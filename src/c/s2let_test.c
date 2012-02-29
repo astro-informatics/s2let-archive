@@ -5,8 +5,28 @@
 #include "s2let.h"
 #include <assert.h>
 
-#define MAX(a,b) ((a) > (b) ? (a) : (b)
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
+
+double maxerr_cplx(complex double *a, complex double *b, int size)
+{
+	double value = 0;
+	int i;
+	for(i = 0; i<size; i++){
+		value = MAX( cabs( a[i]-b[i] ), value );
+	}
+	return value;
+}
+
+double maxerr(double *a, double *b, int size)
+{
+	double value = 0;
+	int i;
+	for(i = 0; i<size; i++){
+		value = MAX( abs( a[i]-b[i] ), value );
+	}
+	return value;
+}
 
 double ran2_dp(int idum) {
 
@@ -88,29 +108,46 @@ void s2let_wav_lm_test(int B, int L, int seed)
 	int J = s2let_j_max(L, B);
 
 	double *wav_lm, *scal_lm;
-	s2let_allocate_wav_lm(&wav_lm, &scal_lm, B, L);
+	s2let_allocate_wav_lm_real(&wav_lm, &scal_lm, B, L);
 
 	int J_min = 0;
-	s2let_wav_lm(wav_lm, scal_lm, B, L, J_min);
+	s2let_wav_lm(wav_lm, scal_lm, B, L);
 
-	/*
+	
 	printf("-- scal -- \n");
 	for (l = 0; l < L; l++){
-		printf("scal_lm(%i) = %f\n", l, scal_lm[l]);
+		for (m = -l; m <= l; m++){
+			printf("scal_lm(%i,%i) = %f\n", l, m,scal_lm[lm2ind(l,m)]);
+		}
 	}
 	for (j = 0; j <= J; j++ ){
 		printf("-- j = %i -- \n", j);
 		for (l = 0; l < L; l++){
-			printf("wav_lm(%i) = %f\n", l, wav_lm[j * L + l]);
+			for (m = -l; m <= l; m++){
+				printf("wav_lm(%i,%i) = %f\n", l, m, wav_lm[jlm2ind(j,l,m,L)]);
+			}
 		}
 	}
-	*/
+	 
 
-	double *f_wav_lm, *f_scal_lm, *flm;
-	flm = (double*)calloc(L * L, sizeof(double));
+	complex double *f_wav_lm, *f_scal_lm, *flm, *flm_rec;
+	flm = (complex double*)calloc(L * L, sizeof(complex double));
+	flm_rec = (complex double*)calloc(L * L, sizeof(complex double));
 	s2let_random_flm(flm, L, seed);
-	s2let_allocate_f_wav_lm(&f_wav_lm, &f_scal_lm, B, L);
-	s2let_wav_analysis_lm_real(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+	printf("Allocate f_wav\n");
+	s2let_allocate_wav_lm(&f_wav_lm, &f_scal_lm, B, L);
+	printf("Analysis\n");
+	s2let_wav_analysis_lm(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+	printf("Synthesis\n");
+	s2let_wav_synthesis_lm(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+	for (l = 0; l < L; l++){
+	for (m = -l; m <= l ; m++){
+		 int ind = l*l+l+m;
+			printf("(l,m) = (%i,%i) - flm = (%f,%f) - rec = (%f,%f)\n",l,m,creal(flm[ind]),cimag(flm[ind]),creal(flm_rec[ind]),cimag(flm_rec[ind]));
+	}}
+	printf("  - Maximum absolute error    : %6.5e\n", 
+		maxerr_cplx(flm, flm_rec, L*L));
+
 }
 
 int main(int argc, char *argv[]) 

@@ -12,11 +12,6 @@ S2LETLIBN= s2let
 S2LETSRC = $(S2LETDIR)/src/c
 S2LETOBJ = $(S2LETSRC)
 
-FLAGDIR = ${FLAG}
-FLAGLIB = $(FLAGDIR)/lib/c
-FLAGINC = $(FLAGDIR)/include/c
-FLAGLIBN= flag
-
 SSHTDIR	= ${SSHT}
 SSHTLIB	= $(SSHTDIR)/lib/c
 SSHTINC	= $(SSHTDIR)/include/c
@@ -30,11 +25,12 @@ FFTWLIBNM   = fftw3
 vpath %.c $(S2LETSRC)
 vpath %.h $(S2LETSRC)
 
-LDFLAGS = -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLIB) -l$(SSHTLIBN) -L$(FLAGLIB) -l$(FLAGLIBN) -L$(S2LETLIB) -l$(S2LETLIBN) -lm
+LDFLAGS = -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLIB) -l$(SSHTLIBN) -L$(S2LETLIB) -l$(S2LETLIBN) -lm
 
-FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(FLAGINC) -I$(S2LETINC)
+FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(S2LETINC)
 
-S2LETOBJS= $(S2LETOBJ)/s2let_core.o		\
+S2LETOBJS= $(S2LETOBJ)/s2let_tilling.o		\
+	  $(S2LETOBJ)/s2let_axisym.o 				\
 	  $(S2LETOBJ)/s2let_math.o
 
 $(S2LETOBJ)/%.o: %.c
@@ -42,11 +38,6 @@ $(S2LETOBJ)/%.o: %.c
 
 .PHONY: default
 default: lib test tidy
-
-.PHONY: about
-about: $(S2LETBIN)/s2let_about
-$(S2LETBIN)/s2let_about: $(S2LETOBJ)/s2let_about.o 
-	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_about
 
 .PHONY: lib
 lib: $(S2LETLIB)/lib$(S2LETLIBN).a

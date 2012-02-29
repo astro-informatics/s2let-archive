@@ -9,9 +9,9 @@
 #include <fftw3.h> 
 #include <time.h>
 #include <ssht.h>
-#include <flag.h>
 
-#include "../../src/c/s2let_core.h"
+#include "../../src/c/s2let_axisym.h"
+#include "../../src/c/s2let_tilling.h"
 #include "../../src/c/s2let_math.h"
 
 #endif
