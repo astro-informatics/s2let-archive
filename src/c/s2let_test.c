@@ -73,21 +73,19 @@ void s2let_random_flm(complex double *flm, int L, int seed)
 	}
 }
 
-void s2let_tilling_test(int B, int L)
-{
-	int l, j;
-	int J = s2let_j_max(L, B);
-		
+void s2let_tilling_test(int B, int L, int J_min)
+{		
 	double *kappa, *kappa0;
 	allocate_tilling(&kappa, &kappa0, B, L);
 
-	s2let_tilling(kappa, kappa0, B, L);
+	s2let_tilling(kappa, kappa0, B, L, J_min);
 
-	//printf("\n");
-	j = 0;
+	/*
+	int l, j;
+	int J = s2let_j_max(L, B);
 	printf("> KAPPA_0 :       ");
 	for (l = 0; l < L; l++){
-		printf(" %2.2f,", kappa0[l+j*L]);
+		printf(" %2.2f,", kappa0[l]);
 	}
 	printf("\n");
 	for (j = 0; j <= J; j++){
@@ -97,77 +95,113 @@ void s2let_tilling_test(int B, int L)
 		}
 		printf("\n");
 	}
+	*/
 
-	s2let_check_identity(kappa, kappa0, B, L);
-	printf("\n");
+	double res = s2let_check_identity(kappa, kappa0, B, L, J_min);
+	printf("  - Identity residuals : %6.5e\n", res);
+
+	free(kappa);
+	free(kappa0);
 }
 
-void s2let_wav_lm_test(int B, int L, int seed)
+void s2let_wav_lm_test(int B, int L, int J_min, int seed)
 {
-	int j, l, m;
-	int J = s2let_j_max(L, B);
+	clock_t time_start, time_end;
 
 	double *wav_lm, *scal_lm;
-	s2let_allocate_wav_lm_real(&wav_lm, &scal_lm, B, L);
+	s2let_allocate_wav_lm(&wav_lm, &scal_lm, B, L);
 
-	int J_min = 0;
-	s2let_wav_lm(wav_lm, scal_lm, B, L);
+	//int J_min = 0;
+	time_start = clock();
+	s2let_wav_lm(wav_lm, scal_lm, B, L, J_min);
+	time_end = clock();
+	printf("  - Generate wavelets  : %4.4f seconds\n", 
+		(time_end - time_start) / (double)CLOCKS_PER_SEC);
 
-	
+	/*
+	int j, l, m;
+	int J = s2let_j_max(L, B);
 	printf("-- scal -- \n");
 	for (l = 0; l < L; l++){
-		for (m = -l; m <= l; m++){
-			printf("scal_lm(%i,%i) = %f\n", l, m,scal_lm[lm2ind(l,m)]);
-		}
+		printf("scal_lm(%i) = %f\n", l,sqrt((4.0*PI)/(2.0*l+1.0)) * scal_lm[l]);
 	}
 	for (j = 0; j <= J; j++ ){
 		printf("-- j = %i -- \n", j);
 		for (l = 0; l < L; l++){
-			for (m = -l; m <= l; m++){
-				printf("wav_lm(%i,%i) = %f\n", l, m, wav_lm[jlm2ind(j,l,m,L)]);
-			}
+			printf("wav_lm(%i) = %f\n", l, sqrt((4.0*PI)/(2.0*l+1.0)) * wav_lm[j*L+l]);
 		}
 	}
+	*/	
 	 
-
 	complex double *f_wav_lm, *f_scal_lm, *flm, *flm_rec;
 	flm = (complex double*)calloc(L * L, sizeof(complex double));
 	flm_rec = (complex double*)calloc(L * L, sizeof(complex double));
+
 	s2let_random_flm(flm, L, seed);
-	printf("Allocate f_wav\n");
-	s2let_allocate_wav_lm(&f_wav_lm, &f_scal_lm, B, L);
-	printf("Analysis\n");
+	
+	s2let_allocate_f_wav_lm(&f_wav_lm, &f_scal_lm, B, L);
+	
+	time_start = clock();
 	s2let_wav_analysis_lm(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
-	printf("Synthesis\n");
+	time_end = clock();
+	printf("  - Wavelet analysis   : %4.4f seconds\n", 
+		(time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+
+	time_start = clock();
 	s2let_wav_synthesis_lm(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+	time_end = clock();
+	printf("  - Wavelet synthesis  : %4.4f seconds\n", 
+		(time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+	/*
 	for (l = 0; l < L; l++){
-	for (m = -l; m <= l ; m++){
-		 int ind = l*l+l+m;
+	    for (m = -l; m <= l ; m++){
+		    int ind = l*l+l+m;
 			printf("(l,m) = (%i,%i) - flm = (%f,%f) - rec = (%f,%f)\n",l,m,creal(flm[ind]),cimag(flm[ind]),creal(flm_rec[ind]),cimag(flm_rec[ind]));
-	}}
-	printf("  - Maximum absolute error    : %6.5e\n", 
+	    }
+	}
+	*/
+
+	printf("  - Maximum abs error  : %6.5e\n", 
 		maxerr_cplx(flm, flm_rec, L*L));
 
+	free(flm);
+	free(flm_rec);
+	free(f_wav_lm);
+	free(f_scal_lm);
+	free(wav_lm);
+	free(scal_lm);
 }
+
+/*void s2let_wav_test(int B, int L, int J_min, int seed)
+{
+
+}*/
 
 int main(int argc, char *argv[]) 
 {
 	
-	const int L = 12;
+	const int L = 64;
 	const int B = 2;
-	const int seed = (int)(1000000.0*(double)clock()/(double)CLOCKS_PER_SEC)/10;
+	const int J_min = 1;
+	const int seed = (int)(10000.0*(double)clock()/(double)CLOCKS_PER_SEC);
+	int l_min = s2let_el_min(B, J_min);
 
 	printf("=========================================================\n");
 	printf("PARAMETERS : ");
-	printf("  L = %i   B = %i  \n", L, B);
+	printf("  L = %i   B = %i   l_min = %i   seed = %i\n", L, B, l_min, seed);
 	printf("----------------------------------------------------------\n");
 	printf("> Testing harmonic tilling...\n");
-	s2let_tilling_test(B, L);
-	printf("OK\n");
+	s2let_tilling_test(B, L, J_min);
 	printf("----------------------------------------------------------\n");
-	printf("> Testing wavelets in harmonics space...\n");
-	s2let_wav_lm_test(B, L, seed);
-	printf("OK\n");
+	printf("> Testing axisymmetric wavelets in harmonics space...\n");
+	s2let_wav_lm_test(B, L, J_min, seed);
+	printf("----------------------------------------------------------\n");
+	printf("> Testing axisymmetric wavelets in pixel space...\n");
+	//s2let_wav_test(B, L, J_min, seed);
+	printf("=========================================================\n");
+
 
 	return 0;		
 }

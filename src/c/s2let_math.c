@@ -36,9 +36,9 @@ double s2let_kappa0_quadtrap(double a, double b, int n, int B)
 double simpson(double a, double b, int n, int B)
 {
   long double integral,x,h;
-  long double part,coeff,m;
+  long double part,coeff;
   int i;
-  m = f(3.333333,B);
+  //long double m = f(3.333333,B);
   part = (b-a) / (long double) n;
   h = part / (long double) 3.0;
 
