@@ -174,10 +174,62 @@ void s2let_wav_lm_test(int B, int L, int J_min, int seed)
 	free(scal_lm);
 }
 
-/*void s2let_wav_test(int B, int L, int J_min, int seed)
+void s2let_wav_test(int B, int L, int J_min, int seed)
 {
+	clock_t time_start, time_end;
+	int spin = 0;
+	int verbosity = 0;
+	ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+	int J = s2let_j_max(L, B);
 
-}*/
+	complex double *f, *f_rec, *flm, *flm_rec;
+	flm = (complex double*)calloc(L * L, sizeof(complex double));
+	flm_rec = (complex double*)calloc(L * L, sizeof(complex double));
+	f = (complex double*)calloc(L*(2*L-1), sizeof(complex double));
+	f_rec = (complex double*)calloc(L*(2*L-1), sizeof(complex double));
+
+	s2let_random_flm(flm, L, seed);
+
+	ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
+
+	complex double *f_wav, *f_scal;
+	f_scal = (complex double*)calloc(L*(2*L-1), sizeof(complex double));
+	f_wav = (complex double*)calloc((J+1)*L*(2*L-1), sizeof(complex double));
+
+	time_start = clock();
+	s2let_wav_analysis(f_wav, f_scal, f, B, L, J_min);
+	time_end = clock();
+	printf("  - Wavelet analysis   : %4.4f seconds\n", 
+		(time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+
+	time_start = clock();
+	s2let_wav_synthesis(f_rec, f_wav, f_scal, B, L, J_min);
+	time_end = clock();
+	printf("  - Wavelet synthesis  : %4.4f seconds\n", 
+		(time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+	ssht_core_mw_forward_sov_conv_sym(flm_rec, f_rec, L, spin, dl_method, verbosity);
+
+	printf("  - Maximum abs error  : %6.5e\n", 
+		maxerr_cplx(flm, flm_rec, L*L));
+
+	/*
+	int l, m;
+	for (l = 0; l < L; l++){
+	    for (m = -l; m <= l ; m++){
+		    int ind = l*l+l+m;
+			printf("(l,m) = (%i,%i) - flm = (%f,%f) - rec = (%f,%f)\n",l,m,creal(flm[ind]),cimag(flm[ind]),creal(flm_rec[ind]),cimag(flm_rec[ind]));
+	    }
+	}
+	*/
+	
+	
+	free(f);
+	free(f_rec);
+	free(f_wav);
+	free(f_scal);
+}
 
 int main(int argc, char *argv[]) 
 {
@@ -199,7 +251,10 @@ int main(int argc, char *argv[])
 	s2let_wav_lm_test(B, L, J_min, seed);
 	printf("----------------------------------------------------------\n");
 	printf("> Testing axisymmetric wavelets in pixel space...\n");
-	//s2let_wav_test(B, L, J_min, seed);
+	s2let_wav_test(B, L, J_min, seed);
+	printf("----------------------------------------------------------\n");
+	printf("> Testing real axisymmetric wavelets in pixel space...\n");
+	//s2let_wav_real_test(B, L, J_min, seed);
 	printf("=========================================================\n");
 
 
