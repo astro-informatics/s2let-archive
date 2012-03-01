@@ -76,7 +76,7 @@ void s2let_random_flm(complex double *flm, int L, int seed)
 void s2let_tilling_test(int B, int L, int J_min)
 {		
 	double *kappa, *kappa0;
-	allocate_tilling(&kappa, &kappa0, B, L);
+	s2let_allocate_tilling(&kappa, &kappa0, B, L);
 
 	s2let_tilling(kappa, kappa0, B, L, J_min);
 
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
 	
 	const int L = 64;
 	const int B = 2;
-	const int J_min = 1;
+	const int J_min = 3;
 	const int seed = (int)(10000.0*(double)clock()/(double)CLOCKS_PER_SEC);
 	int l_min = s2let_el_min(B, J_min);
 
