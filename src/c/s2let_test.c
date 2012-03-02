@@ -29,7 +29,6 @@ double maxerr(double *a, double *b, int size)
 }
 
 double ran2_dp(int idum) {
-
   int IM1=2147483563,IM2=2147483399,IMM1=IM1-1, 
     IA1=40014,IA2=40692,IQ1=53668,IQ2=52774,IR1=12211,IR2=3791, 
     NTAB=32,NDIV=1+IMM1/NTAB;
@@ -61,7 +60,6 @@ double ran2_dp(int idum) {
   iv[j-1]=idum;
   if(iy < 1)iy=iy+IMM1;
   return (AM*iy < RNMX ? AM*iy : RNMX); // min(AM*iy,RNMX);
-
 }
 
 void s2let_random_flm(complex double *flm, int L, int seed)
@@ -111,7 +109,6 @@ void s2let_wav_lm_test(int B, int L, int J_min, int seed)
 	double *wav_lm, *scal_lm;
 	s2let_allocate_wav_lm(&wav_lm, &scal_lm, B, L);
 
-	//int J_min = 0;
 	time_start = clock();
 	s2let_wav_lm(wav_lm, scal_lm, B, L, J_min);
 	time_end = clock();
@@ -202,7 +199,6 @@ void s2let_wav_test(int B, int L, int J_min, int seed)
 	printf("  - Wavelet analysis   : %4.4f seconds\n", 
 		(time_end - time_start) / (double)CLOCKS_PER_SEC);
 
-
 	time_start = clock();
 	s2let_wav_synthesis(f_rec, f_wav, f_scal, B, L, J_min);
 	time_end = clock();
@@ -224,7 +220,6 @@ void s2let_wav_test(int B, int L, int J_min, int seed)
 	}
 	*/
 	
-	
 	free(f);
 	free(f_rec);
 	free(f_wav);
@@ -240,8 +235,8 @@ int main(int argc, char *argv[])
 	const int seed = (int)(10000.0*(double)clock()/(double)CLOCKS_PER_SEC);
 	int l_min = s2let_el_min(B, J_min);
 
-	printf("=========================================================\n");
-	printf("PARAMETERS : ");
+	printf("==========================================================\n");
+	printf("PARAMETERS: ");
 	printf("  L = %i   B = %i   l_min = %i   seed = %i\n", L, B, l_min, seed);
 	printf("----------------------------------------------------------\n");
 	printf("> Testing harmonic tilling...\n");
@@ -255,7 +250,7 @@ int main(int argc, char *argv[])
 	printf("----------------------------------------------------------\n");
 	printf("> Testing real axisymmetric wavelets in pixel space...\n");
 	//s2let_wav_real_test(B, L, J_min, seed);
-	printf("=========================================================\n");
+	printf("==========================================================\n");
 
 
 	return 0;		
