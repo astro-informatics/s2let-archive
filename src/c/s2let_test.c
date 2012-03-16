@@ -247,8 +247,8 @@ int main(int argc, char *argv[])
 	printf("----------------------------------------------------------\n");
 	printf("> Testing axisymmetric wavelets in pixel space...\n");
 	s2let_wav_test(B, L, J_min, seed);
-	printf("----------------------------------------------------------\n");
-	printf("> Testing real axisymmetric wavelets in pixel space...\n");
+	//printf("----------------------------------------------------------\n");
+	//printf("> Testing real axisymmetric wavelets in pixel space...\n");
 	//s2let_wav_real_test(B, L, J_min, seed);
 	printf("==========================================================\n");
 
