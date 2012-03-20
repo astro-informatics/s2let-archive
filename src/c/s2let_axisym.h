@@ -15,8 +15,8 @@ void s2let_wav_analysis_lm(complex double *f_wav_lm, complex double *f_scal_lm, 
 void s2let_wav_synthesis_lm(complex double *flm, const complex double *f_wav_lm, const complex double *f_scal_lm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
 
 void s2let_wav_analysis(complex double *f_wav, complex double *f_scal, const complex double *f, int B, int L, int J_min);
-// ??? TODO void s2let_wav_analysis_real(double *f_wav, double *f_scal, const complex double *f, int B, int L, int J_min);
+void s2let_wav_analysis_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);
 void s2let_wav_synthesis(complex double *f, const complex double *f_wav, const complex double *f_scal, int B, int L, int J_min);
-// ??? TODO void s2let_wav_synthesis_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min);
+void s2let_wav_synthesis_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min);
 
 #endif

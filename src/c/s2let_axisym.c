@@ -53,7 +53,7 @@ void s2let_wav_lm(double *wav_lm, double *scal_lm, int B, int L, int J_min)
 	int j, l;
 	int J = s2let_j_max(L, B);
 	//int J_min = 0;
-	int l_min = s2let_el_min(B, J_min);
+	//int l_min = s2let_el_min(B, J_min);
 	double k0;
 	double *kappa, *kappa0;
 	s2let_allocate_tilling(&kappa, &kappa0, B, L);
@@ -93,7 +93,7 @@ void s2let_wav_analysis_lm(complex double *f_wav_lm, complex double *f_scal_lm, 
 	int j, l, m;
 	int J = s2let_j_max(L, B);
 	double wav0, scal0;
-	int l_min = s2let_el_min(B, J_min);
+	//int l_min = s2let_el_min(B, J_min);
 
 	for (j = J_min; j <= J; j++){
 		for (l = 0; l < L; l++){
@@ -130,7 +130,7 @@ void s2let_wav_synthesis_lm(complex double *flm, const complex double *f_wav_lm,
 	int j, l, m;
 	int J = s2let_j_max(L, B);
 	double wav0, scal0;
-	int l_min = s2let_el_min(B, J_min);
+	//int l_min = s2let_el_min(B, J_min);
 
 	for (j = J_min; j <= J; j++){
 		for (l = 0; l < L; l++){
@@ -236,6 +236,101 @@ void s2let_wav_synthesis(complex double *f, const complex double *f_wav, const c
 	s2let_wav_synthesis_lm(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
 
 	ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
+
+	free(flm);
+	free(f_scal_lm);
+	free(f_wav_lm);
+}
+
+
+/*!
+ * Perform wavelet transform in real space (from scratch, give pixel space components).
+ * Input function is real.
+ * Sampling scheme : MW sampling.
+ * Spherical wavelets : analysis in real space.
+ *
+ * \param[out]  f_wav Wavelet transform (SHA of wavelet contribution).
+ * \param[out]  f_scal Wavelet transform (SHA of scaling contribution).
+ * \param[in]  f Input function (MW sampling)
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
+void s2let_wav_analysis_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min)
+{
+	int verbosity = 0;
+	ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+
+	int j, offset, offset_lm;
+	int J = s2let_j_max(L, B);
+	//int l_min = s2let_el_min(B, J_min);
+
+	double *wav_lm, *scal_lm;
+	s2let_allocate_wav_lm(&wav_lm, &scal_lm, B, L);
+	s2let_wav_lm(wav_lm, scal_lm, B, L, J_min);
+
+	complex double *flm, *f_wav_lm, *f_scal_lm;
+	flm = (complex double*)calloc(L * L, sizeof(complex double));
+	s2let_allocate_f_wav_lm(&f_wav_lm, &f_scal_lm, B, L);
+
+	ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
+
+	s2let_wav_analysis_lm(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+
+	ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, L, dl_method, verbosity);
+	for(j = J_min; j <= J; j++){
+		offset_lm = j * L * L;
+		offset = j * L * (2 * L - 1);
+		ssht_core_mw_inverse_sov_sym_real(f_wav + offset, f_wav_lm + offset_lm, L, dl_method, verbosity);
+	}
+
+	free(flm);
+	free(f_scal_lm);
+	free(f_wav_lm);
+}
+
+/*!
+ * Perform wavelet transform in real space (from scratch, give pixel space components).
+ * Input function is real.
+ * Sampling scheme : MW sampling.
+ * Spherical wavelets : synthesis in real space.
+ *
+ * \param[out]  f Input function (MW sampling)
+ * \param[in]  f_wav Wavelet transform (SHA of wavelet contribution).
+ * \param[in]  f_scal Wavelet transform (SHA of scaling contribution).
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
+void s2let_wav_synthesis_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min)
+{
+	int verbosity = 0;
+	ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+
+	int j, offset, offset_lm;
+	int J = s2let_j_max(L, B);
+	//int l_min = s2let_el_min(B, J_min);
+
+	double *wav_lm, *scal_lm;
+	s2let_allocate_wav_lm(&wav_lm, &scal_lm, B, L);
+	s2let_wav_lm(wav_lm, scal_lm, B, L, J_min);
+
+	complex double *flm, *f_wav_lm, *f_scal_lm;
+	flm = (complex double*)calloc(L * L, sizeof(complex double));
+	s2let_allocate_f_wav_lm(&f_wav_lm, &f_scal_lm, B, L);
+
+	ssht_core_mw_forward_sov_conv_sym_real(f_scal_lm, f_scal, L, dl_method, verbosity);
+	for(j = J_min; j <= J; j++){
+		offset_lm = j * L * L;
+		offset = j * L * (2 * L - 1);
+		ssht_core_mw_forward_sov_conv_sym_real(f_wav_lm + offset_lm, f_wav + offset, L, dl_method, verbosity);
+	}
+
+	s2let_wav_synthesis_lm(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+
+	ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
 
 	free(flm);
 	free(f_scal_lm);
