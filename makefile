@@ -39,6 +39,9 @@ $(S2LETOBJ)/%.o: %.c
 .PHONY: default
 default: lib test tidy
 
+.PHONY: all
+all: lib test tidy
+
 .PHONY: lib
 lib: $(S2LETLIB)/lib$(S2LETLIBN).a
 $(S2LETLIB)/lib$(S2LETLIBN).a: $(S2LETOBJS)
@@ -48,10 +51,12 @@ $(S2LETLIB)/lib$(S2LETLIBN).a: $(S2LETOBJS)
 lib: $(S2LETBIN)/s2let_test
 $(S2LETBIN)/s2let_test: $(S2LETOBJ)/s2let_test.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_test $(LDFLAGS)
+	$(S2LETBIN)/s2let_test
 
 .PHONY: clean
 clean:	tidy
 	rm -f $(S2LETLIB)/lib$(S2LETLIBN).a
+	rm -f $(S2LETBIN)/s2let_test
 
 .PHONY: tidy
 tidy:

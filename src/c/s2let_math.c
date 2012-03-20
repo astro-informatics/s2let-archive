@@ -4,12 +4,22 @@
 
 #include "s2let.h"
 
+
+/*!
+ * Generating function for the smooth "Schwarts" functions.
+ *
+ */
 double f(double k, int B)
 {
 	double t = (k - (1 / (double)B)) * (2.0 * B / (double)(B-1)) - 1;
     return exp(-2.0 / (1.0 - pow(t, 2.0))) / k;
 }
 
+
+/*!
+ * Computes smooth "Schwarts" functions.
+ *
+ */
 double s2let_kappa0_quadtrap(double a, double b, int n, int B)
 {
     double sum = 0;
@@ -33,6 +43,10 @@ double s2let_kappa0_quadtrap(double a, double b, int n, int B)
     return sum;
 }
 
+/*!
+ * Simpson rule for numerical integration.
+ *
+ */
 double simpson(double a, double b, int n, int B)
 {
   long double integral,x,h;
