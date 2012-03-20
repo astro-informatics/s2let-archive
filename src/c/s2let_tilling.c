@@ -30,16 +30,6 @@ int s2let_j_max(int L, int B)
 	return ceil(log(L) / log(B));
 }
 
-// Computes needlet band-limits for all levels j.
-void s2let_Lj(int *Lj, int B, int L, int J_min)
-{
-	int j;
-	int J = s2let_j_max(L, B);
-	for (j = J_min ; j <= J ; j++){
-		Lj[j+1-J_min] = MIN(L, ceil(pow(B,j+1)) + 1);
-	}
-}
-
 /*!
  * Allocates tilling in harmonic space.
  *
@@ -49,7 +39,7 @@ void s2let_Lj(int *Lj, int B, int L, int J_min)
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void s2let_allocate_tilling(double **kappa, double **kappa0, int B, int L)
+void s2let_axisym_allocate_tilling(double **kappa, double **kappa0, int B, int L)
 {
 	int J = s2let_j_max(L, B);
 	*kappa = (double*)calloc((J+1) * L, sizeof(double));
@@ -66,7 +56,7 @@ void s2let_allocate_tilling(double **kappa, double **kappa0, int B, int L)
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_tilling(double *kappa, double *kappa0, int B, int L, int J_min)
+void s2let_axisym_tilling(double *kappa, double *kappa0, int B, int L, int J_min)
 {
 	int j, l;
 	int J = s2let_j_max(L, B);
@@ -129,7 +119,7 @@ void s2let_tilling_phi2(double *phi2, int B, int L, int J_min)
  * \param[in]  J_min First wavelet scale to be used.
  * \retval Achieved accuracy (should be lower than e-12).
  */
-double s2let_check_identity(double *kappa, double *kappa0, int B, int L, int J_min)
+double s2let_axisym_check_identity(double *kappa, double *kappa0, int B, int L, int J_min)
 {
 	int l, j;
 	int J = s2let_j_max(L, B);

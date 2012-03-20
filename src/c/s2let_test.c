@@ -62,7 +62,7 @@ double ran2_dp(int idum) {
   return (AM*iy < RNMX ? AM*iy : RNMX); // min(AM*iy,RNMX);
 }
 
-void s2let_random_flm(complex double *flm, int L, int seed)
+void s2let_axisym_random_flm(complex double *flm, int L, int seed)
 {
 	int i;
 	srand( time(NULL) );
@@ -72,7 +72,7 @@ void s2let_random_flm(complex double *flm, int L, int seed)
 }
 
 
-void s2let_random_flm_real(complex double *flm, int L, int seed) {
+void s2let_axisym_random_flm_real(complex double *flm, int L, int seed) {
 
   int el, m, msign, i, i_op;
   for (el=0; el<L; el++) {
@@ -91,12 +91,12 @@ void s2let_random_flm_real(complex double *flm, int L, int seed) {
 }
 
 
-void s2let_tilling_test(int B, int L, int J_min)
+void s2let_axisym_tilling_test(int B, int L, int J_min)
 {		
 	double *kappa, *kappa0;
-	s2let_allocate_tilling(&kappa, &kappa0, B, L);
+	s2let_axisym_allocate_tilling(&kappa, &kappa0, B, L);
 
-	s2let_tilling(kappa, kappa0, B, L, J_min);
+	s2let_axisym_tilling(kappa, kappa0, B, L, J_min);
 
 	/*
 	int l, j;
@@ -115,22 +115,22 @@ void s2let_tilling_test(int B, int L, int J_min)
 	}
 	*/
 
-	double res = s2let_check_identity(kappa, kappa0, B, L, J_min);
+	double res = s2let_axisym_check_identity(kappa, kappa0, B, L, J_min);
 	printf("  - Identity residuals : %6.5e\n", res);
 
 	free(kappa);
 	free(kappa0);
 }
 
-void s2let_wav_lm_test(int B, int L, int J_min, int seed)
+void s2let_axisym_wav_lm_test(int B, int L, int J_min, int seed)
 {
 	clock_t time_start, time_end;
 
 	double *wav_lm, *scal_lm;
-	s2let_allocate_wav_lm(&wav_lm, &scal_lm, B, L);
+	s2let_axisym_allocate_wav_lm(&wav_lm, &scal_lm, B, L);
 
 	time_start = clock();
-	s2let_wav_lm(wav_lm, scal_lm, B, L, J_min);
+	s2let_axisym_wav_lm(wav_lm, scal_lm, B, L, J_min);
 	time_end = clock();
 	printf("  - Generate wavelets  : %4.4f seconds\n", 
 		(time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -154,19 +154,19 @@ void s2let_wav_lm_test(int B, int L, int J_min, int seed)
 	flm = (complex double*)calloc(L * L, sizeof(complex double));
 	flm_rec = (complex double*)calloc(L * L, sizeof(complex double));
 
-	s2let_random_flm(flm, L, seed);
+	s2let_axisym_random_flm(flm, L, seed);
 	
-	s2let_allocate_f_wav_lm(&f_wav_lm, &f_scal_lm, B, L);
+	s2let_axisym_allocate_f_wav_lm(&f_wav_lm, &f_scal_lm, B, L);
 	
 	time_start = clock();
-	s2let_wav_analysis_lm(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+	s2let_axisym_wav_analysis_lm(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
 	time_end = clock();
 	printf("  - Wavelet analysis   : %4.4f seconds\n", 
 		(time_end - time_start) / (double)CLOCKS_PER_SEC);
 
 
 	time_start = clock();
-	s2let_wav_synthesis_lm(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+	s2let_axisym_wav_synthesis_lm(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
 	time_end = clock();
 	printf("  - Wavelet synthesis  : %4.4f seconds\n", 
 		(time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -191,7 +191,7 @@ void s2let_wav_lm_test(int B, int L, int J_min, int seed)
 	free(scal_lm);
 }
 
-void s2let_wav_test(int B, int L, int J_min, int seed)
+void s2let_axisym_wav_test(int B, int L, int J_min, int seed)
 {
 	clock_t time_start, time_end;
 	int spin = 0;
@@ -205,7 +205,7 @@ void s2let_wav_test(int B, int L, int J_min, int seed)
 	f = (complex double*)calloc(L*(2*L-1), sizeof(complex double));
 	f_rec = (complex double*)calloc(L*(2*L-1), sizeof(complex double));
 
-	s2let_random_flm(flm, L, seed);
+	s2let_axisym_random_flm(flm, L, seed);
 
 	ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
@@ -214,13 +214,13 @@ void s2let_wav_test(int B, int L, int J_min, int seed)
 	f_wav = (complex double*)calloc((J+1)*L*(2*L-1), sizeof(complex double));
 
 	time_start = clock();
-	s2let_wav_analysis(f_wav, f_scal, f, B, L, J_min);
+	s2let_axisym_wav_analysis(f_wav, f_scal, f, B, L, J_min);
 	time_end = clock();
 	printf("  - Wavelet analysis   : %4.4f seconds\n", 
 		(time_end - time_start) / (double)CLOCKS_PER_SEC);
 
 	time_start = clock();
-	s2let_wav_synthesis(f_rec, f_wav, f_scal, B, L, J_min);
+	s2let_axisym_wav_synthesis(f_rec, f_wav, f_scal, B, L, J_min);
 	time_end = clock();
 	printf("  - Wavelet synthesis  : %4.4f seconds\n", 
 		(time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -246,7 +246,7 @@ void s2let_wav_test(int B, int L, int J_min, int seed)
 	free(f_scal);
 }
 
-void s2let_wav_real_test(int B, int L, int J_min, int seed)
+void s2let_axisym_wav_real_test(int B, int L, int J_min, int seed)
 {
 	clock_t time_start, time_end;
 	int verbosity = 0;
@@ -260,7 +260,7 @@ void s2let_wav_real_test(int B, int L, int J_min, int seed)
 	f = (double*)calloc(L*(2*L-1), sizeof(double));
 	f_rec = (double*)calloc(L*(2*L-1), sizeof(double));
 
-	s2let_random_flm_real(flm, L, seed);
+	s2let_axisym_random_flm_real(flm, L, seed);
 
 	ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
 
@@ -269,13 +269,13 @@ void s2let_wav_real_test(int B, int L, int J_min, int seed)
 	f_wav = (double*)calloc((J+1)*L*(2*L-1), sizeof(double));
 
 	time_start = clock();
-	s2let_wav_analysis_real(f_wav, f_scal, f, B, L, J_min);
+	s2let_axisym_wav_analysis_real(f_wav, f_scal, f, B, L, J_min);
 	time_end = clock();
 	printf("  - Wavelet analysis   : %4.4f seconds\n", 
 		(time_end - time_start) / (double)CLOCKS_PER_SEC);
 
 	time_start = clock();
-	s2let_wav_synthesis_real(f_rec, f_wav, f_scal, B, L, J_min);
+	s2let_axisym_wav_synthesis_real(f_rec, f_wav, f_scal, B, L, J_min);
 	time_end = clock();
 	printf("  - Wavelet synthesis  : %4.4f seconds\n", 
 		(time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -315,16 +315,16 @@ int main(int argc, char *argv[])
 	printf("  L = %i   B = %i   l_wav_min = %i   seed = %i\n", L, B, l_min, seed);
 	printf("----------------------------------------------------------\n");
 	printf("> Testing harmonic tilling...\n");
-	s2let_tilling_test(B, L, J_min);
+	s2let_axisym_tilling_test(B, L, J_min);
 	printf("----------------------------------------------------------\n");
 	printf("> Testing axisymmetric wavelets in harmonics space...\n");
-	s2let_wav_lm_test(B, L, J_min, seed);
+	s2let_axisym_wav_lm_test(B, L, J_min, seed);
 	printf("----------------------------------------------------------\n");
 	printf("> Testing axisymmetric wavelets in pixel space...\n");
-	s2let_wav_test(B, L, J_min, seed);
+	s2let_axisym_wav_test(B, L, J_min, seed);
 	printf("----------------------------------------------------------\n");
 	printf("> Testing real axisymmetric wavelets in pixel space...\n");
-	s2let_wav_real_test(B, L, J_min, seed);
+	s2let_axisym_wav_real_test(B, L, J_min, seed);
 	printf("==========================================================\n");
 
 

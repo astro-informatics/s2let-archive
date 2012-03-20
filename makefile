@@ -16,6 +16,22 @@ UNAME := $(shell uname)
 
 # ======================================== #
 
+# === MATLAB ===
+ifeq ($(UNAME), Linux)
+  MLABINC	= ${MLAB}/extern/include
+  MLABLIB	= ${MLAB}/extern/lib
+  MEXEXT	= mexa64
+  MEX 		= ${MLAB}/bin/mex
+  MEXFLAGS	= -cxx
+endif
+ifeq ($(UNAME), Darwin)
+  MLABINC	= ${MLAB}/extern/include
+  MLABLIB	= ${MLAB}/extern/lib
+  MEXEXT	= mexmaci64
+  MEX 		= ${MLAB}/bin/mex
+  MEXFLAGS	= -cxx
+endif
+
 # === S2LET ===
 S2LETDIR = .
 S2LETLIB = $(S2LETDIR)/lib/c
@@ -37,10 +53,17 @@ FFTWLIBNM   = fftw3
 
 # ======================================== #
 
+S2LETSRCMAT	= $(S2LETDIR)/src/matlab
+S2LETOBJMAT  = $(S2LETSRCMAT)
+S2LETOBJMEX  = $(S2LETSRCMAT)
+
 vpath %.c $(S2LETSRC)
 vpath %.h $(S2LETSRC)
+vpath %_mex.c $(S2LETSRCMAT)
 
 LDFLAGS = -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLIB) -l$(SSHTLIBN) -L$(S2LETLIB) -l$(S2LETLIBN) -lm
+
+LDFLAGSMEX = -I/usr/local/include -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLIB) -l$(SSHTLIBN) -L$(S2LETLIB) -l$(S2LETLIBN)
 
 FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(S2LETINC)
 
@@ -48,16 +71,29 @@ S2LETOBJS= $(S2LETOBJ)/s2let_tilling.o		\
 	  $(S2LETOBJ)/s2let_axisym.o 				\
 	  $(S2LETOBJ)/s2let_math.o
 
+S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_axisym_tilling_mex.o
+
+S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_axisym_tilling_mex.$(MEXEXT)
+
 $(S2LETOBJ)/%.o: %.c
 	$(CC) $(OPT) $(FFLAGS) -c $< -o $@
+
+$(S2LETOBJMAT)/%_mex.o: %_mex.c $(S2LETLIB)/lib$(S2LETLIBN).a
+	$(CC) $(OPT) $(FFLAGS) -c $< -o $@ -I${MLABINC} 
+
+$(S2LETOBJMEX)/%_mex.$(MEXEXT): $(S2LETOBJMAT)/%_mex.o $(S2LETLIB)/lib$(S2LETLIBN).a
+	$(MEX) $< -o $@ $(LDFLAGSMEX) $(MEXFLAGS) -L$(MLABLIB)
 
 # ======================================== #
 
 .PHONY: default
 default: lib test tidy
 
+.PHONY: matlab
+matlab: lib $(S2LETOBJSMEX)
+
 .PHONY: all
-all: lib doc test tidy
+all: lib matlab doc test tidy
 
 .PHONY: lib
 lib: $(S2LETLIB)/lib$(S2LETLIBN).a
@@ -70,7 +106,6 @@ $(S2LETBIN)/s2let_test: $(S2LETOBJ)/s2let_test.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_test $(LDFLAGS)
 	$(S2LETBIN)/s2let_test
 
-
 .PHONY: doc
 doc:
 	$(DOXYGEN_PATH) $(S2LETDIR)/src/doxygen.config
@@ -81,6 +116,7 @@ cleandoc:
 .PHONY: clean
 clean:	tidy cleandoc
 	rm -f $(S2LETLIB)/lib$(S2LETLIBN).a
+	rm -f $(S2LETOBJMEX)/*_mex.$(MEXEXT)
 	rm -f $(S2LETBIN)/s2let_test
 
 .PHONY: tidy
