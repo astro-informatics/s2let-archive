@@ -15,4 +15,4 @@ J = s2let_jmax(L, B)
 
 % Checks tilling of harmonic space for axysimmetric wavelets
 [kappa kappa0] = s2let_axisym_tilling(B, L, J_min);
-s2let_check_axisym_tilling(kappa, kappa0, L, J);
+error_on_axisym_tilling = s2let_check_axisym_tilling(kappa, kappa0, L, J)

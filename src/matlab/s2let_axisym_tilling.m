@@ -13,7 +13,7 @@ function [kappa kappa0] = s2let_axisym_tilling(B, L, J_min)
 % L is the angular band-limit,
 % J_min the first wavelet to be used.
 %
-% S2LET package to perform Wavelets on the Sphere.
+% S2LET package to perform Wavelets transform on the Sphere.
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
