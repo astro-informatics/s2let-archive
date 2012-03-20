@@ -312,7 +312,7 @@ int main(int argc, char *argv[])
 
 	printf("==========================================================\n");
 	printf("PARAMETERS: ");
-	printf("  L = %i   B = %i   l_min = %i   seed = %i\n", L, B, l_min, seed);
+	printf("  L = %i   B = %i   l_wav_min = %i   seed = %i\n", L, B, l_min, seed);
 	printf("----------------------------------------------------------\n");
 	printf("> Testing harmonic tilling...\n");
 	s2let_tilling_test(B, L, J_min);

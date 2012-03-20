@@ -40,6 +40,15 @@ void s2let_Lj(int *Lj, int B, int L, int J_min)
 	}
 }
 
+/*!
+ * Allocates tilling in harmonic space.
+ *
+ * \param[out]  kappa Kernel functions for the wavelets.
+ * \param[out]  kappa0 Kernel for the scaling function.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \retval none
+ */
 void s2let_allocate_tilling(double **kappa, double **kappa0, int B, int L)
 {
 	int J = s2let_j_max(L, B);
@@ -50,7 +59,7 @@ void s2let_allocate_tilling(double **kappa, double **kappa0, int B, int L)
 /*!
  * Generates tilling in harmonic space.
  *
- * \param[out]  kappa Wavelet kernel functions for wavelets.
+ * \param[out]  kappa Kernel functions for the wavelets.
  * \param[out]  kappa0 Kernel for the scaling function.
  * \param[in]  B Wavelet parameter.
  * \param[in]  L Angular harmonic band-limit.
@@ -82,7 +91,7 @@ void s2let_tilling(double *kappa, double *kappa0, int B, int L, int J_min)
 /*!
  * Generates smooth functions to construct the tilling.
  *
- * \param[out]  phi2 Smooth step functions for wavelets.
+ * \param[out]  phi2 Smooth step functions for the wavelets.
  * \param[in]  B Wavelet parameter.
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
@@ -113,12 +122,12 @@ void s2let_tilling_phi2(double *phi2, int B, int L, int J_min)
 /*!
  * Checks exactness of the harmonic tilling.
  *
- * \param[in]  kappa Wavelet kernel functions for wavelets.
+ * \param[in]  kappa Kernel functions for the wavelets.
  * \param[in]  kappa0 Kernel for the scaling function.
  * \param[in]  B Wavelet parameter.
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
- * \retval Achieved accuracy (should be 0).
+ * \retval Achieved accuracy (should be lower than e-12).
  */
 double s2let_check_identity(double *kappa, double *kappa0, int B, int L, int J_min)
 {

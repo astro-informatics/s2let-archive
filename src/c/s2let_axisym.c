@@ -75,7 +75,7 @@ void s2let_wav_lm(double *wav_lm, double *scal_lm, int B, int L, int J_min)
 }
 
 /*!
- * Perform wavelet transform in harmonic space (from precomputed kernels, give SHA coefficients).
+ * Perform wavelet transform in harmonic space (from precomputed kernels, gives SHA coefficients).
  * Spherical wavelets : analysis in harmonic space.
  *
  * \param[out]  f_wav_lm Wavelet transform (SHA of wavelet contribution).
@@ -112,7 +112,7 @@ void s2let_wav_analysis_lm(complex double *f_wav_lm, complex double *f_scal_lm, 
 }
 
 /*!
- * Perform wavelet transform in harmonic space (from precomputed kernels, give SHA coefficients).
+ * Perform wavelet transform in harmonic space (from precomputed kernels, gives SHA coefficients).
  * Spherical wavelets : synthesis in harmonic space.
  *
  * \param[out]  flm Spherical harmonic decomposition of input function.
@@ -149,12 +149,12 @@ void s2let_wav_synthesis_lm(complex double *flm, const complex double *f_wav_lm,
 }
 
 /*!
- * Perform wavelet transform in real space (from scratch, give pixel space components).
+ * Perform wavelet transform in real space (from scratch, gives pixel space components).
  * Sampling scheme : MW sampling.
  * Spherical wavelets : analysis in real space.
  *
- * \param[out]  f_wav Wavelet transform (SHA of wavelet contribution).
- * \param[out]  f_scal Wavelet transform (SHA of scaling contribution).
+ * \param[out]  f_wav Wavelet transform (wavelet contribution in real space).
+ * \param[out]  f_scal Wavelet transform (scaling contribution in real space).
  * \param[in]  f Input function (MW sampling)
  * \param[in]  B Wavelet parameter.
  * \param[in]  L Angular harmonic band-limit.
@@ -196,13 +196,13 @@ void s2let_wav_analysis(complex double *f_wav, complex double *f_scal, const com
 }
 
 /*!
- * Perform wavelet transform in real space (from scratch, give pixel space components).
+ * Perform wavelet transform in real space (from scratch, gives pixel space components).
  * Sampling scheme : MW sampling.
  * Spherical wavelets : synthesis in real space.
  *
  * \param[out]  f Input function (MW sampling)
- * \param[in]  f_wav Wavelet transform (SHA of wavelet contribution).
- * \param[in]  f_scal Wavelet transform (SHA of scaling contribution).
+ * \param[in]  f_wav Wavelet transform (wavelet contribution in real space).
+ * \param[in]  f_scal Wavelet transform (scaling contribution in real space).
  * \param[in]  B Wavelet parameter.
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
@@ -244,13 +244,13 @@ void s2let_wav_synthesis(complex double *f, const complex double *f_wav, const c
 
 
 /*!
- * Perform wavelet transform in real space (from scratch, give pixel space components).
+ * Perform wavelet transform in real space (from scratch, gives pixel space components).
  * Input function is real.
  * Sampling scheme : MW sampling.
  * Spherical wavelets : analysis in real space.
  *
- * \param[out]  f_wav Wavelet transform (SHA of wavelet contribution).
- * \param[out]  f_scal Wavelet transform (SHA of scaling contribution).
+ * \param[out]  f_wav Wavelet transform (wavelet contribution in real space).
+ * \param[out]  f_scal Wavelet transform (scaling contribution in real space).
  * \param[in]  f Input function (MW sampling)
  * \param[in]  B Wavelet parameter.
  * \param[in]  L Angular harmonic band-limit.
@@ -291,14 +291,14 @@ void s2let_wav_analysis_real(double *f_wav, double *f_scal, const double *f, int
 }
 
 /*!
- * Perform wavelet transform in real space (from scratch, give pixel space components).
+ * Perform wavelet transform in real space (from scratch, gives pixel space components).
  * Input function is real.
  * Sampling scheme : MW sampling.
  * Spherical wavelets : synthesis in real space.
  *
  * \param[out]  f Input function (MW sampling)
- * \param[in]  f_wav Wavelet transform (SHA of wavelet contribution).
- * \param[in]  f_scal Wavelet transform (SHA of scaling contribution).
+ * \param[in]  f_wav Wavelet transform (wavelet contribution in real space).
+ * \param[in]  f_scal Wavelet transform (scaling contribution in real space).
  * \param[in]  B Wavelet parameter.
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
