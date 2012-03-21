@@ -67,13 +67,17 @@ LDFLAGSMEX = -I/usr/local/include -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLIB) -l$(S
 
 FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(S2LETINC)
 
-S2LETOBJS= $(S2LETOBJ)/s2let_tilling.o		\
-	  $(S2LETOBJ)/s2let_axisym.o 				\
+S2LETOBJS= $(S2LETOBJ)/s2let_tilling.o	\
+	  $(S2LETOBJ)/s2let_axisym.o 		\
 	  $(S2LETOBJ)/s2let_math.o
 
-S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_axisym_tilling_mex.o
+S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_axisym_tilling_mex.o	\
+	  $(S2LETOBJMAT)/s2let_axisym_analysis_mex.o		\
+	  $(S2LETOBJMAT)/s2let_axisym_synthesis_mex.o	
 
-S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_axisym_tilling_mex.$(MEXEXT)
+S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_axisym_tilling_mex.$(MEXEXT)	\
+	  $(S2LETOBJMEX)/s2let_axisym_analysis_mex.$(MEXEXT)	\
+	  $(S2LETOBJMEX)/s2let_axisym_synthesis_mex.$(MEXEXT)
 
 $(S2LETOBJ)/%.o: %.c
 	$(CC) $(OPT) $(FFLAGS) -c $< -o $@

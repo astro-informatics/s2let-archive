@@ -76,7 +76,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_axisym_tilling_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
 
-  // Allocate arrays
+  // Compute ultimate scale J_max
   int J = s2let_j_max(L, B);
 
   if( J_min > J+1 ) {
@@ -84,6 +84,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
           "First scale J_min must be larger than that!");
   }
 
+  // Allocate arrays
   double *kappa = (double*)calloc((J+1) * L, sizeof(double));
   double *kappa0 = (double*)calloc(L, sizeof(double));
 
