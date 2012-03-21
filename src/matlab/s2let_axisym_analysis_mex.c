@@ -104,7 +104,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
           "First scale J_min must be integer.");
   }
   J_min = (int)mxGetScalar(prhs[iin]);
-  if (mxGetScalar(prhs[iin]) > (double)J_min || J_min <= 0)
+  if (mxGetScalar(prhs[iin]) > (double)J_min || J_min < 0)
     mexErrMsgIdAndTxt("s2let_axisym_analysis_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
 
