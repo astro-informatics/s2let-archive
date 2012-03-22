@@ -1,4 +1,4 @@
-function plot_laguerre_kernels(N, R, npoints)
+function s2let_plot_laguerre_kernels(N, R, npoints)
 
 h = R/(npoints);
 nodes = (h:h:R);

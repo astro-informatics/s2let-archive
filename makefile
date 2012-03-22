@@ -11,7 +11,7 @@ DOXYGEN_PATH=/Applications/Doxygen.app/Contents/Resources/doxygen
 
 # Compiler and options
 CC	= gcc
-OPT	= -Wall -O3
+OPT	= -Wall -O3 -g -DS2LET_VERSION=\"1.0\" -DS2LET_BUILD=\"`svnversion -n .`\"
 UNAME := $(shell uname)
 
 # ======================================== #
@@ -91,24 +91,30 @@ $(S2LETOBJMEX)/%_mex.$(MEXEXT): $(S2LETOBJMAT)/%_mex.o $(S2LETLIB)/lib$(S2LETLIB
 # ======================================== #
 
 .PHONY: default
-default: lib test tidy
+default: lib test about tidy
 
 .PHONY: matlab
-matlab: lib $(S2LETOBJSMEX)
+matlab: $(S2LETOBJSMEX)
 
 .PHONY: all
-all: lib matlab doc test tidy
+all: lib matlab doc test about tidy
 
 .PHONY: lib
 lib: $(S2LETLIB)/lib$(S2LETLIBN).a
 $(S2LETLIB)/lib$(S2LETLIBN).a: $(S2LETOBJS)
 	ar -r $(S2LETLIB)/lib$(S2LETLIBN).a $(S2LETOBJS)
 
-.PHONY: test
+.PHONY: lib test
 lib: $(S2LETBIN)/s2let_test
 $(S2LETBIN)/s2let_test: $(S2LETOBJ)/s2let_test.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_test $(LDFLAGS)
 	$(S2LETBIN)/s2let_test
+
+.PHONY: about
+about: $(S2LETBIN)/s2let_about
+$(S2LETBIN)/s2let_about: $(S2LETOBJ)/s2let_about.o 
+	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_about
+	$(S2LETBIN)/s2let_about
 
 .PHONY: doc
 doc:
@@ -122,6 +128,7 @@ clean:	tidy cleandoc
 	rm -f $(S2LETLIB)/lib$(S2LETLIBN).a
 	rm -f $(S2LETOBJMEX)/*_mex.$(MEXEXT)
 	rm -f $(S2LETBIN)/s2let_test
+	rm -f $(S2LETBIN)/s2let_about
 
 .PHONY: tidy
 tidy:
