@@ -24,10 +24,15 @@ flm = 2.*(flm - (1+sqrt(-1))./2);
 % Real space synthesis
 f = ssht_inverse(flm, L, 'Method', 'MW');
 
+% Perform axisym wavelet transform with default parameters
+[f_wav, f_scal] = s2let_axisym_analysis(f);
+f_rec = s2let_axisym_synthesis(f_wav, f_scal);
+s2let_default_transform_error = max(max(abs(f-f_rec)))
+
 % Perform axisym wavelet transform 
-[f_wav, f_scal] = s2let_axisym_analysis(f, B, L, J_min);
-f_rec = s2let_axisym_synthesis(f_wav, f_scal, B, L, J_min);
-s2let_transform_error = max(max(abs(f-f_rec)))
+[f_wav, f_scal] = s2let_axisym_analysis(f, 'B', B, 'L', L, 'J_min', J_min);
+f_rec = s2let_axisym_synthesis(f_wav, f_scal, 'B', B, 'L', L, 'J_min', J_min);
+s2let_custom_transform_error = max(max(abs(f-f_rec)))
 
 % Constraint on flm's to generate real signal
 for el = 0:L-1
@@ -43,7 +48,7 @@ end
 f_real = ssht_inverse(flm, L, 'Method', 'MW', 'Reality', true);
 
 % Perform real axisym wavelet transform 
-[f_wav_real, f_scal_real] = s2let_axisym_analysis(f_real, B, L, J_min, 'Reality', true);
-f_real_rec = s2let_axisym_synthesis(f_wav_real, f_scal_real, B, L, J_min, 'Reality', true);
+[f_wav_real, f_scal_real] = s2let_axisym_analysis(f_real, 'B', B, 'L', L, 'J_min', J_min, 'Reality', true);
+f_real_rec = s2let_axisym_synthesis(f_wav_real, f_scal_real, 'B', B, 'L', L, 'J_min', J_min, 'Reality', true);
 s2let_real_transform_error = max(max(abs(f_real-f_real_rec)))
 
