@@ -105,7 +105,7 @@ $(S2LETLIB)/lib$(S2LETLIBN).a: $(S2LETOBJS)
 	ar -r $(S2LETLIB)/lib$(S2LETLIBN).a $(S2LETOBJS)
 
 .PHONY: lib test
-lib: $(S2LETBIN)/s2let_test
+test: $(S2LETBIN)/s2let_test
 $(S2LETBIN)/s2let_test: $(S2LETOBJ)/s2let_test.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_test $(LDFLAGS)
 	$(S2LETBIN)/s2let_test
@@ -133,6 +133,7 @@ clean:	tidy cleandoc
 .PHONY: tidy
 tidy:
 	rm -f $(S2LETOBJ)/*.o
+	rm -f $(S2LETOBJMEX)/*.o
 	rm -f *~ 
 
 # ======================================== #
