@@ -7,6 +7,8 @@
 
 #define PI    3.141592653589793238462643383279502884197
 
+int s2let_bandlimit(int B, int j);
+
 int s2let_el_min(int B, int J_min);
 
 int s2let_j_max(int L, int B);

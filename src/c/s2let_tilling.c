@@ -7,6 +7,18 @@
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 
 /*!
+ * Computes band-limit of a specific wavelet scale.
+ *
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  j Wavelet scale.
+ * \retval band-limit
+ */
+int s2let_bandlimit(int B, int j)
+{
+	return ceil(pow(B, j+1));
+}
+
+/*!
  * Computes minimum harmonic index supported by needlets.
  *
  * \param[in]  B Wavelet parameter.

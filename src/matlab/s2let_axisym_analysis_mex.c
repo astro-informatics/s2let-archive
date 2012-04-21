@@ -5,6 +5,8 @@
 #include <s2let.h>
 #include "mex.h"
 
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
+
 /**
  * MATLAB interface: s2let_axisym_analysis.
  * This function for internal use only.
@@ -19,16 +21,16 @@
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
-  int n, i, j, B, L, J_min, f_m, f_n, reality;
+  int n, i, j, B, L, J_min, f_m, f_n, reality, downsample;
   double *f_wav_real, *f_scal_real, *f_real, *f_wav_imag, *f_scal_imag, *f_imag;
   complex double *f_wav = NULL, *f_scal = NULL, *f = NULL;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
   int iin = 0, iout = 0;
 
   // Check number of arguments
-  if(nrhs!=5) {
+  if(nrhs!=6) {
     mexErrMsgIdAndTxt("s2let_axisym_analysis_mex:InvalidInput:nrhs",
-          "Require five inputs.");
+          "Require six inputs.");
   }
   if(nlhs!=2) {
     mexErrMsgIdAndTxt("s2let_axisym_analysis_mex:InvalidOutput:nlhs",
@@ -41,6 +43,13 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_axisym_analysis_mex:InvalidInput:reality",
           "Reality flag must be logical.");
   reality = mxIsLogicalScalarTrue(prhs[iin]);
+
+  // Parse multiresolution flag
+  iin = 5;
+  if( !mxIsLogicalScalar(prhs[iin]) )
+    mexErrMsgIdAndTxt("s2let_axisym_analysis_mex:InvalidInput:downsample",
+          "Multiresolution flag must be logical.");
+  downsample = mxIsLogicalScalarTrue(prhs[iin]);
 
   // Parse input dataset f
   iin = 0;
@@ -85,11 +94,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_axisym_analysis_mex:InvalidInput:bandLimitNonInt",
           "Harmonic band-limit L must be positive integer.");
 
-  if( B >= L ) {
-    mexErrMsgIdAndTxt("s2let_axisym_analysis_mex:InvalidInput:waveletParameter",
-          "Wavelet parameter B must be smaller than L!");
-  }
-
   if( f_m*f_n != L*(2*L-1) ) {
     mexErrMsgIdAndTxt("s2let_axisym_analysis_mex:InvalidInput:LbandLimit",
           "L must correspond to the sampling scheme, i.e. f = L*(2*L-1) samples.");
@@ -117,50 +121,72 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }
 
   // Perform wavelet transform in harmonic space and then FLAG reconstruction.
-  if(reality){
-    f_wav_r = (double*)malloc( (J+1) * L * (2*L-1) * sizeof(double));
-    f_scal_r = (double*)malloc( L * (2*L-1) * sizeof(double));
-    s2let_axisym_wav_analysis_real(f_wav_r, f_scal_r, f_r, B, L, J_min);
+  if(downsample){
+    // Multiresolution algorithm
+    if(reality){
+      s2let_axisym_allocate_f_wav_multires_real(&f_wav_r, &f_scal_r, B, L, J_min);
+      s2let_axisym_wav_analysis_multires_real(f_wav_r, f_scal_r, f_r, B, L, J_min);
+    }else{
+      s2let_axisym_allocate_f_wav_multires(&f_wav, &f_scal, B, L, J_min);
+      s2let_axisym_wav_analysis_multires(f_wav, f_scal, f, B, L, J_min); 
+    }
   }else{
-    f_wav = (complex double*)malloc( (J+1) * L * (2*L-1) * sizeof(complex double));
-    f_scal = (complex double*)malloc( L * (2*L-1) * sizeof(complex double));
-    s2let_axisym_wav_analysis(f_wav, f_scal, f, B, L, J_min); 
+    // Full resolution algorithm
+    if(reality){
+      s2let_axisym_allocate_f_wav_real(&f_wav_r, &f_scal_r, B, L, J_min);
+      s2let_axisym_wav_analysis_real(f_wav_r, f_scal_r, f_r, B, L, J_min);
+    }else{
+      s2let_axisym_allocate_f_wav(&f_wav, &f_scal, B, L, J_min);
+      s2let_axisym_wav_analysis(f_wav, f_scal, f, B, L, J_min); 
+    }
   }
 
+  // Compute size of wavelet array
+  int bandlimit, wavsize, scalsize = 0;
+  if(downsample){
+    for (j = J_min; j <= J; j++){
+        bandlimit = MIN(s2let_bandlimit(B, j), L);
+        wavsize += bandlimit * (2 * bandlimit - 1);
+     }
+     bandlimit = MIN(s2let_bandlimit(B, J_min), L);
+     scalsize = bandlimit * (2 * bandlimit - 1);
+  }else{
+    wavsize = (J+1-J_min) * L * ( 2 * L - 1 );
+    scalsize = L * ( 2 * L - 1 );
+  }
 
   // Output wavelets
   if(reality){
 
     iout = 0;
-    plhs[iout] = mxCreateDoubleMatrix(J+1, L*(2*L-1), mxREAL);
+    plhs[iout] = mxCreateDoubleMatrix(1, wavsize, mxREAL);
     f_wav_real = mxGetPr(plhs[iout]);
-    for(j=0; j<=J; j++)
-      for (i=0; i<L*(2*L-1); i++)
-        f_wav_real[ i * (J + 1 ) + j ] = creal(f_wav_r[ j * L*(2*L-1) + i ]);
+    for (i=0; i<wavsize; i++){
+      f_wav_real[ i] = creal(f_wav_r[ i ]);
+    }
 
     iout = 1;
-    plhs[iout] = mxCreateDoubleMatrix(1, L*(2*L-1), mxREAL);
+    plhs[iout] = mxCreateDoubleMatrix(1, scalsize, mxREAL);
     f_scal_real = mxGetPr(plhs[iout]);
-    for (i=0; i<f_m*f_n; i++)
+    for (i=0; i<scalsize; i++)
       f_scal_real[i] = creal(f_scal_r[i]);
 
   }else{
 
     iout = 0;
-    plhs[iout] = mxCreateDoubleMatrix(J+1, L*(2*L-1), mxCOMPLEX);
+    plhs[iout] = mxCreateDoubleMatrix(1, wavsize, mxCOMPLEX);
     f_wav_real = mxGetPr(plhs[iout]);
     f_wav_imag = mxGetPi(plhs[iout]);
-    for(j=0; j<=J; j++)
-      for (i=0; i<L*(2*L-1); i++){
-        f_wav_real[ i * (J + 1 ) + j ] = creal( f_wav[ j * L*(2*L-1) + i ] );
-        f_wav_imag[ i * (J + 1 ) + j ] = cimag( f_wav[ j * L*(2*L-1) + i ] );
-      }
+    for (i=0; i<wavsize; i++){
+      f_wav_real[ i ] = creal( f_wav[ i ] );
+      f_wav_imag[ i ] = cimag( f_wav[ i ] );
+    }
 
     iout = 1;
-    plhs[iout] = mxCreateDoubleMatrix(1, L*(2*L-1), mxCOMPLEX);
+    plhs[iout] = mxCreateDoubleMatrix(1, scalsize, mxCOMPLEX);
     f_scal_real = mxGetPr(plhs[iout]);
     f_scal_imag = mxGetPi(plhs[iout]);
-    for (i=0; i<L*(2*L-1); i++){
+    for (i=0; i<scalsize; i++){
       f_scal_real[i] = creal( f_scal[i] );
       f_scal_imag[i] = cimag( f_scal[i] );
     }

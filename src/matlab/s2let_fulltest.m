@@ -8,9 +8,9 @@ clear all;
 close all;
 
 % Main parameters
-L = 32
-B = 3
-J_min = 2
+L = 64;
+B = 3;
+J_min = 2;
 J = s2let_jmax(L, B)
 
 % Checks tilling of harmonic space for axysimmetric wavelets
@@ -27,12 +27,22 @@ f = ssht_inverse(flm, L, 'Method', 'MW');
 % Perform axisym wavelet transform with default parameters
 [f_wav, f_scal] = s2let_axisym_analysis(f);
 f_rec = s2let_axisym_synthesis(f_wav, f_scal);
-s2let_default_transform_error = max(max(abs(f-f_rec)))
+default = max(max(abs(f-f_rec)))
+
+% Perform axisym wavelet transform with default parameters
+[f_wav, f_scal] = s2let_axisym_analysis(f, 'downsample', true);
+f_rec = s2let_axisym_synthesis(f_wav, f_scal, 'downsample', true);
+default_multires = max(max(abs(f-f_rec)))
+
+% Perform axisym wavelet transform with default parameters
+[f_wav, f_scal] = s2let_axisym_analysis(f, 'downsample', false);
+f_rec = s2let_axisym_synthesis(f_wav, f_scal, 'downsample', false);
+default_fullres = max(max(abs(f-f_rec)))
 
 % Perform axisym wavelet transform 
 [f_wav, f_scal] = s2let_axisym_analysis(f, 'B', B, 'L', L, 'J_min', J_min);
 f_rec = s2let_axisym_synthesis(f_wav, f_scal, 'B', B, 'L', L, 'J_min', J_min);
-s2let_custom_transform_error = max(max(abs(f-f_rec)))
+custom = max(max(abs(f-f_rec)))
 
 % Constraint on flm's to generate real signal
 for el = 0:L-1
@@ -47,8 +57,24 @@ end
 % Real space synthesis
 f_real = ssht_inverse(flm, L, 'Method', 'MW', 'Reality', true);
 
+
+% Perform real axisym wavelet transform 
+[f_wav_real, f_scal_real] = s2let_axisym_analysis(f_real, 'Reality', true);
+f_real_rec = s2let_axisym_synthesis(f_wav_real, f_scal_real, 'Reality', true);
+default = max(max(abs(f_real-f_real_rec)))
+
+% Perform real axisym wavelet transform 
+[f_wav_real, f_scal_real] = s2let_axisym_analysis(f_real, 'downsample', true, 'Reality', true);
+f_real_rec = s2let_axisym_synthesis(f_wav_real, f_scal_real, 'downsample', true, 'Reality', true);
+default_multires = max(max(abs(f_real-f_real_rec)))
+
+% Perform real axisym wavelet transform 
+[f_wav_real, f_scal_real] = s2let_axisym_analysis(f_real, 'downsample', false, 'Reality', true);
+f_real_rec = s2let_axisym_synthesis(f_wav_real, f_scal_real, 'downsample', false, 'Reality', true);
+default_fullres = max(max(abs(f_real-f_real_rec)))
+
 % Perform real axisym wavelet transform 
 [f_wav_real, f_scal_real] = s2let_axisym_analysis(f_real, 'B', B, 'L', L, 'J_min', J_min, 'Reality', true);
 f_real_rec = s2let_axisym_synthesis(f_wav_real, f_scal_real, 'B', B, 'L', L, 'J_min', J_min, 'Reality', true);
-s2let_real_transform_error = max(max(abs(f_real-f_real_rec)))
+custom = max(max(abs(f_real-f_real_rec)))
 
