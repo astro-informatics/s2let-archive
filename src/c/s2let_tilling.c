@@ -73,6 +73,7 @@ void s2let_axisym_tilling(double *kappa, double *kappa0, int B, int L, int J_min
 	int j, l;
 	int J = s2let_j_max(L, B);
 
+	double previoustemp, temp;
 	double *phi2 = (double*)calloc((J+2) * L, sizeof(double));
 
 	s2let_tilling_phi2(phi2, B, L, J_min);
@@ -83,7 +84,12 @@ void s2let_axisym_tilling(double *kappa, double *kappa0, int B, int L, int J_min
 	
 	for (j = J_min; j <= J; j++){
 		for (l = 0; l < L; l++){
-			kappa[l+j*L] = sqrt(phi2[l+(j+1)*L] - phi2[l+j*L]);
+			temp = sqrt(phi2[l+(j+1)*L] - phi2[l+j*L]);
+			if( isnan(temp) || isinf(temp) )
+				kappa[l+j*L] = previoustemp;
+			else
+				kappa[l+j*L] = temp;
+			previoustemp = temp;
 		}
 	}
 
@@ -103,8 +109,7 @@ void s2let_tilling_phi2(double *phi2, int B, int L, int J_min)
 {
 	int j, l;
 	int J = s2let_j_max(L, B);
-
-	int n = 100;
+	int n = 300;
 
 	double kappanorm = s2let_kappa0_quadtrap(1.0 / (double)B, 1.0, n, B);
 	for (j = 0; j <= J+1; j++){
@@ -135,7 +140,7 @@ double s2let_axisym_check_identity(double *kappa, double *kappa0, int B, int L, 
 {
 	int l, j;
 	int J = s2let_j_max(L, B);
-	int l_min = s2let_el_min(B, J_min);
+	//int l_min = s2let_el_min(B, J_min);
 	double sum = 0;
 		
 	double *ident;

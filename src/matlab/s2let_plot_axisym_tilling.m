@@ -26,7 +26,7 @@ hold on;
 for j = J_min:J  
   colour = rand(1,3)*0.9;
   plot(0:L-1, kappa(j+1,:), 'LineWidth', 2, 'Color', colour);
-  h = text(B.^j, 1.05, strcat('j=',num2str(j)), 'Color', colour);  
+  h = text(B.^j, 1.05, strcat('j=',num2str(j+1)), 'Color', colour);  
 end
 title('Harmonic tiling');
 xlabel('el');

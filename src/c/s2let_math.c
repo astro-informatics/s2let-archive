@@ -35,7 +35,8 @@ double s2let_kappa0_quadtrap(double a, double b, int n, int B)
 	    	f1 = f(a + i * h, B);
 	    	//printf("f(%f)=%f  |  ",a + i * h, f1);
 	    	f2 = f(a + (i + 1) * h, B);
-	    	sum += ((f1 + f2) * h) / 2;
+        if(!isnan(f1) && !isinf(f1) && !isnan(f2) && !isinf(f2))
+          sum += ((f1 + f2) * h) / 2;
 	    	//printf("f(%f)=%f  |  ",a + (i+1) * h, f2);
 	    }
 	}

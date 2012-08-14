@@ -8,9 +8,9 @@ clear all;
 close all;
 
 % Main parameters
-L = 64;
+L = 128;
 B = 3;
-J_min = 2;
+J_min = 4;
 J = s2let_jmax(L, B)
 
 % Checks tilling of harmonic space for axysimmetric wavelets
