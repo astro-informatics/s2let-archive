@@ -12,9 +12,8 @@
  */
 int read_mw_bandlimit(char* filename)
 {
-  long     naxes, *naxis, npix, npercol, irow;
-  int      status, Lread, hdutype, nfound, anynul;
-  float    nulval;
+  long     naxes, *naxis, Lread;
+  int      status, hdutype, nfound;
   char     comment[FLEN_COMMENT];
   fitsfile *fptr;
   status = 0;
@@ -56,8 +55,8 @@ int read_mw_bandlimit(char* filename)
  */
 void read_mw_map(double* f, char* filename, int L)
 {
-  long     naxes, *naxis, npix, npercol, irow;
-  int      status, Lread, hdutype, nfound, anynul;
+  long     naxes, *naxis, npix, npercol, irow, Lread;
+  int      status, hdutype, nfound, anynul;
   float    nulval;
   char     comment[FLEN_COMMENT];
   fitsfile *fptr;
@@ -84,7 +83,7 @@ void read_mw_map(double* f, char* filename, int L)
     printerror(status);
 
   if( Lread != L )
-  	printf("Attention : read L = %i but you specified L = %i\n",Lread,L);
+  	printf("Attention : read L = %li but you specified L = %i\n",Lread,L);
 
   npix = L * (2*L-1);
 
@@ -164,7 +163,8 @@ void write_mw_map(char* filename, double* f, int L)
   
 }
 
-void printerror( int status)
+
+void printerror(int status)
 {
  if (status){
        fits_report_error(stderr, status); /* print error report */

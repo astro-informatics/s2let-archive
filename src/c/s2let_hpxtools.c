@@ -29,7 +29,7 @@ void healpix_inverse_real(double* f, const complex double* flm, int nside, int L
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void healpix_forward_real(complex double* flm, double* f, int nside, int L)
+void healpix_forward_real(complex double* flm, const double* f, int nside, int L)
 {
     s2let_hpx_map2alm_(f, flm, &nside, &L);
 }
@@ -57,7 +57,7 @@ void read_healpix_map(double* f, char* file, int nside)
  * \param[in]  nside Healpix resolution of the output map.
  * \retval none
  */
-void write_healpix_map(char* file, double* f, int nside)
+void write_healpix_map(char* file, const double* f, int nside)
 {
     s2let_hpx_write_map_(file, f, &nside);
 }

@@ -511,8 +511,6 @@ void s2let_axisym_wav_multires_real_test(int B, int L, int J_min, int seed)
  */
 void s2let_mw_io_test(int L, int seed)
 {
-	clock_t time_start, time_end;
-	int spin = 0;
 	int verbosity = 0;
 	ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 

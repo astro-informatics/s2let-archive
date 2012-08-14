@@ -99,25 +99,50 @@ S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_axisym_tilling_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_axisym_analysis_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_axisym_synthesis_mex.$(MEXEXT)
 
+# ======================================== #
+
 ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
+
 	S2LETOBJS+= $(S2LETOBJ)/s2let_hpxtools.o
 	S2LETOBJS+= $(S2LETOBJ)/s2let_axisym_hpx.o
 	S2LETOBJS+= $(S2LETOBJF90)/s2let_hpx.o
+
 	FFLAGS+= -I$(HEALPIXINC)
 	LDFLAGS+= -L$(HEALPIXLIB)
 	LDFLAGS+= -l$(HEALPIXLIBN)
+
 	LDFLAGS+= -lgfortran -fopenmp
+	LDFLAGSMEX+= -lgfortran -lgomp
 	LDFLAGSMEX+= -L$(HEALPIXLIB)
 	LDFLAGSMEX+= -l$(HEALPIXLIBN)
+
+	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_axisym_analysis_mex.$(MEXEXT)
+	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_axisym_synthesis_mex.$(MEXEXT)
+	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_hpx_axisym_analysis_mex.o
+	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_hpx_axisym_synthesis_mex.o
+
+	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_map2alm_mex.$(MEXEXT)
+	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_alm2map_mex.$(MEXEXT)
+	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_hpx_map2alm_mex.o
+	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_hpx_alm2map_mex.o
+
 endif
 
+# ======================================== #
+
 ifneq (,$(wildcard $(CFITSIOLIB)/libcfitsio.a))
+
 	FFLAGS+= -I$(CFITSIOINC)
+
 	LDFLAGS+= -L$(CFITSIOLIB)
 	LDFLAGS+= -l$(CFITSIOLIBNM)
+
 	LDFLAGSMEX+= -L$(CFITSIOLIB)
 	LDFLAGSMEX+= -l$(CFITSIOLIBNM)
+
 endif
+
+# ======================================== #
 
 $(S2LETOBJ)/%.o: %.c
 	$(CC) $(OPT) $(FFLAGS) -c $< -o $@
@@ -140,7 +165,7 @@ default: lib test about tidy
 matlab: $(S2LETOBJSMEX)
 
 .PHONY: all
-all: lib matlab doc test about tidy
+all: lib matlab doc hpxtest test about tidy
 
 .PHONY: lib
 lib: $(S2LETLIB)/lib$(S2LETLIBN).a

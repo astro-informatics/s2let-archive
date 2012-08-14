@@ -15,7 +15,7 @@ function f = s2let_axisym_synthesis(f_wav, f_scal, varargin)
 %  'Reality'         = { false        [do not assume f real (default)],
 %                        true         [assume f real (improves performance)] }
 %  'B'               = { Dilation factor; B > 1 (default=2) }
-%  'L'               = { Harmonic band-limit; L > 1 (default=guessed) }
+%  'L'               = { Harmonic band-limit; L > 1 (default=guessed from input) }
 %  'Downsample'      = { true        [multiresolution algorithm (default)],
 %                        false       [full resolution wavelets] }
 %  'J_min'           = { Minimum needlet scale to consider;

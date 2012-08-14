@@ -5,7 +5,7 @@ function [f_wav, f_scal] = s2let_axisym_analysis(f, varargin)
 %
 % Default usage :
 %
-%   [f_wav, f_scal] = s2let_axisym_analysis(f, B, L, J_min, <options>)
+%   [f_wav, f_scal] = s2let_axisym_analysis(f, <options>)
 %
 % f is the input field -- MW sampling,
 % f_wav contains the output wavelet contributions,
@@ -13,7 +13,7 @@ function [f_wav, f_scal] = s2let_axisym_analysis(f, varargin)
 %
 % Option :
 %  'B'               = { Dilation factor; B > 1 (default=2) }
-%  'L'               = { Harmonic band-limit; L > 1 (default=guessed) }
+%  'L'               = { Harmonic band-limit; L > 1 (default=guessed from input) }
 %  'J_min'           = { Minimum needlet scale to consider;
 %                        0 <= J_min < log_B(L) (default=0) }
 %  'Downsample'      = { true        [multiresolution algorithm (default)],

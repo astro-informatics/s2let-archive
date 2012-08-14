@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 		offset += 12 * nside * nside; // Go to the next wavelet
 	}
 	// Finally write the scaling function
-	sprintf(outfile, "%s%s%s%s", "some_cmb_simu", "_scal_", params, ".fits");
+	sprintf(outfile, "%s%s%s%s", "data/some_cmb_simu", "_scal_", params, ".fits");
 	printf("Outfile_scal = %s\n",outfile);
 	remove(outfile); // In case the file exists
 	write_healpix_map(outfile, f_scal, nside); // Now write the map to fits file

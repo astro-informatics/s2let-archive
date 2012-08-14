@@ -125,9 +125,6 @@ void s2let_axisym_random_flm_real(complex double *flm, int L, int seed) {
  */
 void s2let_axisym_hpx_test(int nside, int L, int seed)
 {
-	clock_t time_start, time_end;
-	//int J = s2let_j_max(L, B);
-
 	double *f, *f_rec;
 	complex double *flm, *flm_rec;
 	flm = (complex double*)calloc(L * L, sizeof(complex double));
@@ -222,8 +219,6 @@ void s2let_axisym_hpx_wav_test(int nside, int B, int L, int J_min, int seed)
  */
 void s2let_hpx_io_test(int nside, int L, int seed)
 {
-	clock_t time_start, time_end;
-
 	double *f, *f_rec;
 	complex double *flm, *flm_rec;
 	flm = (complex double*)calloc(L * L, sizeof(complex double));

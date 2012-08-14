@@ -120,7 +120,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
           "First scale J_min must be larger than that!");
   }
 
-  // Perform wavelet transform in harmonic space and then FLAG reconstruction.
+  // Perform wavelet transform in harmonic space and then reconstruction.
   if(downsample){
     // Multiresolution algorithm
     if(reality){
@@ -142,7 +142,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }
 
   // Compute size of wavelet array
-  int bandlimit, wavsize, scalsize = 0;
+  int bandlimit, wavsize = 0, scalsize = 0;
   if(downsample){
     for (j = J_min; j <= J; j++){
         bandlimit = MIN(s2let_bandlimit(B, j), L);

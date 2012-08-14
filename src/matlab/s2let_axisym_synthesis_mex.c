@@ -130,7 +130,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
           "First scale J_min must be larger than that!");
   }
 
-  // Perform wavelet transform in harmonic space and then FLAG reconstruction.
+  // Perform wavelet transform in harmonic space and then reconstruction.
   if(downsample){
     // Multiresolution algorithm
     if(reality){

@@ -12,9 +12,9 @@ extern void s2let_hpx_write_map_();
 extern void s2let_hpx_read_map_();
 
 void healpix_inverse_real(double* f, const complex double* flm, int nside, int L);
-void healpix_forward_real(complex double* flm, double* f, int nside, int L);
+void healpix_forward_real(complex double* flm, const double* f, int nside, int L);
 
 void read_healpix_map(double* f, char* file, int nside);
-void write_healpix_map(char* file, double* f, int nside);
+void write_healpix_map(char* file, const double* f, int nside);
 
 #endif
