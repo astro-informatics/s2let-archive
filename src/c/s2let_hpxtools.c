@@ -16,7 +16,7 @@
  */
 void healpix_inverse_real(double* f, const complex double* flm, int nside, int L)
 {
-	s2let_hpx_alm2map_(flm, f, &nside, &L);
+	s2let_hpx_alm2map_(f, flm, &nside, &L);
 }
 
 /*!
@@ -31,7 +31,7 @@ void healpix_inverse_real(double* f, const complex double* flm, int nside, int L
  */
 void healpix_forward_real(complex double* flm, const double* f, int nside, int L)
 {
-    s2let_hpx_map2alm_(f, flm, &nside, &L);
+    s2let_hpx_map2alm_(flm, f, &nside, &L);
 }
 
 /*!

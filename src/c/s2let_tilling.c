@@ -91,6 +91,10 @@ void s2let_axisym_tilling(double *kappa, double *kappa0, int B, int L, int J_min
 				kappa[l+j*L] = temp;
 			previoustemp = temp;
 		}
+		for (l = 0; l < L; l++){
+			if( !finite(kappa[l+j*L]) ) 
+				 kappa[l+j*L] = kappa[l+j*L-1];
+		}
 	}
 
 	free(phi2);

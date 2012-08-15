@@ -1,10 +1,11 @@
 ! ----------------------------------------------------------- !
 
-SUBROUTINE s2let_hpx_map2alm( map, alm, nside, L )
+SUBROUTINE s2let_hpx_map2alm( alm, map, nside, L )
   use healpix_types
   use healpix_modules
   implicit none
-  integer(i4b) 	:: nside, nlmax, L, npix, el, em
+  integer(i4b) 	:: nside, nlmax, L, el, em
+  integer(i8b) :: npix
   real(dp), dimension(0:12*nside*nside-1) :: map
   complex(dp), dimension(0:L*L-1) 	  :: alm
   real(dp), allocatable, dimension(:,:) :: dw8 
@@ -35,11 +36,12 @@ END SUBROUTINE s2let_hpx_map2alm
 
 ! ----------------------------------------------------------- !
 
-SUBROUTINE s2let_hpx_alm2map( alm, map, nside, L )
+SUBROUTINE s2let_hpx_alm2map( map, alm, nside, L )
   use healpix_types
   use healpix_modules
   implicit none
-  integer(i4b) 	:: nside, nlmax, L, npix, el, em
+  integer(i4b) 	:: nside, nlmax, L, el, em
+  integer(i8b) :: npix
   real(dp), dimension(0:12*nside*nside-1) :: map
   complex(dp), dimension(0:L*L-1) 	  :: alm
   complex(dpc), allocatable, dimension(:,:,:)  ::  alm_temp

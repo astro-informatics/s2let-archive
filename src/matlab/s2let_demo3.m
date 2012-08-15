@@ -2,8 +2,8 @@
 % Analyse some CMB simulation from a valid HEALPIX map
 
 L = 128;
-B = 3;
-J_min = 1;
+B = 4;
+J_min = 2;
 
 [f, nside] = read_healpix_map('data/some_cmb_simu.fits');
 
@@ -19,8 +19,8 @@ f_rec = s2let_hpx_axisym_synthesis(f_wav, f_scal,'B',B,'L',L,'J_min',J_min);
 J = s2let_jmax(L, B);
 zoomfactor = 1.2;
 ns = ceil(sqrt(2+J-J_min+1)) ;
-ny = ns - 1 + rem(2+J-J_min + 1, ns) ;
-nx = ns;
+ny = ns - 1 ;
+nx = ns ;
 figure('Position',[100 100 1300 1000])
 
 subplot(nx, ny, 1);

@@ -261,10 +261,10 @@ void s2let_hpx_io_test(int nside, int L, int seed)
 int main(int argc, char *argv[]) 
 {
 	
-	const int L = 64;
+	const int L = 256;
 	const int B = 2;
 	const int J_min = 2;
-	int nside = 32;
+	int nside = 128;
 	const int seed = (int)(10000.0*(double)clock()/(double)CLOCKS_PER_SEC);
 
 	printf("==========================================================\n");

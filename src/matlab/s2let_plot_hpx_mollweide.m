@@ -11,8 +11,6 @@ nside = sqrt(max(sz)/12);
 gridDelaunay = delaunay(x,y);
 h = trisurf(gridDelaunay,x,y,f*0.0,f);
 
-% Plot.
-%h = surf(x,y,zeros(12*nside^2,12*nside^2));
 set(h, 'LineStyle', 'none')
 axis equal
 axis off

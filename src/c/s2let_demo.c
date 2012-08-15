@@ -8,9 +8,9 @@
 int main(int argc, char *argv[]) 
 {
 	
-	const int L = 128;    // Harmonic band-limit
-	const int B = 3;      // Wavelet parameters
-	const int J_min = 1;  // First wavelet scale to use
+	const int L = 256;    // Harmonic band-limit
+	const int B = 4;      // Wavelet parameters
+	const int J_min = 2;  // First wavelet scale to use
 
 	// The input file is a random CMB simulation (healpix map with nside=128)
 	char file[100] = "data/some_cmb_simu.fits";
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 	int j, J = s2let_j_max(L, B); // Explicitly compute the maximum wavelet scale
 	int offset = 0; // Start with the first wavelet
 	for(j = J_min; j <= J; j++){
-		sprintf(outfile, "%s%s%s%s%d%s", "some_cmb_simu", "_wav_", params, "_", j, ".fits");
+		sprintf(outfile, "%s%s%s%s%d%s", "data/some_cmb_simu", "_wav_", params, "_", j, ".fits");
 		printf("Outfile_wav[j=%i] = %s\n",j,outfile);
 		remove(outfile); // In case the file exists
 		write_healpix_map(outfile, f_wav + offset, nside); // Now write the map to fits file

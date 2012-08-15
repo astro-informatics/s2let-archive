@@ -8,9 +8,9 @@ clear all;
 close all;
 
 % Main parameters
-L = 64;
-nside = 64;
-B = 3;
+L = 128;
+nside = 128;
+B = 2;
 J_min = 1;
 J = s2let_jmax(L, B);
 npix = 12*nside*nside;

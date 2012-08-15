@@ -43,7 +43,6 @@ void s2let_axisym_hpx_wav_analysis_real(double *f_wav, double *f_scal, const dou
 {
 	int bandlimit, j, offset, offset_lm;
 	int J = s2let_j_max(L, B);
-	//int l_min = s2let_axisym_el_min(B, J_min);
 
 	double *wav_lm, *scal_lm;
 	s2let_axisym_allocate_wav_lm(&wav_lm, &scal_lm, B, L);
@@ -68,6 +67,8 @@ void s2let_axisym_hpx_wav_analysis_real(double *f_wav, double *f_scal, const dou
 		offset_lm += bandlimit * bandlimit;
 		offset += 12 * nside * nside;
 	}
+	offset_lm -= bandlimit * bandlimit;
+	offset -= 12 * nside * nside;
 
 	free(flm);
 	free(f_scal_lm);
@@ -94,7 +95,6 @@ void s2let_axisym_hpx_wav_synthesis_real(double *f, const double *f_wav, const d
 {
 	int bandlimit, j, offset, offset_lm;
 	int J = s2let_j_max(L, B);
-	//int l_min = s2let_axisym_el_min(B, J_min);
 
 	double *wav_lm, *scal_lm;
 	s2let_axisym_allocate_wav_lm(&wav_lm, &scal_lm, B, L);

@@ -194,7 +194,6 @@ void s2let_axisym_wav_analysis_multires_lm(complex double *f_wav_lm, complex dou
 	int bandlimit, offset, j, l, m;
 	int J = s2let_j_max(L, B);
 	double wav0, scal0;
-	//int l_min = s2let_axisym_el_min(B, J_min);
 
 	offset = 0;
 	for (j = J_min; j <= J; j++){

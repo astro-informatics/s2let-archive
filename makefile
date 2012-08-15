@@ -1,3 +1,6 @@
+# S2LET package
+# Copyright (C) 2012 
+# Boris Leistedt & Jason McEwen
 # ======================================== #
 
 # Directory for CFITSIO
@@ -16,7 +19,7 @@ DOXYGEN_PATH=/Applications/Doxygen.app/Contents/Resources/doxygen
 # Compiler and options
 CC	= gcc
 FCC	= gfortran
-OPT	= -Wall -O3 -g -DS2LET_VERSION=\"1.0\" -DS2LET_BUILD=\"`svnversion -n .`\"
+OPT	= -Wall -O3 -g -DS2LET_VERSION=\"1.1\" -DS2LET_BUILD=\"`svnversion -n .`\"
 OPTF90 = -O3 -ffree-form
 HPXOPT = -lgfortran -DGFORTRAN -fno-second-underscore -fopenmp
 UNAME := $(shell uname)
@@ -165,7 +168,7 @@ default: lib test about tidy
 matlab: $(S2LETOBJSMEX)
 
 .PHONY: all
-all: lib matlab doc hpxtest test about tidy
+all: lib matlab doc hpxtest test demo about tidy
 
 .PHONY: lib
 lib: $(S2LETLIB)/lib$(S2LETLIBN).a
@@ -176,19 +179,16 @@ $(S2LETLIB)/lib$(S2LETLIBN).a: $(S2LETOBJS)
 test: $(S2LETBIN)/s2let_test
 $(S2LETBIN)/s2let_test: $(S2LETOBJ)/s2let_test.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_test $(LDFLAGS)
-	$(S2LETBIN)/s2let_test
 
 .PHONY: demo
 demo: $(S2LETBIN)/s2let_demo
 $(S2LETBIN)/s2let_demo: $(S2LETOBJ)/s2let_demo.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_demo $(LDFLAGS)
-	$(S2LETBIN)/s2let_demo
 
 .PHONY: hpxtest
 hpxtest: $(S2LETBIN)/s2let_hpxtest
 $(S2LETBIN)/s2let_hpxtest: $(S2LETOBJ)/s2let_hpxtest.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_hpxtest $(LDFLAGS)
-	$(S2LETBIN)/s2let_hpxtest
 
 .PHONY: about
 about: $(S2LETBIN)/s2let_about
