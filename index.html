@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-<meta name="description" content="ssht: spin spherical harmonic transforms" />
-<meta name="keywords" content="ssht, spherical, harmonics, spherical
-harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, wiaux" />
-<meta name="author" content="Jason McEwen / Design by Andreas Viklund - http://andreasviklund.com/" />
+<meta name="description" content="s2let: fast wavelets on the sphere" />
+<meta name="keywords" content="s2let, spherical, harmonics, spherical
+harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wavelets, tilling" />
+<meta name="author" content="Boris Leistedt & Jason McEwen" />
 <link rel="stylesheet" type="text/css" href="style.css" title="1024px style" media="screen,projection" />
 <title>ssht</title>
 </head>
@@ -36,8 +36,8 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, wiaux" />
 	<img src="images/logo.jpg" width="140" height="140" border=0> 
       </td>
       <td width=500 align="left" valign="center">
-	<h1 class="title">ssht<span class="fade">1.0b1</span></h1>
-	<p id="slogantitle">Spin spherical harmonic transforms</p>
+	<h1 class="title">S2LET<span class="fade">1.1</span></h1>
+	<p id="slogantitle">Fast wavelets on the sphere</p>
       </td>			
     </tr>
   </table>
@@ -51,14 +51,11 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, wiaux" />
 <h2>News</h2>
 
 <ul>
-<li><strong>31 October 2011</strong><br />
-Public release of SSHT 1.0b1 (first beta).
+<li><strong>17 Augustus 2012</strong><br />
+Private release of SSHT 1.1, fully supporting the HEALPIX sampling.
 </li>
-<li><strong>20 May 2011</strong><br />
-Private release of SSHT 0.2, including fast adjoint algorithms.
-</li>
-<li><strong>5 March 2011</strong><br />
-Private release of SSHT 0.1.
+<li><strong>3 May 2012</strong><br />
+Private release of S2LET 1.0 for fast wavelet transform on the MW sampling.
 </li>
 </ul>
 
@@ -72,142 +69,90 @@ Private release of SSHT 0.1.
 <a name="introduction"><h2>Introduction</h2></a>
 
   <p>
-  The <strong>SSHT</strong> code provides functionality to perform fast and exact
-  spin spherical harmonic transforms based on the sampling theorem on the
-  sphere derived in our paper:
-  <i><a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#mcewen:fssht">A
-  novel sampling theorem on the sphere</a> </i>
+  The <strong>S2LET</strong> code provides high performance routines for performing wavelet analysis of signals given on the sphere. 
+	It was initially intended to work with the <a
+ href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> code that uses the <a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#mcewen:fssht">MW sampling</a> 
   (<a href="http://arxiv.org/abs/1110.6298">ArXiv</a>
-  | <a href="http://dx.doi.org/10.1109/TSP.2011.2166394">DOI</a>).
-
-  In some applications, adjoint forward and inverse spherical harmonic
-  transforms are also required (for example, when solving convex
-  optimisation problems).  We provide functionality to perform
-  fast and exact adjoint transforms, based on the fast algorithms
-  derived in our paper: 
-  <i><a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#mcewen:css2">Efficient
-  and compressive sampling on the sphere</a></i>.
+  | <a href="http://dx.doi.org/10.1109/TSP.2011.2166394">DOI</a>) to perform exact spherical harmonic transform on the sphere. In that case the wavelet transform is also theoretically exact, i.e. it captures all the information of band-limited signals in the minimal number of samples. S2LET was extended in order to support the <a
+ href="http://healpix.jpl.nasa.gov/">HEALPIX</a> format, in which case the transforms are not theoretically exact. 
 
   <p>
-  This documentation outlines the various harmonic transforms
-  supported in SSHT, before describing installation details and
-  documenting the C, Fortran and Matlab source code.  Reference,
-  version, and license information then follows.
+  This documentation outlines the main features of S2LET, installation details as well as the core functionalties and interfaces.  Reference, version, and license information then follows.
   
   For an overview see the <a href="../README.txt">README.txt</a>
-  file.
+  file. S2LET requires the <a
+ href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a
+ href="http://www.fftw.org/">FFTW</a> and <a
+ href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> packages. To support <a
+ href="http://healpix.jpl.nasa.gov/">HEALPIX</a>, a valid installation of its Fortran implementation must be provided.
 
 <!--------------------------------------------------------------->  
-<a name="routines"><h2>Spin spherical harmonic transform routines</h2></a>
+<a name="routines"><h2>Wavelet transform on the sphere</h2></a>
 
-  <p> Routines are provided to compute forward and inverse transforms
-  using our optimal sampling (the MW routines).  An extension of our
-  sampling theorem to a sub-optimal but diametrically symmetric
-  sampling, which is important for certain applications, is also
-  provided (the MWSS routines).  For the MW and MWSS routines we also
-  provide fast algorithms to perform adjoint forward and inverse
-  transforms.
+  <p> Following the needlet approach, wavelet kernels are constructed through exact tilling of harmonic space. With an exact spherical harmonic transform as the one provided in SSHT, the wavelet transform is theoretically exact in both pixel and harmonic spaces. S2LET then achieves floating-point precision. When using HEALPIX instead of the MW sampling, the harmonic transform is not exact and hence the corresponding wavelet transform performed by S2LET is only exact in harmonic space. In other words, a set of spherical harmonic coefficients may be projected onto wavelets exactly in harmonic spaces but the HEALPIX maps don't capture all the information contained in these coefficients. However it achieves good numerical accuracy in a wide range of situations.
 
-  <p> We also provide optimal routines to perform spherical harmonic
-  transforms using Gauss-Legendre quadrature (the GL routines),
-  although these are slower than the MW routines.
+  <p> S2LET provides user-friendly routines for performing the wavelet transform in both real and harmonic space. Moreover, since the individual wavelet kernels have different band-limits, they may be reconstructed at different resolutions on the MW sampling. For this reason all MW routines are implemented in two versions : the usual transform where all maps are constructed at full resolution on the sphere, and a multiresolution algorithm that stores each wavelet map in the number of samples corresponding to its band-limit. This multiresolution approach fully exploit the advantages of the tilling of harmonic space as well as the exactness of both the spherical harmonic and the wavelet transforms. The multiresolution cannot be used with HEALPIX as its spherical harmonic transform is not exact.
 
-  <p> Finally, we provide routines to perform transforms based on the
-  quadrature of Driscoll & Healy (the DH routines).  Note that we do
-  NOT implement the fast Driscoll & Healy algorithms (which may be
-  found in s2kit) but simply apply the quadrature rule to implement a
-  simple algorithm based on a separation of variables, hence these
-  routines are slower still.
-
-  <p> All of these transforms correspond to sampling theorems on the
-  sphere, with exact forward and inverse transforms for band-limited
-  signals.  In practice reconstruction accuracy is limited by machine
-  precision.  For all of the algorithms we find maximum reconstruction
-  errors are of the order 10^(-10) or considerably smaller.  Please
-  set our paper for a discussion of the various algorithms implemented
-  in the SSHT package and for a comparison of their performance.
+  <p> 
 
 
 <!--------------------------------------------------------------->  
 <a name="installation"><h2>Installation</h2></a>
 
-  <p> The <strong>SSHT</strong> package contains both C and Fortran 90
-  implementations.  The C version is recommended since it is faster
-  (due to more efficient memory addressing) and, in addition to the MW
-  routines, it also contains the MWSS, GL and DH routines described <a
-   href="#routines">above</a>.  Furthermore, fast adjoint algorithms
-  are provided in the C implementation only.  The Fortran version
-  contains the core MW routines and additional development and testing
-  routines.  Furthermore, a Matlab interface to the C implementation
-  is provided.
+  <p> The core functionalities of <strong>S2LET</strong> are written in C and self-documented. Matlab interfaces are provided for all high-level routines. They allow to read/write FITS maps (for both the MW and HEALPIX formats), compute the spherical harmonic and the wavelet transforms and plot the resulting signals on the sphere. To support HEALPIX, S2LET uses a hybrid C/Fortran interface to the Fortran HEALPIX library. Several examples, tests and demos are provided for both the C and Matlab codes.
 
   <h4>Dependencies</h4>
 
-  <p> <strong>SSHT</strong> requires only the <a
- href="http://www.fftw.org/">FFTW</a> package.  Obviously suitable C and
- Fortran 90 compilers will be required to build the respective
+  <p> <strong>S2LET</strong> requires the <a
+ href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a
+ href="http://www.fftw.org/">FFTW</a> and <a
+ href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> packages.  Obviously suitable C and Fortran 90 compilers will be required to build the respective
  implementations.  Both C and Matlab mex compilers will be required
  to build the Matlab interface to the C implementation.
 
   <h4>Compiling</h4>
 
-  <p> Makefiles are provided to build the code.  By default the C <a
-  href="../makefile">makefile</a> will be assumed, unless the Fortran
-  <a href="../makefile_f90">makefile_f90</a> is explicitly specified by passing
-  the filename to make using the following command:
-
-  <pre> >> make -f makefile_f90</pre>
-
-  <p>
-  Hereafter we consider the C makefile, although the following
-  commands also apply to the Fortran makefile (with the exception of
-  the Matlab interface).  Before compiling you will need to edit the
-  makefile to specify your compiler and to link with the appropriate libraries.
+  <p> Makefiles are provided to build the code. However the locations of SSHT, FFTW, CFITSIO and optionnaly HEALPIX must be specified. In S2LET the default Makefile will look at these symbols in Bash/Shell profiles. Alternatively you may write them explicitely in the first section of the makefile. The compilers and their options may also be changed there. 
 
   <p> Once you have set the makefile up for your system,
-  <strong>SSHT</strong> may be compiled by running:
+  <strong>S2LET</strong> may be compiled by running:
 
   <pre> >> make all</pre> 
 
-  <p> This will build the library, test program and Matlab interface.
-  If your system is configured to build all of these components then
-  you are done.  If you prefer to build only a subset of these
-  components then read on.
+  <p> This will build the C library and Matlab interface, the documentation and tests. The HEALPIX support will be build if HEALPIX is found. The test programs will run automatically so that you can see of the code was compiled properly. For the MW sampling the wavelet transform should achieve floating-point precision.
 
   <p> You may alternatively build the individual components of
   <strong>SSHT</strong>.  To build the library only run:
   <pre> >> make lib</pre> 
-  <p> To build the test program run:
+  <p> To build the test framework for the exact wavelet transform (MW sampling, default) run:
   <pre> >> make test</pre> 
-  <p> To build the Matlab interface run (which will also build the
-  library if it has not already been built):
+  <p> To build the test framework for the HEALPIX wavelet transform (optional) run:
+  <pre> >> make hpxtest</pre> 
+  <p> To build the Matlab interfaces (MW by default, HEALPIX if found):
   <pre> >> make matlab</pre>
-
+  <p> A demo of the wavelet transform on a CMB simulation (HEALPIX map) is also provided, and can be build with:
+  <pre> >> make demo</pre>
 
   <h4>Testing</h4>
 
-  <p> Run the test program to verify your installation.  A default
-  test may be performed by running: <pre> >> make runtest</pre> <p> If
-  <strong>SSHT</strong> is installed correctly the test program should
-  run and print test results to the terminal.  The test program
-  performs an inverse (spin) spherical harmonic transform of a random
-  signal, followed by a forward transform.  The error between the
-  original and recovered spherical harmonic coefficients is computed
-  and displayed.  All errors should be of the order of numerical
-  precision.
+  <p> Three programs may be run to test the framework. They are extensively documented and may serve as starting point to learn to use the functionalities of S2LET. The command
+  <pre> >> ./bin/c/s2let_test</pre>
+	will run various performance and accuracy tests for the exact Wavelet transform built on the MW sampling. All algorithms and high-level features are tested, including the pixel space and harmonic space transforms with and without the multiresolution algorithm.
 
-  <p>Alternatively, you may run the test program directly by running:
-  <pre> >> ./bin/c/ssht_test &ltbandlimit&gt &ltspin&gt</pre>
-  <p> where <code>&ltbandlimit&gt</code> and <code>&ltspin&gt</code> are
-  the harmonic band-limit and spin number, respectively, of your test.
+  <p> If HEALPIX is provided, the command
+  <pre> >> ./bin/c/s2let_hpxtest</pre>
+  will test the interfaces to the Fortran implementation of HEALPIX as well as the corresponding wavelet transform.
+
+  <p> Finally, a full demo is provided to read a HEALPIX map of a random CMB simulation, perform its wavelet decomposition and write the wavelet maps to FITS files in the <it>data</it> directory.
+  <pre> >> ./bin/c/s2let_demo</pre>
 
   <p>To check the version and build numbers of your version run:
-  <pre> >> ./bin/c/ssht_about </pre>
+  <pre> >> ./bin/c/s2let_about </pre>
 
   <h4>Documentation</h4>
 
   <p>
-  The <strong>SSHT</strong> code is self documenting.  Although the package
+  The <strong>S2LET</strong> code is self documenting.  Although the package
   ships with <a href="#documentation">source documentation</a>, you may generate html source
   documentation by running:
   <pre> >> make doc</pre>
@@ -219,8 +164,9 @@ Private release of SSHT 0.1.
 
   <h4>Cleaning up</h4>
 
-  <p> To clean up your version of the <strong>SSHT</strong> code and
-  remove all builds run:
+  <p> To tidy up all temporary files and objects run:
+  <pre> >> make tidy</pre>
+  <p> To remove all compiled files and programs run:
   <pre> >> make clean</pre>
 
   <p> To remove all source documentation run:
@@ -231,10 +177,9 @@ Private release of SSHT 0.1.
 <a name="documentation"><h2>Source code documentation</h2></a>
 
   <p>
-  <strong>SSHT</strong> ships with source documentation that is
+  <strong>S2LET</strong> ships with source documentation that is
   generated by <a href="http://www.doxygen.org">doxygen</a>.
-  Documentation is available here for the <a href="c/html/index.html">C</a>
-and <a href="f90/html/index.html">Fortran 90</a> implementations.  The
+  Documentation is available <a href="c/html/index.html">here</a>.  The
   Matlab routines that interface with the C implementation are self
   documenting (documentation can be access through the help command in
   Matlab), as discussed below.  
@@ -244,56 +189,44 @@ and <a href="f90/html/index.html">Fortran 90</a> implementations.  The
 <a name="matlab"><h2>Matlab interface</h2></a>
 
   <p> Once the Matlab interface is built, you must have
-  <code>ssht/src/matlab</code> in your path in order to run the Matlab functions.
+  <code>s2let/src/matlab</code> in your path in order to run the Matlab functions.
   A number of Matlab functions and demos illustrating their use are
   provided.
 
   <h4>Functions</h4>
 
-  <p>Usage of the <strong>SSHT</strong> Matlab interface will most
-  frequently require only the functions to perform forward and inverse
-  spherical harmonic transforms (<code>ssht_forward</code> and
-  <code>ssht_inverse</code> respectively).  However, a number of
-  additional functions are also provided.  A full list of Matlab
+  <p>A full list of Matlab
   functions, with brief descriptions are given here:
 
   <pre>
 
-  <a href="../src/matlab/ssht_c2s.m">ssht_c2s</a>
-  Convert cartesian to spherical coordinates
+  <a href="../src/matlab/s2let_axisym_analysis.m">s2let_axisym_analysis</a>
+  Compute exact wavelet transform of a signal sampled on the sphere (MW sampling)
 
-  <a href="../src/matlab/ssht_elm2ind.m">ssht_elm2ind</a>
-  Convert harmonic indices to vector index
+  <a href="../src/matlab/s2let_axisym_synthesis.m">s2let_axisym_synthesis</a>
+  Exactly reconstuct a signal on the sphere from its wavelet contributions (MW sampling)
 
-  <a href="../src/matlab/ssht_forward.m">ssht_forward</a>
-  Compute forward spin spherical harmonic transform
+  <a href="../src/matlab/s2let_axisym_tilling.m">s2let_axisym_tilling</a>
+  Compute the tilling of harmonic space
 
-  <a href="../src/matlab/ssht_forward_adjoint.m">ssht_forward_adjoint</a>
-  Compute adjoint forward spin spherical harmonic transform
+  <a href="../src/matlab/s2let_check_axisym_tilling.m">s2let_check_axisym_tilling</a>
+  Check exactness (i.e. identity resolution) of the harmonic tilling
 
-  <a href="../src/matlab/ssht_ind2elm.m">ssht_ind2elm</a>
-  Convert vector index to harmonic indices
+  <a href="../src/matlab/s2let_hpx_alm2map.m">s2let_hpx_alm2map</a>
+  Interface to the Fortran function alm2map in HEALPIX (inverse spherical harmonic transform)
 
-  <a href="../src/matlab/ssht_inverse.m">ssht_inverse</a>
-  Compute inverse spin spherical harmonic transform
+  <a href="../src/matlab/s2let_hpx_map2alm.m"> s2let_hpx_map2alm</a>
+  Interface to the Fortran function map2alm in HEALPIX (forward spherical harmonic transform)
 
-  <a href="../src/matlab/ssht_inverse_adjoint.m">ssht_inverse_adjoint</a>
-  Compute adjoint inverse spin spherical harmonic transform
+  <a href="../src/matlab/s2let_hpx_axisym_analysis.m">s2let_hpx_axisym_analysis</a>
+  Compute wavelet transform of a HEALPIX map
 
-  <a href="../src/matlab/ssht_plot_harmonic.m">ssht_plot_harmonic</a>
-  Plot spherical harmonic coefficients
+  <a href="../src/matlab/s2let_hpx_axisym_synthesis.m">s2let_hpx_axisym_synthesis</a>
+  Reconstuct a HEALPIX map on the sphere from its wavelet maps
 
-  <a href="../src/matlab/ssht_plot_mollweide.m">ssht_plot_mollweide</a>
-  Plot function using Mollweide projection
+  <a href="../src/matlab/s2let_plot_hpx_mollweide.m"> s2let_plot_hpx_mollweide</a>
+  Plot a HEALPIX map using Mollweide projection
 
-  <a href="../src/matlab/ssht_plot_sphere.m">ssht_plot_sphere</a>
-  Plot function on sphere
-
-  <a href="../src/matlab/ssht_s2c.m">ssht_s2c</a>
-  Convert spherical to cartesian coordinates
-
-  <a href="../src/matlab/ssht_sampling.m">ssht_sampling</a>
-  Compute sample positions
   </pre>
 
   <p> To access the documentation for each function in Matlab, simply
@@ -305,39 +238,24 @@ and <a href="f90/html/index.html">Fortran 90</a> implementations.  The
   <h4>Demos</h4>
 
   <p> A number of demos are provided to illustrate the use of the
-  Matlab interface.  The demos start extremely simple and
-  progressively become more complicated/flexible.
+  Matlab interface. 
 
   <pre>
-  <a href="../src/matlab/ssht_demo0.m">ssht_demo0</a>
-  Plot spherical harmonic functions on the sphere.
+  <a href="../src/matlab/s2let_fulltest.m">s2let_fulltest</a>
+  Run and test all functionalties of the wavelet transform (MW sampling)
 
-  <a href="../src/matlab/ssht_demo1.m">ssht_demo1</a>
-  Simple demo to compute inverse and forward transform of complex
-  scalar function, using simplest interface with default options.
+  <a href="../src/matlab/s2let_hpxtest.m">s2let_hpxtest</a>
+  Run and test all functionalties of the wavelet transform (HEALPIX sampling)
 
-  <a href="../src/matlab/ssht_demo2.m">ssht_demo2</a>
-  Simple demo to compute inverse and forward transform of real scalar
-  function, using simplest interface with default options.
+  <a href="../src/matlab/s2let_demo1.m">s2let_demo1</a>
+  Compute and plot wavelets of Earth tomography data (full and multi-resolution, MW sampling)
 
-  <a href="../src/matlab/ssht_demo3.m">ssht_demo3</a>
-  Demo to compute inverse and forward transform of spin function,
-  using standard interface with various options.
+  <a href="../src/matlab/s2let_demo2.m">s2let_demo2</a>
+  Plot wavelet kernels corresponding to some set of parameters
 
-  <a href="../src/matlab/ssht_demo4.m">ssht_demo4</a>
-  Demo to compute inverse and forward transform of spin function,
-  using polar interface with various options.
-
-  <a href="../src/matlab/ssht_demo5.m">ssht_demo5</a>
-  Simulate a Gaussian cosmic microwave background (CMB).
-
-  <a href="../src/matlab/ssht_demo6.m">ssht_demo6</a>
-  Smooth Earth topography map by applying a Gaussian filter in
-  harmonic space.
-
-  <a href="../src/matlab/ssht_demo7.m">ssht_demo7</a>
-  Integrate a band-limited function on the sphere using the
-  symmetrised quadrature weights. </pre>
+  <a href="../src/matlab/s2let_demo3.m">s2let_demo3</a>
+  Compute and plot wavelets of a random CMB simultion (HEALPIX sampling)
+  </pre>
 
  <p> To access the documentation for each demo in Matlab, simply
   run:
@@ -347,22 +265,17 @@ and <a href="f90/html/index.html">Fortran 90</a> implementations.  The
 <!--------------------------------------------------------------->
 <a name="download"><h2>Download</h2></a>
 
-  <p>We make the source code of the <strong>SSHT</strong> package
+  <p>We make the source code of the <strong>S2LET</strong> package
   available under the license described <a
    href="#license">below</a>.
 
-  <p>To receive a copy of <strong>SSHT</strong> by email please
-  complete the download form, available by clicking the following
-  icon:
-
-  <p align=center>
-  <a href=http://www.mrao.cam.ac.uk/~jdm57/download.html> <img src="images/download_icon.gif"> </a>
+  <p>To receive a copy of <strong>S2LET</strong> ...
   </p>
 
 <!--------------------------------------------------------------->
 <a name="referencing"><h2>Referencing</h2></a>
 
-  <p> If you use <strong>SSHT</strong> for work that results in
+  <p> If you use <strong>S2LET</strong> for work that results in
   publication, please reference this site (<a
    href="http://www.jasonmcewen.org/">http://www.jasonmcewen.org/</a>)
   and our related academic paper:
@@ -373,29 +286,19 @@ and <a href="f90/html/index.html">Fortran 90</a> implementations.  The
  press, 2011 (<a href="http://arxiv.org/abs/1110.6298">ArXiv</a>
  | <a href="http://dx.doi.org/10.1109/TSP.2011.2166394">DOI</a>). </blockquote>
 
-  <p> If you make use of our fast adjoint algorithms, then please also cite:
-
-<blockquote> J. D. McEwen, G. Puy, J.-Ph. Thiran, P. Vandergheynst,
-D. Van De Ville and Y. Wiaux, <a
- href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#mcewen:css2">Efficient
-and compressive sampling on the sphere</a>, IEEE Trans. Sig. Proc.,
-submitted, 2011.
-</blockquote>
 
 
 <!--------------------------------------------------------------->
 <a name="version"><h2>Version</h2></a>
 
   <p>
-  Version: 1.0b1<br>
-  Release date: 31 October 2011
+  Version: 1.1<br>
+  Release date: 17 Augustus 2012
 
   <h4>Version history</h4>
   <p>
  <ul>
-   <li>1.0b1 (31 October 2011): Public release of first beta.</li>
-   <li>0.2 (20 May 2011): Fast adjoint algorithms added.</li>
-   <li>0.1 (5 March 2011): First private release.</li>
+   <li>1.0 (3 May 2012): Private release.</li>
   </ul>
 
 <!--------------------------------------------------------------->
@@ -403,8 +306,8 @@ submitted, 2011.
 
 <blockquote>  
 <p>
-SSHT package to perform spin spherical harmonic transforms<br>
-Copyright (C) 2011 Jason McEwen
+S2LET package to perform fast wavelet transform on the sphere<br>
+Copyright (C) 2012 Boris Leistedt & Jason McEwen
 
 <p>
 This program is free software; you can redistribute it and/or modify
@@ -428,12 +331,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 <!--------------------------------------------------------------->
 <a name="authors"><h2>About the authors</h2></a>
 
-  <p> <strong>SSHT</strong> has been developed by Jason McEwen and
- Yves Wiaux at the Ecole Polytechnique Federale de Lausanne (<a
-  href="http://www.epfl.ch/" target="_top">EPFL</a>).  Both Jason and
- Yves are interested in fundamental signal processing on the sphere and
- applications of their techniques to problems in astrophysics and
- biomedical imaging.  See their web pages for more information.</p>
+  <p> <strong>S2LET</strong> has been developed by Boris Leistedt and
+ Jason McEwen at University College London (<a
+  href="http://www.ucl.ac.uk/" target="_top">UCL</a>).</p>
+
+  <p>
+  <img src="images/photo_boris.jpeg" width="100"
+  alt="Example frontpage image" class="left photobox" />
+
+  Boris Leistedt<br>
+  <a href="http://http://ixkael.com/blog/">Academic web page</a>
+  &raquo;</p>
+  </p>
+  
+  <br><br><br><br><br><br>
 
   <p>
   <img src="images/photo_jason.jpg" width="100"
@@ -443,16 +354,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
   <a href="http://www.jasonmcewen.org/">Academic web page</a>
   &raquo;</p>
   </p>
-  
-  <br><br><br><br><br>
-
-  <p>
-  <img src="images/photo_yves.jpg" width="100"
-  alt="Example frontpage image" class="left photobox" />
-
-  Dr Yves Wiaux<br>
-  <a href="http://www.google.co.uk/search?q=yves wiaux">Academic web page</a>
-  &raquo;</p>
  
 
 <br><br><br><br><br><br><br>
