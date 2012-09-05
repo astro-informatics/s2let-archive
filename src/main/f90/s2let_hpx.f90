@@ -1,6 +1,6 @@
 ! ----------------------------------------------------------- !
 
-SUBROUTINE s2let_hpx_map2alm( alm, map, nside, L )
+SUBROUTINE healpix_forward_real( alm, map, nside, L )
   use healpix_types
   use healpix_modules
   implicit none
@@ -32,11 +32,11 @@ SUBROUTINE s2let_hpx_map2alm( alm, map, nside, L )
 
   deallocate(dw8, alm_temp)
 
-END SUBROUTINE s2let_hpx_map2alm
+END SUBROUTINE healpix_forward_real
 
 ! ----------------------------------------------------------- !
 
-SUBROUTINE s2let_hpx_alm2map( map, alm, nside, L )
+SUBROUTINE healpix_inverse_real( map, alm, nside, L )
   use healpix_types
   use healpix_modules
   implicit none
@@ -61,7 +61,7 @@ SUBROUTINE s2let_hpx_alm2map( map, alm, nside, L )
 
   deallocate(alm_temp)
 
-END SUBROUTINE s2let_hpx_alm2map
+END SUBROUTINE healpix_inverse_real
 
 ! ----------------------------------------------------------- !
 

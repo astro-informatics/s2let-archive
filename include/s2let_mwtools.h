@@ -5,9 +5,9 @@
 #ifndef S2LET_MWTOOLS
 #define S2LET_MWTOOLS
 
-int read_mw_bandlimit(char* filename);
-void read_mw_map(double* f, char* file, int L);
-void write_mw_map(char* file, double* f, int L);
-void printerror(int status);
+void s2let_mw_alm2map(complex double* f, const complex double* flm, int L);
+void s2let_mw_map2alm(complex double* flm, const complex double* f, int L);
+void s2let_mw_alm2map_real(double* f, const complex double* flm, int L);
+void s2let_mw_map2alm_real(complex double* flm, const double* f, int L);
 
 #endif

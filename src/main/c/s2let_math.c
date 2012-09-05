@@ -3,7 +3,7 @@
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
-
+#include <math.h>
 
 /*!
  * Generating function for the smooth "Schwarts" functions.
@@ -26,22 +26,18 @@ double s2let_kappa0_quadtrap(double a, double b, int n, int B)
     double f1, f2;
     int i;
     double h = (b - a) / n;
-    //printf("\nIntegral in (%f,%f)\n",a,b);
 
     if( a == b ){
     	return 0;
     }else{
 	    for (i = 0; i < n; i++){
 	    	f1 = f(a + i * h, B);
-	    	//printf("f(%f)=%f  |  ",a + i * h, f1);
 	    	f2 = f(a + (i + 1) * h, B);
         if(!isnan(f1) && !isinf(f1) && !isnan(f2) && !isinf(f2))
           sum += ((f1 + f2) * h) / 2;
-	    	//printf("f(%f)=%f  |  ",a + (i+1) * h, f2);
 	    }
 	}
-	//printf("\n");
-    return sum;
+  return sum;
 }
 
 /*!
@@ -53,7 +49,6 @@ double simpson(double a, double b, int n, int B)
   long double integral,x,h;
   long double part,coeff;
   int i;
-  //long double m = f(3.333333,B);
   part = (b-a) / (long double) n;
   h = part / (long double) 3.0;
 

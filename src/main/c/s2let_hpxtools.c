@@ -3,6 +3,7 @@
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
+#include <complex.h> 
 
 /*!
  * Restore real healpix map from spherical harmonic coefficients.
@@ -14,9 +15,9 @@
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void healpix_inverse_real(double* f, const complex double* flm, int nside, int L)
+void s2let_hpx_alm2map_real(double* f, const complex double* flm, int nside, int L)
 {
-	s2let_hpx_alm2map_(f, flm, &nside, &L);
+	healpix_inverse_real_(f, flm, &nside, &L);
 }
 
 /*!
@@ -29,9 +30,9 @@ void healpix_inverse_real(double* f, const complex double* flm, int nside, int L
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void healpix_forward_real(complex double* flm, const double* f, int nside, int L)
+void s2let_hpx_map2alm_real(complex double* flm, const double* f, int nside, int L)
 {
-    s2let_hpx_map2alm_(flm, f, &nside, &L);
+    healpix_forward_real_(flm, f, &nside, &L);
 }
 
 /*!

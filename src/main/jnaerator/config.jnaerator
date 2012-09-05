@@ -1,0 +1,20 @@
+-library s2let
+
+//-Dcomplex=
+
+-parseChunks
+
+-I $(DIR)/../../../include
+	$(DIR)/../../../include/s2let.h
+
+-I /usr/local/include
+
+-I $(SSHT)/include/c
+	$(SSHT)/include/c/ssht.h
+
+-I $(HEALPIX)/include
+
+-arch darwin_universal
+	$(DIR)/../../../lib/libs2let.dylib
+
+-package org.flaglets.s2let.bindings

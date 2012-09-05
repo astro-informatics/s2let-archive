@@ -3,6 +3,9 @@
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
+#include <complex.h> 
+#include <ssht.h>
+#include <stdlib.h>
 
 /*!
  * Allocates arrays for wavelets and scaling functions in pixel space (MW sampling).

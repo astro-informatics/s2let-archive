@@ -73,7 +73,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Perform harmonic transform 
   flm = (complex double*)malloc( L * L * sizeof(complex double));
-  healpix_forward_real(flm, f_r, nside, L);
+  s2let_hpx_map2alm_real(flm, f_r, nside, L);
 
   // Output flm's
   iout = 0;

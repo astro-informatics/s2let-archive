@@ -5,6 +5,8 @@
 #ifndef S2LET_AXISYM_MW
 #define S2LET_AXISYM_MW
 
+#include <complex.h> 
+
 void s2let_axisym_allocate_f_wav_multires(complex double **f_wav, complex double **f_scal, int B, int L, int J_min);
 void s2let_axisym_allocate_f_wav_multires_real(double **f_wav, double **f_scal, int B, int L, int J_min);
 void s2let_axisym_allocate_f_wav(complex double **f_wav, complex double **f_scal, int B, int L, int J_min);

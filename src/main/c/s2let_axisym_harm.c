@@ -3,17 +3,10 @@
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
+#include <complex.h> 
+#include <math.h>
+#include <stdlib.h>
 
-/*!
- * Allocates arrays for wavelets and scaling functions in harmonic space.
- *
- * \param[out]  f_wav_lm Harmnic coefficients of the wavelets. Each wavelet has size L*L and there are (J+1-J_min) scales.
- * \param[out]  f_scal_lm Harmnic coefficients of the scaling function (L*L).
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
 void s2let_axisym_allocate_f_wav_lm(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min)
 {
 	int J = s2let_j_max(L, B);
@@ -21,16 +14,6 @@ void s2let_axisym_allocate_f_wav_lm(complex double **f_wav_lm, complex double **
 	*f_scal_lm = (complex double*)calloc(L * L, sizeof(complex double));
 }
 
-/*!
- * Allocates multiresolution arrays for wavelets and scaling functions in harmonic space.
- *
- * \param[out]  f_wav_lm Harmnic coefficients of the wavelets. The size of each wavelet depends on its band-limit.
- * \param[out]  f_scal_lm Harmnic coefficients of the scaling function (L*L).
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
 void s2let_axisym_allocate_f_wav_multires_lm(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min)
 {
 	int J = s2let_j_max(L, B);
@@ -44,16 +27,6 @@ void s2let_axisym_allocate_f_wav_multires_lm(complex double **f_wav_lm, complex 
 	*f_scal_lm = (complex double*)calloc(bandlimit * bandlimit, sizeof(complex double));
 }
 
-
-/*!
- * Allocates arrays for the kernels of the wavelets and the scaling functions.
- *
- * \param[out]  wav_lm Wavelet kernels.
- * \param[out]  scal_lm Scaling function kernels.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \retval none
- */
 void s2let_axisym_allocate_wav_lm(double **wav_lm, double **scal_lm, int B, int L)
 {
 	int J = s2let_j_max(L, B);
@@ -61,16 +34,6 @@ void s2let_axisym_allocate_wav_lm(double **wav_lm, double **scal_lm, int B, int 
 	*scal_lm = (double*)calloc(L, sizeof(double));
 }
 
-/*!
- * Computes the kernels of the wavelets and the scaling functions.
- *
- * \param[out]  wav_lm Wavelet kernels.
- * \param[out]  scal_lm Scaling function kernels.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
 void s2let_axisym_wav_lm(double *wav_lm, double *scal_lm, int B, int L, int J_min)
 {
 	int j, l;
@@ -79,8 +42,8 @@ void s2let_axisym_wav_lm(double *wav_lm, double *scal_lm, int B, int L, int J_mi
 	//int l_min = s2let_axisym_el_min(B, J_min);
 	double k0;
 	double *kappa, *kappa0;
-	s2let_axisym_allocate_tilling(&kappa, &kappa0, B, L);
-	s2let_axisym_tilling(kappa, kappa0, B, L, J_min);
+	s2let_axisym_allocate_tiling(&kappa, &kappa0, B, L);
+	s2let_axisym_tiling(kappa, kappa0, B, L, J_min);
 
 	for (j = J_min; j <= J; j++){
 		for (l = 0; l < L; l++){
@@ -97,20 +60,6 @@ void s2let_axisym_wav_lm(double *wav_lm, double *scal_lm, int B, int L, int J_mi
 	free(kappa0);
 }
 
-/*!
- * Spherical wavelets : full resolution analysis in harmonic space.
- * Perform wavelet transform from precomputed kernels and gives the harmonic coefficients.
- *
- * \param[out]  f_wav_lm Wavelet transform (harmonic coefficients of wavelet contribution).
- * \param[out]  f_scal_lm Wavelet transform (harmonic coefficients of scaling contribution).
- * \param[in]  flm Spherical harmonic decomposition of input function.
- * \param[in]  wav_lm Wavelet kernels.
- * \param[in]  scal_lm Scaling function kernels.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
 void s2let_axisym_wav_analysis_lm(complex double *f_wav_lm, complex double *f_scal_lm, const complex double *flm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min)
 {
 	int offset, j, l, m;
@@ -136,20 +85,6 @@ void s2let_axisym_wav_analysis_lm(complex double *f_wav_lm, complex double *f_sc
 	}
 }
 
-/*!
- * Spherical wavelets : full resolution synthesis in harmonic space.
- * Perform wavelet transform in harmonic space from precomputed kernels and gives harmonic coefficients.
- *
- * \param[out]  flm Spherical harmonic decomposition of input function.
- * \param[in]  f_wav_lm Wavelet transform (harmonic coefficients of wavelet contribution).
- * \param[in]  f_scal_lm Wavelet transform (harmonic coefficients of scaling contribution).
- * \param[in]  wav_lm Wavelet kernels.
- * \param[in]  scal_lm Scaling function kernels.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
 void s2let_axisym_wav_synthesis_lm(complex double *flm, const complex double *f_wav_lm, const complex double *f_scal_lm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min)
 {
 	int offset, j, l, m;
@@ -175,20 +110,6 @@ void s2let_axisym_wav_synthesis_lm(complex double *flm, const complex double *f_
 	}
 }
 
-/*!
- * Spherical wavelets : multiresolution analysis in harmonic space.
- * Perform multiresolution wavelet transform in harmonic space from precomputed kernels and gives harmonic coefficients.
- *
- * \param[out]  f_wav_lm Wavelet transform (SHA of wavelet contribution).
- * \param[out]  f_scal_lm Wavelet transform (SHA of scaling contribution).
- * \param[in]  flm Spherical harmonic decomposition of input function.
- * \param[in]  wav_lm Wavelet kernels.
- * \param[in]  scal_lm Scaling function kernels.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
 void s2let_axisym_wav_analysis_multires_lm(complex double *f_wav_lm, complex double *f_scal_lm, const complex double *flm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min)
 {
 	int bandlimit, offset, j, l, m;
@@ -215,20 +136,6 @@ void s2let_axisym_wav_analysis_multires_lm(complex double *f_wav_lm, complex dou
 	}
 }
 
-/*!
- * Spherical wavelets : multiresolution synthesis in harmonic space.
- * Perform multiresolution wavelet transform in harmonic space from precomputed kernels and gives harmonic coefficients.
- *
- * \param[out]  flm Spherical harmonic decomposition of input function.
- * \param[in]  f_wav_lm Wavelet transform (SHA of wavelet contribution).
- * \param[in]  f_scal_lm Wavelet transform (SHA of scaling contribution).
- * \param[in]  wav_lm Wavelet kernels.
- * \param[in]  scal_lm Scaling function kernels.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
 void s2let_axisym_wav_synthesis_multires_lm(complex double *flm, const complex double *f_wav_lm, const complex double *f_scal_lm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min)
 {
 	int bandlimit, offset, j, l, m;
