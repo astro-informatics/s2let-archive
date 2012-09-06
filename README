@@ -1,0 +1,66 @@
+
+                             S2LET CODE 
+              Fast wavelet transforms on the sphere
+  ----------------------------------------------------------------
+
+DESCRIPTION
+     The SSHT code provides functionality to perform fast and exact
+     spin spherical harmonic transforms.
+
+VERSION
+     Release 1.0, September 2012
+
+AUTHORS
+     B. Leistedt (www.ixkael.com/blog)
+     J. D. McEwen (www.jasonmcewen.org)
+
+REFERENCES
+     B. Leistedt, Y. Wiaux, P. Vandergheynst and J. D. McEwen,
+     S2LET: A code to perform fast wavelet analysis on the sphere, 
+     Astronomy & Astrophysics, 2012 (arXiv: TODO)
+     
+     J. D. McEwen and Y. Wiaux, A novel sampling theorem on the
+     sphere, IEEE Trans. Sig. Proc., in press, 2011 (arXiv:1110.6298).
+
+DOCUMENTATION
+     See doc/index.html
+
+INSTALLATION
+     See INSTALL
+
+REQUIREMENTS
+     SSHT (http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html)
+     FFTW (http://www.fftw.org/)
+
+OPTIONAL
+     CFITSIO (http://heasarc.gsfc.nasa.gov/fitsio/)
+     HEALPIX (http://healpix.jpl.nasa.gov/)
+
+DOWNLOAD
+     http://www.s2let.org/
+
+SUPPORT
+     Please email the authors.
+
+NOTE
+     The package is in beta and is still under development.
+     Please report problems/bugs by email to: boris.leistedt@gmail.com
+
+LICENSE
+     S2LET package to perform fast wavelet transform on the sphere<br>
+     Copyright (C) 2012 Boris Leistedt & Jason McEwen
+
+     This program is free software; you can redistribute it and/or
+     modify it under the terms of the GNU General Public License
+     as published by the Free Software Foundation; either version 2
+     of the License, or (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details (LICENSE.txt).
+
+     You should have received a copy of the GNU General Public License
+     along with this program; if not, write to the Free Software
+     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+     MA  02110-1301, USA.

@@ -1,0 +1,158 @@
+  
+                             S2LET CODE 
+              Fast wavelet transforms on the sphere
+  ---------------------------------------------------------------- 
+
+------------------
+REQUIREMENTS
+------------------
+
+     SSHT href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html
+     FFTW http://www.fftw.org/
+
+     Obviously suitable C and Fortran 90 compilers will be required
+     to build the respective implementations.  Both C and Matlab mex 
+     compilers will be require to build the Matlab interface. 
+     The Java interfaces are pre-compiled and provided in a self-contained jar.
+
+------------------
+OPTIONAL
+------------------
+
+     Linking with CFITSIO http://heasarc.gsfc.nasa.gov/fitsio/
+     adds the FITS input-output functionalities for the MW sampling. 
+
+     Linking with HEALPIX http://healpix.jpl.nasa.gov/
+     adds support for the Healpix spherical harmonic transform 
+     as well as the FITS input-output routines.
+
+------------------
+COMPILING
+------------------
+
+     Makefiles are provided to build the code. 
+     However the locations of SSHT, FFTW and optionnaly CFITSIO and HEALPIX
+     must be specified. In S2LET the default Makefile will look at these symbols
+     in Bash/Shell profiles. Alternatively you may declare them explicitely 
+     in the first section of the makefile. The compilers and their options
+     may also be changed in the Makefile. 
+ 
+     Once you have set the Makefile up for your system,
+     S2LET may be compiled by running:
+
+     >> make all 
+
+     This will build the C library, Matlab interface, tests programs,
+     high-level programs and documentation. The FITS features will be added
+     if CFITSIO is found. The HEALPIX support will be build if HEALPIX is found.
+     We recommend to run the tests (s2let_test) to check that compilation worked and
+     that the wavelet transform for the MW sampling achieves floating-point precision.
+
+     You may alternatively build the individual components of S2LET. 
+    
+     To build the library only run (which will work without CFITSIO or HEALPIX):
+  
+     >> make lib 
+  
+     To build the test framework for the exact wavelet transform 
+     (MW sampling, default) run:
+   
+     >> make test 
+   
+     To build the test framework for the Healpix wavelet transform (optional) run:
+   
+     >> make hpx_test 
+   
+     To build the Matlab interfaces (MW by default, Healpix added if found):
+   
+     >> make matlab
+   
+     To build all programs, run
+   
+     >> make bin
+
+------------------
+TESTS AND PROGRAMS
+------------------
+
+     Five programs may be run to test and familiarize yourself with the framework.
+     They are extensively documented and may serve as starting point to learn 
+     to use the functionalities of S2LET. The command
+   
+     >> ./bin/s2let_test
+
+     will run various performance and accuracy tests for the exact Wavelet transform 
+     built on the MW sampling. All algorithms and high-level features are tested, 
+     including the pixel space and harmonic space transforms with and without
+     the multiresolution algorithm.
+
+     If HEALPIX is provided, the command
+  
+     >> ./bin/s2let_hpx_test
+ 
+     will test the interfaces to the Fortran implementation of HEALPIX as well  
+     as the corresponding wavelet transform.
+
+     A full demo is provided to read a Healpix map of a random CMB simulation,
+     perform its wavelet decomposition and write the wavelet maps
+     to FITS files in the <it>data</it> directory.
+  
+     >> ./bin/s2let_hpx_demo
+
+     A denoising example is also provided and extensively documented. 
+     It reads an MW map containing Earth tomography data, adds a random noise,
+     perform the wavelet transform, denoise the wavelet scales through hard thresholding,
+     reconstruct the denoised map and write it to an output FITS file
+     in the <it>data</it> directory.
+
+     >> ./bin/s2let_denoising_demo
+
+     We also provide a program to read a valid MW map, perform its wavelet decomposition
+     and output the wavelet maps (which can be plotted in Matlab, for example). 
+     The command, whose parameters are fully documented in the code, reads
+
+     >> ./bin/s2let_axisym_mw_analysis_real 
+		inputFile  waveletParameter  firstScale  multiResolution
+
+     We provide the same routine for a Healpix map, for which the multiresolution flag
+     has to be replaced by the band-limit of the analysis. 
+     The output maps may be plotted in Matlab or IDL, for example.
+ 
+     >> ./bin/s2let_axisym_hpx_analysis_real 
+		inputFile  waveletParameter  firstScale  bandLimit
+
+     Finally, to check the version and build numbers of your version run:
+    
+     >> ./bin/s2let_about 
+
+------------------
+DOCUMENTATION
+------------------
+  
+     The S2LET code is self documenting.  Although the package
+     ships with source documentation, you may generate html source
+     documentation by running:
+
+     >> make doc
+
+     Documentation is generated using doxygen, thus you must have doxygen
+    installed on your system to generate the source documentation.
+
+
+------------------
+CLEANING UP
+------------------
+
+     To tidy up all temporary files and objects run:
+
+     >> make tidy
+
+     To remove all compiled files and programs run:
+
+     >> make clean
+
+     To remove all source documentation run:
+    
+     >> make cleandoc
+
+
