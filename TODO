@@ -1,0 +1,17 @@
+
+SHORT TERM
+	- IDL support : add more MW routines and tests
+	- IDL : read and write MW maps
+	- IDL : plot MW maps
+	- Finish Java interfaces, doc and install notes
+	- Second sort of tiling in option
+	- Download procedure in DOC
+	- Website s2let.org
+	- Paper referencend in doc (arxiv link, etc)
+
+LONG TERM
+	- Find a better LOGO + picture
+	- Scala interfaces
+	- Steerable wavelets
+	- Parallelize C code
+
