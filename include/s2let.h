@@ -4,6 +4,7 @@
 #include "s2let_axisym_harm.h"
 #include "s2let_axisym_hpx.h"
 #include "s2let_axisym_mw.h"
+#include "s2let_fitstools.h"
 #include "s2let_hpxtools.h"
 #include "s2let_idl_mw.h"
 #include "s2let_idl_hpx.h"

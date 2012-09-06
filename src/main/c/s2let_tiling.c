@@ -6,51 +6,21 @@
 #include <math.h>
 #include <stdlib.h>
 
-/*!
- * Computes band-limit of a specific wavelet scale.
- *
- * \param[in]  B Wavelet parameter.
- * \param[in]  j Wavelet scale.
- * \retval band-limit
- */
 int s2let_bandlimit(int B, int j)
 {
 	return ceil(pow(B, j+1));
 }
 
-/*!
- * Computes minimum harmonic index supported by needlets.
- *
- * \param[in]  B Wavelet parameter.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval ell_min
- */
 int s2let_el_min(int B, int J_min)
 {
 	return ceil(pow(B, J_min));
 }
 
-/*!
- * Computes needlet maximum level required to ensure exact reconstruction.
- *
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  B Wavelet parameter.
- * \retval j_max
- */
 int s2let_j_max(int L, int B)
 {
 	return ceil(log(L) / log(B));
 }
 
-/*!
- * Allocates tiling in harmonic space.
- *
- * \param[out]  kappa Kernel functions for the wavelets.
- * \param[out]  kappa0 Kernel for the scaling function.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \retval none
- */
 void s2let_axisym_allocate_tiling(double **kappa, double **kappa0, int B, int L)
 {
 	int J = s2let_j_max(L, B);
@@ -58,16 +28,6 @@ void s2let_axisym_allocate_tiling(double **kappa, double **kappa0, int B, int L)
 	*kappa0 = (double*)calloc(L, sizeof(double));
 }
 
-/*!
- * Generates tiling in harmonic space.
- *
- * \param[out]  kappa Kernel functions for the wavelets.
- * \param[out]  kappa0 Kernel for the scaling function.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
 void s2let_axisym_tiling(double *kappa, double *kappa0, int B, int L, int J_min)
 {
 	int j, l;
@@ -100,15 +60,6 @@ void s2let_axisym_tiling(double *kappa, double *kappa0, int B, int L, int J_min)
 	free(phi2);
 }
 
-/*!
- * Generates smooth functions to construct the tiling.
- *
- * \param[out]  phi2 Smooth step functions for the wavelets.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
 void s2let_tiling_phi2(double *phi2, int B, int L, int J_min)
 {
 	int j, l;
@@ -130,16 +81,6 @@ void s2let_tiling_phi2(double *phi2, int B, int L, int J_min)
 
 }
 
-/*!
- * Checks exactness of the harmonic tiling.
- *
- * \param[in]  kappa Kernel functions for the wavelets.
- * \param[in]  kappa0 Kernel for the scaling function.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval Achieved accuracy (should be lower than e-12).
- */
 double s2let_axisym_check_identity(double *kappa, double *kappa0, int B, int L, int J_min)
 {
 	int l, j;
@@ -167,31 +108,3 @@ double s2let_axisym_check_identity(double *kappa, double *kappa0, int B, int L, 
 	return sum;
 	free(ident);
 }
-
-/*!
- * Indice corresponding to a triplet (j, l, m) in the wavelets.
- *
- * \param[in]  j Scale indice.
- * \param[in]  l Multipole indice.
- * \param[in]  m Order indice.
- * \param[in]  L Angular harmonic band-limit.
- * \retval Indice
- */
-int jlm2ind(int j, int l, int m, int L)
-{
-	return j*L*L + l*l + l + m ;
-}
-
-/*!
- * Indice corresponding to a doublet (l, m).
- *
- * \param[in]  l Multipole indice.
- * \param[in]  m Order indice.
- * \param[in]  L Angular harmonic band-limit.
- * \retval Indice
- */
-int lm2ind(int l, int m)
-{
-	return l*l + l + m ;
-}
-

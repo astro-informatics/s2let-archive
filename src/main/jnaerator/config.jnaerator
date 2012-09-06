@@ -17,4 +17,4 @@
 -arch darwin_universal
 	$(DIR)/../../../lib/libs2let.dylib
 
--package org.flaglets.s2let.bindings
+-package org.s2let.bindings

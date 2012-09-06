@@ -5,13 +5,7 @@
 #include "fitsio.h"
 #include "s2let.h"
 
-/*!
- * Read MW resolution / band-limit parameter from a FITS file.
- *
- * \param[in]  file Filename.
- * \retval int resolution parameter
- */
-int read_mw_bandlimit(char* filename)
+int s2let_read_mw_bandlimit(char* filename)
 {
   long     naxes, *naxis, Lread;
   int      status, hdutype, nfound;
@@ -19,18 +13,19 @@ int read_mw_bandlimit(char* filename)
   fitsfile *fptr;
   status = 0;
 
+
   if ( fits_open_file(&fptr, filename, READONLY, &status) ) 
     printerror( status );
 
   if ( fits_movabs_hdu(fptr, 2, &hdutype, &status) )
     printerror( status );
-  
+
   if (hdutype != BINARY_TBL) 
     fprintf(stderr, "%s (%d): Extension is not binary!\n", __FILE__, __LINE__);
 
   if ( fits_read_key_lng(fptr, "NAXIS", &naxes, comment, &status) ) 
     printerror( status );
-  
+
   naxis = (long *)malloc(((size_t)naxes)*sizeof(long));
   if ( fits_read_keys_lng(fptr, "NAXIS", 1, naxes, naxis, &nfound, &status) 
        || nfound != naxes ) 
@@ -46,15 +41,44 @@ int read_mw_bandlimit(char* filename)
 
 }
 
-/*!
- * Read MW map from a FITS file.
- *
- * \param[out]  f Input map (MW sampling).
- * \param[in]  file Filename.
- * \param[in]  L Band-limit / resolution parameter.
- * \retval none
- */
-void read_mw_map(double* f, char* filename, int L)
+
+int s2let_read_hpx_nside(char* filename)
+{
+  long     naxes, *naxis, nsideread;
+  int      status, hdutype, nfound;
+  char     comment[FLEN_COMMENT];
+  fitsfile *fptr;
+  status = 0;
+
+
+  if ( fits_open_file(&fptr, filename, READONLY, &status) ) 
+    printerror( status );
+
+  if ( fits_movabs_hdu(fptr, 2, &hdutype, &status) )
+    printerror( status );
+
+  if (hdutype != BINARY_TBL) 
+    fprintf(stderr, "%s (%d): Extension is not binary!\n", __FILE__, __LINE__);
+
+  if ( fits_read_key_lng(fptr, "NAXIS", &naxes, comment, &status) ) 
+    printerror( status );
+
+  naxis = (long *)malloc(((size_t)naxes)*sizeof(long));
+  if ( fits_read_keys_lng(fptr, "NAXIS", 1, naxes, naxis, &nfound, &status) 
+       || nfound != naxes ) 
+           printerror( status );
+
+  if ( fits_read_key_lng(fptr, "NSIDE", &nsideread, comment, &status) ) 
+    printerror(status);
+
+  if ( fits_close_file(fptr, &status) ) 
+    printerror( status );
+
+  return nsideread;
+
+}
+
+void s2let_read_mw_map(double* f, char* filename, int L)
 {
   long     naxes, *naxis, npix, npercol, irow, Lread;
   int      status, hdutype, nfound, anynul;
@@ -69,12 +93,13 @@ void read_mw_map(double* f, char* filename, int L)
   if ( fits_movabs_hdu(fptr, 2, &hdutype, &status) ) 
     printerror( status );
 
+
   if (hdutype != BINARY_TBL) 
     fprintf(stderr, "%s (%d): Extension is not binary!\n", __FILE__, __LINE__);
 
   if ( fits_read_key_lng(fptr, "NAXIS", &naxes, comment, &status) ) 
     printerror( status );
-  
+
   naxis = (long *)malloc(((size_t)naxes)*sizeof(long));
   if ( fits_read_keys_lng(fptr, "NAXIS", 1, naxes, naxis, &nfound, &status) 
        || nfound != naxes ) 
@@ -94,6 +119,7 @@ void read_mw_map(double* f, char* filename, int L)
   npercol = npix/naxis[1];
   nulval = -1.6375e30;
   for (irow = 0; irow < naxis[1]; irow++) {
+
     if ( fits_read_col(fptr, TDOUBLE, 1, irow+1, 1, npercol, &nulval, 
 		       &(f[irow*npercol]), &anynul, &status) ) {
       printerror(status);
@@ -105,15 +131,7 @@ void read_mw_map(double* f, char* filename, int L)
 
 }
 
-/*!
- * Write MW map from a FITS file.
- *
- * \param[in]  f Input map (MW sampling).
- * \param[in]  file Filename.
- * \param[in]  L Band-limit / resolution parameter.
- * \retval none
- */
-void write_mw_map(char* filename, double* f, int L)
+void s2let_write_mw_map(char* filename, double* f, int L)
 {
   fitsfile *fptr;  
   int status, hdutype;
@@ -163,7 +181,6 @@ void write_mw_map(char* filename, double* f, int L)
 	    __FILE__, __LINE__);
   
 }
-
 
 void printerror(int status)
 {

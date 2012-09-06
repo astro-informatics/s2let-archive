@@ -7,7 +7,7 @@ loc = GETENV('S2LET')
 
 if loc eq '' then begin
 
-   print,'You must define environment variance S2LET (base directory of s2let)'
+   print,'You must define environment variable S2LET (base directory of s2let)'
    return, 0
 
 endif else begin

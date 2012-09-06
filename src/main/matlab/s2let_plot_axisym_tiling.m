@@ -1,4 +1,4 @@
-function s2let_plot_axisym_tilling(B, L, J_min)
+function s2let_plot_axisym_tiling(B, L, J_min)
 
 % plot_axisym_tilling - Plot tilling in harmonic space.
 % -- Axisymmetric wavelets on the sphere.
@@ -15,7 +15,7 @@ function s2let_plot_axisym_tilling(B, L, J_min)
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
-[kappa kappa0] = s2let_axisym_tilling(B, L, J_min);
+[kappa kappa0] = s2let_axisym_tiling(B, L, J_min);
 
 J = s2let_jmax(L, B);
 

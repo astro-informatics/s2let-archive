@@ -115,16 +115,15 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
 
   // Perform wavelet transform in harmonic space and then reconstruction.
-  int npix = 12 * nside * nside;
-  f_r = (double*)malloc( npix * sizeof(double));
+  s2let_allocate_hpx_real(&f_r, nside);
   s2let_axisym_hpx_wav_synthesis_real(f_r, f_wav_r, f_scal_r, nside, B, L, J_min);
    
 
   // Output function f
   iout = 0;
-  plhs[iout] = mxCreateDoubleMatrix(1, npix, mxREAL);
+  plhs[iout] = mxCreateDoubleMatrix(1, 12 * nside * nside, mxREAL);
   f_real = mxGetPr(plhs[iout]);
-  for (i=0; i<npix; i++)
+  for (i=0; i < 12 * nside * nside; i++)
     f_real[i] = creal(f_r[i]);
 
   free(f_r);

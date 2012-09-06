@@ -72,7 +72,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
           "Harmonic band-limit L must be positive integer.");
 
   // Perform harmonic transform 
-  flm = (complex double*)malloc( L * L * sizeof(complex double));
+  s2let_allocate_lm(&flm, L);
   s2let_hpx_map2alm_real(flm, f_r, nside, L);
 
   // Output flm's

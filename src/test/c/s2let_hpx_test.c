@@ -4,115 +4,14 @@
 
 #include "s2let.h"
 #include <assert.h>
-
-/*!
- * Max absolute error between two complex arrays
- */
-double maxerr_cplx(complex double *a, complex double *b, int size)
-{
-	double value = 0;
-	int i;
-	for(i = 0; i<size; i++){
-		value = MAX( cabs( a[i]-b[i] ), value );
-	}
-	return value;
-}
-
-/*!
- * Max absolute error between two real arrays
- */
-double maxerr(double *a, double *b, int size)
-{
-	double value = 0;
-	int i;
-	for(i = 0; i<size; i++){
-		value = MAX( abs( a[i]-b[i] ), value );
-	}
-	return value;
-}
-
-/*!
- * Random number from seed (Numerical Recipes)
- */
-double ran2_dp(int idum) {
-  int IM1=2147483563,IM2=2147483399,IMM1=IM1-1, 
-    IA1=40014,IA2=40692,IQ1=53668,IQ2=52774,IR1=12211,IR2=3791, 
-    NTAB=32,NDIV=1+IMM1/NTAB;
-
-  double AM=1./IM1,EPS=1.2e-7,RNMX=1.-EPS;
-  int j,k;
-  static int iv[32],iy,idum2 = 123456789; 
-  // N.B. in C static variables are initialised to 0 by default.
-
-  if (idum <= 0) {
-    idum= (-idum>1 ? -idum : 1); // max(-idum,1);
-    idum2=idum;
-    for(j=NTAB+8;j>=1;j--) {
-      k=idum/IQ1;
-      idum=IA1*(idum-k*IQ1)-k*IR1;
-      if (idum < 0) idum=idum+IM1;
-      if (j < NTAB) iv[j-1]=idum;
-    }
-    iy=iv[0];
-  }
-  k=idum/IQ1;
-  idum=IA1*(idum-k*IQ1)-k*IR1;
-  if (idum < 0) idum=idum+IM1;
-  k=idum2/IQ2;
-  idum2=IA2*(idum2-k*IQ2)-k*IR2;
-  if (idum2 < 0) idum2=idum2+IM2;
-  j=1+iy/NDIV;
-  iy=iv[j-1]-idum2;
-  iv[j-1]=idum;
-  if(iy < 1)iy=iy+IMM1;
-  return (AM*iy < RNMX ? AM*iy : RNMX); // min(AM*iy,RNMX);
-}
-
-
-/*!
- * Generate random harmonic coefficients for a complex map.
- *
- * \param[out]  flm Harmonic coefficients.
- * \param[in]  L Band-limit.
- * \param[in]  seed Random seed.
- * \retval none
- */
-void s2let_axisym_random_flm(complex double *flm, int L, int seed)
-{
-	int i;
-	srand( time(NULL) );
-	for (i=0; i<L*L; i++){
-		flm[i] = (2.0*ran2_dp(seed) - 1.0) + I * (2.0*ran2_dp(seed) - 1.0);
-	}
-}
-
-
-/*!
- * Generate random harmonic coefficients corresponding to a real map.
- *
- * \param[out]  flm Harmonic coefficients.
- * \param[in]  L Band-limit.
- * \param[in]  seed Random seed.
- * \retval none
- */
-void s2let_axisym_random_flm_real(complex double *flm, int L, int seed) {
-
-  int el, m, msign, i, i_op;
-  for (el=0; el<L; el++) {
-    m = 0;
-    i = el*el + el + m ;
-    flm[i] = (2.0*ran2_dp(seed) - 1.0);
-    for (m=1; m<=el; m++) {
-      i = el*el + el + m ;
-      flm[i] = (2.0*ran2_dp(seed) - 1.0) + I * (2.0*ran2_dp(seed) - 1.0);
-      i_op = el*el + el - m ;
-      msign = m & 1;
-      msign = 1 - msign - msign; // (-1)^m
-      flm[i_op] = msign * conj(flm[i]);
-    }
-  }
-}
-
+#include <complex.h> 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <time.h>
+#include <fftw3.h> 
+#include <ssht.h>
 
 /*!
  * Perform HEALPIX spherical harmonic transform back and forth.
@@ -127,19 +26,19 @@ void s2let_axisym_hpx_test(int nside, int L, int seed)
 {
 	double *f, *f_rec;
 	complex double *flm, *flm_rec;
-	flm = (complex double*)calloc(L * L, sizeof(complex double));
-	flm_rec = (complex double*)calloc(L * L, sizeof(complex double));
-	f = (double*)calloc(12*nside*nside, sizeof(double));
-	f_rec = (double*)calloc(12*nside*nside, sizeof(double));
+	s2let_allocate_lm(&flm, L);
+	s2let_allocate_lm(&flm_rec, L);
+	s2let_allocate_hpx_real(&f, nside);
+	s2let_allocate_hpx_real(&f_rec, nside);
 
 	// Generate random harmonic coefficients
 	s2let_axisym_random_flm_real(flm, L, seed);
 
 	// Reconstruct the corresponding signal on the sphere on a healpix map
-	healpix_inverse_real(f, flm, nside, L);
+	s2let_hpx_alm2map_real(f, flm, nside, L);
 
 	// Decompose it again to get the harmonic coefficients back
-	healpix_forward_real(flm_rec, f, nside, L);
+	s2let_hpx_map2alm_real(flm_rec, f, nside, L);
 
 	// Compute the maximum absolute error on the harmonic coefficients
 	printf("  - Maximum abs error  : %6.5e\n", 
@@ -167,16 +66,16 @@ void s2let_axisym_hpx_wav_test(int nside, int B, int L, int J_min, int seed)
 
 	double *f, *f_rec;
 	complex double *flm, *flm_rec;
-	flm = (complex double*)calloc(L * L, sizeof(complex double));
-	flm_rec = (complex double*)calloc(L * L, sizeof(complex double));
-	f = (double*)calloc(12*nside*nside, sizeof(double));
-	f_rec = (double*)calloc(12*nside*nside, sizeof(double));
+	s2let_allocate_lm(&flm, L);
+	s2let_allocate_lm(&flm_rec, L);
+	s2let_allocate_hpx_real(&f, nside);
+	s2let_allocate_hpx_real(&f_rec, nside);
 
 	// Generate random harmonic coefficients
 	s2let_axisym_random_flm_real(flm, L, seed);
 
 	// Reconstruct the corresponding signal on the sphere on a healpix map
-	healpix_inverse_real(f, flm, nside, L);
+	s2let_hpx_alm2map_real(f, flm, nside, L);
 
 	// Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
 	double *f_wav, *f_scal;
@@ -197,7 +96,7 @@ void s2let_axisym_hpx_wav_test(int nside, int B, int L, int J_min, int seed)
 		(time_end - time_start) / (double)CLOCKS_PER_SEC);
 
 	// Get the harmonic coefficients back
-	healpix_forward_real(flm_rec, f_rec, nside, L);
+	s2let_hpx_map2alm_real(flm_rec, f_rec, nside, L);
 
 	// Compute the maximum absolute error on the harmonic coefficients
 	printf("  - Maximum abs error  : %6.5e\n", 
@@ -221,31 +120,31 @@ void s2let_hpx_io_test(int nside, int L, int seed)
 {
 	double *f, *f_rec;
 	complex double *flm, *flm_rec;
-	flm = (complex double*)calloc(L * L, sizeof(complex double));
-	flm_rec = (complex double*)calloc(L * L, sizeof(complex double));
-	f = (double*)calloc(12*nside*nside, sizeof(double));
-	f_rec = (double*)calloc(12*nside*nside, sizeof(double));
+	s2let_allocate_lm(&flm, L);
+	s2let_allocate_lm(&flm_rec, L);
+	s2let_allocate_hpx_real(&f, nside);
+	s2let_allocate_hpx_real(&f_rec, nside);
 
 	// Generate random harmonic coefficients
 	s2let_axisym_random_flm_real(flm, L, seed);
 
 	// Construct the corresponding real signal on a healpix map
-	healpix_inverse_real(f, flm, nside, L);
+	s2let_hpx_alm2map_real(f, flm, nside, L);
 
 	char file[100] = "temp.fits";
 
 	// Remove the file if it exists
 	remove(file);
 	// Write the signal to file
-	write_healpix_map(file, f, nside);
+	s2let_write_hpx_map(file, f, nside);
 
 	// Read the signal from file
-	read_healpix_map(f_rec, file, nside);
+	s2let_read_hpx_map(f_rec, file, nside);
 	// Clean
 	remove(file);
 
 	// Get the harmonic coefficients back 
-	healpix_forward_real(flm_rec, f, nside, L);
+	s2let_hpx_map2alm_real(flm_rec, f, nside, L);
 
 	// Compute the maximum absolute error on the harmonic coefficients
 	printf("  - Maximum abs error  : %6.5e\n", 
@@ -257,6 +156,58 @@ void s2let_hpx_io_test(int nside, int L, int seed)
 	free(flm_rec);
 }
 
+/*!
+ * Test the Input-Output facilities for the MW sampling (to FITS filts)
+ *
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  seed Random seed.
+ * \retval none
+ */
+void s2let_mw_io_test(int L, int seed)
+{
+	int verbosity = 0;
+	ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+
+	double *f, *f_rec;
+	complex double *flm, *flm_rec;
+	s2let_allocate_lm(&flm, L);
+	s2let_allocate_lm(&flm_rec, L);
+	s2let_allocate_mw_real(&f, L);
+	s2let_allocate_mw_real(&f_rec, L);
+
+	// Generate random harmonic coefficients
+	s2let_axisym_random_flm_real(flm, L, seed);
+
+	// Construct the corresponding real signal, on MW sampling 
+	ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
+
+	char file[100] = "temp.fits";
+
+	// Remove the file if it exists
+	remove(file);
+	// Write the signal to file
+	s2let_write_mw_map(file, f, L);
+
+	// Read the band-limit from file
+	int Lread = s2let_read_mw_bandlimit(file);
+
+	// Read the signal from file
+	s2let_read_mw_map(f_rec, file, Lread);
+	// Clean
+	remove(file);
+
+	// Get the harmonic coefficients back 
+	ssht_core_mw_forward_sov_conv_sym_real(flm_rec, f_rec, L, dl_method, verbosity);
+
+	// Compute the maximum absolute error on the harmonic coefficients
+	printf("  - Maximum abs error  : %6.5e\n", 
+		maxerr_cplx(flm, flm_rec, L*L));
+	
+	free(f);
+	free(f_rec);
+	free(flm);
+	free(flm_rec);
+}
 
 int main(int argc, char *argv[]) 
 {
@@ -279,7 +230,10 @@ int main(int argc, char *argv[])
 	printf("> Testing real axisymmetric wavelets in pixel space...\n");
 	s2let_axisym_hpx_wav_test(nside, B, L, J_min, seed);
 	printf("----------------------------------------------------------\n");
-	printf("> Testing interface to IO-fits healpix functions...\n");
+	printf("> Testing IO functions for MW sampling...\n");
+	s2let_mw_io_test(L, seed);
+	printf("----------------------------------------------------------\n");
+	printf("> Testing IO functions for HEALPIX sampling...\n");
 	s2let_hpx_io_test(nside, L, seed);
 	printf("==========================================================\n");
 

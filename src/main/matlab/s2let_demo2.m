@@ -13,9 +13,9 @@ ns = ceil(sqrt(2+J-J_min+1)) ;
 ny = ns - 1 + rem(2+J-J_min + 1, ns) ;
 nx = ns;
 
-[kappa kappa0] = s2let_axisym_tilling(B, L, J_min);
+[kappa kappa0] = s2let_axisym_tiling(B, L, J_min);
 
-s2let_plot_axisym_tilling(B, L, J_min);
+s2let_plot_axisym_tiling(B, L, J_min);
 
 figure('Position',[100 100 1100 700]) 
 

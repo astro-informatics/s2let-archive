@@ -1,4 +1,4 @@
-function [healpixmap, nside]= read_healpix_map(file)
+function [healpixmap, nside]= s2let_read_hpx_real_map(file)
 
 datacell = fitsread(file,'binarytable');
 data = datacell{1};

@@ -107,11 +107,12 @@ LDFLAGSMEX = -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLIB) -l$(SSHTLIBN) -L$(S2LETLIB
 
 FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(S2LETINC)
 
-S2LETOBJS= $(S2LETOBJ)/s2let_tiling.o	\
-	  $(S2LETOBJ)/s2let_axisym_harm.o 	\
+S2LETOBJS= $(S2LETOBJ)/s2let_axisym_harm.o 	\
 	  $(S2LETOBJ)/s2let_axisym_mw.o 	\
+	  $(S2LETOBJ)/s2let_idl_mw.o 	\
 	  $(S2LETOBJ)/s2let_math.o 	\
-	  $(S2LETOBJ)/s2let_mwtools.o
+	  $(S2LETOBJ)/s2let_mwtools.o	\
+	  $(S2LETOBJ)/s2let_tiling.o
 
 S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_axisym_tiling_mex.o	\
 	  $(S2LETOBJMAT)/s2let_axisym_analysis_mex.o		\
@@ -127,6 +128,7 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 
 	S2LETOBJS+= $(S2LETOBJ)/s2let_hpxtools.o
 	S2LETOBJS+= $(S2LETOBJ)/s2let_axisym_hpx.o
+	S2LETOBJS+= $(S2LETOBJ)/s2let_idl_hpx.o
 	S2LETOBJS+= $(S2LETOBJF90)/s2let_hpx.o
 
 	FFLAGS+= -I$(HEALPIXINC)
@@ -192,7 +194,10 @@ default: lib test about tidy
 matlab: $(S2LETOBJSMEX)
 
 .PHONY: all
-all: lib matlab doc hpxtest test demo about tidy
+all: lib matlab doc bin tidy
+
+.PHONY: bin
+bin: test hpx_test hpx_demo denoising_demo s2let_axisym_mw_analysis_real s2let_axisym_hpx_analysis_real about tidy
 
 .PHONY: lib
 lib: $(S2LETLIB)/lib$(S2LETLIBN).a
@@ -211,15 +216,30 @@ test: $(S2LETBIN)/s2let_test
 $(S2LETBIN)/s2let_test: $(S2LETTESTOBJ)/s2let_test.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_test $(LDFLAGS)
 
-.PHONY: demo
-demo: $(S2LETBIN)/s2let_demo
-$(S2LETBIN)/s2let_demo: $(S2LETTESTOBJ)/s2let_demo.o $(S2LETLIB)/lib$(S2LETLIBN).a
-	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_demo $(LDFLAGS)
+.PHONY: hpx_demo
+hpx_demo: $(S2LETBIN)/s2let_hpx_demo
+$(S2LETBIN)/s2let_hpx_demo: $(S2LETOBJ)/s2let_hpx_demo.o $(S2LETLIB)/lib$(S2LETLIBN).a
+	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_hpx_demo $(LDFLAGS)
 
-.PHONY: hpxtest
-hpxtest: $(S2LETBIN)/s2let_hpxtest
-$(S2LETBIN)/s2let_hpxtest: $(S2LETTESTOBJ)/s2let_hpxtest.o $(S2LETLIB)/lib$(S2LETLIBN).a
-	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_hpxtest $(LDFLAGS)
+.PHONY: s2let_axisym_mw_analysis_real
+s2let_axisym_mw_analysis_real: $(S2LETBIN)/s2let_axisym_mw_analysis_real
+$(S2LETBIN)/s2let_axisym_mw_analysis_real: $(S2LETOBJ)/s2let_axisym_mw_analysis_real.o $(S2LETLIB)/lib$(S2LETLIBN).a
+	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_axisym_mw_analysis_real $(LDFLAGS)
+
+.PHONY: s2let_axisym_hpx_analysis_real
+s2let_axisym_hpx_analysis_real: $(S2LETBIN)/s2let_axisym_hpx_analysis_real
+$(S2LETBIN)/s2let_axisym_hpx_analysis_real: $(S2LETOBJ)/s2let_axisym_hpx_analysis_real.o $(S2LETLIB)/lib$(S2LETLIBN).a
+	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_axisym_hpx_analysis_real $(LDFLAGS)
+
+.PHONY: denoising_demo
+denoising_demo: $(S2LETBIN)/s2let_denoising_demo
+$(S2LETBIN)/s2let_denoising_demo: $(S2LETOBJ)/s2let_denoising_demo.o $(S2LETLIB)/lib$(S2LETLIBN).a
+	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_denoising_demo $(LDFLAGS)
+
+.PHONY: hpx_test
+hpx_test: $(S2LETBIN)/s2let_hpx_test
+$(S2LETBIN)/s2let_hpx_test: $(S2LETTESTOBJ)/s2let_hpx_test.o $(S2LETLIB)/lib$(S2LETLIBN).a
+	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_hpx_test $(LDFLAGS)
 
 .PHONY: about
 about: $(S2LETBIN)/s2let_about
@@ -238,10 +258,7 @@ cleandoc:
 clean:	tidy cleandoc
 	rm -f $(S2LETLIB)/lib$(S2LETLIBN).*
 	rm -f $(S2LETOBJMEX)/*_mex.$(MEXEXT)
-	rm -f $(S2LETBIN)/s2let_test
-	rm -f $(S2LETBIN)/s2let_demo
-	rm -f $(S2LETBIN)/s2let_hpxtest
-	rm -f $(S2LETBIN)/s2let_about
+	rm -f $(S2LETBIN)/*
 
 .PHONY: tidy
 tidy:

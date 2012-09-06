@@ -110,6 +110,12 @@ Private release of S2LET 1.0 for fast wavelet transform on the MW sampling.
  implementations.  Both C and Matlab mex compilers will be required
  to build the Matlab interface to the C implementation.
 
+- you *can* build LIB without CFITSIO or HEALPIX
+-> all interfaces work, but you handle the IO part
+- linking to CFITSIO adds MW input-output
+- linking to HEALPIX adds HPX-SHA and HPX input-output
+
+
   <h4>Compiling</h4>
 
   <p> Makefiles are provided to build the code. However the locations of SSHT, FFTW, CFITSIO and optionnaly HEALPIX must be specified. In S2LET the default Makefile will look at these symbols in Bash/Shell profiles. Alternatively you may write them explicitely in the first section of the makefile. The compilers and their options may also be changed there. 
@@ -133,7 +139,13 @@ Private release of S2LET 1.0 for fast wavelet transform on the MW sampling.
   <p> A demo of the wavelet transform on a CMB simulation (HEALPIX map) is also provided, and can be build with:
   <pre> >> make demo</pre>
 
-  <h4>Testing</h4>
+  <h4>Tests and programs</h4>
+
+s2let_test
+s2let_hpxtest
+s2let_hpxiodemo
+s2let_axisym_hpx_analysis_real
+s2let_axisym_mw_analysis_real
 
   <p> Three programs may be run to test the framework. They are extensively documented and may serve as starting point to learn to use the functionalities of S2LET. The command
   <pre> >> ./bin/c/s2let_test</pre>

@@ -5,8 +5,11 @@ L = 192;
 B = 3;
 J_min = 2;
 nside_recon = 128;
+s2let_path = '~/Dropbox/Wavelets/s2let';
+inputfile = strcat(s2let_path,'/data/somecmbsimu_hpx_128.fits')
 
-[f_ini, nside] = read_healpix_map('data/some_cmb_simu.fits');
+% Read the file
+[f_ini, nside] = s2let_read_hpx_real_map(inputfile);
 
 % Band limit the data
 flm = s2let_hpx_map2alm(f_ini, 'L', L);

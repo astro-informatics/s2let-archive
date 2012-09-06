@@ -14,8 +14,8 @@ J_min = 1;
 J = s2let_jmax(L, B);
 
 disp('Checks tilling of harmonic space for axysimmetric wavelets')
-[kappa kappa0] = s2let_axisym_tilling(B, L, J_min);
-error_on_axisym_tilling = s2let_check_axisym_tilling(kappa, kappa0, L, J)
+[kappa kappa0] = s2let_axisym_tiling(B, L, J_min);
+error_on_axisym_tilling = s2let_check_axisym_tiling(kappa, kappa0, L, J)
 
 disp('Generates band-limited function')
 flm = zeros(L^2,1); 

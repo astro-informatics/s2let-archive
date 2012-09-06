@@ -28,7 +28,7 @@ f = ssht_inverse(flm, L, 'Reality', true);
 
 B = 3;
 J_min = 2;
-J = s2let_jmax(L, B)
+J = s2let_jmax(L, B);
 
 % Perform decomposition
 [f_wav, f_scal] = s2let_axisym_analysis(f, 'B', B, 'J_min', J_min, 'Reality', true);

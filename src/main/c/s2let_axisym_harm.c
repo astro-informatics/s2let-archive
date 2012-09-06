@@ -7,6 +7,11 @@
 #include <math.h>
 #include <stdlib.h>
 
+int lm2ind(int el, int em)
+{
+	return el*el + el + em;
+}
+
 void s2let_axisym_allocate_f_wav_lm(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min)
 {
 	int J = s2let_j_max(L, B);
@@ -161,4 +166,5 @@ void s2let_axisym_wav_synthesis_multires_lm(complex double *flm, const complex d
 			flm[lm2ind(l,m)] += f_scal_lm[lm2ind(l,m)] * scal0 ;
 		}
 	}
+
 }

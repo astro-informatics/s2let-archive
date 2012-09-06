@@ -65,7 +65,7 @@ END SUBROUTINE healpix_inverse_real
 
 ! ----------------------------------------------------------- !
 
-SUBROUTINE  s2let_hpx_read_map(map, file, nside)
+SUBROUTINE  read_healpix_map(map, file, nside)
   use healpix_types
   use healpix_modules
   character(len=filenamelen) :: file
@@ -77,11 +77,11 @@ SUBROUTINE  s2let_hpx_read_map(map, file, nside)
   npix = nside2npix(nside)
   call read_bintab(file, map, npix, 1, nullval, anynull)
 
-END SUBROUTINE s2let_hpx_read_map
+END SUBROUTINE read_healpix_map
 
 ! ----------------------------------------------------------- !
 
-SUBROUTINE s2let_hpx_write_map(file, map, nside)
+SUBROUTINE write_healpix_map(file, map, nside)
   use healpix_types
   use healpix_modules
   character(len=filenamelen) :: file
@@ -93,6 +93,6 @@ SUBROUTINE s2let_hpx_write_map(file, map, nside)
   header = ''
   call write_bintab(map, npix, 1, header, 120, file)
 
-END SUBROUTINE s2let_hpx_write_map
+END SUBROUTINE write_healpix_map
 
 ! ----------------------------------------------------------- !
