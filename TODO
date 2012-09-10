@@ -1,9 +1,9 @@
 
 SHORT TERM
-	- IDL support : add more MW routines and tests
-	- IDL : read and write MW maps
-	- IDL : plot MW maps
-	- Finish Java interfaces, doc and install notes
+        - Cmake : cross compilation and tests under Win & Linux
+	- Tests for Java interfaces
+        - doc and install notes for Java
+        - Multi platform support, precompiled libs
 	- Second sort of tiling in option
 	- Download procedure in DOC
 	- Website s2let.org

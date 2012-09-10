@@ -8,7 +8,7 @@
  * IDL integer types. For historical reasons, we use UCHAR for TYP_BYTE
  * instead of defining an IDL_BYTE type.
  */
- #if defined(ALPHA_OSF) || defined(SUN_64) || defined(LINUX_X86_64) || defined(HPUX_64) || defined(IRIX_64) || defined(AIX_64)
+#if defined(ALPHA_OSF) || defined(SUN_64) || defined(LINUX_X86_64) || defined(HPUX_64) || defined(IRIX_64) || defined(AIX_64)
 #define IDL_SIZEOF_C_LONG 8
 #else
 #define IDL_SIZEOF_C_LONG 4
@@ -36,10 +36,10 @@ int s2let_idl_axisym_hpx_wav_analysis_real(int argc, void* argv[])
   double *f_wav = (double *) argv[0];
   double *f_scal = (double *) argv[1];
   double *f = (double *) argv[2];
-  IDL_LONG *nside = (IDL_LONG *) argv[3];
-  IDL_LONG *B = (IDL_LONG *) argv[4];
-  IDL_LONG *L = (IDL_LONG *) argv[5];
-  IDL_LONG *J_min = (IDL_LONG *) argv[6];
+  IDL_INT *nside = (IDL_INT *) argv[3];
+  IDL_INT *B = (IDL_INT *) argv[4];
+  IDL_INT *L = (IDL_INT *) argv[5];
+  IDL_INT *J_min = (IDL_INT *) argv[6];
 
   s2let_axisym_hpx_wav_analysis_real(f_wav, f_scal, f, *nside, *B, *L, *J_min);
 
@@ -52,12 +52,39 @@ int s2let_idl_axisym_hpx_wav_synthesis_real(int argc, void* argv[])
   double *f = (double *) argv[0];
   double *f_wav = (double *) argv[1];
   double *f_scal = (double *) argv[2];
-  IDL_LONG *nside = (IDL_LONG *) argv[3];
-  IDL_LONG *B = (IDL_LONG *) argv[4];
-  IDL_LONG *L = (IDL_LONG *) argv[5];
-  IDL_LONG *J_min = (IDL_LONG *) argv[6];
+  IDL_INT *nside = (IDL_INT *) argv[3];
+  IDL_INT *B = (IDL_INT *) argv[4];
+  IDL_INT *L = (IDL_INT *) argv[5];
+  IDL_INT *J_min = (IDL_INT *) argv[6];
 
   s2let_axisym_hpx_wav_synthesis_real(f, f_wav, f_scal, *nside, *B, *L, *J_min);
+
+  return 1;  
+}    
+
+
+int s2let_idl_hpx_map2alm_real(int argc, void* argv[])  
+{  
+  if(argc != 4) return 0;  
+  complex double *flm = (complex double *) argv[0];
+  double *f = (double *) argv[1];
+  IDL_INT *nside = (IDL_INT *) argv[2];
+  IDL_INT *L = (IDL_INT *) argv[3];
+
+  s2let_hpx_map2alm_real(flm, f, *nside, *L);
+
+  return 1;  
+}    
+
+int s2let_idl_hpx_alm2map_real(int argc, void* argv[])  
+{  
+  if(argc != 4) return 0;  
+  double *f = (double *) argv[0];
+  complex double *flm = (complex double *) argv[1];
+  IDL_INT *nside = (IDL_INT *) argv[2];
+  IDL_INT *L = (IDL_INT *) argv[3];
+
+  s2let_hpx_alm2map_real(f, flm, *nside, *L);
 
   return 1;  
 }    

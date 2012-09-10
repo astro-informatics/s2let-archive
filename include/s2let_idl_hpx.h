@@ -15,4 +15,14 @@ int s2let_idl_axisym_hpx_wav_analysis_real(int argc, void* argv[]);
  */
 int s2let_idl_axisym_hpx_wav_synthesis_real(int argc, void* argv[]);
 
+/*!
+ * IDL interface to s2let_hpx_map2alm_real
+ */
+int s2let_idl_hpx_map2alm_real(int argc, void* argv[]);  
+
+/*!
+ * IDL interface to s2let_hpx_alm2map_real
+ */
+int s2let_idl_hpx_alm2map_real(int argc, void* argv[]);
+
 #endif

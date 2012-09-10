@@ -252,7 +252,9 @@ doc:
 	$(DOXYGEN_PATH) $(S2LETDIR)/src/doxygen.config
 .PHONY: cleandoc
 cleandoc:
-	rm -rf $(S2LETDIR)/doc/html/*
+	rm -rf $(S2LETDIR)/doc/c/*
+	rm -rf $(S2LETDIR)/doc/idl/*
+	rm -rf $(S2LETDIR)/doc/matlab/*
 
 .PHONY: clean
 clean:	tidy cleandoc

@@ -8,10 +8,11 @@ import static org.s2let.bindings.S2letLibrary.*;
  *
  * @author bl
  */
+
 public abstract class PixelizedMap {
-    protected SamplingScheme scheme;
-    protected boolean reality;
-    protected int resolution;
+    protected final SamplingScheme scheme;
+    protected final int resolution;
+    protected final boolean reality;
     public SamplingScheme getScheme() {
         return scheme;
     }
@@ -21,104 +22,113 @@ public abstract class PixelizedMap {
     public int getResolution() {
         return this.resolution;
     };
-    public PixelizedMap() {
-        
+    protected PixelizedMap(SamplingScheme sc, int bandlimit, boolean rea) {
+        this.scheme = sc;
+        this.reality = rea;
+        this.resolution = bandlimit;
+    }
+    static public PixelizedMap fromHarmonics(SphericalHarmonicTransform flm, SamplingScheme sc, int nside) {
+        if (sc == SamplingScheme.MW){        
+            if (flm.getReality()) {
+                return new MWRealMap(flm);
+            } else {
+                return new MWCmplxMap(flm);
+            }
+        } else {
+            return new HealpixRealMap(flm, nside);
+        }
+            
     };
-}
+    static public PixelizedMap fromHarmonics(SphericalHarmonicTransform flm, SamplingScheme sc) {
+        int defaultNside = flm.getBandlimit();
+        return fromHarmonics(flm, sc, defaultNside);
+    }
+    static public PixelizedMap fromWavelets(AxisymmetricWaveletTransform wavelets, SamplingScheme sc, int nside) {
+        if (sc == SamplingScheme.MW){
+            if (wavelets.getReality()) {
+                return new MWRealMap(wavelets);
+            } else {
+                return new MWCmplxMap(wavelets);
+            }
+        } else {
+            return new HealpixRealMap(wavelets, nside);
+        }
+    };
+     static public PixelizedMap fromWavelets(AxisymmetricWaveletTransform wavelets, SamplingScheme sc) {
+        int defaultNside = wavelets.getBandlimit();
+        return fromWavelets(wavelets, sc, defaultNside);
+    }
+    public abstract void computeHarmonics(Pointer<ComplexDouble> flm);
+};
+
 
 class MWCmplxMap extends PixelizedMap {
-    private Pointer<ComplexDouble> mapValues;
-    public Pointer<ComplexDouble> getMap() { 
-        return this.mapValues; 
+    private Pointer<ComplexDouble> mapValues; 
+    public Pointer<ComplexDouble> getMap() {
+        return mapValues;
     }
-    public long getPixelCount() {
-        return this.mapValues.getValidElements();
-    };
-    public MWCmplxMap(SphericalHarmonicTransform flm) {
-        this.resolution = flm.getBandlimit();
-        this.scheme = SamplingScheme.MW;
-        this.mapValues = Pointer.allocateArray(ComplexDouble.class, resolution * (2*resolution-1)); ;
+    protected MWCmplxMap(SphericalHarmonicTransform flm) {
+        super(SamplingScheme.MW, flm.getBandlimit(), false);
+        this.mapValues = Pointer.allocateArray(ComplexDouble.class, resolution * (2*resolution-1));
         s2let_mw_alm2map(this.mapValues, flm.getCoefficients(), resolution);
     }
-    public MWCmplxMap(AxisymmetricWaveletTransform wavelets) {
-        int bandlimit = wavelets.getBandlimit();
-        this.resolution = bandlimit;this.scheme = SamplingScheme.MW;
+    protected MWCmplxMap(AxisymmetricWaveletTransform wavelets) {
+        super(SamplingScheme.MW, wavelets.getBandlimit(), false);
         this.mapValues = Pointer.allocateArray(ComplexDouble.class, resolution * (2*resolution-1));
-        int scaleCount = wavelets.getScaleCount();
-        int firstScale = wavelets.getFirstScale();
-        boolean multiresolution = wavelets.getMultiresolution();
-        int waveletParameter = wavelets.getWaveletParameter();
-        if(!multiresolution){
-            Pointer<ComplexDouble> f_wav = Pointer.allocateArray(ComplexDouble.class, (scaleCount + 1 - firstScale) * bandlimit * (2 * bandlimit - 1));
-            Pointer<ComplexDouble> f_scal = Pointer.allocateArray(ComplexDouble.class, bandlimit * (2 * bandlimit - 1));   
-            // Construct right pointer
-            s2let_axisym_wav_analysis_multires(mapValues, f_wav, f_scal, waveletParameter, bandlimit, firstScale);
-        }else{
-            Pointer<ComplexDouble> f_wav = Pointer.allocateArray(ComplexDouble.class, getMultiresTotalSize());
-            Pointer<ComplexDouble> f_scal = Pointer.allocateArray(ComplexDouble.class, bandlimit * (2 * bandlimit - 1));
-            // Construct right pointer
-            s2let_axisym_wav_synthesis(mapValues, f_wav, f_scal, waveletParameter, bandlimit, firstScale);
-        }
+        Pointer<ComplexDouble> flm = Pointer.allocateArray(ComplexDouble.class, resolution * resolution);
+        wavelets.reconstructHarmonics(flm);
+        s2let_mw_alm2map(this.mapValues, flm, resolution);
     }
+    public void computeHarmonics(Pointer<ComplexDouble> flm){
+        s2let_mw_map2alm(flm, this.mapValues, resolution);
+    };
 }
 
 class MWRealMap extends PixelizedMap {
     private Pointer<Double> mapValues; 
-    public Pointer<Double> getMap() { 
-        return this.mapValues; 
+    public Pointer<Double> getMap() {
+        return mapValues;
     }
-    public long getPixelCount() {
-        return this.mapValues.getValidElements();
-    };
-    public MWRealMap(SphericalHarmonicTransform flm) {
-        this.resolution = flm.getBandlimit();
-        this.scheme = SamplingScheme.MW;
+    protected MWRealMap(SphericalHarmonicTransform flm) {
+        super(SamplingScheme.MW, flm.getBandlimit(), true);
         this.mapValues = Pointer.allocateArray(Double.class, resolution * (2*resolution-1));
         s2let_mw_alm2map_real(this.mapValues, flm.getCoefficients(), resolution);
     }
-    public MWRealMap(AxisymmetricWaveletTransform wavelets) {
-        int bandlimit = wavelets.getBandlimit();
-        this.resolution = bandlimit;this.scheme = SamplingScheme.MW;
+    protected MWRealMap(AxisymmetricWaveletTransform wavelets) {
+        super(SamplingScheme.MW, wavelets.getBandlimit(), true);
         this.mapValues = Pointer.allocateArray(Double.class, resolution * (2*resolution-1));
-        int scaleCount = wavelets.getScaleCount();
-        int firstScale = wavelets.getFirstScale();
-        boolean multiresolution = wavelets.getMultiresolution();
-        int waveletParameter = wavelets.getWaveletParameter();
-        if(!multiresolution){
-            Pointer<Double> f_wav = Pointer.allocateArray(Double.class, (scaleCount + 1 - firstScale) * bandlimit * (2 * bandlimit - 1));
-            Pointer<Double> f_scal = Pointer.allocateArray(Double.class, bandlimit * (2 * bandlimit - 1));   
-            // Construct right pointer
-            s2let_axisym_wav_analysis_multires_real(mapValues, f_wav, f_scal, waveletParameter, bandlimit, firstScale);
-        }else{
-            Pointer<Double> f_wav = Pointer.allocateArray(Double.class, getMultiresTotalSize());
-            Pointer<Double> f_scal = Pointer.allocateArray(Double.class, bandlimit * (2 * bandlimit - 1));
-            // Construct right pointer
-            s2let_axisym_wav_synthesis_real(mapValues, f_wav, f_scal, waveletParameter, bandlimit, firstScale);
+        Pointer<ComplexDouble> flm = Pointer.allocateArray(ComplexDouble.class, resolution * resolution);
+        wavelets.reconstructHarmonics(flm);
+        s2let_mw_alm2map_real(this.mapValues, flm, resolution);
         }
-    }
+    public void computeHarmonics(Pointer<ComplexDouble> flm){
+        s2let_mw_map2alm_real(flm, this.mapValues, resolution);
+    };
+
 }
 
 class HealpixRealMap extends PixelizedMap {
-    private Pointer<Double> mapValues;
-    public Pointer<Double> getMap() { 
-        return this.mapValues; 
+    private Pointer<Double> mapValues; 
+    public Pointer<Double> getMap() {
+        return mapValues;
     }
-    public long getPixelCount() {
-        return this.mapValues.getValidElements();
-    };
-    public HealpixRealMap(SphericalHarmonicTransform flm, int res) {
-        this.resolution = res;
-        this.scheme = SamplingScheme.HEALPIX;
-        int bandlimit = flm.getBandlimit();
+    protected HealpixRealMap(SphericalHarmonicTransform flm, int res) {
+        super(SamplingScheme.HEALPIX, res, true);
         this.mapValues = Pointer.allocateArray(Double.class, 12*res*res);
-        s2let_hpx_alm2map_real(this.mapValues, flm.getCoefficients(), this.resolution, bandlimit);
+        s2let_hpx_alm2map_real(this.mapValues, flm.getCoefficients(), this.resolution, flm.getBandlimit());
     }
-    public HealpixRealMap(AxisymmetricWaveletTransform wavelets) {
-        // Calculate wavelet decomposition
-    }
+    protected HealpixRealMap(AxisymmetricWaveletTransform wavelets, int res) {
+        super(SamplingScheme.HEALPIX, res, true);
+        this.mapValues = Pointer.allocateArray(Double.class, 12*res*res);
+        int bandlimit = wavelets.getBandlimit();
+        Pointer<ComplexDouble> flm = Pointer.allocateArray(ComplexDouble.class, bandlimit * bandlimit);
+        wavelets.reconstructHarmonics(flm);
+        s2let_hpx_alm2map_real(this.mapValues, flm, res, bandlimit);
+        }
+    public void computeHarmonics(Pointer<ComplexDouble> flm){
+        int bandlimit = (int)(Math.sqrt(flm.getValidElements()));
+        s2let_hpx_map2alm_real(flm, this.mapValues, resolution, bandlimit);
+    };
 }
 
-enum SamplingScheme {
-    HEALPIX, MW
-};
 
