@@ -10,6 +10,11 @@ import static java.lang.Math.*;
 import java.util.Random;
 
 public class S2letLibraryTest {
+        /**
+         * Generate random complex harmonic coefficients.
+         * @param flm
+         * @param L 
+         */
 	public void random_flm(Pointer<ComplexDouble> flm, int L) {
             Random randomGenerator = new Random();
             Pointer<Double> pd = flm.as(Double.class);
@@ -18,6 +23,11 @@ public class S2letLibraryTest {
                     pd.setDoubleAtOffset(i * 2 * 8 + 8, randomGenerator.nextDouble());
             }
 	}
+        /**
+         * Generate random complex harmonic coefficients corresponding to a real signal.
+         * @param flm
+         * @param L 
+         */
         public void random_flm_real(Pointer<ComplexDouble> flm, int L) {
             Random randomGenerator = new Random();
             Pointer<Double> pd = flm.as(Double.class);

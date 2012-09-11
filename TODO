@@ -1,7 +1,6 @@
 
 SHORT TERM
         - Cmake : cross compilation and tests under Win & Linux
-	- Tests for Java interfaces
         - doc and install notes for Java
         - Multi platform support, precompiled libs
 	- Second sort of tiling in option

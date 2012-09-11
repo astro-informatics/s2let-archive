@@ -3,6 +3,7 @@
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
+#include <stdlib.h>
 #include <math.h>
 #include <time.h>
 

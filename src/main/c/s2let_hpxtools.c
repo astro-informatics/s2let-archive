@@ -3,6 +3,7 @@
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
+#include <stdlib.h>
 #include <complex.h> 
 
 // Fortran interfaces to Healpix F90 library ; see s2let_hpx.f90

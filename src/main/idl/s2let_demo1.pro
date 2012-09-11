@@ -1,4 +1,4 @@
-pro s2let_demo1, B=B, J_min=J_min, multires=multires
+pro s2let_demo1, B=B, J_min=J_min, multires=multires, charsize=charsize
 ;+
 ; S2LET package - Copyright (C) 2012 
 ; Boris Leistedt & Jason McEwen
@@ -22,6 +22,7 @@ pro s2let_demo1, B=B, J_min=J_min, multires=multires
 if not keyword_set(multires) then multires = 0
 if not keyword_set(B) then B = 3
 if not keyword_set(J_min) then J_min = 2
+if not keyword_set(charsize) then charsize = 2.0
 
 if s2let_dylib_exists() eq 1 then begin
 
@@ -51,10 +52,10 @@ if s2let_dylib_exists() eq 1 then begin
 
    !P.MULTI=[0,nx,ny]
 
-   s2let_plot_mollweide, f_rec, title='Band-limited map'
-   s2let_plot_mollweide, f_wav.scal, title='Scaling map'
+   s2let_plot_mollweide, f_rec, title='Band-limited map', charsize=charsize
+   s2let_plot_mollweide, f_wav.scal, title='Scaling map', charsize=charsize
    for j=0, J_max-J_min do begin
-      s2let_plot_mollweide, f_wav.(j), title='Wavelet map '+strtrim(j+1,2)+' on '+strtrim(J_max-J_min+1,2)
+      s2let_plot_mollweide, f_wav.(j), title='Wavelet map '+strtrim(j+1,2)+' on '+strtrim(J_max-J_min+1,2), charsize=charsize
    endfor
 
    !P.MULTI=0

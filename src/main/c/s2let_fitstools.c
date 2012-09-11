@@ -5,6 +5,16 @@
 #include "fitsio.h"
 #include "s2let.h"
 
+
+void printerror(int status)
+{
+ if (status){
+       fits_report_error(stderr, status); /* print error report */
+       exit( status );    /* terminate the program, returning error status */
+    }
+    return;
+}
+
 int s2let_read_mw_bandlimit(char* filename)
 {
   long     naxes, *naxis, Lread;
@@ -182,11 +192,3 @@ void s2let_write_mw_map(char* filename, double* f, int L)
   
 }
 
-void printerror(int status)
-{
- if (status){
-       fits_report_error(stderr, status); /* print error report */
-       exit( status );    /* terminate the program, returning error status */
-    }
-    return;
-}

@@ -101,9 +101,9 @@ vpath %.c $(S2LETTESTSRC)
 vpath %.h $(S2LETINC)
 vpath %_mex.c $(S2LETSRCMAT)
 
-LDFLAGS = -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLIB) -l$(SSHTLIBN) -L$(S2LETLIB) -l$(S2LETLIBN) -lm -lc
+LDFLAGS = -L$(S2LETLIB) -l$(S2LETLIBN) -lm -lc -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLIB) -l$(SSHTLIBN)
 
-LDFLAGSMEX = -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLIB) -l$(SSHTLIBN) -L$(S2LETLIB) -l$(S2LETLIBN)
+LDFLAGSMEX = -L$(S2LETLIB) -l$(S2LETLIBN) -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLIB) -l$(SSHTLIBN) 
 
 FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(S2LETINC)
 
@@ -205,7 +205,7 @@ $(S2LETLIB)/lib$(S2LETLIBN).a: $(S2LETOBJS)
 	ar -r $(S2LETLIB)/lib$(S2LETLIBN).a $(S2LETOBJS)
 
 .PHONY: dylib
-dylib: lib $(S2LETLIB)/lib$(S2LETLIBN).$(DYLIBEXT)
+dylib: $(S2LETLIB)/lib$(S2LETLIBN).$(DYLIBEXT)
 $(S2LETLIB)/lib$(S2LETLIBN).$(DYLIBEXT): $(S2LETOBJS)
 	$(DYLIBCMD) $(FFLAGS) $(LDFLAGS) -I$(S2LETINC)/idl_export.h -o $(S2LETLIB)/lib$(S2LETLIBN).$(DYLIBEXT) $(S2LETOBJS)
 	cp $(S2LETLIB)/lib$(S2LETLIBN).$(DYLIBEXT) $(S2LETDIR)/src/main/resources/lib/darwin_universal/
@@ -253,8 +253,6 @@ doc:
 .PHONY: cleandoc
 cleandoc:
 	rm -rf $(S2LETDIR)/doc/c/*
-	rm -rf $(S2LETDIR)/doc/idl/*
-	rm -rf $(S2LETDIR)/doc/matlab/*
 
 .PHONY: clean
 clean:	tidy cleandoc

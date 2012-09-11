@@ -33,7 +33,7 @@ void s2let_axisym_tiling(double *kappa, double *kappa0, int B, int L, int J_min)
 	int j, l;
 	int J = s2let_j_max(L, B);
 
-	double previoustemp, temp;
+	double previoustemp = 0.0, temp;
 	double *phi2 = (double*)calloc((J+2) * L, sizeof(double));
 
 	s2let_tiling_phi2(phi2, B, L, J_min);

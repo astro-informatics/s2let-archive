@@ -3,12 +3,12 @@
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
+#include <ssht.h>
 #include <assert.h>
 #include <complex.h> 
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include <ssht.h>
 
 /*!
  * Test the identity relation of the wavelet tiling in harmonic space.

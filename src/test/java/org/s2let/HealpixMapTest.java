@@ -6,8 +6,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author bl
+ * @author      Boris Leistedt <boris.leistedt @ gmail.com>
  */
 public class HealpixMapTest {
     
@@ -17,6 +16,12 @@ public class HealpixMapTest {
         test_Healpix_SphericalHarmonicTransform(64, 16, verbosity);
         test_Healpix_SphericalHarmonicTransform(256, 128, verbosity);
     }
+    /**
+     * Test that the spherical harmonic transform works well on the Healpix sampling (real signals).
+     * @param nside the resolution of the Healpix maps
+     * @param bandlimit the bandlimit of the decomposition to generate and work with
+     * @param verbosity 
+     */
     public void test_Healpix_SphericalHarmonicTransform(int nside, int bandlimit, boolean verbosity) {
         SphericalHarmonicTransform flm = SphericalHarmonicTransform.randomReal(bandlimit);
         PixelizedMap map = PixelizedMap.fromHarmonics(flm, SamplingScheme.HEALPIX, nside);

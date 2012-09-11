@@ -6,8 +6,7 @@ import static org.junit.Assert.*;
 
 
 /**
- *
- * @author bl
+ * @author      Boris Leistedt <boris.leistedt @ gmail.com>
  */
 public class MWMapTest {
     
@@ -18,6 +17,11 @@ public class MWMapTest {
         test_MW_SphericalHarmonicTransform(64, verbosity);
         test_MW_SphericalHarmonicTransform(128, verbosity);
     }
+    /**
+     * Test the exactness of the spherical harmonic transform built on the MW sampling (complex signals).
+     * @param bandlimit the bandlimit of the decomposition to generate and work with
+     * @param verbosity 
+     */
     public void test_MW_SphericalHarmonicTransform(int bandlimit, boolean verbosity) {
         SphericalHarmonicTransform flm = SphericalHarmonicTransform.random(bandlimit);
         PixelizedMap map = PixelizedMap.fromHarmonics(flm, SamplingScheme.MW);
@@ -36,6 +40,11 @@ public class MWMapTest {
         test_MWReal_SphericalHarmonicTransform(64, verbosity);
         test_MWReal_SphericalHarmonicTransform(128, verbosity);
     }
+    /**
+     * Test the exactness of the spherical harmonic transform built on the MW sampling (real signals).
+     * @param bandlimit the bandlimit of the decomposition to generate and work with
+     * @param verbosity 
+     */
     public void test_MWReal_SphericalHarmonicTransform(int bandlimit, boolean verbosity) {
         SphericalHarmonicTransform flm = SphericalHarmonicTransform.randomReal(bandlimit);
         PixelizedMap map = PixelizedMap.fromHarmonics(flm, SamplingScheme.MW);
