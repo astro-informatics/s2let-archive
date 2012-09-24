@@ -576,12 +576,14 @@ int main(int argc, char *argv[])
 	printf("----------------------------------------------------------\n");
 	printf("> Testing multiresolution algorithm for real function...\n");
 	s2let_axisym_wav_multires_real_test(B, L, J_min, seed);
+	/*
 	printf("==========================================================\n");
 	printf("> Testing performances at full resolution...\n");
 	s2let_transform_performance_test(B, J_min, NREPEAT, NSCALE, seed);
 	printf("----------------------------------------------------------\n");
 	printf("> Testing performances with multiresolution...\n");
 	s2let_transform_performance_multires_test(B, J_min, NREPEAT, NSCALE, seed);
+	*/
 	printf("==========================================================\n");
 
 
