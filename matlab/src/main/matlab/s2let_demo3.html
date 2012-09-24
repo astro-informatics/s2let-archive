@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of s2let_demo3</title>
+  <meta name="keywords" content="s2let_demo3">
+  <meta name="description" content="s2let_demo3">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">src</a> &gt; <a href="#">main</a> &gt; <a href="index.html">matlab</a> &gt; s2let_demo3.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for src/main/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>s2let_demo3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>s2let_demo3</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> s2let_demo3
+ Analyse some CMB simulation from a valid HEALPIX map</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>	s2let_axisym_synthesis</li><li><a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	</li><li><a href="s2let_plot_hpx_mollweide.html" class="code" title="function s2let_plot_hpx_mollweide(f)">s2let_plot_hpx_mollweide</a>	s2let_plot_hpx_mollweide - Plot HEALPIX map using Mollweide projection</li><li><a href="s2let_read_hpx_real_map.html" class="code" title="function [healpixmap, nside]= s2let_read_hpx_real_map(file)">s2let_read_hpx_real_map</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% s2let_demo3</span>
+0002 <span class="comment">% Analyse some CMB simulation from a valid HEALPIX map</span>
+0003 
+0004 L = 192;
+0005 B = 3;
+0006 J_min = 2;
+0007 nside_recon = 128;
+0008 s2let_path = <span class="string">'~/Dropbox/Wavelets/s2let'</span>;
+0009 inputfile = strcat(s2let_path,<span class="string">'/data/somecmbsimu_hpx_128.fits'</span>)
+0010 
+0011 <span class="comment">% Read the file</span>
+0012 [f_ini, nside] = <a href="s2let_read_hpx_real_map.html" class="code" title="function [healpixmap, nside]= s2let_read_hpx_real_map(file)">s2let_read_hpx_real_map</a>(inputfile);
+0013 
+0014 <span class="comment">% Band limit the data</span>
+0015 flm = <a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>(f_ini, <span class="string">'L'</span>, L);
+0016 f = <a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>(flm, nside_recon, <span class="string">'L'</span>, L);
+0017 
+0018 <span class="comment">% Perform decomposition</span>
+0019 [f_wav, f_scal] = <a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>(f,<span class="string">'B'</span>,B,<span class="string">'L'</span>,L,<span class="string">'J_min'</span>,J_min);
+0020 
+0021 <span class="comment">% Plot</span>
+0022 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
+0023 zoomfactor = 1.2;
+0024 ns = ceil(sqrt(2+J-J_min+1)) ;
+0025 ny = ns - 1 ;
+0026 nx = ns ;
+0027 figure(<span class="string">'Position'</span>,[100 100 1300 1000])
+0028 
+0029 subplot(nx, ny, 1);
+0030 <a href="s2let_plot_hpx_mollweide.html" class="code" title="function s2let_plot_hpx_mollweide(f)">s2let_plot_hpx_mollweide</a>(f);
+0031 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0032 title(<span class="string">'Initial band-limited data'</span>)
+0033 
+0034 subplot(nx, ny, 2);
+0035 <a href="s2let_plot_hpx_mollweide.html" class="code" title="function s2let_plot_hpx_mollweide(f)">s2let_plot_hpx_mollweide</a>(f_scal);
+0036 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0037 title(<span class="string">'Scaling fct'</span>)
+0038 
+0039 <span class="keyword">for</span> j = J_min:J
+0040    subplot(nx, ny, j-J_min+3);
+0041    <a href="s2let_plot_hpx_mollweide.html" class="code" title="function s2let_plot_hpx_mollweide(f)">s2let_plot_hpx_mollweide</a>(f_wav{j-J_min+1});
+0042    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0043    title([<span class="string">'Wavelet scale : '</span>,int2str(j)-J_min+1])
+0044 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 11-Sep-2012 00:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
