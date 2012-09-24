@@ -28,13 +28,17 @@
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> s2let_demo2
- plot wavelet kernels</pre></div>
+ Compute and plot the harmonic tilling and the wavelet kernels.
+
+ S2LET package to perform Wavelets on the Sphere.
+ Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen
+ See LICENSE.txt for license details</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_axisym_tiling.html" class="code" title="function [kappa kappa0] = s2let_axisym_tiling(B, L, J_min)">s2let_axisym_tiling</a>	s2let_axisym_tiling - Compute tiling in harmonic space.</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	</li><li><a href="s2let_plot_axisym_tiling.html" class="code" title="function s2let_plot_axisym_tiling(B, L, J_min)">s2let_plot_axisym_tiling</a>	plot_axisym_tilling - Plot tilling in harmonic space.</li></ul>
+<li><a href="s2let_axisym_tiling.html" class="code" title="function [kappa kappa0] = s2let_axisym_tiling(B, L, J_min)">s2let_axisym_tiling</a>	s2let_axisym_tiling - Compute tiling in harmonic space.</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li><li><a href="s2let_plot_axisym_tiling.html" class="code" title="function s2let_plot_axisym_tiling(B, L, J_min)">s2let_plot_axisym_tiling</a>	plot_axisym_tilling - Plot tilling in harmonic space.</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -44,57 +48,61 @@ This function is called by:
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <span class="comment">% s2let_demo2</span>
-0002 <span class="comment">% plot wavelet kernels</span>
-0003 
-0004 B = 3;
-0005 zoomfactor = 1.2;
-0006 J_min = 2;
-0007 L = 128;
-0008 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
-0009 type = <span class="string">'colour'</span>;
-0010 lighting = true;
-0011 
-0012 ns = ceil(sqrt(2+J-J_min+1)) ;
-0013 nx = ns - 1 + rem(2+J-J_min + 1, ns) ;
-0014 ny = ns;
+0002 <span class="comment">% Compute and plot the harmonic tilling and the wavelet kernels.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% S2LET package to perform Wavelets on the Sphere.</span>
+0005 <span class="comment">% Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen</span>
+0006 <span class="comment">% See LICENSE.txt for license details</span>
+0007 
+0008 B = 3;
+0009 zoomfactor = 1.2;
+0010 J_min = 2;
+0011 L = 128;
+0012 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
+0013 type = <span class="string">'colour'</span>;
+0014 lighting = true;
 0015 
-0016 [kappa kappa0] = <a href="s2let_axisym_tiling.html" class="code" title="function [kappa kappa0] = s2let_axisym_tiling(B, L, J_min)">s2let_axisym_tiling</a>(B, L, J_min);
-0017 
-0018 <a href="s2let_plot_axisym_tiling.html" class="code" title="function s2let_plot_axisym_tiling(B, L, J_min)">s2let_plot_axisym_tiling</a>(B, L, J_min);
+0016 ns = ceil(sqrt(2+J-J_min+1)) ;
+0017 nx = ns - 1 + rem(2+J-J_min + 1, ns) ;
+0018 ny = ns;
 0019 
-0020 figure(<span class="string">'Position'</span>,[100 100 1100 700]) 
+0020 [kappa kappa0] = <a href="s2let_axisym_tiling.html" class="code" title="function [kappa kappa0] = s2let_axisym_tiling(B, L, J_min)">s2let_axisym_tiling</a>(B, L, J_min);
 0021 
-0022 h=subplot(nx, ny, 1);
-0023 flm = zeros(L^2,1);
-0024 <span class="keyword">for</span> l = 0:L-1
-0025     flm(l^2+l+1,1) = kappa0(l+1);
-0026 <span class="keyword">end</span>     
-0027 f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
-0028 ssht_plot_sphere(f, L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
-0029 zoom(zoomfactor)
-0030 title(<span class="string">'Scaling fct'</span>)
-0031 locate = get(h,<span class="string">'title'</span>);
-0032 pos = get(locate,<span class="string">'position'</span>); 
-0033 pos(1,2) = pos(1,2)+0.7;
-0034 pos(1,1) = pos(1,1)-0.7;
-0035 set(locate,<span class="string">'pos'</span>,pos);
-0036    
-0037 <span class="keyword">for</span> j = J_min:J
-0038    h=subplot(nx, ny, j-J_min+2);
-0039    flm = zeros(L^2,1);
-0040     <span class="keyword">for</span> l = 0:L-1
-0041         flm(l^2+l+1,1) = kappa(j+1,l+1);
-0042     <span class="keyword">end</span>  
-0043    f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
-0044    ssht_plot_sphere(f, L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
-0045    title([<span class="string">'Wavelet scale : '</span>,int2str(j)-J_min+1])
-0046    locate = get(h,<span class="string">'title'</span>);
-0047    pos = get(locate,<span class="string">'position'</span>); 
-0048    pos(1,2) = pos(1,2)+0.7;
-0049    pos(1,1) = pos(1,1)-0.7;
-0050    set(locate,<span class="string">'pos'</span>,pos);
-0051    zoom(zoomfactor)
-0052 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 11-Sep-2012 00:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0022 <a href="s2let_plot_axisym_tiling.html" class="code" title="function s2let_plot_axisym_tiling(B, L, J_min)">s2let_plot_axisym_tiling</a>(B, L, J_min);
+0023 
+0024 figure(<span class="string">'Position'</span>,[100 100 1100 700]) 
+0025 
+0026 h=subplot(nx, ny, 1);
+0027 flm = zeros(L^2,1);
+0028 <span class="keyword">for</span> l = 0:L-1
+0029     flm(l^2+l+1,1) = kappa0(l+1);
+0030 <span class="keyword">end</span>     
+0031 f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
+0032 ssht_plot_sphere(f, L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
+0033 zoom(zoomfactor)
+0034 title(<span class="string">'Scaling fct'</span>)
+0035 locate = get(h,<span class="string">'title'</span>);
+0036 pos = get(locate,<span class="string">'position'</span>); 
+0037 pos(1,2) = pos(1,2)+0.7;
+0038 pos(1,1) = pos(1,1)-0.7;
+0039 set(locate,<span class="string">'pos'</span>,pos);
+0040    
+0041 <span class="keyword">for</span> j = J_min:J
+0042    h=subplot(nx, ny, j-J_min+2);
+0043    flm = zeros(L^2,1);
+0044     <span class="keyword">for</span> l = 0:L-1
+0045         flm(l^2+l+1,1) = kappa(j+1,l+1);
+0046     <span class="keyword">end</span>  
+0047    f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
+0048    ssht_plot_sphere(f, L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
+0049    title([<span class="string">'Wavelet scale : '</span>,int2str(j)-J_min+1])
+0050    locate = get(h,<span class="string">'title'</span>);
+0051    pos = get(locate,<span class="string">'position'</span>); 
+0052    pos(1,2) = pos(1,2)+0.7;
+0053    pos(1,1) = pos(1,1)-0.7;
+0054    set(locate,<span class="string">'pos'</span>,pos);
+0055    zoom(zoomfactor)
+0056 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Mon 24-Sep-2012 11:30:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -50,6 +50,7 @@ if s2let_dylib_exists() eq 0 then return, reterror('Dynamic library not found') 
    npix = nside2npix(nside)
 
    s2let_valid_wav_parameters, B, L, J_min
+   J_max = s2let_j_max(L, B)
    if keyword_set(verbose) then begin
    print, '=========================================='
    print, 's2let_axisym_hpx_wav_analysis_real'

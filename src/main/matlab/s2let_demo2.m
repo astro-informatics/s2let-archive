@@ -1,5 +1,9 @@
 % s2let_demo2
-% plot wavelet kernels
+% Compute and plot the harmonic tilling and the wavelet kernels.
+%
+% S2LET package to perform Wavelets on the Sphere.
+% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% See LICENSE.txt for license details
 
 B = 3;
 zoomfactor = 1.2;

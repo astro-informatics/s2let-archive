@@ -1,5 +1,11 @@
 function s2let_plot_mw_mollweide(f)
-% s2let_plot_hpx_mollweide - Plot HEALPIX map using Mollweide projection
+
+% s2let_plot_mw_mollweide 
+% Plot a real MW map using Mollweide projection.
+%
+% S2LET package to perform Wavelets transform on the Sphere.
+% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% See LICENSE.txt for license details
 
 sz = size(f);
 L = min(sz);

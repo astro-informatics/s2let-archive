@@ -1,4 +1,7 @@
-% s2let_fulltest - Run all tests
+% s2let_fulltest
+% Run all exactness tests for the MW sampling,
+% all wavelet transforms must reconstruct the input maps 
+% at floating-point precision. Various parameters are tested.
 %
 % S2LET package to perform Wavelets on the Sphere.
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen

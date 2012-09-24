@@ -1,5 +1,10 @@
 % s2let_demo3
 % Analyse some CMB simulation from a valid HEALPIX map
+% Compute the output wavelets as Healpix maps and plot them.
+%
+% S2LET package to perform Wavelets on the Sphere.
+% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% See LICENSE.txt for license details
 
 L = 192;
 B = 3;

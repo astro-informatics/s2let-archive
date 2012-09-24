@@ -1,7 +1,7 @@
 function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)
 
 % s2let_axisym_synthesis 
-% Compute axisymmetric wavelet transform, output as HEALPIX maps.
+% Compute axisymmetric wavelet transform, input/outputs as HEALPIX maps.
 %
 % Default usage :
 %

@@ -28,15 +28,20 @@
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> s2let_demo1
- Analyse Earth tomography data
+ Analyse Earth tomography data as a real MW map.
+ Compute the wavelet maps and plot them.
  Plot 1 : multiresolution wavelet scales
- Plot 2 : full resolution wavelet scales</pre></div>
+ Plot 2 : full resolution wavelet scales
+
+ S2LET package to perform Wavelets on the Sphere.
+ Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen
+ See LICENSE.txt for license details</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_analysis(f, varargin)">s2let_axisym_analysis</a>	s2let_axisym_analysis</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	</li></ul>
+<li><a href="s2let_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_analysis(f, varargin)">s2let_axisym_analysis</a>	s2let_axisym_analysis</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li><li><a href="s2let_plot_mw_mollweide.html" class="code" title="function s2let_plot_mw_mollweide(f)">s2let_plot_mw_mollweide</a>	s2let_plot_mw_mollweide</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -46,81 +51,67 @@ This function is called by:
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <span class="comment">% s2let_demo1</span>
-0002 <span class="comment">% Analyse Earth tomography data</span>
-0003 <span class="comment">% Plot 1 : multiresolution wavelet scales</span>
-0004 <span class="comment">% Plot 2 : full resolution wavelet scales</span>
-0005 
-0006 load(<span class="string">'EGM2008_Topography_flms_L0128'</span>);
-0007 f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
-0008 
-0009 <span class="comment">% load('wmap_lcdm_pl_model_wmap7baoh0.mat');</span>
-0010 <span class="comment">% L = 256;</span>
-0011 <span class="comment">% cmb_lm = zeros(L^2,1);</span>
-0012 <span class="comment">% for el = 2:L-1</span>
-0013 <span class="comment">%    cl(el-1) = cl(el-1) * 2*pi / (el*(el+1));</span>
-0014 <span class="comment">%    for m = -el:el</span>
-0015 <span class="comment">%      ind = ssht_elm2ind(el, m);</span>
-0016 <span class="comment">%      if m == 0</span>
-0017 <span class="comment">%        cmb_lm(ind) = sqrt(cl(el-1)) .* randn;</span>
-0018 <span class="comment">%      else</span>
-0019 <span class="comment">%         cmb_lm(ind) = ...</span>
-0020 <span class="comment">%            sqrt(cl(el-1)./2) .* randn ...</span>
-0021 <span class="comment">%            + sqrt(-1) * sqrt(cl(el-1)./2) .* randn;</span>
-0022 <span class="comment">%      end</span>
-0023 <span class="comment">%    end</span>
-0024 <span class="comment">% end</span>
-0025 <span class="comment">%</span>
-0026 <span class="comment">% % Compute real space version of CMB.</span>
-0027 <span class="comment">% f = ssht_inverse(cmb_lm, L, 'Reality', true);</span>
-0028 
-0029 B = 3;
-0030 J_min = 2;
-0031 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
-0032 
-0033 <span class="comment">% Perform decomposition</span>
-0034 [f_wav, f_scal] = <a href="s2let_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_analysis(f, varargin)">s2let_axisym_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true);
-0035 
-0036 zoomfactor = 1.2;
-0037 ns = ceil(sqrt(2+J-J_min+1)) ;
-0038 ny = ns - 1 + rem(2+J-J_min + 1, ns) ;
-0039 nx = ns;
-0040 <span class="comment">% MULTIRESOLUTION PLOT</span>
-0041 figure(<span class="string">'Position'</span>,[100 100 1300 1000])
-0042 subplot(nx, ny, 1);
-0043 ssht_plot_mollweide(f, L);
-0044 title(<span class="string">'Initial data'</span>)
-0045 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-0046 subplot(nx, ny, 2);
-0047 band_limit = min([ ceil(B^(J_min)) L ]);
-0048 ssht_plot_mollweide(f_scal, band_limit);
-0049 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-0050 title(<span class="string">'Scaling fct'</span>)
-0051 <span class="keyword">for</span> j = J_min:J
-0052    subplot(nx, ny, j-J_min+3);
-0053    band_limit = min([ ceil(B^(j+1)) L ]);
-0054    ssht_plot_mollweide(f_wav{j-J_min+1}, band_limit);
-0055    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-0056    title([<span class="string">'Wavelet scale : '</span>,int2str(j)-J_min+1])
-0057 <span class="keyword">end</span> 
-0058 
-0059 <span class="comment">% Perform decomposition</span>
-0060 [f_wav, f_scal] = <a href="s2let_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_analysis(f, varargin)">s2let_axisym_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true, <span class="string">'downsample'</span>, false);
-0061 <span class="comment">% FULL RESOLUTION PLOT</span>
-0062 figure(<span class="string">'Position'</span>,[100 100 1300 1000])
-0063 subplot(nx, ny, 1);
-0064 ssht_plot_mollweide(f, L);
-0065 title(<span class="string">'Initial data'</span>)
-0066 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-0067 subplot(nx, ny, 2);
-0068 ssht_plot_mollweide(f_scal, L);
-0069 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-0070 title(<span class="string">'Scaling fct'</span>)
-0071 <span class="keyword">for</span> j = J_min:J
-0072    subplot(nx, ny, j-J_min+3);
-0073    ssht_plot_mollweide(f_wav{j-J_min+1}, L);
-0074    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-0075    title([<span class="string">'Wavelet scale : '</span>,int2str(j)-J_min+1])
-0076 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 11-Sep-2012 00:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0002 <span class="comment">% Analyse Earth tomography data as a real MW map.</span>
+0003 <span class="comment">% Compute the wavelet maps and plot them.</span>
+0004 <span class="comment">% Plot 1 : multiresolution wavelet scales</span>
+0005 <span class="comment">% Plot 2 : full resolution wavelet scales</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% S2LET package to perform Wavelets on the Sphere.</span>
+0008 <span class="comment">% Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen</span>
+0009 <span class="comment">% See LICENSE.txt for license details</span>
+0010 
+0011 load(<span class="string">'EGM2008_Topography_flms_L0128'</span>);
+0012 f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
+0013 
+0014 <span class="comment">%inputfile = 'data/earth_tomo_mw_128.fits';</span>
+0015 <span class="comment">%[f, L] = s2let_read_mw_real_map(inputfile);</span>
+0016 
+0017 B = 3;
+0018 J_min = 2;
+0019 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
+0020 
+0021 <span class="comment">% Perform decomposition</span>
+0022 [f_wav, f_scal] = <a href="s2let_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_analysis(f, varargin)">s2let_axisym_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true);
+0023 
+0024 zoomfactor = 1.2;
+0025 ns = ceil(sqrt(2+J-J_min+1)) ;
+0026 ny = ns - 1 + rem(2+J-J_min + 1, ns) ;
+0027 nx = ns;
+0028 <span class="comment">% MULTIRESOLUTION PLOT</span>
+0029 figure(<span class="string">'Position'</span>,[100 100 1300 1000])
+0030 subplot(nx, ny, 1);
+0031 <a href="s2let_plot_mw_mollweide.html" class="code" title="function s2let_plot_mw_mollweide(f)">s2let_plot_mw_mollweide</a>(f);
+0032 <span class="comment">%title('Initial data')</span>
+0033 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0034 subplot(nx, ny, 2);
+0035 <a href="s2let_plot_mw_mollweide.html" class="code" title="function s2let_plot_mw_mollweide(f)">s2let_plot_mw_mollweide</a>(f_scal);
+0036 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0037 <span class="comment">%title('Scaling fct')</span>
+0038 <span class="keyword">for</span> j = J_min:J
+0039    subplot(nx, ny, j-J_min+3);
+0040    <a href="s2let_plot_mw_mollweide.html" class="code" title="function s2let_plot_mw_mollweide(f)">s2let_plot_mw_mollweide</a>(f_wav{j-J_min+1});
+0041    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0042    <span class="comment">%title(['Wavelet scale : ',int2str(j)-J_min+1])</span>
+0043 <span class="keyword">end</span> 
+0044 
+0045 <span class="comment">% Perform decomposition</span>
+0046 [f_wav, f_scal] = <a href="s2let_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_analysis(f, varargin)">s2let_axisym_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true, <span class="string">'downsample'</span>, false);
+0047 <span class="comment">% FULL RESOLUTION PLOT</span>
+0048 figure(<span class="string">'Position'</span>,[100 100 1300 1000])
+0049 subplot(nx, ny, 1);
+0050 <a href="s2let_plot_mw_mollweide.html" class="code" title="function s2let_plot_mw_mollweide(f)">s2let_plot_mw_mollweide</a>(f);
+0051 <span class="comment">%title('Initial data')</span>
+0052 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0053 subplot(nx, ny, 2);
+0054 <a href="s2let_plot_mw_mollweide.html" class="code" title="function s2let_plot_mw_mollweide(f)">s2let_plot_mw_mollweide</a>(f_scal);
+0055 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0056 <span class="comment">%title('Scaling fct')</span>
+0057 <span class="keyword">for</span> j = J_min:J
+0058    subplot(nx, ny, j-J_min+3);
+0059    <a href="s2let_plot_mw_mollweide.html" class="code" title="function s2let_plot_mw_mollweide(f)">s2let_plot_mw_mollweide</a>(f_wav{j-J_min+1});
+0060    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0061    <span class="comment">%title(['Wavelet scale : ',int2str(j)-J_min+1])</span>
+0062 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Mon 24-Sep-2012 11:30:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

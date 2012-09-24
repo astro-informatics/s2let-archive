@@ -1,4 +1,7 @@
-% s2let_hpxtest - Run test for HEALPIX data
+% s2let_hpxtest
+% Run test for HEALPIX data.
+% The wavelet transforms will not be exact but should
+% at least reconstruct the input maps with correct precision.
 %
 % S2LET package to perform Wavelets on the Sphere.
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen

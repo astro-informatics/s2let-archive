@@ -4,7 +4,7 @@
 <head>
   <title>Description of s2let_write_mw_real_map</title>
   <meta name="keywords" content="s2let_write_mw_real_map">
-  <meta name="description" content="">
+  <meta name="description" content="s2let_write_mw_real_map">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,13 +21,24 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong></strong></div>
+<div class="box"><strong>s2let_write_mw_real_map</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>function s2let_write_mw_real_map(f, file) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"></pre></div>
+<div class="fragment"><pre class="comment"> s2let_write_mw_real_map 
+ Write an MW real map to a FITS file
+ Default usage :
+
+   s2let_write_mw_real_map(f, file)
+
+ f the MW map to be written,
+ file the name of the output FITS file.
+
+ S2LET package to perform Wavelets transform on the Sphere.
+ Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen
+ See LICENSE.txt for license details</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -44,17 +55,30 @@ This function is called by:
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s2let_write_mw_real_map(f, file)</a>
 0002 
-0003 sz = size(f);
-0004 L = min([sz(1), sz(2)]);
-0005 
-0006 mwmap = [];
-0007 <span class="keyword">for</span> l = 1:L
-0008     mwmap = [mwmap f(l,:)];
-0009 <span class="keyword">end</span>
-0010 
-0011 <a href="fitswrite.html" class="code" title="function fitswrite(data, filename, parname, parval)">fitswrite</a>(mwmap, file, <span class="string">'L'</span>, L);
-0012 
-0013 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 11-Sep-2012 00:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0003 <span class="comment">% s2let_write_mw_real_map</span>
+0004 <span class="comment">% Write an MW real map to a FITS file</span>
+0005 <span class="comment">% Default usage :</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   s2let_write_mw_real_map(f, file)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% f the MW map to be written,</span>
+0010 <span class="comment">% file the name of the output FITS file.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% S2LET package to perform Wavelets transform on the Sphere.</span>
+0013 <span class="comment">% Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen</span>
+0014 <span class="comment">% See LICENSE.txt for license details</span>
+0015 
+0016 sz = size(f);
+0017 L = min([sz(1), sz(2)]);
+0018 
+0019 mwmap = [];
+0020 <span class="keyword">for</span> l = 1:L
+0021     mwmap = [mwmap f(l,:)];
+0022 <span class="keyword">end</span>
+0023 
+0024 <a href="fitswrite.html" class="code" title="function fitswrite(data, filename, parname, parval)">fitswrite</a>(mwmap, file, <span class="string">'L'</span>, L);
+0025 
+0026 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Mon 24-Sep-2012 11:30:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

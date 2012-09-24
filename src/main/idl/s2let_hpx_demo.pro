@@ -31,7 +31,7 @@ if s2let_dylib_exists() eq 1 then begin
    f_wav = s2let_axisym_hpx_wav_analysis(f, B, L, J_min)
    f_rec = s2let_axisym_hpx_wav_synthesis(f_wav)
 
-   J_max = s2let_j_max(L, b)
+   J_max = s2let_j_max(L, B)
    mollview, f_rec, title='Band-limited map'
    mollview, f_wav.scal, title='Scaling map'
    for j=0, J_max-J_min do begin

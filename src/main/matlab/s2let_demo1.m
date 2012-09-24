@@ -1,7 +1,12 @@
 % s2let_demo1
-% Analyse Earth tomography data
+% Analyse Earth tomography data as a real MW map.
+% Compute the wavelet maps and plot them.
 % Plot 1 : multiresolution wavelet scales
 % Plot 2 : full resolution wavelet scales
+%
+% S2LET package to perform Wavelets on the Sphere.
+% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% See LICENSE.txt for license details
 
 load('EGM2008_Topography_flms_L0128');
 f = ssht_inverse(flm, L, 'Reality', true);

@@ -1,5 +1,19 @@
 function [thetas, phis] = healpix_sampling_ring(nside)
 
+% healpix_sampling_ring 
+% Compute the Healpix sampling nodes
+% Default usage :
+%
+%   [thetas, phis] = healpix_sampling_ring(nside)
+%
+% nside is the input Healpix resolution,
+% thetas contains the colatitudes of the nodes,
+% phis contains the longitudes of the nodes.
+%
+% S2LET package to perform Wavelets transform on the Sphere.
+% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% See LICENSE.txt for license details
+
 %     npix = 12 * nside^2;
 %     thetas = zeros(npix,1);
 %     phis = zeros(npix,1);

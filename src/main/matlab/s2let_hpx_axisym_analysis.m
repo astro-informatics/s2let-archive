@@ -17,7 +17,7 @@ function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)
 %  'L'               = { Harmonic band-limit; L > 1 (default=2*nside) }
 %  'J_min'           = { Minimum needlet scale to consider;
 %                        0 <= J_min < log_B(L) (default=0) }
-
+%
 % S2LET package to perform Wavelets transform on the Sphere.
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
