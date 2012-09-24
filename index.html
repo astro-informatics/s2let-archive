@@ -61,13 +61,22 @@ Private release of <strong>S2LET</strong> 0.9 for fast wavelet transform on the 
 </li>
 </ul>
 
-<h2>Installation and documentation notes</h2>
+<h2>Installation notes</h2>
 
 <ul>
 <li><a href="c_doc.html">C library</a></li>
 <li><a href="idl_doc.html">IDL interfaces</a></li>
 <li><a href="java_doc.html">Java interfaces</a></li>
 <li><a href="matlab_doc.html">Matlab interfaces</a></li>
+</ul>
+
+<h2>Source documentation</h2>
+
+<ul>
+<li><a href="c/files.html">C documentation</a></li>
+<li><a href="idl/index.html">IDL documentation</a></li>
+<li><a href="java/index-all.html">Java documentation</a></li>
+<li><a href="matlab/index.html">Matlab documentation</a></li>
 </ul>
 
 </div>
@@ -80,12 +89,11 @@ Private release of <strong>S2LET</strong> 0.9 for fast wavelet transform on the 
 <a name="introduction"><h2>Introduction</h2></a>
 
   <p>
-  The <strong>S2LET</strong> code provides high performance routines for fast wavelet analysis of signals given on the sphere. 
+  The <strong>S2LET</strong> code provides high performance routines for fast wavelet analysis of signals on the sphere. 
 	It is primarily intended to work with the <a
- href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> code that uses the <a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#mcewen:fssht">MW sampling</a> 
+ href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> code built on the <a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#mcewen:fssht">MW sampling</a> 
   (<a href="http://arxiv.org/abs/1110.6298">ArXiv</a>
-  | <a href="http://dx.doi.org/10.1109/TSP.2011.2166394">DOI</a>) to perform exact spherical harmonic transform on the sphere. In that case the wavelet transform is theoretically exact, i.e. it captures all the information of band-limited signals in the minimal number of samples. <strong>S2LET</strong> was also extended to support the <a
- href="http://healpix.jpl.nasa.gov/">HEALPIX</a> format, in which case the transforms are not theoretically exact but achieve good numerical accuracy. 
+  | <a href="http://dx.doi.org/10.1109/TSP.2011.2166394">DOI</a>) to perform exact spherical harmonic transform on the sphere. The resulting wavelet transform is also theoretically exact, i.e. it captures all the information of band-limited signals in the minimal number of samples. <strong>S2LET</strong> was also extended to support the <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> sampling scheme, in which case the transforms are not theoretically exact but achieve good numerical accuracy. 
 
   <p>
   This page outlines the main features of <strong>S2LET</strong>, installation details as well as the core functionalties and interfaces.  References, version, and license information then follows.
@@ -102,34 +110,27 @@ Private release of <strong>S2LET</strong> 0.9 for fast wavelet transform on the 
 <!--------------------------------------------------------------->  
 <a name="routines"><h2>Wavelet transform on the sphere</h2></a>
 
-  <p> In <strong>S2LET</strong>, the wavelet kernels are constructed through exact tilling of harmonic space, as shown on the image below for a particular set of wavelet parameters (B=2, J_min=2, detailed in the relevant publications). Harmonic space is tiled, and the corresponding wavelet kernels are localised (i.e. have compact support) in both real and frequency spaces.</p>
+  <p> In <strong>S2LET</strong>, the wavelet kernels are constructed through exact tilling of harmonic space. The harmonic line is tiled into wavelet kernels which are localised (i.e. have compact support) in both real and frequency spaces, as shown on the image below for a particular set of wavelet parameters (B=2, J_min=2, harmonic space on the left, corresponding kernels on the right).</p>
 
  <p><img src="images/tiling2.png" width="350" height="240" border=0 align="center"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="images/needlets.png" width="350" height="250" border=0 align="center"> 
 
-  <p> With an exact spherical harmonic transform as the one provided in <strong>SSHT</strong>, the wavelet transform is theoretically exact in both pixel and harmonic spaces. <strong>S2LET</strong> then achieves floating-point precision, and one can decompose a MW map in a set of wavelet maps that exactly capture all the information. Using the previous tiling of harmonic space, the individual wavelet maps have different band-limits and hence can be reconstructed at different resolutions, i.e. on the minimal number of samples. The left and right panels below are the wavelet decomposition of Earth tomography data at full (left) and multi-resolution (right). Due to the exactness of all transforms, these two approaches are equivalent and capture all the information contained in the initial band-limited map.
+  <p> With an exact spherical harmonic transform as the one provided in <strong>SSHT</strong>, the wavelet transform implemented in <strong>S2LET</strong> is theoretically exact in both pixel and harmonic spaces. In other words one can decompose a band-limited signal in a set of wavelet maps that exactly capture all the information, and reconstruct the initial signal at floating-point precision. Due to the nature of the tiling in harmonic space, the individual wavelet maps have different band-limits and hence can be reconstructed at different resolutions, i.e. on the minimal number of samples. The left and right panels below are the wavelet decomposition of Earth tomography data at full (left) and multi-resolution (right). Due to the exactness of all transforms, these two approaches are equivalent and capture all the information contained in the initial band-limited map.
 
  <p>&nbsp;<img src="images/earth2.png" width="340" height="300" border=0 align="center">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="images/earth1.png" width="340" height="300" border=0 align="center"> </p>
 
- <p>When using <strong>HEALPIX</strong> instead of the MW sampling, the harmonic transform is not exact and hence the corresponding wavelet transform performed by <strong>S2LET</strong> is only exact in harmonic space. In other words, a set of spherical harmonic coefficients may be projected onto wavelets exactly in harmonic spaces but the HEALPIX maps don't capture all the information contained in these coefficients. However it achieves good numerical accuracy in a wide range of situations. </p>
+ <p>When using <a
+ href="http://healpix.jpl.nasa.gov/">HEALPIX</a> instead of the MW sampling, the harmonic transform is not exact and hence the corresponding wavelet transform performed by <strong>S2LET</strong> is only exact in harmonic space. In other words, a set of spherical harmonic coefficients may be projected onto wavelets exactly in harmonic spaces but the HEALPIX maps don't capture all the information contained in these coefficients. However it achieves good numerical accuracy in a wide range of situations. </p>
 
 <br>
 
 <!--------------------------------------------------------------->  
 <a name="installation"><h2>Installation and documentation</h2></a>
 
-  <p> The core functionalities of <strong>S2LET</strong> are written in C and self-documenting. The C library only requires <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a
- href="http://www.fftw.org/">FFTW</a>. The extra IO and Healpix features require the <strong>CFITSIO</strong> and <strong>HEALPIX</strong> libraries. Interfaces are provided for all high-level routines in Matlab, IDL and Java. In Matlab and IDL, these interfaces allow to read/write FITS maps (for both the MW and HEALPIX formats), compute the spherical harmonic and the wavelet transforms and plot the resulting signals on the sphere. To support <strong>HEALPIX</strong>, <strong>S2LET</strong> uses a hybrid C/Fortran interface to the Fortran <strong>HEALPIX</strong> library. Several examples, tests and demos are provided fo the C library and all interfaces in Matlab, IDL and Java.</p>
-
-  <h4>Dependencies</h4>
-
-  <p> <strong>S2LET</strong> requires the <a
- href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a
- href="http://www.fftw.org/">FFTW</a> packages.  Obviously suitable C and Fortran 90 compilers will be required to build the respective
- implementations.  Both C and Matlab mex compilers will be required
- to build the Matlab interface.
- <br> Linking with <a
- href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> adds the FITS input-output functionalities for the MW sampling. Linking with <a
- href="http://healpix.jpl.nasa.gov/">HEALPIX</a> adds support for the Healpix spherical harmonic transform as well as the FITS input-output routines.</p>
+  <p> The core functionalities of <strong>S2LET</strong> are written in C and self-documenting. The C library only requires <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a href="http://www.fftw.org/">FFTW</a>. The extra IO and Healpix features require the <a
+ href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a
+ href="http://healpix.jpl.nasa.gov/">HEALPIX</a> libraries. Interfaces are provided for all high-level routines in Matlab, IDL and Java. In Matlab and IDL, these interfaces allow to read/write FITS maps (for both the MW and HEALPIX formats), compute the spherical harmonic and the wavelet transforms and plot the resulting signals on the sphere. To support <a
+ href="http://healpix.jpl.nasa.gov/">HEALPIX</a>, <strong>S2LET</strong> uses a hybrid C/Fortran interface to the Fortran <a
+ href="http://healpix.jpl.nasa.gov/">HEALPIX</a> library. Several examples, tests and demos are provided fo the C library and all interfaces in Matlab, IDL and Java.</p>
 
   <h4>Compiling</h4>
 
@@ -144,7 +145,7 @@ Private release of <strong>S2LET</strong> 0.9 for fast wavelet transform on the 
   <p><strong>S2LET</strong> ships with source and HTML documentation. 
   <br> - The C documentation is generated by <a href="http://www.doxygen.org">doxygen</a> and available <a href="c_doc.html">here</a>.
   <br> - The Matlab routines that interface with the C implementation are self
-  documenting, and documentation can be access through the help command in
+  documenting, and documentation can be accessed through the help command in
   Matlab). HTML documentation is available <a href="matlab_doc.html">here</a> and was built with <a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a>. 
   <br> - The documentation for IDL interfaces is available <a href="idl_doc.html">here</a> and can be rebuilt in IDL with the function s2let_make_doc. The DOC_LIBRARY routine can also be used to display the documentation while running IDL.</p>
 <br>
@@ -225,7 +226,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 <!--------------------------------------------------------------->
 <a name="authors"><h2>About the authors</h2></a>
 
-  <p> <strong>S2LET</strong> has been developed by Boris Leistedt and
+  <p> <strong>S2LET</strong> was developed by Boris Leistedt and
  Jason McEwen at University College London (<a
   href="http://www.ucl.ac.uk/" target="_top">UCL</a>).</p>
 

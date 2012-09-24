@@ -51,13 +51,22 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <div id="sidebar">
 
 
+<h2>Installation notes</h2>
+
+<ul>
+<li><a href="c_doc.html">C library</a></li>
+<li><a href="idl_doc.html">IDL interfaces</a></li>
+<li><a href="java_doc.html">Java interfaces</a></li>
+<li><a href="matlab_doc.html">Matlab interfaces</a></li>
+</ul>
+
 <h2>Source documentation</h2>
 
 <ul>
-<li><a href="c/files.html">C source documentation</a></li>
-<li><a href="idl/index.html">IDL source documentation</a></li>
-<li><a href="java/index-all.html">Java source documentation</a></li>
-<li><a href="matlab/index.html">Matlab source documentation</a></li>
+<li><a href="c/files.html">C documentation</a></li>
+<li><a href="idl/index.html">IDL documentation</a></li>
+<li><a href="java/index-all.html">Java documentation</a></li>
+<li><a href="matlab/index.html">Matlab documentation</a></li>
 </ul>
 
 
@@ -86,40 +95,41 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <!--------------------------------------------------------------->
 <a name="introduction"><h2>Introduction</h2></a>
 
-  <p> <strong>S2LET</strong> provides user-friendly routines for performing the wavelet transform in both real and harmonic spaces. Moreover, since the individual wavelet kernels have different band-limits, they may be reconstructed at different resolutions on the MW sampling. For this reason all MW routines are implemented in two versions : the usual transform where all maps are constructed at full resolution on the sphere, and a multiresolution algorithm that stores each wavelet map in the number of samples corresponding to its band-limit. This multiresolution approach fully exploit the advantages of the tilling of harmonic space as well as the exactness of both the spherical harmonic and the wavelet transforms. The multiresolution cannot be used with <strong>HEALPIX</strong> as its spherical harmonic transform is not exact.</p> 
+  <p> <strong>S2LET</strong> provides user-friendly routines for performing the wavelet transform in both real and harmonic spaces. The individual wavelet kernels have different band-limits and hence they may be reconstructed at different resolutions on the MW sampling when <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> is used. For this reason all MW routines are implemented in two versions : the usual transform where all maps are constructed at full resolution on the sphere, and a multiresolution algorithm that stores each wavelet map in the number of samples corresponding to its band-limit. This multiresolution approach fully exploit the advantages of the tilling of harmonic space as well as the exactness of both the spherical harmonic and the wavelet transforms. The wavelet transform for the <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> format is only available at full resolution since the spherical harmonic transform implemented in <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> is not exact.</p> 
 
 <br>
 
 <!--------------------------------------------------------------->  
 <a name="installation"><h2>Installation</h2></a>
 
-  <p> The core functionalities of <strong>S2LET</strong> are written in C and self-documented. The C library only requires <strong>SSHT</strong> and <strong>FFTW</strong>. The extra IO and Healpix features require the <strong>CFITSIO</strong> and <strong>HEALPIX</strong> libraries. To support <strong>HEALPIX</strong>, <strong>S2LET</strong> uses a hybrid C/Fortran interface to the Fortran <strong>HEALPIX</strong> library. Several examples, tests and demos are provided to demonstrate the usability of the C library.</p>
+  <p> The core functionalities of <strong>S2LET</strong> are written in C and self-documented. The C library only requires <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a
+ href="http://www.fftw.org/">FFTW</a>. The extra IO and Healpix features require the <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> libraries. To support <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a>, <strong>S2LET</strong> uses a hybrid C/Fortran interface to the Fortran <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> library. Several examples, tests and demos are provided to demonstrate the usability of the C library.</p>
 
   <h4>Dependencies</h4>
 
-  <p> <strong>S2LET</strong> requires the <a
- href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a
+  <p> <strong>S2LET</strong> requires the <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a
  href="http://www.fftw.org/">FFTW</a> packages.  Obviously suitable C and Fortran 90 compilers will be required to build the respective
- implementations.  Both C and Matlab mex compilers will be required
- to build the Matlab interface. The Java interfaces are pre-compiled and provided in a self-contained jar.</p>
-
- <p> Linking with <a
+ implementations. Linking with <a
  href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> adds the FITS input-output functionalities for the MW sampling. Linking with <a
  href="http://healpix.jpl.nasa.gov/">HEALPIX</a> adds support for the Healpix spherical harmonic transform as well as the FITS input-output routines.</p>
 
   <h4>Compiling</h4>
 
-  <p> Makefiles are provided to build the code. However the locations of <strong>SSHT</strong>, <strong>FFTW</strong> and optionnaly <strong>CFITSIO</strong> and <strong>HEALPIX</strong> must be specified. In <strong>S2LET</strong> the default Makefile will look at these symbols in Bash/Shell profiles. Alternatively you may declare them explicitely in the first section of the makefile. The compilers and their options may also be changed in the Makefile. 
+  <p> Makefiles are provided to build the code. However the locations of <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a href="http://www.fftw.org/">FFTW</a> and optionnaly <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> must be specified. In <strong>S2LET</strong> the default Makefile will look at these symbols in Bash/Shell profiles. Alternatively you may declare them explicitely in the first section of the makefile. The compilers and their options may also be changed in the Makefile. 
 
   <p> Once you have set the Makefile up for your system,
   <strong>S2LET</strong> may be compiled by running:
 
   <pre> >> make all</pre> 
 
-  <p> This will build the C library, Matlab interface, tests programs, high-level programs and documentation. The FITS features will be added if <strong>CFITSIO</strong> is found. The <strong>HEALPIX</strong> support will be build if <strong>HEALPIX</strong> is found. We recommend to run the tests (s2let_test) to check that compilation worked and that the wavelet transform for the MW sampling achieves floating-point precision.
+  <p> This will build the C library, Matlab interfaces, test/demo programs and documentation. The FITS features will be added if <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> is found (namely libcfitsio.a in $CFITSIO/lib). The <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> support will be build if <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> is found (libhealpix.a in $HEALPIX/lib and the F90 modules in $HEALPIX/include). We recommend to run the tests (s2let_test) to check that compilation worked and that the wavelet transform for the MW sampling achieves floating-point precision.
+
+  <p> To use the IDL and Java interfaces, you need to build the dynamic library by running:
+
+  <pre> >> make dylib</pre> 
 
   <p> You may alternatively build the individual components of
-  <strong>S2LET</strong>.  To build the library only run (which will work without <strong>CFITSIO</strong> or <strong>HEALPIX</strong>):
+  <strong>S2LET</strong>.  To build the library only run (which will work without <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> or <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a>):
   <pre> >> make lib</pre> 
   <p> To build the test framework for the exact wavelet transform (MW sampling, default) run:
   <pre> >> make test</pre> 
@@ -127,7 +137,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <pre> >> make hpx_test</pre> 
   <p> To build the Matlab interfaces (MW by default, Healpix added if found):
   <pre> >> make matlab</pre>
-  <p> To build all programs, run
+  <p> To build all test and demo programs (optional, requires Healpix), run
   <pre> >> make bin</pre>
 
   <h4>Documentation</h4>
@@ -176,23 +186,27 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <pre> >> ./bin/s2let_test</pre>
 	<p>will run various performance and accuracy tests for the exact Wavelet transform built on the MW sampling. All algorithms and high-level features are tested, including the pixel space and harmonic space transforms with and without the multiresolution algorithm.
 
-  <p> If <strong>HEALPIX</strong> is provided, the command
+  <p> If <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> is provided, the command
   <pre> >> ./bin/s2let_hpx_test</pre>
-  <p>will test the interfaces to the Fortran implementation of <strong>HEALPIX</strong> as well as the corresponding wavelet transform.
+  <p>will test the interfaces to the Fortran implementation of <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> as well as the corresponding wavelet transform.
 
-  <p> A full demo is provided to read a Healpix map of a random CMB simulation, perform its wavelet decomposition and write the wavelet maps to FITS files in the <it>data</it> directory.
+  <p> A full demo is provided to read a Healpix map of a random CMB simulation, perform its wavelet decomposition and write the wavelet maps to FITS files in the <it>/data</it> directory.
   <pre> >> ./bin/s2let_hpx_demo</pre>
 
-  <p> A denoising example is also provided and extensively documented. It reads an MW map containing Earth tomography data, adds a random noise, perform the wavelet transform, denoise the wavelet scales through hard thresholding, reconstruct the denoised map and write it to an output FITS file in the <it>data</it> directory.
+  <p> A denoising example is also provided and extensively documented. It reads an MW map containing Earth tomography data, adds a random noise, perform the wavelet transform, denoise the wavelet scales through hard thresholding, reconstruct the denoised map and write it to an output FITS file in the <it>/data</it> directory.
   <pre> >> ./bin/s2let_denoising_demo</pre>
 
-  <p> We also provide a program to read a valid MW map, perform its wavelet decomposition and output the wavelet maps (which can be plotted in Matlab, for example). The command, whose parameters are fully documented in the code, reads
+  <p> We also provide a program to read a valid MW map, perform its wavelet decomposition and output the wavelet maps (which can be plotted in Matlab, for instance). The command, whose parameters are fully documented in the code, reads
   <pre> >> ./bin/s2let_axisym_mw_analysis_real 
 		inputFile  waveletParameter  firstScale  multiResolution</pre>
+  To reproduce the example on the main page, use:<p>
+  <pre> >> ./bin/s2let_axisym_mw_analysis_real data/earth_tomo_mw_128.fits 3 2 1</pre></p>
 
-  <p> We provide the same routine for a Healpix map, for which the multiresolution flag has to be replaced by the band-limit of the analysis. The output maps may be plotted in Matlab or IDL, for example.
+  <p> We provide the same routine for a Healpix map, for which the multiresolution flag has to be replaced by the band-limit of the analysis. The output maps may be plotted in Matlab or IDL, for instance.
   <pre> >> ./bin/s2let_axisym_hpx_analysis_real 
 		inputFile  waveletParameter  firstScale  bandLimit</pre>
+  As an example, to decompose a Healpix CMB simulation into wavelets, run  :<p>
+  <pre> >> ./bin/s2let_axisym_hpx_analysis_real data/somecmbsimu_hpx_128.fits 3 2 128</pre></p>
 
   <p>Finally, to check the version and build numbers of your version run:
   <pre> >> ./bin/s2let_about </pre>
@@ -211,7 +225,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <p>
   <a href="#header">Back to top</a><br >
   
-  <p>&copy; 2011 <a href="http://www.jasonmcewen.org">Jason McEwen</a> | Design by
+  <p>&copy; 2012 <a href="http://www.ixkael.com/blog">Boris Leistedt</a> & <a href="http://www.jasonmcewen.org">Jason McEwen</a> | Design by
   <a href="http://andreasviklund.com/">Andreas Viklund</a> </p>
 
 
