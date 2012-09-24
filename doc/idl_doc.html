@@ -51,15 +51,23 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <div id="sidebar">
 
 
+<h2>Installation notes</h2>
+
+<ul>
+<li><a href="c_doc.html">C library</a></li>
+<li><a href="idl_doc.html">IDL interfaces</a></li>
+<li><a href="java_doc.html">Java interfaces</a></li>
+<li><a href="matlab_doc.html">Matlab interfaces</a></li>
+</ul>
+
 <h2>Source documentation</h2>
 
 <ul>
-<li><a href="c/files.html">C source documentation</a></li>
-<li><a href="idl/index.html">IDL source documentation</a></li>
-<li><a href="java/index-all.html">Java source documentation</a></li>
-<li><a href="matlab/index.html">Matlab source documentation</a></li>
+<li><a href="c/files.html">C documentation</a></li>
+<li><a href="idl/index.html">IDL documentation</a></li>
+<li><a href="java/index-all.html">Java documentation</a></li>
+<li><a href="matlab/index.html">Matlab documentation</a></li>
 </ul>
-
 
 <h2>Brief release notes</h2>
 
@@ -87,13 +95,13 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <!--------------------------------------------------------------->  
 <a name="installation"><h2>Introduction</h2></a>
 
-  <p> The Healpix package provides all the routines to read, write and manipulate Healpix maps. <strong>S2LET</strong> completes this framework by providing similar routines for the MW sampling. Interfaces for the spherical harmonic and the wavelet transforms are provided for both samplings and allow for the same flexibility as in the C and Matlab code. In particular, <strong>S2LET</strong> enables to work either with MW of Healpix maps from the FITS files to the output wavelets plotted in Mollweide projection.
+  <p> The Healpix package already provides all the routines to read, write and manipulate Healpix maps in IDL. <strong>S2LET</strong> completes this framework by providing similar routines for the MW sampling. Interfaces for the spherical harmonic and the wavelet transforms are provided for both samplings and allow for the same flexibility as in the C and Matlab code. In particular, <strong>S2LET</strong> enables to work either with MW of Healpix maps from the FITS files to the output wavelets plotted in Mollweide projection.
 <br>
 
 <!--------------------------------------------------------------->  
 <a name="installation"><h2>Installation</h2></a>
 
-  <p> To use the IDL interfaces, one must build the dynamic C library according to the instructions of <a href="c_doc.html">this page</a>.  The variable S2LET must be defined in Bash/Shell and point to the root of the S2LET directory so that IDL can find the dynamic library. Note that <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> are required to support for the Healpix spherical harmonic transform as well as the FITS input-output routines.</p>
+  <p> To use the IDL interfaces, one must build the dynamic C library according to the instructions of <a href="c_doc.html">this page</a> (e.g. by running make dylib). The variable S2LET must be defined in Bash/Shell and point to the root of the S2LET directory so that IDL can find the dynamic library. Note that <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> are required to support for the Healpix spherical harmonic transform as well as the FITS input-output routines.</p>
 <br>
 
 <!--------------------------------------------------------------->
@@ -143,7 +151,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 
   </pre>
 
-  <p> To access the documentation for each function in idl, simply
+  <p> To access the documentation for each function in IDL, simply
   run:
   <pre> >> DOC_LIBRARY, "&ltfunction&gt"</pre>
   <p> where <code>&ltfunction&gt</code> is the function name. 
@@ -179,7 +187,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <p>
   <a href="#header">Back to top</a><br >
   
-  <p>&copy; 2011 <a href="http://www.jasonmcewen.org">Jason McEwen</a> | Design by
+  <p>&copy; 2012 <a href="http://www.ixkael.com/blog">Boris Leistedt</a> & <a href="http://www.jasonmcewen.org">Jason McEwen</a> | Design by
   <a href="http://andreasviklund.com/">Andreas Viklund</a> </p>
 
 

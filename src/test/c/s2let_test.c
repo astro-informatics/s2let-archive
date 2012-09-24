@@ -172,7 +172,7 @@ void s2let_axisym_wav_test(int B, int L, int J_min, int seed)
 	clock_t time_start, time_end;
 	int spin = 0;
 	int verbosity = 0;
-	ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+	ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
 	//int J = s2let_j_max(L, B);
 
 	complex double *f, *f_rec, *flm, *flm_rec;
@@ -231,7 +231,7 @@ void s2let_axisym_wav_real_test(int B, int L, int J_min, int seed)
 {
 	clock_t time_start, time_end;
 	int verbosity = 0;
-	ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+	ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
 	//int J = s2let_j_max(L, B);
 
 	complex *flm, *flm_rec;
@@ -293,7 +293,7 @@ void s2let_axisym_wav_multires_test(int B, int L, int J_min, int seed)
 	clock_t time_start, time_end;
 	int spin = 0;
 	int verbosity = 0;
-	ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+	ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
 	//int J = s2let_j_max(L, B);
 
 	complex double *f, *f_rec, *flm, *flm_rec;
@@ -353,7 +353,7 @@ void s2let_axisym_wav_multires_real_test(int B, int L, int J_min, int seed)
 {
 	clock_t time_start, time_end;
 	int verbosity = 0;
-	ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+	ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
 	//int J = s2let_j_max(L, B);
 
 	complex *flm, *flm_rec;
@@ -401,12 +401,152 @@ void s2let_axisym_wav_multires_real_test(int B, int L, int J_min, int seed)
 }
 
 
+void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
+{
+	complex double *f, *flm, *flm_rec, *f_rec, *f_wav, *f_scal;
+	clock_t time_start, time_end;
+	int sc, repeat;
+	double tottime_analysis = 0, tottime_synthesis = 0;
+	double accuracy = 0.0;
+
+	int L = 2;
+
+	for (sc=0; sc<NSCALE; sc++) {
+		
+		L *= 2;
+	
+		s2let_allocate_lm(&flm, L);
+
+	 	printf(" > L =  %i \n", L);
+	 	for (repeat=0; repeat<NREPEAT; repeat++){
+
+	 		printf("  -> Iteration : %i on %i \n",repeat+1,NREPEAT);
+
+			s2let_axisym_random_flm(flm, L, seed);
+			s2let_allocate_mw(&f, L);
+ 			s2let_mw_alm2map(f, flm, L);
+			s2let_axisym_allocate_f_wav(&f_wav, &f_scal, B, L, J_min);
+
+		    time_start = clock();
+			s2let_axisym_wav_analysis(f_wav, f_scal, f, B, L, J_min);
+			time_end = clock();
+			tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
+			//printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
+			
+			s2let_allocate_mw(&f_rec, L);
+
+			time_start = clock();
+			s2let_axisym_wav_synthesis(f_rec, f_wav, f_scal, B, L, J_min);
+			time_end = clock();
+			tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
+
+			s2let_allocate_lm(&flm_rec, L);
+ 			s2let_mw_map2alm(flm_rec, f_rec, L);
+
+			//printf("  - Duration for S2LET analysis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
+			accuracy += maxerr_cplx(flm, flm_rec, L*L);
+
+			free(f);
+			free(f_rec);
+			free(flm_rec);
+			free(f_wav);
+			free(f_scal);
+
+		}
+
+		tottime_synthesis = tottime_synthesis / (double)NREPEAT;
+		tottime_analysis = tottime_analysis / (double)NREPEAT;
+		accuracy = accuracy / (double)NREPEAT;
+		
+		printf("  - Average duration for S2LET synthesis  : %5.5f seconds\n", tottime_synthesis);
+		printf("  - Average duration for S2LET analysis   : %5.5f seconds\n", tottime_analysis);
+		printf("  - Average max error on reconstruction  : %6.5e\n", accuracy);
+
+		free(flm);
+
+	}
+
+}
+
+
+
+void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
+{
+	complex double *f, *flm, *flm_rec, *f_rec, *f_wav, *f_scal;
+	clock_t time_start, time_end;
+	int sc, repeat;
+	double tottime_analysis = 0, tottime_synthesis = 0;
+	double accuracy = 0.0;
+
+	int L = 2;
+
+	for (sc=0; sc<NSCALE; sc++) {
+		
+		L *= 2;
+	
+		s2let_allocate_lm(&flm, L);
+
+	 	printf(" > L =  %i \n", L);
+	 	for (repeat=0; repeat<NREPEAT; repeat++){
+
+	 		printf("  -> Iteration : %i on %i \n",repeat+1,NREPEAT);
+
+			s2let_axisym_random_flm(flm, L, seed);
+			s2let_allocate_mw(&f, L);
+ 			s2let_mw_alm2map(f, flm, L);
+			s2let_axisym_allocate_f_wav_multires(&f_wav, &f_scal, B, L, J_min);
+
+		    time_start = clock();
+			s2let_axisym_wav_analysis_multires(f_wav, f_scal, f, B, L, J_min);
+			time_end = clock();
+			tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
+			//printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
+			
+			s2let_allocate_mw(&f_rec, L);
+
+			time_start = clock();
+			s2let_axisym_wav_synthesis_multires(f_rec, f_wav, f_scal, B, L, J_min);
+			time_end = clock();
+			tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
+
+			s2let_allocate_lm(&flm_rec, L);
+ 			s2let_mw_map2alm(flm_rec, f_rec, L);
+
+			//printf("  - Duration for S2LET analysis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
+			accuracy += maxerr_cplx(flm, flm_rec, L*L);
+
+			free(f);
+			free(f_rec);
+			free(flm_rec);
+			free(f_wav);
+			free(f_scal);
+
+		}
+
+		tottime_synthesis = tottime_synthesis / (double)NREPEAT;
+		tottime_analysis = tottime_analysis / (double)NREPEAT;
+		accuracy = accuracy / (double)NREPEAT;
+		
+		printf("  - Average duration for S2LET multires synthesis  : %5.5f seconds\n", tottime_synthesis);
+		printf("  - Average duration for S2LET multires analysis   : %5.5f seconds\n", tottime_analysis);
+		printf("  - Average max error on reconstruction  : %6.5e\n", accuracy);
+
+		free(flm);
+
+	}
+
+}
+
+
+
 int main(int argc, char *argv[]) 
 {
-	
 	const int L = 64;
-	const int B = 3;
-	const int J_min = 1;
+	const int B = 2;
+	const int J_min = 0;
+	const int NREPEAT = 10;
+	const int NSCALE = 5;
+
 	const int seed = (int)(10000.0*(double)clock()/(double)CLOCKS_PER_SEC);
 	int l_min = s2let_el_min(B, J_min);
 
@@ -437,6 +577,13 @@ int main(int argc, char *argv[])
 	printf("> Testing multiresolution algorithm for real function...\n");
 	s2let_axisym_wav_multires_real_test(B, L, J_min, seed);
 	printf("==========================================================\n");
+	printf("> Testing performances at full resolution...\n");
+	s2let_transform_performance_test(B, J_min, NREPEAT, NSCALE, seed);
+	printf("----------------------------------------------------------\n");
+	printf("> Testing performances with multiresolution...\n");
+	s2let_transform_performance_multires_test(B, J_min, NREPEAT, NSCALE, seed);
+	printf("==========================================================\n");
+
 
 
 	return 0;		
