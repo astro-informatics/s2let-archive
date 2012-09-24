@@ -4,7 +4,7 @@
 <head>
   <title>Description of s2let_hpxtest</title>
   <meta name="keywords" content="s2let_hpxtest">
-  <meta name="description" content="s2let_hpxtest - Run test for HEALPIX data">
+  <meta name="description" content="s2let_hpxtest">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,13 +21,16 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>s2let_hpxtest - Run test for HEALPIX data</strong></div>
+<div class="box"><strong>s2let_hpxtest</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>This is a script file. </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> s2let_hpxtest - Run test for HEALPIX data
+<div class="fragment"><pre class="comment"> s2let_hpxtest
+ Run test for HEALPIX data.
+ The wavelet transforms will not be exact but should
+ at least reconstruct the input maps with correct precision.
 
  S2LET package to perform Wavelets on the Sphere.
  Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen
@@ -37,7 +40,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>	s2let_axisym_synthesis</li><li><a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_hpx_axisym_synthesis.html" class="code" title="function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)">s2let_hpx_axisym_synthesis</a>	s2let_axisym_synthesis</li><li><a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	</li></ul>
+<li><a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>	s2let_axisym_synthesis</li><li><a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_hpx_axisym_synthesis.html" class="code" title="function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)">s2let_hpx_axisym_synthesis</a>	s2let_axisym_synthesis</li><li><a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -46,63 +49,66 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% s2let_hpxtest - Run test for HEALPIX data</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% S2LET package to perform Wavelets on the Sphere.</span>
-0004 <span class="comment">% Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen</span>
-0005 <span class="comment">% See LICENSE.txt for license details</span>
-0006 
-0007 clear all;
-0008 close all;
+<div class="fragment"><pre>0001 <span class="comment">% s2let_hpxtest</span>
+0002 <span class="comment">% Run test for HEALPIX data.</span>
+0003 <span class="comment">% The wavelet transforms will not be exact but should</span>
+0004 <span class="comment">% at least reconstruct the input maps with correct precision.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% S2LET package to perform Wavelets on the Sphere.</span>
+0007 <span class="comment">% Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen</span>
+0008 <span class="comment">% See LICENSE.txt for license details</span>
 0009 
-0010 <span class="comment">% Main parameters</span>
-0011 L = 128;
-0012 nside = 128;
-0013 B = 2;
-0014 J_min = 1;
-0015 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
-0016 npix = 12*nside*nside;
-0017 
-0018 
-0019 disp(<span class="string">'Generates band-limited function'</span>)
-0020 flm = zeros(L^2,1); 
-0021 flm = rand(size(flm)) + sqrt(-1)*rand(size(flm));
-0022 flm = 2.*(flm - (1+sqrt(-1))./2);
-0023 
-0024 disp(<span class="string">'Constraint on flms to generate real signal'</span>)
-0025 <span class="keyword">for</span> el = 0:L-1
-0026    ind = el*el + el + 1;
-0027    flm(ind,1) = real(flm(ind,1));
-0028    <span class="keyword">for</span> m = 1:el
-0029       ind_pm = el*el + el + m + 1;
-0030       ind_nm = el*el + el - m + 1;
-0031       flm(ind_nm,1) = (-1)^m * conj(flm(ind_pm,1));
-0032    <span class="keyword">end</span>  
-0033 <span class="keyword">end</span>
-0034 
-0035 
-0036 disp(<span class="string">'Perform spherical harmonic decomposition with default parameters'</span>)
-0037 f = <a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>(flm, nside, <span class="string">'L'</span>, L);
-0038 flm_rec = <a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>(f, <span class="string">'L'</span>, L);
-0039 default = max(max(abs(flm-flm_rec)))
-0040 
-0041 
-0042 disp(<span class="string">'Perform spherical harmonic decomposition with custom parameters'</span>)
-0043 f = <a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>(flm, nside, <span class="string">'L'</span>, L);
-0044 flm_rec = <a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>(f, <span class="string">'nside'</span>, nside, <span class="string">'L'</span>, L);
-0045 custom = max(max(abs(flm-flm_rec)))
-0046  
-0047 
-0048 disp(<span class="string">'Perform axisym wavelet transform with default parameters'</span>)
-0049 [f_wav, f_scal] = <a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>(f);
-0050 f_rec = <a href="s2let_hpx_axisym_synthesis.html" class="code" title="function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)">s2let_hpx_axisym_synthesis</a>(f_wav, f_scal);
-0051 default = max(max(abs(f-f_rec)))
-0052 
-0053 
-0054 disp(<span class="string">'Perform axisym wavelet transform with custom parameters'</span>)
-0055 [f_wav, f_scal] = <a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
-0056 f_rec = <a href="s2let_hpx_axisym_synthesis.html" class="code" title="function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)">s2let_hpx_axisym_synthesis</a>(f_wav, f_scal, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
-0057 custom = max(max(abs(f-f_rec)))</pre></div>
-<hr><address>Generated on Tue 11-Sep-2012 00:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0010 clear all;
+0011 close all;
+0012 
+0013 <span class="comment">% Main parameters</span>
+0014 L = 128;
+0015 nside = 128;
+0016 B = 2;
+0017 J_min = 1;
+0018 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
+0019 npix = 12*nside*nside;
+0020 
+0021 
+0022 disp(<span class="string">'Generates band-limited function'</span>)
+0023 flm = zeros(L^2,1); 
+0024 flm = rand(size(flm)) + sqrt(-1)*rand(size(flm));
+0025 flm = 2.*(flm - (1+sqrt(-1))./2);
+0026 
+0027 disp(<span class="string">'Constraint on flms to generate real signal'</span>)
+0028 <span class="keyword">for</span> el = 0:L-1
+0029    ind = el*el + el + 1;
+0030    flm(ind,1) = real(flm(ind,1));
+0031    <span class="keyword">for</span> m = 1:el
+0032       ind_pm = el*el + el + m + 1;
+0033       ind_nm = el*el + el - m + 1;
+0034       flm(ind_nm,1) = (-1)^m * conj(flm(ind_pm,1));
+0035    <span class="keyword">end</span>  
+0036 <span class="keyword">end</span>
+0037 
+0038 
+0039 disp(<span class="string">'Perform spherical harmonic decomposition with default parameters'</span>)
+0040 f = <a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>(flm, nside, <span class="string">'L'</span>, L);
+0041 flm_rec = <a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>(f, <span class="string">'L'</span>, L);
+0042 default = max(max(abs(flm-flm_rec)))
+0043 
+0044 
+0045 disp(<span class="string">'Perform spherical harmonic decomposition with custom parameters'</span>)
+0046 f = <a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>(flm, nside, <span class="string">'L'</span>, L);
+0047 flm_rec = <a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>(f, <span class="string">'nside'</span>, nside, <span class="string">'L'</span>, L);
+0048 custom = max(max(abs(flm-flm_rec)))
+0049  
+0050 
+0051 disp(<span class="string">'Perform axisym wavelet transform with default parameters'</span>)
+0052 [f_wav, f_scal] = <a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>(f);
+0053 f_rec = <a href="s2let_hpx_axisym_synthesis.html" class="code" title="function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)">s2let_hpx_axisym_synthesis</a>(f_wav, f_scal);
+0054 default = max(max(abs(f-f_rec)))
+0055 
+0056 
+0057 disp(<span class="string">'Perform axisym wavelet transform with custom parameters'</span>)
+0058 [f_wav, f_scal] = <a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
+0059 f_rec = <a href="s2let_hpx_axisym_synthesis.html" class="code" title="function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)">s2let_hpx_axisym_synthesis</a>(f_wav, f_scal, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
+0060 custom = max(max(abs(f-f_rec)))</pre></div>
+<hr><address>Generated on Mon 24-Sep-2012 11:30:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

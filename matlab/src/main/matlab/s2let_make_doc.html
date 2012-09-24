@@ -4,7 +4,7 @@
 <head>
   <title>Description of s2let_make_doc</title>
   <meta name="keywords" content="s2let_make_doc">
-  <meta name="description" content="">
+  <meta name="description" content="s2let_make_doc">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,13 +21,24 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong></strong></div>
+<div class="box"><strong>s2let_make_doc</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>function s2let_make_doc(s2letpath) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"></pre></div>
+<div class="fragment"><pre class="comment"> s2let_make_doc
+ Generate Matlab documentation
+
+ Default usage :
+
+   s2let_make_doc(s2letpath)
+
+ s2letpath is the path for the S2LET package (root)
+
+ S2LET package to perform Wavelets transform on the Sphere.
+ Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen
+ See LICENSE.txt for license details</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -44,10 +55,23 @@ This function is called by:
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s2let_make_doc(s2letpath)</a>
 0002 
-0003 cd(s2letpath)
-0004 m2html(<span class="string">'mfiles'</span>, <span class="string">'src/main/matlab'</span>, <span class="string">'htmldir'</span>, <span class="string">'doc/matlab'</span>);
-0005 
-0006 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 11-Sep-2012 00:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0003 <span class="comment">% s2let_make_doc</span>
+0004 <span class="comment">% Generate Matlab documentation</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Default usage :</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   s2let_make_doc(s2letpath)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% s2letpath is the path for the S2LET package (root)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% S2LET package to perform Wavelets transform on the Sphere.</span>
+0013 <span class="comment">% Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen</span>
+0014 <span class="comment">% See LICENSE.txt for license details</span>
+0015 
+0016 cd(s2letpath)
+0017 m2html(<span class="string">'mfiles'</span>, <span class="string">'src/main/matlab'</span>, <span class="string">'htmldir'</span>, <span class="string">'doc/matlab'</span>);
+0018 
+0019 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Mon 24-Sep-2012 11:30:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

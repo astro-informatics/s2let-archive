@@ -28,7 +28,7 @@
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> s2let_axisym_synthesis 
- Compute axisymmetric wavelet transform, output as HEALPIX maps.
+ Compute axisymmetric wavelet transform, input/outputs as HEALPIX maps.
 
  Default usage :
 
@@ -53,10 +53,10 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	</li></ul>
+<li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_hpxtest.html" class="code" title="">s2let_hpxtest</a>	s2let_hpxtest - Run test for HEALPIX data</li></ul>
+<li><a href="s2let_hpxtest.html" class="code" title="">s2let_hpxtest</a>	s2let_hpxtest</li></ul>
 <!-- crossreference -->
 
 
@@ -65,7 +65,7 @@ This function is called by:
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)</a>
 0002 
 0003 <span class="comment">% s2let_axisym_synthesis</span>
-0004 <span class="comment">% Compute axisymmetric wavelet transform, output as HEALPIX maps.</span>
+0004 <span class="comment">% Compute axisymmetric wavelet transform, input/outputs as HEALPIX maps.</span>
 0005 <span class="comment">%</span>
 0006 <span class="comment">% Default usage :</span>
 0007 <span class="comment">%</span>
@@ -114,6 +114,6 @@ This function is called by:
 0050 f = s2let_hpx_axisym_synthesis_mex(f_wav_vec, f_scal, args.nside, args.B, args.L, args.J_min);
 0051  
 0052 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 11-Sep-2012 00:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Mon 24-Sep-2012 11:30:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

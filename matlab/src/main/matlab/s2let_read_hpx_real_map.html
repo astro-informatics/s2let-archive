@@ -4,7 +4,7 @@
 <head>
   <title>Description of s2let_read_hpx_real_map</title>
   <meta name="keywords" content="s2let_read_hpx_real_map">
-  <meta name="description" content="">
+  <meta name="description" content="s2let_real_hpx_real_map">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,13 +21,25 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong></strong></div>
+<div class="box"><strong>s2let_real_hpx_real_map</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>function [healpixmap, nside]= s2let_read_hpx_real_map(file) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"></pre></div>
+<div class="fragment"><pre class="comment"> s2let_real_hpx_real_map 
+ Read an MW real map from a FITS file
+ Default usage :
+
+   [healpixmap, L]= s2let_read_hpx_real_map(file)
+
+ file the name of the input FITS file,
+ healpixmap the output signal read from the file,
+ nside its resolution.
+
+ S2LET package to perform Wavelets transform on the Sphere.
+ Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen
+ See LICENSE.txt for license details</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -44,18 +56,32 @@ This function is called by:
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [healpixmap, nside]= s2let_read_hpx_real_map(file)</a>
 0002 
-0003 datacell = fitsread(file,<span class="string">'binarytable'</span>);
-0004 data = datacell{1};
-0005 sz = size(data);
-0006 
-0007 healpixmap = [];
-0008 <span class="keyword">for</span> col = 1:sz(1)
-0009     healpixmap = [healpixmap data(col,:)];
-0010 <span class="keyword">end</span>
-0011 
-0012 nside = sqrt((sz(1) * sz(2)) / 12);
-0013 
-0014 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 11-Sep-2012 00:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0003 <span class="comment">% s2let_real_hpx_real_map</span>
+0004 <span class="comment">% Read an MW real map from a FITS file</span>
+0005 <span class="comment">% Default usage :</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   [healpixmap, L]= s2let_read_hpx_real_map(file)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% file the name of the input FITS file,</span>
+0010 <span class="comment">% healpixmap the output signal read from the file,</span>
+0011 <span class="comment">% nside its resolution.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% S2LET package to perform Wavelets transform on the Sphere.</span>
+0014 <span class="comment">% Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen</span>
+0015 <span class="comment">% See LICENSE.txt for license details</span>
+0016 
+0017 datacell = fitsread(file,<span class="string">'binarytable'</span>);
+0018 data = datacell{1};
+0019 sz = size(data);
+0020 
+0021 healpixmap = [];
+0022 <span class="keyword">for</span> col = 1:sz(1)
+0023     healpixmap = [healpixmap data(col,:)];
+0024 <span class="keyword">end</span>
+0025 
+0026 nside = sqrt((sz(1) * sz(2)) / 12);
+0027 
+0028 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Mon 24-Sep-2012 11:30:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
