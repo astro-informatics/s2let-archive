@@ -19,18 +19,18 @@ function s2let_plot_axisym_tiling(B, L, J_min)
 
 J = s2let_jmax(L, B);
 
-figure;
-plot(0:L-1, kappa0, 'k', 'LineWidth', 2);
-h = text(1, 1.1, 'kappa0', 'Color', [0 0 0]);
+figure('Position',[100 100 600 300])
+semilogx(0:L-1, kappa0, 'k', 'LineWidth', 2);
+h = text(2, 1.07, 'k0', 'Color', [0 0 0]);
 hold on;
 for j = J_min:J  
   colour = rand(1,3)*0.9;
   plot(0:L-1, kappa(j+1,:), 'LineWidth', 2, 'Color', colour);
-  h = text(B.^j, 1.05, strcat('j=',num2str(j+1)), 'Color', colour);  
+  h = text(B.^j, 1.07, strcat('j',num2str(j+1)), 'Color', colour);  
 end
-title('Harmonic tiling');
+%title('Harmonic tiling');
 xlabel('el');
 axis([0 L -0.05 1.15]);
-set(gca,'XTick',B.^[0:J]);
+set(gca,'XTick',2.^[0:(J+2)]);
 
 end

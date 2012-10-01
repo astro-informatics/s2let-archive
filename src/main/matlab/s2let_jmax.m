@@ -5,7 +5,7 @@ function J = s2let_jmax(L, B)
 %
 % Default usage:
 %		J_max = s2let_jmax(L, B)
-$	
+%	
 %	L is the band-limit for the transform,
 %	B is the wavelet parameter.
 %
