@@ -69,7 +69,7 @@ ylabel('y1','FontSize',20)
 set(gca,'XTick',nb_samples,'XTickLabel',nb_samples_pow,'FontSize',20)
 set(gca,'YTick',[1e-16 1e-15 1e-14 1e-13 1e-12 1e-11] ,'FontSize',20)
 axis([3e0 5300 1e-15 1e-11])
-
+grid minor
 %title('Accuracy of overall transform','FontSize',20)
 
 subplot(2,1,2)
@@ -83,5 +83,6 @@ ylabel('y2','FontSize',20)
 axis([3e0 5300 1e-5 1e5])
 set(gca,'YTick',[1e-6 1e-4 1e-2  1e0 1e2 1e4 1e6] ,'FontSize',20)
 set(gca,'XTick',nb_samples,'XTickLabel',nb_samples_pow,'FontSize',20)
+grid minor
 %title('Speed of overall transform','FontSize',20)
 

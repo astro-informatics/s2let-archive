@@ -185,6 +185,9 @@ $(S2LETOBJMAT)/%_mex.o: %_mex.c $(S2LETLIB)/lib$(S2LETLIBN).a
 $(S2LETOBJMEX)/%_mex.$(MEXEXT): $(S2LETOBJMAT)/%_mex.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(MEX) $< -o $@ $(LDFLAGSMEX) $(MEXFLAGS) -L$(MLABLIB)
 
+$(S2LETBIN)/%: $(S2LETOBJ)/%.o $(S2LETLIB)/lib$(S2LETLIBN).a
+	$(CC) $(OPT) $< -o $@ $(LDFLAGS)
+
 # ======================================== #
 
 .PHONY: default
@@ -197,7 +200,7 @@ matlab: $(S2LETOBJSMEX)
 all: lib matlab doc bin tidy
 
 .PHONY: bin
-bin: test hpx_test hpx_demo denoising_demo s2let_axisym_mw_analysis_real s2let_axisym_hpx_analysis_real about tidy
+bin: test hpx_test hpx_demo denoising_demo axisym_mw_analysis_real axisym_mw_synthesis_real axisym_hpx_analysis_real axisym_hpx_synthesis_real about tidy
 
 .PHONY: lib
 lib: $(S2LETLIB)/lib$(S2LETLIBN).a
@@ -221,25 +224,21 @@ hpx_demo: $(S2LETBIN)/s2let_hpx_demo
 $(S2LETBIN)/s2let_hpx_demo: $(S2LETOBJ)/s2let_hpx_demo.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_hpx_demo $(LDFLAGS)
 
-.PHONY: s2let_axisym_mw_analysis_real
-s2let_axisym_mw_analysis_real: $(S2LETBIN)/s2let_axisym_mw_analysis_real
-$(S2LETBIN)/s2let_axisym_mw_analysis_real: $(S2LETOBJ)/s2let_axisym_mw_analysis_real.o $(S2LETLIB)/lib$(S2LETLIBN).a
-	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_axisym_mw_analysis_real $(LDFLAGS)
-
-.PHONY: s2let_axisym_hpx_analysis_real
-s2let_axisym_hpx_analysis_real: $(S2LETBIN)/s2let_axisym_hpx_analysis_real
-$(S2LETBIN)/s2let_axisym_hpx_analysis_real: $(S2LETOBJ)/s2let_axisym_hpx_analysis_real.o $(S2LETLIB)/lib$(S2LETLIBN).a
-	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_axisym_hpx_analysis_real $(LDFLAGS)
-
-.PHONY: denoising_demo
-denoising_demo: $(S2LETBIN)/s2let_denoising_demo
-$(S2LETBIN)/s2let_denoising_demo: $(S2LETOBJ)/s2let_denoising_demo.o $(S2LETLIB)/lib$(S2LETLIBN).a
-	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_denoising_demo $(LDFLAGS)
-
 .PHONY: hpx_test
 hpx_test: $(S2LETBIN)/s2let_hpx_test
 $(S2LETBIN)/s2let_hpx_test: $(S2LETTESTOBJ)/s2let_hpx_test.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_hpx_test $(LDFLAGS)
+
+
+denoising_demo: $(S2LETBIN)/s2let_denoising_demo
+
+axisym_mw_analysis_real: $(S2LETBIN)/s2let_axisym_mw_analysis_real
+
+axisym_mw_synthesis_real: $(S2LETBIN)/s2let_axisym_mw_synthesis_real
+	
+axisym_hpx_analysis_real: $(S2LETBIN)/s2let_axisym_hpx_analysis_real
+
+axisym_hpx_synthesis_real: $(S2LETBIN)/s2let_axisym_hpx_synthesis_real
 
 .PHONY: about
 about: $(S2LETBIN)/s2let_about

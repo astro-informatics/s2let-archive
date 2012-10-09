@@ -31,14 +31,23 @@ subplot(nx, ny, 1);
 s2let_plot_mw_mollweide(f);
 %title('Initial data')
 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
 subplot(nx, ny, 2);
 s2let_plot_mw_mollweide(f_scal);
 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
 %title('Scaling fct')
 for j = J_min:J
    subplot(nx, ny, j-J_min+3);
    s2let_plot_mw_mollweide(f_wav{j-J_min+1});
    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
    %title(['Wavelet scale : ',int2str(j)-J_min+1])
 end 
 
@@ -50,13 +59,22 @@ subplot(nx, ny, 1);
 s2let_plot_mw_mollweide(f);
 %title('Initial data')
 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
 subplot(nx, ny, 2);
 s2let_plot_mw_mollweide(f_scal);
 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
 %title('Scaling fct')
 for j = J_min:J
    subplot(nx, ny, j-J_min+3);
    s2let_plot_mw_mollweide(f_wav{j-J_min+1});
    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
    %title(['Wavelet scale : ',int2str(j)-J_min+1])
 end

@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of s2let_perf_tests</title>
+  <meta name="keywords" content="s2let_perf_tests">
+  <meta name="description" content="s2let_perf_tests">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">src</a> &gt; <a href="#">main</a> &gt; <a href="index.html">matlab</a> &gt; s2let_perf_tests.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for src/main/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>s2let_perf_tests
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>s2let_perf_tests</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> s2let_perf_tests</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% s2let_perf_tests</span>
+0002 
+0003 ell = [ 4 8 16 32 64 128 256 512 1024 ];
+0004 accuracy = [ <span class="keyword">...</span>
+0005     2.5e-15 <span class="keyword">...</span><span class="comment"> % 4</span>
+0006     3.97e-15 <span class="keyword">...</span><span class="comment"> % 8</span>
+0007     8.0e-15 <span class="keyword">...</span><span class="comment"> % 16</span>
+0008     2.1e-14 <span class="keyword">...</span><span class="comment"> % 32</span>
+0009     4.10e-14 <span class="keyword">...</span><span class="comment"> % 64</span>
+0010     7.32e-14 <span class="keyword">...</span><span class="comment"> % 128</span>
+0011     1.38e-13 <span class="keyword">...</span><span class="comment"> % 256</span>
+0012     2.31e-13 <span class="keyword">...</span><span class="comment"> % 512</span>
+0013     5.2e-13 <span class="keyword">...</span><span class="comment"> % 256</span>
+0014     ];
+0015 speed = [ <span class="keyword">...</span>
+0016     0.00019 <span class="keyword">...</span><span class="comment">  % 4</span>
+0017     0.00038 <span class="keyword">...</span><span class="comment"> % 8</span>
+0018     0.00160 <span class="keyword">...</span><span class="comment"> % 16</span>
+0019     0.0060 <span class="keyword">...</span><span class="comment"> % 32</span>
+0020     0.047 <span class="keyword">...</span><span class="comment"> % 64</span>
+0021     0.32 <span class="keyword">...</span><span class="comment"> % 128</span>
+0022     2.5 <span class="keyword">...</span><span class="comment"> % 256</span>
+0023     20.5 <span class="keyword">...</span><span class="comment"> % 512</span>
+0024     195 <span class="keyword">...</span><span class="comment"> % 1024</span>
+0025     ];
+0026 accuracy_multires = [ <span class="keyword">...</span>
+0027     2.5e-15 <span class="keyword">...</span><span class="comment"> % 4</span>
+0028     3.91e-15 <span class="keyword">...</span><span class="comment"> % 8</span>
+0029     8.0e-15 <span class="keyword">...</span><span class="comment"> % 16</span>
+0030     2.1e-14 <span class="keyword">...</span><span class="comment"> % 32</span>
+0031     3.97e-14 <span class="keyword">...</span><span class="comment"> % 64</span>
+0032     7.32e-14 <span class="keyword">...</span><span class="comment"> % 128</span>
+0033     1.37e-13 <span class="keyword">...</span><span class="comment"> % 256</span>
+0034     2.37e-13 <span class="keyword">...</span><span class="comment"> % 512</span>
+0035     5.3e-13 <span class="keyword">...</span><span class="comment"> % 256</span>
+0036     ];
+0037 speed_multires = [ <span class="keyword">...</span>
+0038     0.00021 <span class="keyword">...</span><span class="comment">  % 4</span>
+0039     0.00040 <span class="keyword">...</span><span class="comment"> % 8</span>
+0040     0.00105 <span class="keyword">...</span><span class="comment"> % 16</span>
+0041     0.00300 <span class="keyword">...</span><span class="comment"> % 32</span>
+0042     0.018 <span class="keyword">...</span><span class="comment"> % 64</span>
+0043     0.1 <span class="keyword">...</span><span class="comment"> % 128</span>
+0044     0.75 <span class="keyword">...</span><span class="comment"> % 256</span>
+0045     5.2 <span class="keyword">...</span><span class="comment"> % 512</span>
+0046     45.0 <span class="keyword">...</span><span class="comment"> % 1024</span>
+0047     ];
+0048 nb_samples = ell;
+0049 nb_samples_pow = str2mat(<span class="string">'t04'</span>, <span class="string">'t08'</span>, <span class="string">'t16'</span>, <span class="string">'t32'</span>, <span class="string">'t64'</span>, <span class="string">'t28'</span>, <span class="string">'t56'</span>, <span class="string">'t12'</span>, <span class="string">'t24'</span>);
+0050 
+0051 figure(<span class="string">'Position'</span>,[100 100 700 600])
+0052 
+0053 subplot(2,1,1)
+0054 loglog( nb_samples, (1e-15)*ell, <span class="string">'red'</span>,<span class="string">'LineWidth'</span>, 2 )
+0055 hold on
+0056 loglog( nb_samples, accuracy, <span class="string">'--oblack'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'MarkerSize'</span>,10)
+0057 loglog( nb_samples, accuracy_multires, <span class="string">'-oblack'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'MarkerSize'</span>,10)
+0058 grid on
+0059 xlabel(<span class="string">'x1'</span>,<span class="string">'FontSize'</span>,20)
+0060 ylabel(<span class="string">'y1'</span>,<span class="string">'FontSize'</span>,20)
+0061 set(gca,<span class="string">'XTick'</span>,nb_samples,<span class="string">'XTickLabel'</span>,nb_samples_pow,<span class="string">'FontSize'</span>,20)
+0062 set(gca,<span class="string">'YTick'</span>,[1e-16 1e-15 1e-14 1e-13 1e-12] ,<span class="string">'FontSize'</span>,20)
+0063 axis([3e0 1300 1e-15 1e-12])
+0064 
+0065 <span class="comment">%title('Accuracy of overall transform','FontSize',20)</span>
+0066 
+0067 subplot(2,1,2)
+0068 loglog( nb_samples, (1e-6)*ell.^3, <span class="string">'red'</span>,<span class="string">'LineWidth'</span>, 2 )
+0069 hold on
+0070 loglog( nb_samples, speed, <span class="string">'--oblack'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'MarkerSize'</span>,10)
+0071 loglog( nb_samples, speed_multires, <span class="string">'-oblack'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'MarkerSize'</span>,10)
+0072 grid on
+0073 xlabel(<span class="string">'x2'</span>,<span class="string">'FontSize'</span>,20)
+0074 ylabel(<span class="string">'y2'</span>,<span class="string">'FontSize'</span>,20)
+0075 axis([3e0 1300 1e-5 2e3])
+0076 set(gca,<span class="string">'YTick'</span>,[1e-6 1e-4 1e-2  1e0 1e2 1e4 1e6] ,<span class="string">'FontSize'</span>,20)
+0077 set(gca,<span class="string">'XTick'</span>,nb_samples,<span class="string">'XTickLabel'</span>,nb_samples_pow,<span class="string">'FontSize'</span>,20)
+0078 <span class="comment">%title('Speed of overall transform','FontSize',20)</span>
+0079</pre></div>
+<hr><address>Generated on Mon 24-Sep-2012 11:30:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

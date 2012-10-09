@@ -6,7 +6,7 @@
 % See LICENSE.txt for license details
 
 B = 3;
-zoomfactor = 1.2;
+zoomfactor = 1.4;
 J_min = 2;
 L = 256;
 J = s2let_jmax(L, B);

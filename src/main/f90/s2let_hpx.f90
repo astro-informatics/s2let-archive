@@ -1,9 +1,11 @@
 ! ----------------------------------------------------------- !
 
 SUBROUTINE healpix_forward_real( alm, map, nside, L )
+
   use healpix_types
   use healpix_modules
   implicit none
+
   integer(i4b) 	:: nside, nlmax, L, el, em
   integer(i8b) :: npix
   real(dp), dimension(0:12*nside*nside-1) :: map
@@ -37,9 +39,11 @@ END SUBROUTINE healpix_forward_real
 ! ----------------------------------------------------------- !
 
 SUBROUTINE healpix_inverse_real( map, alm, nside, L )
+
   use healpix_types
   use healpix_modules
   implicit none
+
   integer(i4b) 	:: nside, nlmax, L, el, em
   integer(i8b) :: npix
   real(dp), dimension(0:12*nside*nside-1) :: map
@@ -65,9 +69,11 @@ END SUBROUTINE healpix_inverse_real
 
 ! ----------------------------------------------------------- !
 
-SUBROUTINE  read_healpix_map(map, file, nside)
+SUBROUTINE read_healpix_map(map, file, nside)
+
   use healpix_types
   use healpix_modules
+
   character(len=filenamelen) :: file
   integer :: nside, npix
   real(dp), dimension(0:12*nside*nside-1,1:1) :: map
@@ -82,8 +88,10 @@ END SUBROUTINE read_healpix_map
 ! ----------------------------------------------------------- !
 
 SUBROUTINE write_healpix_map(file, map, nside)
+
   use healpix_types
   use healpix_modules
+
   character(len=filenamelen) :: file
   CHARACTER(len=80), DIMENSION(1:120):: header
   integer :: nside, npix
@@ -91,6 +99,7 @@ SUBROUTINE write_healpix_map(file, map, nside)
 
   npix = nside2npix(nside)
   header = ''
+  call write_minimal_header(header, 'MAP', nside=nside, ordering='ring')
   call write_bintab(map, npix, 1, header, 120, file)
 
 END SUBROUTINE write_healpix_map

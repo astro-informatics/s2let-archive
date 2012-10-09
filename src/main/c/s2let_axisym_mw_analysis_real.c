@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 		else
 			bl = L;
 		s2let_write_mw_map(outfile, f_wav + offset, bl); // Now write the map to fits file
-		offset += bl * bl; // Go to the next wavelet
+		offset += (2*bl-1) * bl; // Go to the next wavelet
 	}
 	// Finally write the scaling function
 	sprintf(outfile, "%s%s%s%s", fileroot, "_scal_", params, ".fits");
