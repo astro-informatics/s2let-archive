@@ -24,9 +24,11 @@ UNAME 	:= $(shell uname)
 # Compilers and options for C
 CC	= gcc
 OPT	= -Wall -O3 -g -DS2LET_VERSION=\"1.0\" -DS2LET_BUILD=\"`svnversion -n .`\"
+
 # Compilers and options for Fortran
 FCC	= gfortran
 OPTF90 	= -O3 -ffree-form
+#GFORTRANLIB = /sw/lib/gcc4.6/lib
 
 # Config for dynamic library
 ifeq ($(UNAME), Linux)
@@ -40,6 +42,7 @@ endif
 
 # Commands for Healpix
 HPXOPT	 = -lgfortran -DGFORTRAN -fno-second-underscore -fopenmp
+
 
 # ======================================== #
 
@@ -135,9 +138,12 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 	FFLAGS+= -I$(HEALPIXINC)
 	LDFLAGS+= -L$(HEALPIXLIB)
 	LDFLAGS+= -l$(HEALPIXLIBN)
+	LDFLAGS+= -l$(GFORTRANHEALPIXLIBN)
 
-	LDFLAGS+= -lgfortran -fopenmp
+	LDFLAGS+= -lgfortran -fopenmp 
+	LDFLAGS+= -L$(GFORTRANLIB)
 	LDFLAGSMEX+= -lgfortran -lgomp
+	LDFLAGSMEX+= -L$(GFORTRANLIB)
 	LDFLAGSMEX+= -L$(HEALPIXLIB)
 	LDFLAGSMEX+= -l$(HEALPIXLIBN)
 
@@ -198,7 +204,7 @@ default: lib test about tidy
 matlab: $(S2LETOBJSMEX)
 
 .PHONY: all
-all: lib matlab doc bin tidy
+all: lib matlab bin tidy
 
 .PHONY: bin
 bin: test hpx_test hpx_demo denoising_demo axisym_mw_analysis_real axisym_mw_synthesis_real axisym_hpx_analysis_real axisym_hpx_synthesis_real about tidy
@@ -236,7 +242,7 @@ denoising_demo: $(S2LETBIN)/s2let_denoising_demo
 axisym_mw_analysis_real: $(S2LETBIN)/s2let_axisym_mw_analysis_real
 
 axisym_mw_synthesis_real: $(S2LETBIN)/s2let_axisym_mw_synthesis_real
-	
+
 axisym_hpx_analysis_real: $(S2LETBIN)/s2let_axisym_hpx_analysis_real
 
 axisym_hpx_synthesis_real: $(S2LETBIN)/s2let_axisym_hpx_synthesis_real
