@@ -21,10 +21,6 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <a href="index.html">Introduction</a> |
   <a href="index.html#routines">Routines</a> |
   <a href="index.html#installation">Installation</a> |
-  <a href="c_doc.html">C</a> |
-  <a href="idl_doc.html">IDL</a> |
-  <a href="java_doc.html">Java</a> |
-  <a href="matlab_doc.html">Matlab</a> |
   <a href="index.html#download">Download</a> |
   <a href="index.html#referencing">Referencing</a> |  
   <a href="index.html#version">Version</a> |
@@ -38,8 +34,8 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 	<img src="images/wav.png" width="140" height="140" border=0> 
       </td>
       <td width=500 align="left" valign="center">
-	<h1 class="title">S2LET<span class="fade">1.0</span></h1>
-	<p id="slogantitle">Installing and using the C library</p>
+	<h1 class="title">S2LET<span class="fade">1.0b1</span></h1>
+	<p id="slogantitle">Fast wavelets on the sphere</p>
       </td>			
     </tr>
   </table>
@@ -73,14 +69,10 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <h2>Brief release notes</h2>
 
 <ul>
-<li><strong>Version 1.0</strong><br />
+<li><strong>Version 1.0b1</strong><br />
 	<ul>
 	<li>Added I/O routines, FITS format.</li>
 	<li>Full support for real Healpix maps.</li>
-	</ul>
-</li>
-<li><strong>Version 0.9</strong><br />
-	<ul>
 	<li>Full and multi-resolution MW transform operational and tested.</li>
 	</ul>
 </li>
@@ -92,15 +84,9 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <!--------------------------- CONTENT --------------------------->
 <div id="content">
 
-<!--------------------------------------------------------------->
-<a name="introduction"><h2>Introduction</h2></a>
-
-  <p> <strong>S2LET</strong> provides user-friendly routines for performing the wavelet transform in both real and harmonic spaces. The individual wavelet kernels have different band-limits and hence they may be reconstructed at different resolutions on the MW sampling when <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> is used. For this reason all MW routines are implemented in two versions : the usual transform where all maps are constructed at full resolution on the sphere, and a multiresolution algorithm that stores each wavelet map in the number of samples corresponding to its band-limit. This multiresolution approach fully exploit the advantages of the tilling of harmonic space as well as the exactness of both the spherical harmonic and the wavelet transforms. The wavelet transform for the <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> format is only available at full resolution since the spherical harmonic transform implemented in <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> is not exact.</p> 
-
-<br>
 
 <!--------------------------------------------------------------->  
-<a name="installation"><h2>Installation</h2></a>
+<a name="installation"><h2>Installing and using the C library</h2></a>
 
   <p> The core functionalities of <strong>S2LET</strong> are written in C and self-documented. The C library only requires <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a
  href="http://www.fftw.org/">FFTW</a>. The extra IO and Healpix features require the <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> libraries. To support <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a>, <strong>S2LET</strong> uses a hybrid C/Fortran interface to the Fortran <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> library. Several examples, tests and demos are provided to demonstrate the usability of the C library.</p>
@@ -115,7 +101,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 
   <h4>Compiling</h4>
 
-  <p> Makefiles are provided to build the code. However the locations of <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a href="http://www.fftw.org/">FFTW</a> and optionnaly <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> must be specified. In <strong>S2LET</strong> the default Makefile will look at these symbols in Bash/Shell profiles. Alternatively you may declare them explicitely in the first section of the makefile. The compilers and their options may also be changed in the Makefile. 
+  <p> Makefiles are provided to build the code. However the locations of <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a href="http://www.fftw.org/">FFTW</a> and optionally <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> must be defined in Bash/Shell to be found by the Makefile. Alternatively you may declare them explicitely in the first section of the makefile. The compilers and their options may also be changed in the Makefile. 
 
   <p> Once you have set the Makefile up for your system,
   <strong>S2LET</strong> may be compiled by running:
@@ -201,12 +187,20 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 		inputFile  waveletParameter  firstScale  multiResolution</pre>
   To reproduce the example on the main page, use:<p>
   <pre> >> ./bin/s2let_axisym_mw_analysis_real data/earth_tomo_mw_128.fits 3 2 1</pre></p>
+  <p> A similar program is provided to synthesise a map from the wavelet coefficents:
+  <pre> >> ./bin/s2let_axisym_mw_synthesis_real 
+		outpufFitsFile  waveletParameter  firstScale  bandLimit</pre>
+  will look in the same directory for the wavelet scales, requires the maximum bandlimit of the wavelets (i.e. of the output map) and will determine if multiresolution was activated.
 
   <p> We provide the same routine for a Healpix map, for which the multiresolution flag has to be replaced by the band-limit of the analysis. The output maps may be plotted in Matlab or IDL, for instance.
   <pre> >> ./bin/s2let_axisym_hpx_analysis_real 
 		inputFile  waveletParameter  firstScale  bandLimit</pre>
   As an example, to decompose a Healpix CMB simulation into wavelets, run  :<p>
   <pre> >> ./bin/s2let_axisym_hpx_analysis_real data/somecmbsimu_hpx_128.fits 3 2 128</pre></p>
+  <p> A similar program is provided to synthesise a healpix map from the wavelet coefficents:
+  <pre> >> ./bin/s2let_axisym_hpx_synthesis_real 
+		outpufFitsFile  waveletParameter  firstScale  bandLimit</pre>
+  will look in the same directory for the wavelet scales.
 
   <p>Finally, to check the version and build numbers of your version run:
   <pre> >> ./bin/s2let_about </pre>
