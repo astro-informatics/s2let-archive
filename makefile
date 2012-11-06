@@ -28,7 +28,7 @@ OPT	= -Wall -O3 -g -DS2LET_VERSION=\"1.0\" -DS2LET_BUILD=\"`svnversion -n .`\"
 # Compilers and options for Fortran
 FCC	= gfortran
 OPTF90 	= -O3 -ffree-form
-#GFORTRANLIB = /sw/lib/gcc4.6/lib
+GFORTRANLIB = /sw/lib/gcc4.6/lib
 
 # Config for dynamic library
 ifeq ($(UNAME), Linux)
@@ -138,8 +138,6 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 	FFLAGS+= -I$(HEALPIXINC)
 	LDFLAGS+= -L$(HEALPIXLIB)
 	LDFLAGS+= -l$(HEALPIXLIBN)
-	LDFLAGS+= -l$(GFORTRANHEALPIXLIBN)
-
 	LDFLAGS+= -lgfortran -fopenmp 
 	LDFLAGS+= -L$(GFORTRANLIB)
 	LDFLAGSMEX+= -lgfortran -lgomp
