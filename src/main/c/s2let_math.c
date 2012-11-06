@@ -12,8 +12,8 @@
  */
 double f_s2dw(double k, int B)
 {
-	double t = (k - (1 / (double)B)) * (2.0 * B / (double)(B-1)) - 1;
-    return exp(-2.0 / (1.0 - pow(t, 2.0))) / k;
+  double t = (k - (1 / (double)B)) * (2.0 * B / (double)(B-1)) - 1;
+  return exp(-2.0 / (1.0 - pow(t, 2.0))) / k;
 }
 
 /*!
@@ -21,7 +21,7 @@ double f_s2dw(double k, int B)
  */
 double f_needlet(double t)
 {
-    return exp(-1.0 / (1.0 - pow(t, 2.0))) ;
+  return exp(-1.0 / (1.0 - pow(t, 2.0))) ;
 }
 
 
@@ -30,21 +30,21 @@ double f_needlet(double t)
  */
 double s2let_kappa0_quadtrap_s2dw(double a, double b, int n, int B)
 {
-    double sum = 0;
-    double f1, f2;
-    int i;
-    double h = (b - a) / n;
+  double sum = 0;
+  double f1, f2;
+  int i;
+  double h = (b - a) / n;
 
-    if( a == b ){
-    	return 0;
-    }else{
-	    for (i = 0; i < n; i++){
-	    	f1 = f_s2dw(a + i * h, B);
-	    	f2 = f_s2dw(a + (i + 1) * h, B);
-        if(!isnan(f1) && !isinf(f1) && !isnan(f2) && !isinf(f2))
-          sum += ((f1 + f2) * h) / 2;
-	    }
-	}
+  if( a == b ){
+    return 0;
+  }else{
+    for (i = 0; i < n; i++){
+      f1 = f_s2dw(a + i * h, B);
+      f2 = f_s2dw(a + (i + 1) * h, B);
+      if(!isnan(f1) && !isinf(f1) && !isnan(f2) && !isinf(f2))
+	sum += ((f1 + f2) * h) / 2;
+    }
+  }
   return sum;
 }
 
@@ -53,20 +53,20 @@ double s2let_kappa0_quadtrap_s2dw(double a, double b, int n, int B)
  */
 double s2let_kappa0_quadtrap_needlet(double a, double b, int n)
 {
-    double sum = 0;
-    double f1, f2;
-    int i;
-    double h = (b - a) / n;
+  double sum = 0;
+  double f1, f2;
+  int i;
+  double h = (b - a) / n;
 
-    if( a == b ){
-      return 0;
-    }else{
-      for (i = 0; i < n; i++){
-        f1 = f_needlet(a + i * h);
-        f2 = f_needlet(a + (i + 1) * h);
-        if(!isnan(f1) && !isinf(f1) && !isnan(f2) && !isinf(f2))
-          sum += ((f1 + f2) * h) / 2;
-      }
+  if( a == b ){
+    return 0;
+  }else{
+    for (i = 0; i < n; i++){
+      f1 = f_needlet(a + i * h);
+      f2 = f_needlet(a + (i + 1) * h);
+      if(!isnan(f1) && !isinf(f1) && !isnan(f2) && !isinf(f2))
+	sum += ((f1 + f2) * h) / 2;
+    }
   }
   return sum;
 }

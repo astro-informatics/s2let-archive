@@ -86,14 +86,18 @@ FFTWLIB     = $(FFTWDIR)/lib
 FFTWLIBNM   = fftw3
 
 # === CFITSIO ===
+ifneq ($(strip $(CFITSIODIR)),)
 CFITSIOINC    = $(CFITSIODIR)/include
 CFITSIOLIB     = $(CFITSIODIR)/lib
 CFITSIOLIBNM   = cfitsio
+endif
 
 # === HEALPIX ===
+ifneq ($(strip $(HEALPIXDIR)),)
 HEALPIXINC    = $(HEALPIXDIR)/include
 HEALPIXLIB     = $(HEALPIXDIR)/lib
 HEALPIXLIBN   = healpix
+endif
 
 # ======================================== #
 

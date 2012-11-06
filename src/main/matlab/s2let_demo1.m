@@ -12,14 +12,14 @@ load('EGM2008_Topography_flms_L0128');
 f = ssht_inverse(flm, L, 'Reality', true);
 
 %inputfile = 'data/earth_tomo_mw_128.fits';
-%[f, L] = s2let_read_mw_real_map(inputfile);
+%[f, L] = s2let_mw_read_real_map(inputfile);
 
 B = 3;
 J_min = 2;
 J = s2let_jmax(L, B);
 
 % Perform decomposition
-[f_wav, f_scal] = s2let_axisym_analysis(f, 'B', B, 'J_min', J_min, 'Reality', true);
+[f_wav, f_scal] = s2let_mw_axisym_analysis(f, 'B', B, 'J_min', J_min, 'Reality', true);
 
 zoomfactor = 1.2;
 ns = ceil(sqrt(2+J-J_min+1)) ;
@@ -28,14 +28,15 @@ nx = ns;
 % MULTIRESOLUTION PLOT
 figure('Position',[100 100 1300 1000])
 subplot(nx, ny, 1);
-s2let_plot_mw_mollweide(f);
+ssht_plot_mollweide(f, L);
 %title('Initial data')
 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
 v = caxis;
 temp = max(abs(v));
 caxis([-temp temp])
 subplot(nx, ny, 2);
-s2let_plot_mw_mollweide(f_scal);
+bl =  min(ceil(B^(J_min)), L);
+ssht_plot_mollweide(f_scal, bl);
 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
 v = caxis;
 temp = max(abs(v));
@@ -43,7 +44,8 @@ caxis([-temp temp])
 %title('Scaling fct')
 for j = J_min:J
    subplot(nx, ny, j-J_min+3);
-   s2let_plot_mw_mollweide(f_wav{j-J_min+1});
+   bl =  min(ceil(B^(j+1)), L);
+   ssht_plot_mollweide(f_wav{j-J_min+1}, bl);
    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
 v = caxis;
 temp = max(abs(v));
@@ -52,18 +54,18 @@ caxis([-temp temp])
 end 
 
 % Perform decomposition
-[f_wav, f_scal] = s2let_axisym_analysis(f, 'B', B, 'J_min', J_min, 'Reality', true, 'downsample', false);
+[f_wav, f_scal] = s2let_mw_axisym_analysis(f, 'B', B, 'J_min', J_min, 'Reality', true, 'downsample', false);
 % FULL RESOLUTION PLOT
 figure('Position',[100 100 1300 1000])
 subplot(nx, ny, 1);
-s2let_plot_mw_mollweide(f);
+ssht_plot_mollweide(f, L);
 %title('Initial data')
 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
 v = caxis;
 temp = max(abs(v));
 caxis([-temp temp])
 subplot(nx, ny, 2);
-s2let_plot_mw_mollweide(f_scal);
+ssht_plot_mollweide(f_scal, L);
 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
 v = caxis;
 temp = max(abs(v));
@@ -71,7 +73,7 @@ caxis([-temp temp])
 %title('Scaling fct')
 for j = J_min:J
    subplot(nx, ny, j-J_min+3);
-   s2let_plot_mw_mollweide(f_wav{j-J_min+1});
+   ssht_plot_mollweide(f_wav{j-J_min+1}, L);
    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
 v = caxis;
 temp = max(abs(v));

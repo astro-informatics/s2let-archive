@@ -6,7 +6,7 @@
 #define S2LET_FITSTOOLS
 
 /*!
- * Read MW resolution / band-limit parameter from a FITS file.
+ * Read Healpix resolution from a FITS file.
  *
  * \param[in]  file Filename.
  * \retval int resolution parameter

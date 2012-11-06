@@ -1,10 +1,10 @@
-function [thetas, phis] = healpix_sampling_ring(nside)
+function [thetas, phis] = s2let_hpx_sampling_ring(nside)
 
-% healpix_sampling_ring 
+% s2let_hpx_sampling_ring 
 % Compute the Healpix sampling nodes
 % Default usage :
 %
-%   [thetas, phis] = healpix_sampling_ring(nside)
+%   [thetas, phis] = s2let_hpx_sampling_ring(nside)
 %
 % nside is the input Healpix resolution,
 % thetas contains the colatitudes of the nodes,

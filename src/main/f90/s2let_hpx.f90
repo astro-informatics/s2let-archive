@@ -74,14 +74,21 @@ SUBROUTINE read_healpix_map(map, file, nside)
   use healpix_types
   use healpix_modules
 
-  character(len=filenamelen) :: file
+  character(len=filenamelen) :: file, ordering, comment
+  character(LEN=80), dimension(1:60) :: header
   integer :: nside, npix
   real(dp), dimension(0:12*nside*nside-1,1:1) :: map
   real(dp) :: nullval
   logical :: anynull
 
   npix = nside2npix(nside)
-  call read_bintab(file, map, npix, 1, nullval, anynull)
+  call read_bintab(file, map, npix, 1, nullval, anynull, header)
+  call get_card(header,'ORDERING',ordering,comment)
+  if( trim(ordering) .ne. 'ring' .and. trim(ordering) .ne. 'RING' ) then
+     PRINT*, "Input Healpix map must be RING ordered"
+     PRINT*, "End of program..."
+     call exit(0)
+  endif
 
 END SUBROUTINE read_healpix_map
 

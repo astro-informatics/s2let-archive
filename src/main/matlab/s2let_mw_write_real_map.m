@@ -1,10 +1,10 @@
-function s2let_write_mw_real_map(f, file)
+function s2let_mw_write_real_map(f, file)
 
-% s2let_write_mw_real_map 
+% s2let_mw_write_real_map 
 % Write an MW real map to a FITS file
 % Default usage :
 %
-%   s2let_write_mw_real_map(f, file)
+%   s2let_mw_write_real_map(f, file)
 %
 % f the MW map to be written,
 % file the name of the output FITS file.

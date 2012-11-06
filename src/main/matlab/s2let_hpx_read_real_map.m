@@ -1,14 +1,14 @@
-function [mwmaparr, L]= s2let_read_mw_real_map(file)
+function [healpixmap, nside]= s2let_hpx_read_real_map(file)
 
-% s2let_real_mw_real_map 
+% s2let_hpx_read_real_map 
 % Read an MW real map from a FITS file
 % Default usage :
 %
-%   [mwmaparr, L]= s2let_read_mw_real_map(file)
+%   [healpixmap, L]= s2let_hpx_read_real_map(file)
 %
 % file the name of the input FITS file,
-% mwmaparr the output signal read from the file,
-% L its resolution.
+% healpixmap the output signal read from the file,
+% nside its resolution.
 %
 % S2LET package to perform Wavelets transform on the Sphere.
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen
@@ -18,13 +18,11 @@ datacell = fitsread(file,'binarytable');
 data = datacell{1};
 sz = size(data);
 
-mwmap = [];
+healpixmap = [];
 for col = 1:sz(1)
-    mwmap = [mwmap data(col,:)];
+    healpixmap = [healpixmap data(col,:)];
 end
 
-mwmaparr = s2let_mw_vec2arr(mwmap);
-sz = size(mwmaparr);
-L = sz(1);
+nside = sqrt((sz(1) * sz(2)) / 12);
 
 end

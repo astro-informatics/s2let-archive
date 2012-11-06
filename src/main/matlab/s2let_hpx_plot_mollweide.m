@@ -1,6 +1,6 @@
-function s2let_plot_hpx_mollweide(f)
+function s2let_hpx_plot_mollweide(f)
 
-% s2let_plot_hpx_mollweide 
+% s2let_hpx_plot_mollweide 
 % Plot a real Healpix map using Mollweide projection.
 %
 % S2LET package to perform Wavelets transform on the Sphere.
@@ -10,7 +10,7 @@ function s2let_plot_hpx_mollweide(f)
 sz = size(f);
 nside = sqrt(max(sz)/12);
 
-[thetas, phis] = healpix_sampling_ring(nside);
+[thetas, phis] = s2let_hpx_sampling_ring(nside);
           
 [x, y] = ssht_mollweide(thetas, phis);
 
