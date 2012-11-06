@@ -19,7 +19,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 
   <p id="toplinks">
   <a href="index.html">Introduction</a> |
-  <a href="index.html#routines">Routines</a> |
+  <a href="index.html#wavelets">Wavelets </a> |
   <a href="index.html#installation">Installation</a> |
   <a href="index.html#download">Download</a> |
   <a href="index.html#referencing">Referencing</a> |  
@@ -47,7 +47,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <div id="sidebar">
 
 
-<h2>Installation notes</h2>
+<h2>Installation and usage</h2>
 
 <ul>
 <li><a href="c_doc.html">C library</a></li>
@@ -184,23 +184,27 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 
   <p> We also provide a program to read a valid MW map, perform its wavelet decomposition and output the wavelet maps (which can be plotted in Matlab, for instance). The command, whose parameters are fully documented in the code, reads
   <pre> >> ./bin/s2let_axisym_mw_analysis_real 
-		inputFile  waveletParameter  firstScale  multiResolution</pre>
-  To reproduce the example on the main page, use:<p>
+		&lt;inputFile&gt;  &lt;lambda&gt;  &lt;J_0&gt;  &lt;multiResolution&gt;</pre>
+  <p>To reproduce the example on the main page, use:<p>
   <pre> >> ./bin/s2let_axisym_mw_analysis_real data/earth_tomo_mw_128.fits 3 2 1</pre></p>
   <p> A similar program is provided to synthesise a map from the wavelet coefficents:
   <pre> >> ./bin/s2let_axisym_mw_synthesis_real 
-		outpufFitsFile  waveletParameter  firstScale  bandLimit</pre>
-  will look in the same directory for the wavelet scales, requires the maximum bandlimit of the wavelets (i.e. of the output map) and will determine if multiresolution was activated.
+		&lt;outputRoot&gt;  &lt;lambda&gt;  &lt;J_0&gt;  &lt;bandLimit&gt;</pre>
+  <p>will look in the same directory for the wavelet scales, requires the maximum bandlimit of the wavelets (i.e. of the output map) and will determine if multiresolution was activated. To re-synthesise the signal decomposed in the previous example, you may run
+  <pre> >> ./bin/s2let_axisym_mw_synthesis_real data/earth_tomo_mw_128 3 2 128</pre></p>
+
 
   <p> We provide the same routine for a Healpix map, for which the multiresolution flag has to be replaced by the band-limit of the analysis. The output maps may be plotted in Matlab or IDL, for instance.
   <pre> >> ./bin/s2let_axisym_hpx_analysis_real 
-		inputFile  waveletParameter  firstScale  bandLimit</pre>
-  As an example, to decompose a Healpix CMB simulation into wavelets, run  :<p>
+		&lt; inputFile&gt;  &lt;lambda&gt;  &lt;J_0&gt;  &lt;bandLimit&gt;</pre>
+  <p>As an example, to decompose a Healpix CMB simulation into wavelets, run  :<p>
   <pre> >> ./bin/s2let_axisym_hpx_analysis_real data/somecmbsimu_hpx_128.fits 3 2 128</pre></p>
   <p> A similar program is provided to synthesise a healpix map from the wavelet coefficents:
   <pre> >> ./bin/s2let_axisym_hpx_synthesis_real 
-		outpufFitsFile  waveletParameter  firstScale  bandLimit</pre>
-  will look in the same directory for the wavelet scales.
+		&lt;outputRoot&gt;  &lt;lambda&gt;  &lt;J_0&gt;  &lt;bandLimit&gt;</pre>
+  <p>will look in the same directory for the wavelet scales.To re-synthesise the signal decomposed in the previous example, you may run
+  <pre> >> ./bin/s2let_axisym_hpx_synthesis_real data/somecmbsimu_hpx_128 3 2 128</pre></p>
+
 
   <p>Finally, to check the version and build numbers of your version run:
   <pre> >> ./bin/s2let_about </pre>

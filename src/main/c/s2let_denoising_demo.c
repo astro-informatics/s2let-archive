@@ -36,6 +36,11 @@ double needletpower(double *wav_lm, int L){
 	return totalpower; 
 }
 
+/*!
+* PROGRAM : s2let_denoising_demo
+* COMMAND : bin/s2let_denoising_demo
+* ARGUMENTS : none
+*/
 int main(int argc, char *argv[]) 
 {
 	const int seed = (int)(10000.0*(double)clock()/(double)CLOCKS_PER_SEC);

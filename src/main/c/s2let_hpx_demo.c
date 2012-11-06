@@ -11,6 +11,11 @@
 #include <math.h>
 #include <time.h>
 
+/*!
+* PROGRAM : s2let_hpx_demo
+* COMMAND : bin/s2let_hpx_demo
+* ARGUMENTS : none
+*/
 int main(int argc, char *argv[]) 
 {
 	printf("--------------------------------------------------\n");

@@ -23,7 +23,7 @@ UNAME 	:= $(shell uname)
 
 # Compilers and options for C
 CC	= gcc
-OPT	= -Wall -O3 -g -DS2LET_VERSION=\"1.0\" -DS2LET_BUILD=\"`svnversion -n .`\"
+OPT	= -Wall -O3 -g -DS2LET_VERSION=\"1.0b1\" -DS2LET_BUILD=\"`svnversion -n .`\"
 
 # Compilers and options for Fortran
 FCC	= gfortran
@@ -264,7 +264,7 @@ cleandoc:
 	rm -rf $(S2LETDIR)/doc/c/*
 
 .PHONY: clean
-clean:	tidy cleandoc
+clean:	tidy
 	rm -f $(S2LETLIB)/lib$(S2LETLIBN).*
 	rm -f $(S2LETOBJMEX)/*_mex.$(MEXEXT)
 	rm -f $(S2LETBIN)/*
