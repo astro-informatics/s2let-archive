@@ -16,7 +16,8 @@ HEALPIXDIR	= ${HEALPIX}
 # Directory for MATLAB (optional)
 MLAB	=  /Applications/MATLAB_R2011b.app
 # Directory for DOXYGEN (optional)
-DOXYGEN_PATH = /Applications/Doxygen.app/Contents/Resources/doxygen
+#DOXYGEN_PATH = /Applications/Doxygen.app/Contents/Resources/doxygen
+DOXYGEN_PATH = doxygen
 
 UNAME 	:= $(shell uname)
 
