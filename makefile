@@ -28,7 +28,8 @@ OPT	= -Wall -O3 -g -DS2LET_VERSION=\"1.0\" -DS2LET_BUILD=\"`svnversion -n .`\"
 # Compilers and options for Fortran
 FCC	= gfortran
 OPTF90 	= -O3 -ffree-form
-GFORTRANLIB = /sw/lib/gcc4.6/lib
+# To be defined if LGFORTRAN cannot be found in the path
+# GFORTRANLIB = /sw/lib/gcc4.6/lib
 
 # Config for dynamic library
 ifeq ($(UNAME), Linux)
@@ -139,9 +140,14 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 	LDFLAGS+= -L$(HEALPIXLIB)
 	LDFLAGS+= -l$(HEALPIXLIBN)
 	LDFLAGS+= -lgfortran -fopenmp 
-	LDFLAGS+= -L$(GFORTRANLIB)
+	ifneq ($(strip $(GFORTRANLIB)),)
+	  LDFLAGS+= -L$(GFORTRANLIB)
+	endif
+
 	LDFLAGSMEX+= -lgfortran -lgomp
+	ifneq ($(strip $(GFORTRANLIB)),)
 	LDFLAGSMEX+= -L$(GFORTRANLIB)
+	endif
 	LDFLAGSMEX+= -L$(HEALPIXLIB)
 	LDFLAGSMEX+= -l$(HEALPIXLIBN)
 
@@ -204,7 +210,6 @@ matlab: $(S2LETOBJSMEX)
 .PHONY: all
 all: lib matlab bin tidy
 
-.PHONY: bin
 bin: test hpx_test hpx_demo denoising_demo axisym_mw_analysis_real axisym_mw_synthesis_real axisym_hpx_analysis_real axisym_hpx_synthesis_real about tidy
 
 .PHONY: lib

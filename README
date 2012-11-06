@@ -1,14 +1,15 @@
 
                              S2LET CODE 
+			   www.s2let.org
               Fast wavelet transforms on the sphere
   ----------------------------------------------------------------
 
 DESCRIPTION
-     The SSHT code provides functionality to perform fast and exact
-     spin spherical harmonic transforms.
+     The S2LET code provides functionality to perform fast and exact
+     scale-discretised wavelet transforms on the sphere.
 
 VERSION
-     Release 1.0, September 2012
+     Release 1.0b1, November 2012
 
 AUTHORS
      B. Leistedt (www.ixkael.com/blog)
