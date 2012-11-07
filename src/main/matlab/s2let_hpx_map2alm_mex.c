@@ -25,11 +25,11 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Check number of arguments
   if(nrhs!=3) {
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_analysis_mex:InvalidInput:nrhs",
+    mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:nrhs",
           "Require six inputs.");
   }
   if(nlhs!=1) {
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_analysis_mex:InvalidOutput:nlhs",
+    mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidOutput:nlhs",
           "Require two outputs.");
   }
   // Parse input dataset f
@@ -46,16 +46,16 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if( !mxIsDouble(prhs[iin]) || 
       mxIsComplex(prhs[iin]) || 
       mxGetNumberOfElements(prhs[iin])!=1 ) {
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_analysis_mex:InvalidInput:healpixParameter",
+    mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:healpixParameter",
           "HEALPIX parameter nside must be integer.");
   }
   nside = (int)mxGetScalar(prhs[iin]);
   if (mxGetScalar(prhs[iin]) > (double)nside || nside <= 1)
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_analysis_mex:InvalidInput:healpixParameter",
+    mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:healpixParameter",
           "Healpix parameter nside must be positive integer greater than 2");
 
   if( f_m*f_n != 12*nside*nside ) 
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_analysis_mex:InvalidInput:LbandLimit",
+    mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:LbandLimit",
           "nside must correspond to the sampling scheme, i.e. f = 12*nside*nside samples.");
 
   // Parse harmonic band-limit L
@@ -63,16 +63,16 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if( !mxIsDouble(prhs[iin]) || 
       mxIsComplex(prhs[iin]) || 
       mxGetNumberOfElements(prhs[iin])!=1 ) {
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_analysis_mex:InvalidInput:LbandLimit",
+    mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
   }
   L = (int)mxGetScalar(prhs[iin]);
   if (mxGetScalar(prhs[iin]) > (double)L || L <= 0)
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_analysis_mex:InvalidInput:bandLimitNonInt",
+    mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:bandLimitNonInt",
           "Harmonic band-limit L must be positive integer.");
 
   // Perform harmonic transform 
-  s2let_allocate_lm(&flm, L);
+  s2let_lm_allocate(&flm, L);
   s2let_hpx_map2alm_real(flm, f_r, nside, L);
 
   // Output flm's

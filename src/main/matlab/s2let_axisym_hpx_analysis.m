@@ -1,11 +1,11 @@
-function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)
+function [f_wav, f_scal] = s2let_axisym_hpx_analysis(f, varargin)
 
-% s2let_hpx_axisym_analysis 
+% s2let_axisym_hpx_analysis 
 % Compute axisymmetric wavelet transform, output as HEALPIX maps.
 %
 % Default usage :
 %
-%   [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, <options>)
+%   [f_wav, f_scal] = s2let_axisym_hpx_analysis(f, <options>)
 %
 % f is the input field -- HEALPIX sampling,
 % f_wav contains the output wavelet contributions,
@@ -35,7 +35,7 @@ p.addParamValue('J_min', 0, @isnumeric);
 p.parse(f, varargin{:});
 args = p.Results;
 
-[f_wav_vec, f_scal] = s2let_hpx_axisym_analysis_mex(f, args.nside, args.B, args.L, args.J_min);
+[f_wav_vec, f_scal] = s2let_axisym_hpx_analysis_mex(f, args.nside, args.B, args.L, args.J_min);
 
 J = s2let_jmax(args.L, args.B);
 npix = 12*args.nside*args.nside;

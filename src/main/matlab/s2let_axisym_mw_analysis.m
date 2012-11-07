@@ -1,11 +1,11 @@
-function [f_wav, f_scal] = s2let_mw_axisym_analysis(f, varargin)
+function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)
 
-% s2let_mw_axisym_analysis 
+% s2let_axisym_mw_analysis 
 % Compute axisymmetric wavelet transform, output in pixel space.
 %
 % Default usage :
 %
-%   [f_wav, f_scal] = s2let_mw_axisym_analysis(f, <options>)
+%   [f_wav, f_scal] = s2let_axisym_mw_analysis(f, <options>)
 %
 % f is the input field -- MW sampling,
 % f_wav contains the output wavelet contributions,
@@ -40,7 +40,7 @@ args = p.Results;
 
 f_vec = s2let_mw_arr2vec(f);
 
-[f_wav_vec, f_scal_vec] = s2let_mw_axisym_analysis_mex(f_vec, args.B, args.L, args.J_min, args.Reality, args.Downsample);
+[f_wav_vec, f_scal_vec] = s2let_axisym_mw_analysis_mex(f_vec, args.B, args.L, args.J_min, args.Reality, args.Downsample);
 
 f_scal = s2let_mw_vec2arr(f_scal_vec);
 

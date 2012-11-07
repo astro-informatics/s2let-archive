@@ -1,11 +1,11 @@
-function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)
+function f = s2let_axisym_hpx_synthesis(f_wav, f_scal, varargin)
 
 % s2let_axisym_synthesis 
 % Compute axisymmetric wavelet transform, input/outputs as HEALPIX maps.
 %
 % Default usage :
 %
-%   f = s2let_hpx_axisym_synthesis(f_wav, f_scal, <options>)
+%   f = s2let_axisym_hpx_synthesis(f_wav, f_scal, <options>)
 %
 % f_wav contains the input wavelet contributions -- HEALPIX sampling,
 % f_scal contains the input scaling contributions -- HEALPIX sampling,
@@ -47,6 +47,6 @@ for j = args.J_min:J
     f_wav_vec = [f_wav_vec temp];
 end
 
-f = s2let_hpx_axisym_synthesis_mex(f_wav_vec, f_scal, args.nside, args.B, args.L, args.J_min);
+f = s2let_axisym_hpx_synthesis_mex(f_wav_vec, f_scal, args.nside, args.B, args.L, args.J_min);
  
 end

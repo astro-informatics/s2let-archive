@@ -89,7 +89,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   double *kappa0 = (double*)calloc(L, sizeof(double));
 
   // Run S2LET function
-  s2let_axisym_tiling(kappa, kappa0, B, L, J_min);
+  s2let_tiling_axisym(kappa, kappa0, B, L, J_min);
 
 
   // Output kappa and kappa0

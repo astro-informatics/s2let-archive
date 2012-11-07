@@ -21,7 +21,7 @@ flm = s2let_hpx_map2alm(f_ini, 'L', L);
 f = s2let_hpx_alm2map(flm, nside_recon, 'L', L);
 
 % Perform decomposition
-[f_wav, f_scal] = s2let_hpx_axisym_analysis(f,'B',B,'L',L,'J_min',J_min);
+[f_wav, f_scal] = s2let_axisym_hpx_analysis(f,'B',B,'L',L,'J_min',J_min);
 
 % Plot
 J = s2let_jmax(L, B);

@@ -28,23 +28,23 @@ disp('Construct the corresponding signal on the sphere')
 f = ssht_inverse(flm, L, 'Method', 'MW');
 
 disp('Perform axisym wavelet transform with default parameters')
-[f_wav, f_scal] = s2let_axisym_analysis(f);
-f_rec = s2let_axisym_synthesis(f_wav, f_scal);
+[f_wav, f_scal] = s2let_axisym_mw_analysis(f);
+f_rec = s2let_axisym_mw_synthesis(f_wav, f_scal);
 default = max(max(abs(f-f_rec)))
 
 disp('Perform axisym wavelet transform with multiresolution algorithm')
-[f_wav, f_scal] = s2let_axisym_analysis(f, 'downsample', true);
-f_rec = s2let_axisym_synthesis(f_wav, f_scal, 'downsample', true);
+[f_wav, f_scal] = s2let_axisym_mw_analysis(f, 'downsample', true);
+f_rec = s2let_axisym_mw_synthesis(f_wav, f_scal, 'downsample', true);
 default_multires = max(max(abs(f-f_rec)))
 
 disp('Perform axisym wavelet transform at full resolution')
-[f_wav, f_scal] = s2let_axisym_analysis(f, 'downsample', false);
-f_rec = s2let_axisym_synthesis(f_wav, f_scal, 'downsample', false);
+[f_wav, f_scal] = s2let_axisym_mw_analysis(f, 'downsample', false);
+f_rec = s2let_axisym_mw_synthesis(f_wav, f_scal, 'downsample', false);
 default_fullres = max(max(abs(f-f_rec)))
 
 disp('Perform axisym wavelet transform with custom parameters')
-[f_wav, f_scal] = s2let_axisym_analysis(f, 'B', B, 'L', L, 'J_min', J_min);
-f_rec = s2let_axisym_synthesis(f_wav, f_scal, 'B', B, 'L', L, 'J_min', J_min);
+[f_wav, f_scal] = s2let_axisym_mw_analysis(f, 'B', B, 'L', L, 'J_min', J_min);
+f_rec = s2let_axisym_mw_synthesis(f_wav, f_scal, 'B', B, 'L', L, 'J_min', J_min);
 custom = max(max(abs(f-f_rec)))
 
 disp('Constraint on flms to generate real signal')
@@ -62,22 +62,22 @@ f_real = ssht_inverse(flm, L, 'Method', 'MW', 'Reality', true);
 
 
 disp('Perform real axisym wavelet transform with default parameters')
-[f_wav_real, f_scal_real] = s2let_axisym_analysis(f_real, 'Reality', true);
-f_real_rec = s2let_axisym_synthesis(f_wav_real, f_scal_real, 'Reality', true);
+[f_wav_real, f_scal_real] = s2let_axisym_mw_analysis(f_real, 'Reality', true);
+f_real_rec = s2let_axisym_mw_synthesis(f_wav_real, f_scal_real, 'Reality', true);
 default = max(max(abs(f_real-f_real_rec)))
 
 disp('Perform real axisym wavelet transform with multiresolution algorithm')
-[f_wav_real, f_scal_real] = s2let_axisym_analysis(f_real, 'downsample', true, 'Reality', true);
-f_real_rec = s2let_axisym_synthesis(f_wav_real, f_scal_real, 'downsample', true, 'Reality', true);
+[f_wav_real, f_scal_real] = s2let_axisym_mw_analysis(f_real, 'downsample', true, 'Reality', true);
+f_real_rec = s2let_axisym_mw_synthesis(f_wav_real, f_scal_real, 'downsample', true, 'Reality', true);
 default_multires = max(max(abs(f_real-f_real_rec)))
 
 disp('Perform real axisym wavelet transform at full resolution')
-[f_wav_real, f_scal_real] = s2let_axisym_analysis(f_real, 'downsample', false, 'Reality', true);
-f_real_rec = s2let_axisym_synthesis(f_wav_real, f_scal_real, 'downsample', false, 'Reality', true);
+[f_wav_real, f_scal_real] = s2let_axisym_mw_analysis(f_real, 'downsample', false, 'Reality', true);
+f_real_rec = s2let_axisym_mw_synthesis(f_wav_real, f_scal_real, 'downsample', false, 'Reality', true);
 default_fullres = max(max(abs(f_real-f_real_rec)))
 
 disp('Perform real axisym wavelet transform with custom parameters')
-[f_wav_real, f_scal_real] = s2let_axisym_analysis(f_real, 'B', B, 'L', L, 'J_min', J_min, 'Reality', true);
-f_real_rec = s2let_axisym_synthesis(f_wav_real, f_scal_real, 'B', B, 'L', L, 'J_min', J_min, 'Reality', true);
+[f_wav_real, f_scal_real] = s2let_axisym_mw_analysis(f_real, 'B', B, 'L', L, 'J_min', J_min, 'Reality', true);
+f_real_rec = s2let_axisym_mw_synthesis(f_wav_real, f_scal_real, 'B', B, 'L', L, 'J_min', J_min, 'Reality', true);
 custom = max(max(abs(f_real-f_real_rec)))
 

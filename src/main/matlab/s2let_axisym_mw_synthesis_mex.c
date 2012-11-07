@@ -13,7 +13,7 @@
  *
  * Usage: 
  *   f = ...
- *        s2let_mw_axisym_synthesis_mex(f_wav, f_scal, B, L, J_min, reality);
+ *        s2let_axisym_mw_synthesis_mex(f_wav, f_scal, B, L, J_min, reality);
  *
  */
 void mexFunction( int nlhs, mxArray *plhs[],
@@ -27,25 +27,25 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Check number of arguments
   if(nrhs!=7) {
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidInput:nrhs",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidInput:nrhs",
           "Require seven inputs.");
   }
   if(nlhs!=1) {
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidOutput:nlhs",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidOutput:nlhs",
           "Require two outputs.");
   }
 
   // Parse reality flag
   iin = 5;
   if( !mxIsLogicalScalar(prhs[iin]) )
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidInput:reality",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidInput:reality",
           "Reality flag must be logical.");
   reality = mxIsLogicalScalarTrue(prhs[iin]);
 
   // Parse multiresolution flag
   iin = 6;
   if( !mxIsLogicalScalar(prhs[iin]) )
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidInput:downsample",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidInput:downsample",
           "Multiresolution flag must be logical.");
   downsample = mxIsLogicalScalarTrue(prhs[iin]);
 
@@ -87,12 +87,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if( !mxIsDouble(prhs[iin]) || 
       mxIsComplex(prhs[iin]) || 
       mxGetNumberOfElements(prhs[iin])!=1 ) {
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidInput:waveletParameter",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be integer.");
   }
   B = (int)mxGetScalar(prhs[iin]);
   if (mxGetScalar(prhs[iin]) > (double)B || B <= 1)
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidInput:waveletParameter",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be positive integer greater than 2");
 
   // Parse harmonic band-limit L
@@ -100,13 +100,13 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if( !mxIsDouble(prhs[iin]) || 
       mxIsComplex(prhs[iin]) || 
       mxGetNumberOfElements(prhs[iin])!=1 ) {
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidInput:LbandLimit",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
   }
   L = (int)mxGetScalar(prhs[iin]);
 
   if (mxGetScalar(prhs[iin]) > (double)L || L <= 0)
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidInput:bandLimitNonInt",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidInput:bandLimitNonInt",
           "Harmonic band-limit L must be positive integer.");
  
   // Parse first scale J_min
@@ -114,19 +114,19 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if( !mxIsDouble(prhs[iin]) || 
       mxIsComplex(prhs[iin]) || 
       mxGetNumberOfElements(prhs[iin])!=1 ) {
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidInput:Jmin",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidInput:Jmin",
           "First scale J_min must be integer.");
   }
   J_min = (int)mxGetScalar(prhs[iin]);
   if (mxGetScalar(prhs[iin]) > (double)J_min || J_min < 0)
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidInput:Jmin",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
 
   // Compute ultimate scale J_max
   int J = s2let_j_max(L, B);
 
   if( J_min > J+1 ) {
-    mexErrMsgIdAndTxt("s2let_mw_axisym_synthesis_mex:InvalidInput:Jmin",
+    mexErrMsgIdAndTxt("s2let_axisym_mw_synthesis_mex:InvalidInput:Jmin",
           "First scale J_min must be larger than that!");
   }
 
@@ -134,20 +134,20 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if(downsample){
     // Multiresolution algorithm
     if(reality){
-      s2let_allocate_mw_real(&f_r, L);
-      s2let_axisym_wav_synthesis_multires_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
+      s2let_mw_allocate_real(&f_r, L);
+      s2let_axisym_mw_wav_synthesis_multires_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
     }else{
-      s2let_allocate_mw(&f, L);
-      s2let_axisym_wav_synthesis_multires(f, f_wav, f_scal, B, L, J_min); 
+      s2let_mw_allocate(&f, L);
+      s2let_axisym_mw_wav_synthesis_multires(f, f_wav, f_scal, B, L, J_min); 
     }
   }else{
     // Full resolution algorithm
     if(reality){
-      s2let_allocate_mw_real(&f_r, L);
-      s2let_axisym_wav_synthesis_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
+      s2let_mw_allocate_real(&f_r, L);
+      s2let_axisym_mw_wav_synthesis_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
     }else{
-      s2let_allocate_mw(&f, L);
-      s2let_axisym_wav_synthesis(f, f_wav, f_scal, B, L, J_min); 
+      s2let_mw_allocate(&f, L);
+      s2let_axisym_mw_wav_synthesis(f, f_wav, f_scal, B, L, J_min); 
     }
   }
   

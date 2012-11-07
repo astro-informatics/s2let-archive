@@ -23,11 +23,11 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Check number of arguments
   if(nrhs!=3) {
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_synthesis_mex:InvalidInput:nrhs",
+    mexErrMsgIdAndTxt("s2let_hpx_alm2map_mex:InvalidInput:nrhs",
           "Require seven inputs.");
   }
   if(nlhs!=1) {
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_synthesis_mex:InvalidOutput:nlhs",
+    mexErrMsgIdAndTxt("s2let_hpx_alm2map_mex:InvalidOutput:nlhs",
           "Require two outputs.");
   }
 
@@ -59,16 +59,16 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if( !mxIsDouble(prhs[iin]) || 
       mxIsComplex(prhs[iin]) || 
       mxGetNumberOfElements(prhs[iin])!=1 ) {
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_synthesis_mex:InvalidInput:LbandLimit",
+    mexErrMsgIdAndTxt("s2let_hpx_alm2map_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
   }
   L = (int)mxGetScalar(prhs[iin]);
   if (mxGetScalar(prhs[iin]) > (double)L || L <= 0)
-    mexErrMsgIdAndTxt("s2let_hpx_axisym_synthesis_mex:InvalidInput:bandLimitNonInt",
+    mexErrMsgIdAndTxt("s2let_hpx_alm2map_mex:InvalidInput:bandLimitNonInt",
           "Harmonic band-limit L must be positive integer.");
 
   // Perform harmonic transform 
-  s2let_allocate_hpx_real(&f_r, nside);
+  s2let_hpx_allocate_real(&f_r, nside);
   s2let_hpx_alm2map_real(f_r, flm, nside, L);
    
   // Output function f
