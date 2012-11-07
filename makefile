@@ -124,12 +124,12 @@ S2LETOBJS= $(S2LETOBJ)/s2let_axisym_harm.o 	\
 	  $(S2LETOBJ)/s2let_tiling.o
 
 S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_axisym_tiling_mex.o	\
-	  $(S2LETOBJMAT)/s2let_axisym_analysis_mex.o		\
-	  $(S2LETOBJMAT)/s2let_axisym_synthesis_mex.o	
+	  $(S2LETOBJMAT)/s2let_mw_axisym_analysis_mex.o		\
+	  $(S2LETOBJMAT)/s2let_mw_axisym_synthesis_mex.o	
 
 S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_axisym_tiling_mex.$(MEXEXT)	\
-	  $(S2LETOBJMEX)/s2let_axisym_analysis_mex.$(MEXEXT)	\
-	  $(S2LETOBJMEX)/s2let_axisym_synthesis_mex.$(MEXEXT)
+	  $(S2LETOBJMEX)/s2let_mw_axisym_analysis_mex.$(MEXEXT)	\
+	  $(S2LETOBJMEX)/s2let_mw_axisym_synthesis_mex.$(MEXEXT)
 
 # ======================================== #
 
