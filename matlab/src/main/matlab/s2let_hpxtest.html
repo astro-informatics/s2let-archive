@@ -40,7 +40,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>	s2let_axisym_synthesis</li><li><a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_hpx_axisym_synthesis.html" class="code" title="function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)">s2let_hpx_axisym_synthesis</a>	s2let_axisym_synthesis</li><li><a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li></ul>
+<li><a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>	s2let_axisym_synthesis</li><li><a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -100,15 +100,15 @@ This function is called by:
 0049  
 0050 
 0051 disp(<span class="string">'Perform axisym wavelet transform with default parameters'</span>)
-0052 [f_wav, f_scal] = <a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>(f);
-0053 f_rec = <a href="s2let_hpx_axisym_synthesis.html" class="code" title="function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)">s2let_hpx_axisym_synthesis</a>(f_wav, f_scal);
+0052 [f_wav, f_scal] = s2let_hpx_axisym_analysis(f);
+0053 f_rec = s2let_hpx_axisym_synthesis(f_wav, f_scal);
 0054 default = max(max(abs(f-f_rec)))
 0055 
 0056 
 0057 disp(<span class="string">'Perform axisym wavelet transform with custom parameters'</span>)
-0058 [f_wav, f_scal] = <a href="s2let_hpx_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, varargin)">s2let_hpx_axisym_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
-0059 f_rec = <a href="s2let_hpx_axisym_synthesis.html" class="code" title="function f = s2let_hpx_axisym_synthesis(f_wav, f_scal, varargin)">s2let_hpx_axisym_synthesis</a>(f_wav, f_scal, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
+0058 [f_wav, f_scal] = s2let_hpx_axisym_analysis(f, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
+0059 f_rec = s2let_hpx_axisym_synthesis(f_wav, f_scal, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
 0060 custom = max(max(abs(f-f_rec)))</pre></div>
-<hr><address>Generated on Wed 07-Nov-2012 11:36:12 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 07-Nov-2012 13:48:42 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

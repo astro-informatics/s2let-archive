@@ -41,7 +41,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li><li><a href="s2let_mw_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_mw_axisym_analysis(f, varargin)">s2let_mw_axisym_analysis</a>	s2let_mw_axisym_analysis</li></ul>
+<li><a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>	s2let_axisym_mw_analysis</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -71,7 +71,7 @@ This function is called by:
 0019 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
 0020 
 0021 <span class="comment">% Perform decomposition</span>
-0022 [f_wav, f_scal] = <a href="s2let_mw_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_mw_axisym_analysis(f, varargin)">s2let_mw_axisym_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true);
+0022 [f_wav, f_scal] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true);
 0023 
 0024 zoomfactor = 1.2;
 0025 ns = ceil(sqrt(2+J-J_min+1)) ;
@@ -106,7 +106,7 @@ This function is called by:
 0054 <span class="keyword">end</span> 
 0055 
 0056 <span class="comment">% Perform decomposition</span>
-0057 [f_wav, f_scal] = <a href="s2let_mw_axisym_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_mw_axisym_analysis(f, varargin)">s2let_mw_axisym_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true, <span class="string">'downsample'</span>, false);
+0057 [f_wav, f_scal] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true, <span class="string">'downsample'</span>, false);
 0058 <span class="comment">% FULL RESOLUTION PLOT</span>
 0059 figure(<span class="string">'Position'</span>,[100 100 1300 1000])
 0060 subplot(nx, ny, 1);
@@ -132,6 +132,6 @@ This function is called by:
 0080 caxis([-temp temp])
 0081    <span class="comment">%title(['Wavelet scale : ',int2str(j)-J_min+1])</span>
 0082 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 07-Nov-2012 11:36:12 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 07-Nov-2012 13:48:42 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
