@@ -43,7 +43,7 @@ int s2let_j_max(int L, int B);
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void s2let_axisym_allocate_tiling(double **kappa, double **kappa0, int B, int L);
+void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, int B, int L);
 
 /*!
  * Generates tiling in harmonic space.
@@ -55,7 +55,7 @@ void s2let_axisym_allocate_tiling(double **kappa, double **kappa0, int B, int L)
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_tiling(double *kappa, double *kappa0, int B, int L, int J_min);
+void s2let_tiling_axisym(double *kappa, double *kappa0, int B, int L, int J_min);
 
 /*!
  * Generates smooth functions to construct the tiling.
@@ -78,6 +78,6 @@ void s2let_tiling_phi2(double *phi2, int B, int L, int J_min);
  * \param[in]  J_min First wavelet scale to be used.
  * \retval Achieved accuracy (should be lower than e-12).
  */
-double s2let_axisym_check_identity(double *kappa, double *kappa0, int B, int L, int J_min);
+double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, int B, int L, int J_min);
 
 #endif

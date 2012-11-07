@@ -2,10 +2,11 @@
 // Copyright (C) 2012 
 // Boris Leistedt & Jason McEwen
 
-#ifndef S2LET_AXISYM_HARM
-#define S2LET_AXISYM_HARM
+#ifndef S2LET_AXISYM_LM
+#define S2LET_AXISYM_LM
 
 #include <complex.h> 
+
 
 /*!
  * Allocates arrays for wavelets and scaling functions in harmonic space.
@@ -17,7 +18,7 @@
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_allocate_f_wav_lm(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min);
+void s2let_axisym_lm_allocate_f_wav(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min);
 
 /*!
  * Allocates multiresolution arrays for wavelets and scaling functions in harmonic space.
@@ -29,7 +30,7 @@ void s2let_axisym_allocate_f_wav_lm(complex double **f_wav_lm, complex double **
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_allocate_f_wav_multires_lm(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min);
+void s2let_axisym_lm_allocate_f_wav_multires(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min);
 
 
 /*!
@@ -41,7 +42,7 @@ void s2let_axisym_allocate_f_wav_multires_lm(complex double **f_wav_lm, complex 
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void s2let_axisym_allocate_wav_lm(double **wav_lm, double **scal_lm, int B, int L);
+void s2let_axisym_lm_allocate_wav(double **wav_lm, double **scal_lm, int B, int L);
 
 /*!
  * Computes the kernels of the wavelets and the scaling functions.
@@ -53,7 +54,7 @@ void s2let_axisym_allocate_wav_lm(double **wav_lm, double **scal_lm, int B, int 
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
- void s2let_axisym_wav_lm(double *wav_lm, double *scal_lm, int B, int L, int J_min);
+ void s2let_axisym_lm_wav(double *wav_lm, double *scal_lm, int B, int L, int J_min);
 
 
 /*!
@@ -70,7 +71,7 @@ void s2let_axisym_allocate_wav_lm(double **wav_lm, double **scal_lm, int B, int 
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_analysis_lm(complex double *f_wav_lm, complex double *f_scal_lm, const complex double *flm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
+void s2let_axisym_lm_wav_analysis(complex double *f_wav_lm, complex double *f_scal_lm, const complex double *flm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
 
 /*!
  * Spherical wavelets : full resolution synthesis in harmonic space.
@@ -86,7 +87,7 @@ void s2let_axisym_wav_analysis_lm(complex double *f_wav_lm, complex double *f_sc
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
- void s2let_axisym_wav_synthesis_lm(complex double *flm, const complex double *f_wav_lm, const complex double *f_scal_lm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
+ void s2let_axisym_lm_wav_synthesis(complex double *flm, const complex double *f_wav_lm, const complex double *f_scal_lm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
 
 /*!
  * Spherical wavelets : multiresolution analysis in harmonic space.
@@ -102,7 +103,7 @@ void s2let_axisym_wav_analysis_lm(complex double *f_wav_lm, complex double *f_sc
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_analysis_multires_lm(complex double *f_wav_lm, complex double *f_scal_lm, const complex double *flm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
+void s2let_axisym_lm_wav_analysis_multires(complex double *f_wav_lm, complex double *f_scal_lm, const complex double *flm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
 
 /*!
  * Spherical wavelets : multiresolution synthesis in harmonic space.
@@ -118,6 +119,6 @@ void s2let_axisym_wav_analysis_multires_lm(complex double *f_wav_lm, complex dou
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
- void s2let_axisym_wav_synthesis_multires_lm(complex double *flm, const complex double *f_wav_lm, const complex double *f_scal_lm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
+ void s2let_axisym_lm_wav_synthesis_multires(complex double *flm, const complex double *f_wav_lm, const complex double *f_scal_lm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
 
 #endif

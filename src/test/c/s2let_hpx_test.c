@@ -26,13 +26,13 @@ void s2let_axisym_hpx_test(int nside, int L, int seed)
 {
   double *f, *f_rec;
   complex double *flm, *flm_rec;
-  s2let_allocate_lm(&flm, L);
-  s2let_allocate_lm(&flm_rec, L);
-  s2let_allocate_hpx_real(&f, nside);
-  s2let_allocate_hpx_real(&f_rec, nside);
+  s2let_lm_allocate(&flm, L);
+  s2let_lm_allocate(&flm_rec, L);
+  s2let_hpx_allocate_real(&f, nside);
+  s2let_hpx_allocate_real(&f_rec, nside);
 
   // Generate random harmonic coefficients
-  s2let_axisym_random_flm_real(flm, L, seed);
+  s2let_lm_random_flm_real(flm, L, seed);
 
   // Reconstruct the corresponding signal on the sphere on a healpix map
   s2let_hpx_alm2map_real(f, flm, nside, L);
@@ -66,13 +66,13 @@ void s2let_axisym_hpx_wav_test(int nside, int B, int L, int J_min, int seed)
 
   double *f, *f_rec;
   complex double *flm, *flm_rec;
-  s2let_allocate_lm(&flm, L);
-  s2let_allocate_lm(&flm_rec, L);
-  s2let_allocate_hpx_real(&f, nside);
-  s2let_allocate_hpx_real(&f_rec, nside);
+  s2let_lm_allocate(&flm, L);
+  s2let_lm_allocate(&flm_rec, L);
+  s2let_hpx_allocate_real(&f, nside);
+  s2let_hpx_allocate_real(&f_rec, nside);
 
   // Generate random harmonic coefficients
-  s2let_axisym_random_flm_real(flm, L, seed);
+  s2let_lm_random_flm_real(flm, L, seed);
 
   // Reconstruct the corresponding signal on the sphere on a healpix map
   s2let_hpx_alm2map_real(f, flm, nside, L);
@@ -120,13 +120,13 @@ void s2let_hpx_io_test(int nside, int L, int seed)
 {
   double *f, *f_rec;
   complex double *flm, *flm_rec;
-  s2let_allocate_lm(&flm, L);
-  s2let_allocate_lm(&flm_rec, L);
-  s2let_allocate_hpx_real(&f, nside);
-  s2let_allocate_hpx_real(&f_rec, nside);
+  s2let_lm_allocate(&flm, L);
+  s2let_lm_allocate(&flm_rec, L);
+  s2let_hpx_allocate_real(&f, nside);
+  s2let_hpx_allocate_real(&f_rec, nside);
 
   // Generate random harmonic coefficients
-  s2let_axisym_random_flm_real(flm, L, seed);
+  s2let_lm_random_flm_real(flm, L, seed);
 
   // Construct the corresponding real signal on a healpix map
   s2let_hpx_alm2map_real(f, flm, nside, L);
@@ -136,10 +136,10 @@ void s2let_hpx_io_test(int nside, int L, int seed)
   // Remove the file if it exists
   remove(file);
   // Write the signal to file
-  s2let_write_hpx_map(file, f, nside);
+  s2let_hpx_write_map(file, f, nside);
 
   // Read the signal from file
-  s2let_read_hpx_map(f_rec, file, nside);
+  s2let_hpx_read_map(f_rec, file, nside);
   // Clean
   remove(file);
 
@@ -170,13 +170,13 @@ void s2let_mw_io_test(int L, int seed)
 
   double *f, *f_rec;
   complex double *flm, *flm_rec;
-  s2let_allocate_lm(&flm, L);
-  s2let_allocate_lm(&flm_rec, L);
-  s2let_allocate_mw_real(&f, L);
-  s2let_allocate_mw_real(&f_rec, L);
+  s2let_lm_allocate(&flm, L);
+  s2let_lm_allocate(&flm_rec, L);
+  s2let_mw_allocate_real(&f, L);
+  s2let_mw_allocate_real(&f_rec, L);
 
   // Generate random harmonic coefficients
-  s2let_axisym_random_flm_real(flm, L, seed);
+  s2let_lm_random_flm_real(flm, L, seed);
 
   // Construct the corresponding real signal, on MW sampling 
   ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
@@ -186,13 +186,13 @@ void s2let_mw_io_test(int L, int seed)
   // Remove the file if it exists
   remove(file);
   // Write the signal to file
-  s2let_write_mw_map(file, f, L);
+  s2let_fits_mw_write_map(file, f, L);
 
   // Read the band-limit from file
-  int Lread = s2let_read_mw_bandlimit(file);
+  int Lread = s2let_fits_mw_read_bandlimit(file);
 
   // Read the signal from file
-  s2let_read_mw_map(f_rec, file, Lread);
+  s2let_fits_mw_read_map(f_rec, file, Lread);
   // Clean
   remove(file);
 

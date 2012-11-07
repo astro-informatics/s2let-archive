@@ -2,8 +2,8 @@
 // Copyright (C) 2012 
 // Boris Leistedt & Jason McEwen
 
-#ifndef S2LET_MWTOOLS
-#define S2LET_MWTOOLS
+#ifndef S2LET_MW
+#define S2LET_MW
 
 /*!
  * Interface to SSHT (required by the Java interface to S2LET)
@@ -49,14 +49,6 @@ void s2let_mw_alm2map_real(double* f, const complex double* flm, int L);
  */
 void s2let_mw_map2alm_real(complex double* flm, const double* f, int L);
 
-/*!
- * Allocate spherical har for a given bandlimit L
- *
- * \param[inout]  flm Spherical harmonic coefficients.
- * \param[in]  L Angular harmonic band-limit.
- * \retval none
- */
-void s2let_allocate_lm(complex double **flm, int L);
 
 /*!
  * Allocate MW map for a given bandlimit L
@@ -65,7 +57,7 @@ void s2let_allocate_lm(complex double **flm, int L);
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void s2let_allocate_mw(complex double **f, int L);
+void s2let_mw_allocate(complex double **f, int L);
 
 /*!
  * Allocate real MW map for a given bandlimit L
@@ -74,21 +66,16 @@ void s2let_allocate_mw(complex double **f, int L);
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void s2let_allocate_mw_real(double **f, int L);
-
-/*!
- * Computes power of a signal from its harmonics
- */
-double s2let_power_lm(complex double *flm, int L);
+void s2let_mw_allocate_real(double **f, int L);
 
 /*!
  * Computes power of a MW signal
  */
-double s2let_power_mw(complex double *flm, int L);
+double s2let_mw_power(complex double *flm, int L);
 
 /*!
  * Computes power of a MW signal
  */
-double s2let_power_mw_real(double *flm, int L);
+double s2let_mw_power_real(double *flm, int L);
 
 #endif

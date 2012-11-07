@@ -28,11 +28,11 @@ int main(int argc, char *argv[])
 
   // The input file is a random CMB simulation (healpix map with nside=128)
   char file[100] = "data/somecmbsimu_hpx_128.fits";
-  const int nside = s2let_read_hpx_nside(file);
+  const int nside = s2let_fits_hpx_read_nside(file);
 
   // Read Healpix map from file
   double *f = (double*)calloc(12*nside*nside, sizeof(double));
-  s2let_read_hpx_map(f, file, nside);
+  s2let_hpx_read_map(f, file, nside);
 
   // Allocate space for wavelet maps (corresponding to the triplet B/L/J_min)
   double *f_wav, *f_scal;
@@ -55,14 +55,14 @@ int main(int argc, char *argv[])
     sprintf(outfile, "%s%s%s%s%d%s", "data/somecmbsimu_hpx_128", "_wav_", params, "_", j, ".fits");
     printf(" Outfile_wav[j=%i] = %s\n",j,outfile);
     remove(outfile); // In case the file exists
-    s2let_write_hpx_map(outfile, f_wav + offset, nside); // Now write the map to fits file
+    s2let_hpx_write_map(outfile, f_wav + offset, nside); // Now write the map to fits file
     offset += 12 * nside * nside; // Go to the next wavelet
   }
   // Finally write the scaling function
   sprintf(outfile, "%s%s%s%s", "data/somecmbsimu_hpx_128", "_scal_", params, ".fits");
   printf(" Outfile_scal = %s\n",outfile);
   remove(outfile); // In case the file exists
-  s2let_write_hpx_map(outfile, f_scal, nside); // Now write the map to fits file
+  s2let_hpx_write_map(outfile, f_scal, nside); // Now write the map to fits file
 
   free(f_wav);
   free(f_scal);

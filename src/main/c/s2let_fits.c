@@ -15,7 +15,7 @@ void printerror(int status)
   return;
 }
 
-int s2let_read_mw_bandlimit(char* filename)
+int s2let_fits_mw_read_bandlimit(char* filename)
 {
   long     naxes, *naxis, Lread;
   int      status, hdutype, nfound;
@@ -52,7 +52,7 @@ int s2let_read_mw_bandlimit(char* filename)
 }
 
 
-int s2let_read_hpx_nside(char* filename)
+int s2let_fits_hpx_read_nside(char* filename)
 {
   long     naxes, *naxis, nsideread;
   int      status, hdutype, nfound;
@@ -89,44 +89,7 @@ int s2let_read_hpx_nside(char* filename)
 }
 
 
-void s2let_check_hpx_ordering(char* filename)
-{
-  long     naxes, *naxis, nsideread;
-  int      status, hdutype, nfound;
-  char     comment[FLEN_COMMENT];
-  char     ordering[FLEN_COMMENT];
-  fitsfile *fptr;
-  status = 0;
-
-
-  if ( fits_open_file(&fptr, filename, READONLY, &status) ) 
-    printerror( status );
-
-  if ( fits_movabs_hdu(fptr, 2, &hdutype, &status) )
-    printerror( status );
-
-  if (hdutype != BINARY_TBL) 
-    fprintf(stderr, "%s (%d): Extension is not binary!\n", __FILE__, __LINE__);
-
-  if ( fits_read_key_lng(fptr, "NAXIS", &naxes, comment, &status) ) 
-    printerror( status );
-
-  naxis = (long *)malloc(((size_t)naxes)*sizeof(long));
-  if ( fits_read_keys_lng(fptr, "NAXIS", 1, naxes, naxis, &nfound, &status) 
-       || nfound != naxes ) 
-    printerror( status );
-
-  if ( fits_read_key_lng(fptr, "NSIDE", &nsideread, comment, &status) ) 
-    printerror(status);
-
-  if ( fits_close_file(fptr, &status) ) 
-    printerror( status );
-
-  return nsideread;
-
-}
-
-void s2let_read_mw_map(double* f, char* filename, int L)
+void s2let_fits_mw_read_map(double* f, char* filename, int L)
 {
   long     naxes, *naxis, npix, npercol, irow, Lread;
   int      status, hdutype, nfound, anynul;
@@ -179,7 +142,7 @@ void s2let_read_mw_map(double* f, char* filename, int L)
 
 }
 
-void s2let_write_mw_map(char* filename, double* f, int L)
+void s2let_fits_mw_write_map(char* filename, double* f, int L)
 {
   fitsfile *fptr;  
   int status, hdutype;

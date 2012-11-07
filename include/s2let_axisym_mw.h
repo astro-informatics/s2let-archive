@@ -17,7 +17,7 @@
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_allocate_f_wav_multires(complex double **f_wav, complex double **f_scal, int B, int L, int J_min);
+void s2let_axisym_mw_allocate_f_wav_multires(complex double **f_wav, complex double **f_scal, int B, int L, int J_min);
 
 /*!
  * Allocates arrays for multiresolution wavelets and scaling functions in pixel space (MW sampling).
@@ -29,7 +29,7 @@ void s2let_axisym_allocate_f_wav_multires(complex double **f_wav, complex double
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_allocate_f_wav_multires_real(double **f_wav, double **f_scal, int B, int L, int J_min);
+void s2let_axisym_mw_allocate_f_wav_multires_real(double **f_wav, double **f_scal, int B, int L, int J_min);
 
 /*!
  * Allocates arrays for final wavelets and scaling functions in pixel space (MW sampling).
@@ -41,7 +41,7 @@ void s2let_axisym_allocate_f_wav_multires_real(double **f_wav, double **f_scal, 
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_allocate_f_wav(complex double **f_wav, complex double **f_scal, int B, int L, int J_min);
+void s2let_axisym_mw_allocate_f_wav(complex double **f_wav, complex double **f_scal, int B, int L, int J_min);
 
 /*!
  * Allocates arrays for final wavelets and scaling functions in pixel space (MW sampling).
@@ -53,7 +53,7 @@ void s2let_axisym_allocate_f_wav(complex double **f_wav, complex double **f_scal
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_allocate_f_wav_real(double **f_wav, double **f_scal, int B, int L, int J_min);
+void s2let_axisym_mw_allocate_f_wav_real(double **f_wav, double **f_scal, int B, int L, int J_min);
 
 /*!
  * Spherical wavelets : full resolution analysis in real space, MW sampling.
@@ -68,7 +68,7 @@ void s2let_axisym_allocate_f_wav_real(double **f_wav, double **f_scal, int B, in
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_analysis(complex double *f_wav, complex double *f_scal, const complex double *f, int B, int L, int J_min);
+void s2let_axisym_mw_wav_analysis(complex double *f_wav, complex double *f_scal, const complex double *f, int B, int L, int J_min);
 
 /*!
  * Perform wavelet transform in real space (from scratch, gives wavelet maps).
@@ -83,7 +83,7 @@ void s2let_axisym_wav_analysis(complex double *f_wav, complex double *f_scal, co
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_synthesis(complex double *f, const complex double *f_wav, const complex double *f_scal, int B, int L, int J_min);
+void s2let_axisym_mw_wav_synthesis(complex double *f, const complex double *f_wav, const complex double *f_scal, int B, int L, int J_min);
 
 /*!
  * Perform wavelet transform in real space (from scratch, gives wavelet maps).
@@ -99,7 +99,7 @@ void s2let_axisym_wav_synthesis(complex double *f, const complex double *f_wav, 
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_analysis_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);
+void s2let_axisym_mw_wav_analysis_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);
 
 /*!
  * Perform wavelet transform in real space (from scratch, gives wavelet maps).
@@ -115,7 +115,7 @@ void s2let_axisym_wav_analysis_real(double *f_wav, double *f_scal, const double 
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_synthesis_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min);
+void s2let_axisym_mw_wav_synthesis_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min);
 
 /*!
  * Spherical wavelets : multiresolution analysis in real space, MW sampling.
@@ -130,7 +130,7 @@ void s2let_axisym_wav_synthesis_real(double *f, const double *f_wav, const doubl
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_analysis_multires(complex double *f_wav, complex double *f_scal, const complex double *f, int B, int L, int J_min);
+void s2let_axisym_mw_wav_analysis_multires(complex double *f_wav, complex double *f_scal, const complex double *f, int B, int L, int J_min);
 
 /*!
  * Spherical wavelets : multiresolution synthesis in real space, MW sampling.
@@ -145,7 +145,7 @@ void s2let_axisym_wav_analysis_multires(complex double *f_wav, complex double *f
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_synthesis_multires(complex double *f, const complex double *f_wav, const complex double *f_scal, int B, int L, int J_min);
+void s2let_axisym_mw_wav_synthesis_multires(complex double *f, const complex double *f_wav, const complex double *f_scal, int B, int L, int J_min);
 
 /*!
  * Spherical wavelets : multiresolution analysis in real space, MW sampling.
@@ -161,7 +161,7 @@ void s2let_axisym_wav_synthesis_multires(complex double *f, const complex double
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_analysis_multires_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);
+void s2let_axisym_mw_wav_analysis_multires_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);
 
 /*!
  * Spherical wavelets : multiresolution synthesis in real space, MW sampling.
@@ -177,7 +177,7 @@ void s2let_axisym_wav_analysis_multires_real(double *f_wav, double *f_scal, cons
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_synthesis_multires_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min);
+void s2let_axisym_mw_wav_synthesis_multires_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min);
 
 /*!
  * Treshold real wavelets in real space, MW sampling, multiresolution.
@@ -189,7 +189,7 @@ void s2let_axisym_wav_synthesis_multires_real(double *f, const double *f_wav, co
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_hardthreshold_multires_real(double *g_wav, const double *treshold, int B, int L, int J_min);
+void s2let_axisym_mw_wav_hardthreshold_multires_real(double *g_wav, const double *treshold, int B, int L, int J_min);
 
 /*!
  * Treshold real wavelets in real space, MW sampling, full resolution.
@@ -201,6 +201,6 @@ void s2let_axisym_wav_hardthreshold_multires_real(double *g_wav, const double *t
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_axisym_wav_hardthreshold_real(double *g_wav, const double *treshold, int B, int L, int J_min);
+void s2let_axisym_mw_wav_hardthreshold_real(double *g_wav, const double *treshold, int B, int L, int J_min);
 
 #endif

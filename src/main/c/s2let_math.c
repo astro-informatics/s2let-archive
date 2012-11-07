@@ -28,7 +28,7 @@ double f_needlet(double t)
 /*!
  * Computes smooth "Schwarts" functions.
  */
-double s2let_kappa0_quadtrap_s2dw(double a, double b, int n, int B)
+double s2let_math_kappa0_quadtrap_s2dw(double a, double b, int n, int B)
 {
   double sum = 0;
   double f1, f2;
@@ -51,7 +51,7 @@ double s2let_kappa0_quadtrap_s2dw(double a, double b, int n, int B)
 /*!
  * Computes smooth "Schwarts" functions.
  */
-double s2let_kappa0_quadtrap_needlet(double a, double b, int n)
+double s2let_math_kappa0_quadtrap_needlet(double a, double b, int n)
 {
   double sum = 0;
   double f1, f2;
@@ -107,49 +107,6 @@ double ran2_dp(int idum) {
   iv[j-1]=idum;
   if(iy < 1)iy=iy+IMM1;
   return (AM*iy < RNMX ? AM*iy : RNMX); // min(AM*iy,RNMX);
-}
-
-
-/*!
- * Generate random harmonic coefficients for a complex map.
- *
- * \param[out]  flm Harmonic coefficients.
- * \param[in]  L Band-limit.
- * \param[in]  seed Random seed.
- * \retval none
- */
-void s2let_axisym_random_flm(complex double *flm, int L, int seed)
-{
-  int i;
-  srand( time(NULL) );
-  for (i=0; i<L*L; i++){
-    flm[i] = (2.0*ran2_dp(seed) - 1.0) + I * (2.0*ran2_dp(seed) - 1.0);
-  }
-}
-
-/*!
- * Generate random harmonic coefficients corresponding to a real map.
- *
- * \param[out]  flm Harmonic coefficients.
- * \param[in]  L Band-limit.
- * \param[in]  seed Random seed.
- * \retval none
- */
-void s2let_axisym_random_flm_real(complex double *flm, int L, int seed) {
-  int el, m, msign, i, i_op;
-  for (el=0; el<L; el++) {
-    m = 0;
-    i = el*el + el + m ;
-    flm[i] = (2.0*ran2_dp(seed) - 1.0);
-    for (m=1; m<=el; m++) {
-      i = el*el + el + m ;
-      flm[i] = (2.0*ran2_dp(seed) - 1.0) + I * (2.0*ran2_dp(seed) - 1.0);
-      i_op = el*el + el - m ;
-      msign = m & 1;
-      msign = 1 - msign - msign; // (-1)^m
-      flm[i_op] = msign * conj(flm[i]);
-    }
-  }
 }
 
 /*!

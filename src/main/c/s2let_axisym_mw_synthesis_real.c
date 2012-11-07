@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
   for(j = J; j >= J_min; j--){
     sprintf(file, "%s%s%s%s%d%s", fileroot, "_wav_", params, "_", j, ".fits");
     printf("- Infile_wav[j=%i] = %s\n",j,file);
-    bl = s2let_read_mw_bandlimit(file);
+    bl = s2let_fits_mw_read_bandlimit(file);
     printf("  Detected bandlimit bl = %i\n",bl);
     if( bl != MIN(s2let_bandlimit(B, j), L) )
       multires_ok = 0;
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
   // Read the scaling function
   sprintf(file, "%s%s%s%s", fileroot, "_scal_", params, ".fits");
   printf("- Infile_scal = %s\n",file);
-  bl = s2let_read_mw_bandlimit(file);
+  bl = s2let_fits_mw_read_bandlimit(file);
   printf("  Detected bandlimit bl = %i\n",bl);
   if( bl != MIN(s2let_bandlimit(B, J_min-1), L) )
     multires_ok = 0;
@@ -94,9 +94,9 @@ int main(int argc, char *argv[])
   // Allocating memory for the wavelets
   double *f_wav, *f_scal;
   if(multires){
-    s2let_axisym_allocate_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min);
+    s2let_axisym_mw_allocate_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min);
   }else{
-    s2let_axisym_allocate_f_wav_real(&f_wav, &f_scal, B, L, J_min);
+    s2let_axisym_mw_allocate_f_wav_real(&f_wav, &f_scal, B, L, J_min);
   }
 
   // Read the wavelets
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
       bl = MIN(s2let_bandlimit(B, j), L);
     else
       bl = L;
-    s2let_read_mw_map(f_wav + offset, file, bl); // Now write the map to fits file
+    s2let_fits_mw_read_map(f_wav + offset, file, bl); // Now write the map to fits file
     offset += (2*bl-1) * bl; // Go to the next wavelet
   }
   // Read the scaling function
@@ -116,15 +116,15 @@ int main(int argc, char *argv[])
     bl = MIN(s2let_bandlimit(B, J_min-1), L);
   else
     bl = L;
-  s2let_read_mw_map(f_scal, file, bl);
+  s2let_fits_mw_read_map(f_scal, file, bl);
 
 
   printf("Performing wavelet decomposition...");fflush(NULL);
   double *f = (double*)calloc(L * (2 * L - 1), sizeof(double));
   if(multires){
-    s2let_axisym_wav_synthesis_multires_real(f, f_wav, f_scal, B, L, J_min);
+    s2let_axisym_mw_wav_synthesis_multires_real(f, f_wav, f_scal, B, L, J_min);
   }else{
-    s2let_axisym_wav_synthesis_real(f, f_wav, f_scal, B, L, J_min);
+    s2let_axisym_mw_wav_synthesis_real(f, f_wav, f_scal, B, L, J_min);
   }
   printf("done\n");
 
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
   sprintf(outfile, "%s%s%s%s", fileroot, "_recon_", params, ".fits");
   printf("- Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
-  s2let_write_mw_map(outfile, f, L); // Now write the map to fits file
+  s2let_fits_mw_write_map(outfile, f, L); // Now write the map to fits file
 
   printf("--------------------------------------------------\n");	
 

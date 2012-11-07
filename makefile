@@ -116,26 +116,27 @@ LDFLAGSMEX = -L$(S2LETLIB) -l$(S2LETLIBN) -L$(FFTWLIB) -l$(FFTWLIBNM) -L$(SSHTLI
 
 FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(S2LETINC)
 
-S2LETOBJS= $(S2LETOBJ)/s2let_axisym_harm.o 	\
+S2LETOBJS= $(S2LETOBJ)/s2let_axisym_lm.o 	\
 	  $(S2LETOBJ)/s2let_axisym_mw.o 	\
 	  $(S2LETOBJ)/s2let_idl_mw.o 	\
+	  $(S2LETOBJ)/s2let_lm.o	\
 	  $(S2LETOBJ)/s2let_math.o 	\
-	  $(S2LETOBJ)/s2let_mwtools.o	\
+	  $(S2LETOBJ)/s2let_mw.o	\
 	  $(S2LETOBJ)/s2let_tiling.o
 
 S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_axisym_tiling_mex.o	\
-	  $(S2LETOBJMAT)/s2let_mw_axisym_analysis_mex.o		\
-	  $(S2LETOBJMAT)/s2let_mw_axisym_synthesis_mex.o	
+	  $(S2LETOBJMAT)/s2let_axisym_mw_analysis_mex.o		\
+	  $(S2LETOBJMAT)/s2let_axisym_mw_synthesis_mex.o	
 
 S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_axisym_tiling_mex.$(MEXEXT)	\
-	  $(S2LETOBJMEX)/s2let_mw_axisym_analysis_mex.$(MEXEXT)	\
-	  $(S2LETOBJMEX)/s2let_mw_axisym_synthesis_mex.$(MEXEXT)
+	  $(S2LETOBJMEX)/s2let_axisym_mw_analysis_mex.$(MEXEXT)	\
+	  $(S2LETOBJMEX)/s2let_axisym_mw_synthesis_mex.$(MEXEXT)
 
 # ======================================== #
 
 ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 
-	S2LETOBJS+= $(S2LETOBJ)/s2let_hpxtools.o
+	S2LETOBJS+= $(S2LETOBJ)/s2let_hpx.o
 	S2LETOBJS+= $(S2LETOBJ)/s2let_axisym_hpx.o
 	S2LETOBJS+= $(S2LETOBJ)/s2let_idl_hpx.o
 	S2LETOBJS+= $(S2LETOBJF90)/s2let_hpx.o
@@ -155,10 +156,10 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 	LDFLAGSMEX+= -L$(HEALPIXLIB)
 	LDFLAGSMEX+= -l$(HEALPIXLIBN)
 
-	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_axisym_analysis_mex.$(MEXEXT)
-	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_axisym_synthesis_mex.$(MEXEXT)
-	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_hpx_axisym_analysis_mex.o
-	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_hpx_axisym_synthesis_mex.o
+	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_axisym_hpx_analysis_mex.$(MEXEXT)
+	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_axisym_hpx_synthesis_mex.$(MEXEXT)
+	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_axisym_hpx_analysis_mex.o
+	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_axisym_hpx_synthesis_mex.o
 
 	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_map2alm_mex.$(MEXEXT)
 	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_alm2map_mex.$(MEXEXT)
@@ -171,7 +172,7 @@ endif
 
 ifneq (,$(wildcard $(CFITSIOLIB)/libcfitsio.a))
 
-	S2LETOBJS+= $(S2LETOBJ)/s2let_fitstools.o
+	S2LETOBJS+= $(S2LETOBJ)/s2let_fits.o
 
 	FFLAGS+= -I$(CFITSIOINC)
 

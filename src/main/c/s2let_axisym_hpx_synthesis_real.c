@@ -55,18 +55,18 @@ int main(int argc, char *argv[])
   // Init read procedure, read nside
   sprintf(file, "%s%s%s%s", fileroot, "_scal_", params, ".fits");
   printf("- Infile_scal = %s\n",file);
-  const int nside = s2let_read_hpx_nside(file);
+  const int nside = s2let_fits_hpx_read_nside(file);
   printf("- Detected bandlimit nside = %i\n",nside);
   // Allocate memory for wavelets
   double *f_wav, *f_scal;
   s2let_axisym_hpx_allocate_f_wav_real(&f_wav, &f_scal, nside, B, L, J_min);
   // Read the scaling function
-  s2let_read_hpx_map(f_scal, file, nside); // Now write the map to fits file
+  s2let_hpx_read_map(f_scal, file, nside); // Now write the map to fits file
   // Read the wavelets
   for(j = J_min; j <= J; j++){
     sprintf(file, "%s%s%s%s%d%s", fileroot, "_wav_", params, "_", j, ".fits");
     printf("- Infile_wav[j=%i] = %s\n",j,file);
-    s2let_read_hpx_map(f_wav + offset, file, nside); // Now write the map to fits file
+    s2let_hpx_read_map(f_wav + offset, file, nside); // Now write the map to fits file
     offset += 12*nside*nside; // Go to the next wavelet
   }
 
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
   sprintf(outfile, "%s%s%s%s", fileroot, "_recon_", params, ".fits");
   printf("- Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
-  s2let_write_hpx_map(outfile, f, nside); // Now write the map to fits file
+  s2let_hpx_write_map(outfile, f, nside); // Now write the map to fits file
 
   printf("--------------------------------------------------\n");	
 

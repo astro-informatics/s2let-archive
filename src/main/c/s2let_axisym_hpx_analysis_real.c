@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
   if (sscanf(argv[1], "%s", file) != 1)
     exit(-2);
   printf("Input HEALPIX map : %s\n",file);
-  const int nside = s2let_read_hpx_nside(file);
+  const int nside = s2let_fits_hpx_read_nside(file);
   printf("- Detected bandlimit nside = %i\n",nside);
   int L, B, J_min;
   if (sscanf(argv[2], "%i", &B) != 1)
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
   // Read MW map from file
   double *f = (double*)calloc(12*nside*nside, sizeof(double));
-  s2let_read_hpx_map(f, file, nside);
+  s2let_hpx_read_map(f, file, nside);
   printf("File successfully read from file\n");
 
   printf("Performing wavelet decomposition...");fflush(NULL);
@@ -74,14 +74,14 @@ int main(int argc, char *argv[])
     sprintf(outfile, "%s%s%s%s%d%s", fileroot, "_wav_", params, "_", j, ".fits");
     printf("- Outfile_wav[j=%i] = %s\n",j,outfile);
     remove(outfile); // In case the file exists
-    s2let_write_hpx_map(outfile, f_wav + offset, nside); // Now write the map to fits file
+    s2let_hpx_write_map(outfile, f_wav + offset, nside); // Now write the map to fits file
     offset += 12*nside*nside; // Go to the next wavelet
   }
   // Finally write the scaling function
   sprintf(outfile, "%s%s%s%s", fileroot, "_scal_", params, ".fits");
   printf("- Outfile_scal = %s\n",outfile);
   remove(outfile); // In case the file exists
-  s2let_write_hpx_map(outfile, f_scal, nside); // Now write the map to fits file
+  s2let_hpx_write_map(outfile, f_scal, nside); // Now write the map to fits file
 
   printf("--------------------------------------------------\n");	
 

@@ -22,18 +22,17 @@ void s2let_hpx_map2alm_real(complex double* flm, const double* f, int nside, int
   healpix_forward_real_(flm, f, &nside, &L);
 }
 
-void s2let_read_hpx_map(double* f, char* file, int nside)
+void s2let_hpx_read_map(double* f, char* file, int nside)
 {
-  s2let_check_hpx_ordering(file);
   read_healpix_map_(f, file, &nside);
 }
 
-void s2let_write_hpx_map(char* file, const double* f, int nside)
+void s2let_hpx_write_map(char* file, const double* f, int nside)
 {
   write_healpix_map_(file, f, &nside);
 }
 
-void s2let_allocate_hpx_real(double **f, int nside)
+void s2let_hpx_allocate_real(double **f, int nside)
 {
   *f = (double*)calloc(12*nside*nside, sizeof(double));
 }

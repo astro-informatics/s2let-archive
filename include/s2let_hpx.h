@@ -2,8 +2,8 @@
 // Copyright (C) 2012 
 // Boris Leistedt & Jason McEwen
 
-#ifndef S2LET_HPXTOOLS
-#define S2LET_HPXTOOLS
+#ifndef S2LET_HPX
+#define S2LET_HPX
 
 #include <complex.h>
 
@@ -42,7 +42,7 @@ void s2let_hpx_map2alm_real(complex double* flm, const double* f, int nside, int
  * \param[in]  nside Healpix resolution of the output map.
  * \retval none
  */
-void s2let_read_hpx_map(double* f, char* file, int nside);
+void s2let_hpx_read_map(double* f, char* file, int nside);
 
 
 /*!
@@ -54,7 +54,7 @@ void s2let_read_hpx_map(double* f, char* file, int nside);
  * \param[in]  nside Healpix resolution of the output map.
  * \retval none
  */
-void s2let_write_hpx_map(char* file, const double* f, int nside);
+void s2let_hpx_write_map(char* file, const double* f, int nside);
 
 
 /*!
@@ -64,6 +64,6 @@ void s2let_write_hpx_map(char* file, const double* f, int nside);
  * \param[in]  nside Healpix resolution.
  * \retval none
  */
-void s2let_allocate_hpx_real(double **f, int nside);
+void s2let_hpx_allocate_real(double **f, int nside);
 
 #endif
