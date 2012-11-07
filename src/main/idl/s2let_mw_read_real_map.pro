@@ -1,4 +1,4 @@
-function s2let_read_mw_real_map, file
+function s2let_mw_read_real_map, file
 ;+
 ; S2LET package - Copyright (C) 2012 
 ; Boris Leistedt & Jason McEwen
@@ -10,7 +10,7 @@ function s2let_read_mw_real_map, file
 ;   Read a real MW map from a FITS file
 ;
 ; CALLING SEQUENCE:
-;   f = s2let_read_mw_real_map(file)
+;   f = s2let_mw_read_real_map(file)
 ;
 ; INPUTS
 ;   file - filename for the FITS

@@ -55,10 +55,10 @@ if s2let_dylib_exists() eq 1 then begin
 
    !P.MULTI=[0,nx,ny]
 
-   s2let_plot_mollweide, f_rec, title='Band-limited map'
-   s2let_plot_mollweide, f_wav.scal, title='Scaling map'
+   s2let_mw_plot_mollweide, f_rec, title='Band-limited map'
+   s2let_mw_plot_mollweide, f_wav.scal, title='Scaling map'
    for j=0, J_max-J_min do begin
-      s2let_plot_mollweide, f_wav.(j), title='Wavelet map '+strtrim(j+1,2)+' on '+strtrim(J_max-J_min+1,2)
+      s2let_mw_plot_mollweide, f_wav.(j), title='Wavelet map '+strtrim(j+1,2)+' on '+strtrim(J_max-J_min+1,2)
    endfor
 
    !P.MULTI=0

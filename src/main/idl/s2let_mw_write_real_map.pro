@@ -1,16 +1,16 @@
-pro s2let_write_mw_real_map, mapvec, file
+pro s2let_mw_write_real_map, mapvec, file
 ;+
 ; S2LET package - Copyright (C) 2012 
 ; Boris Leistedt & Jason McEwen
 ;
 ; NAME:
-;   s2let_write_mw_real_map
+;   s2let_mw_write_real_map
 ;
 ; PURPOSE:
 ;   Write a real MW map to a FITS file
 ;
 ; CALLING SEQUENCE:
-;   s2let_write_mw_real_map, map, file
+;   s2let_mw_write_real_map, map, file
 ;
 ; INPUTS:
 ;   map - input MW map (npix=L*(2*L-1), L is detected)

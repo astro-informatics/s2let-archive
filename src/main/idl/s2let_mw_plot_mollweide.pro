@@ -1,16 +1,16 @@
-pro s2let_plot_mollweide, maporfile, nlevels=nlevels, title=title, charsize=charsize
+pro s2let_mw_plot_mollweide, maporfile, nlevels=nlevels, title=title, charsize=charsize
 ;+
 ; S2LET package - Copyright (C) 2012 
 ; Boris Leistedt & Jason McEwen
 ;
 ; NAME:
-;   s2let_plot_mollweide
+;   s2let_mw_plot_mollweide
 ;
 ; PURPOSE:
 ;   Plot a real MW map (from data of FITS file) under Mollweide projection
 ;
 ; CALLING SEQUENCE:
-;   s2let_plot_mollweide, mapfile, title='My map'
+;   s2let_mw_plot_mollweide, mapfile, title='My map'
 ;
 ; INPUTS
 ;   maporfile - filename for the FITS or map read with s2let_read_mw_real_map

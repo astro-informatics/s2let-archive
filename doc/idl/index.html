@@ -14,7 +14,7 @@ this routine, refer to the IDL Online Help Navigator
 or type: <P>
 <PRE>     ? mk_html_help</PRE><P>
 at the IDL command line prompt.<P>
-<STRONG>Last modified: </STRONG>Tue Sep 11 00:07:28 2012.<P>
+<STRONG>Last modified: </STRONG>Wed Nov  7 16:51:51 2012.<P>
  
 <HR>
  
@@ -54,11 +54,11 @@ S2LET_AXISYM_MW_WAV_SYNTHESIS_REAL</A>
 <LI><A HREF="#S2LET_MW_MAP2ALM_REAL[2]">S2LET_MW_MAP2ALM_REAL[2]</A>
 <LI><A HREF="#S2LET_MW_MAP2ALM_REAL[3]">S2LET_MW_MAP2ALM_REAL[3]</A>
 <LI><A HREF="#S2LET_MW_PIXEL_EDGES">S2LET_MW_PIXEL_EDGES</A>
+<LI><A HREF="#S2LET_MW_PLOT_MOLLWEIDE">S2LET_MW_PLOT_MOLLWEIDE</A>
 <LI><A HREF="#S2LET_MW_SAMPLING">S2LET_MW_SAMPLING</A>
-<LI><A HREF="#S2LET_PLOT_MOLLWEIDE">S2LET_PLOT_MOLLWEIDE</A>
+<LI><A HREF="#S2LET_MW_WRITE_REAL_MAP">S2LET_MW_WRITE_REAL_MAP</A>
 <LI><A HREF="#S2LET_READ_MW_REAL_MAP">S2LET_READ_MW_REAL_MAP</A>
 <LI><A HREF="#S2LET_VALID_WAV_PARAMETERS">S2LET_VALID_WAV_PARAMETERS</A>
-<LI><A HREF="#S2LET_WRITE_MW_REAL_MAP">S2LET_WRITE_MW_REAL_MAP</A>
 </UL><P>
  
 <HR>
@@ -1018,7 +1018,7 @@ S2LET_AXISYM_MW_WAV_SYNTHESIS_REAL</A>
 <A NAME="S2LET_MW_PIXEL_EDGES">
 <H2>S2LET_MW_PIXEL_EDGES</H2></A>
 <A HREF="#S2LET_MW_MAP2ALM_REAL[3]">[Previous Routine]</A>
-<A HREF="#S2LET_MW_SAMPLING">[Next Routine]</A>
+<A HREF="#S2LET_MW_PLOT_MOLLWEIDE">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  S2LET package - Copyright (C) 2012 
@@ -1046,10 +1046,35 @@ S2LET_AXISYM_MW_WAV_SYNTHESIS_REAL</A>
 <STRONG>(See /Users/bl/Dropbox/Wavelets/s2let/src/main/idl/s2let_mw_pixel_edges.pro)</STRONG><P>
 <HR>
  
+<A NAME="S2LET_MW_PLOT_MOLLWEIDE">
+<H2>S2LET_MW_PLOT_MOLLWEIDE</H2></A>
+<A HREF="#S2LET_MW_PIXEL_EDGES">[Previous Routine]</A>
+<A HREF="#S2LET_MW_SAMPLING">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ S2LET package - Copyright (C) 2012 
+ Boris Leistedt & Jason McEwen
+
+ NAME:
+   s2let_mw_plot_mollweide
+
+ PURPOSE:
+   Plot a real MW map (from data of FITS file) under Mollweide projection
+
+ CALLING SEQUENCE:
+   s2let_mw_plot_mollweide, mapfile, title='My map'
+
+ INPUTS
+   maporfile - filename for the FITS or map read with s2let_read_mw_real_map
+
+</PRE><P>
+<STRONG>(See /Users/bl/Dropbox/Wavelets/s2let/src/main/idl/s2let_mw_plot_mollweide.pro)</STRONG><P>
+<HR>
+ 
 <A NAME="S2LET_MW_SAMPLING">
 <H2>S2LET_MW_SAMPLING</H2></A>
-<A HREF="#S2LET_MW_PIXEL_EDGES">[Previous Routine]</A>
-<A HREF="#S2LET_PLOT_MOLLWEIDE">[Next Routine]</A>
+<A HREF="#S2LET_MW_PLOT_MOLLWEIDE">[Previous Routine]</A>
+<A HREF="#S2LET_MW_WRITE_REAL_MAP">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  S2LET package - Copyright (C) 2012 
@@ -1076,8 +1101,8 @@ S2LET_AXISYM_MW_WAV_SYNTHESIS_REAL</A>
 <STRONG>(See /Users/bl/Dropbox/Wavelets/s2let/src/main/idl/s2let_mw_sampling.pro)</STRONG><P>
 <HR>
  
-<A NAME="S2LET_PLOT_MOLLWEIDE">
-<H2>S2LET_PLOT_MOLLWEIDE</H2></A>
+<A NAME="S2LET_MW_WRITE_REAL_MAP">
+<H2>S2LET_MW_WRITE_REAL_MAP</H2></A>
 <A HREF="#S2LET_MW_SAMPLING">[Previous Routine]</A>
 <A HREF="#S2LET_READ_MW_REAL_MAP">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
@@ -1086,24 +1111,25 @@ S2LET_AXISYM_MW_WAV_SYNTHESIS_REAL</A>
  Boris Leistedt & Jason McEwen
 
  NAME:
-   s2let_plot_mollweide
+   s2let_mw_write_real_map
 
  PURPOSE:
-   Plot a real MW map (from data of FITS file) under Mollweide projection
+   Write a real MW map to a FITS file
 
  CALLING SEQUENCE:
-   s2let_plot_mollweide, mapfile, title='My map'
+   s2let_mw_write_real_map, map, file
 
- INPUTS
-   maporfile - filename for the FITS or map read with s2let_read_mw_real_map
+ INPUTS:
+   map - input MW map (npix=L*(2*L-1), L is detected)
+   file - filename for the FITS
 
 </PRE><P>
-<STRONG>(See /Users/bl/Dropbox/Wavelets/s2let/src/main/idl/s2let_plot_mollweide.pro)</STRONG><P>
+<STRONG>(See /Users/bl/Dropbox/Wavelets/s2let/src/main/idl/s2let_mw_write_real_map.pro)</STRONG><P>
 <HR>
  
 <A NAME="S2LET_READ_MW_REAL_MAP">
 <H2>S2LET_READ_MW_REAL_MAP</H2></A>
-<A HREF="#S2LET_PLOT_MOLLWEIDE">[Previous Routine]</A>
+<A HREF="#S2LET_MW_WRITE_REAL_MAP">[Previous Routine]</A>
 <A HREF="#S2LET_VALID_WAV_PARAMETERS">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -1117,7 +1143,7 @@ S2LET_AXISYM_MW_WAV_SYNTHESIS_REAL</A>
    Read a real MW map from a FITS file
 
  CALLING SEQUENCE:
-   f = s2let_read_mw_real_map(file)
+   f = s2let_mw_read_real_map(file)
 
  INPUTS
    file - filename for the FITS
@@ -1126,13 +1152,12 @@ S2LET_AXISYM_MW_WAV_SYNTHESIS_REAL</A>
    map - MW map (npix=L*(2*L-1), L is detected)
 
 </PRE><P>
-<STRONG>(See /Users/bl/Dropbox/Wavelets/s2let/src/main/idl/s2let_read_mw_real_map.pro)</STRONG><P>
+<STRONG>(See /Users/bl/Dropbox/Wavelets/s2let/src/main/idl/s2let_mw_read_real_map.pro)</STRONG><P>
 <HR>
  
 <A NAME="S2LET_VALID_WAV_PARAMETERS">
 <H2>S2LET_VALID_WAV_PARAMETERS</H2></A>
 <A HREF="#S2LET_READ_MW_REAL_MAP">[Previous Routine]</A>
-<A HREF="#S2LET_WRITE_MW_REAL_MAP">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  S2LET package - Copyright (C) 2012 
@@ -1154,31 +1179,6 @@ S2LET_AXISYM_MW_WAV_SYNTHESIS_REAL</A>
 
 </PRE><P>
 <STRONG>(See /Users/bl/Dropbox/Wavelets/s2let/src/main/idl/s2let_valid_wav_parameters.pro)</STRONG><P>
-<HR>
- 
-<A NAME="S2LET_WRITE_MW_REAL_MAP">
-<H2>S2LET_WRITE_MW_REAL_MAP</H2></A>
-<A HREF="#S2LET_VALID_WAV_PARAMETERS">[Previous Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
- S2LET package - Copyright (C) 2012 
- Boris Leistedt & Jason McEwen
-
- NAME:
-   s2let_write_mw_real_map
-
- PURPOSE:
-   Write a real MW map to a FITS file
-
- CALLING SEQUENCE:
-   s2let_write_mw_real_map, map, file
-
- INPUTS:
-   map - input MW map (npix=L*(2*L-1), L is detected)
-   file - filename for the FITS
-
-</PRE><P>
-<STRONG>(See /Users/bl/Dropbox/Wavelets/s2let/src/main/idl/s2let_write_mw_real_map.pro)</STRONG><P>
 <HR>
  
 </body>

@@ -29,7 +29,7 @@ if s2let_dylib_exists() eq 1 then begin
    loc = GETENV('S2LET')
    file = loc + '/data/earth_tomo_mw_128.fits'
 
-   f = s2let_read_mw_real_map(file)
+   f = s2let_mw_read_real_map(file)
 
    if multires eq 0 then f_wav = s2let_axisym_mw_wav_analysis_real(f, B, J_min) else f_wav = s2let_axisym_mw_wav_analysis_multires_real(f, B, J_min)
 
@@ -52,10 +52,10 @@ if s2let_dylib_exists() eq 1 then begin
 
    !P.MULTI=[0,nx,ny]
 
-   s2let_plot_mollweide, f_rec, title='Band-limited map', charsize=charsize
-   s2let_plot_mollweide, f_wav.scal, title='Scaling map', charsize=charsize
+   s2let_mw_plot_mollweide, f_rec, title='Band-limited map', charsize=charsize
+   s2let_mw_plot_mollweide, f_wav.scal, title='Scaling map', charsize=charsize
    for j=0, J_max-J_min do begin
-      s2let_plot_mollweide, f_wav.(j), title='Wavelet map '+strtrim(j+1,2)+' on '+strtrim(J_max-J_min+1,2), charsize=charsize
+      s2let_mw_plot_mollweide, f_wav.(j), title='Wavelet map '+strtrim(j+1,2)+' on '+strtrim(J_max-J_min+1,2), charsize=charsize
    endfor
 
    !P.MULTI=0

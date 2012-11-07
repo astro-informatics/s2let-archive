@@ -70,7 +70,7 @@ if s2let_dylib_exists() eq 1 then begin
    bl = min([s2let_get_wav_bandlimit(B, J_min-1), L])
    f_scal = dcomplex(dblarr(bl*(2*bl-1)))
 
-   r = call_external(soname, 's2let_idl_axisym_wav_analysis_multires_real', f_wav_vec, f_scal, dcomplex(f), B, L, J_min, /CDECL)
+   r = call_external(soname, 's2let_idl_axisym_mw_wav_analysis_multires_real', f_wav_vec, f_scal, dcomplex(f), B, L, J_min, /CDECL)
    
    f_wav = { scal: f_scal, B: B, L: L, J_min: J_min, J_max: J_max, multires: 1, maptype: 'mw' }
    offset = f_wav_totalsize
