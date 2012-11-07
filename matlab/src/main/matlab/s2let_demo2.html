@@ -55,15 +55,15 @@ This function is called by:
 0006 <span class="comment">% See LICENSE.txt for license details</span>
 0007 
 0008 B = 3;
-0009 zoomfactor = 1.2;
+0009 zoomfactor = 1.4;
 0010 J_min = 2;
-0011 L = 128;
+0011 L = 256;
 0012 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
 0013 type = <span class="string">'colour'</span>;
 0014 lighting = true;
 0015 
 0016 ns = ceil(sqrt(2+J-J_min+1)) ;
-0017 nx = ns - 1 + rem(2+J-J_min + 1, ns) ;
+0017 nx = ns - 1 + rem(2+J-J_min + 1, ns) - 1 ;
 0018 ny = ns;
 0019 
 0020 [kappa kappa0] = <a href="s2let_axisym_tiling.html" class="code" title="function [kappa kappa0] = s2let_axisym_tiling(B, L, J_min)">s2let_axisym_tiling</a>(B, L, J_min);
@@ -80,29 +80,36 @@ This function is called by:
 0031 f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
 0032 ssht_plot_sphere(f, L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
 0033 zoom(zoomfactor)
-0034 title(<span class="string">'Scaling fct'</span>)
-0035 locate = get(h,<span class="string">'title'</span>);
-0036 pos = get(locate,<span class="string">'position'</span>); 
-0037 pos(1,2) = pos(1,2)+0.7;
-0038 pos(1,1) = pos(1,1)-0.7;
-0039 set(locate,<span class="string">'pos'</span>,pos);
-0040    
-0041 <span class="keyword">for</span> j = J_min:J
-0042    h=subplot(nx, ny, j-J_min+2);
-0043    flm = zeros(L^2,1);
-0044     <span class="keyword">for</span> l = 0:L-1
-0045         flm(l^2+l+1,1) = kappa(j+1,l+1);
-0046     <span class="keyword">end</span>  
-0047    f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
-0048    ssht_plot_sphere(f, L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
-0049    title([<span class="string">'Wavelet scale : '</span>,int2str(j)-J_min+1])
-0050    locate = get(h,<span class="string">'title'</span>);
-0051    pos = get(locate,<span class="string">'position'</span>); 
-0052    pos(1,2) = pos(1,2)+0.7;
-0053    pos(1,1) = pos(1,1)-0.7;
-0054    set(locate,<span class="string">'pos'</span>,pos);
-0055    zoom(zoomfactor)
-0056 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Mon 24-Sep-2012 11:30:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0034 v = caxis;
+0035 temp = max(abs(v));
+0036 caxis([-temp temp])
+0037 <span class="comment">%title('k0')</span>
+0038 locate = get(h,<span class="string">'title'</span>);
+0039 pos = get(locate,<span class="string">'position'</span>); 
+0040 pos(1,2) = pos(1,2)+0.7;
+0041 pos(1,1) = pos(1,1)-0.7;
+0042 set(locate,<span class="string">'pos'</span>,pos);
+0043    
+0044 <span class="keyword">for</span> j = J_min:5
+0045    h=subplot(nx, ny, j-J_min+2);
+0046    flm = zeros(L^2,1);
+0047     <span class="keyword">for</span> l = 0:L-1
+0048         flm(l^2+l+1,1) = kappa(j+1,l+1);
+0049     <span class="keyword">end</span>  
+0050    f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
+0051    ssht_plot_sphere(f, L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
+0052    v = caxis;
+0053    temp = max(abs(v));
+0054    caxis([-temp temp])
+0055    colormap(jet)
+0056    <span class="comment">%title(['j',int2str(j)-J_min+1])</span>
+0057    locate = get(h,<span class="string">'title'</span>);
+0058    pos = get(locate,<span class="string">'position'</span>); 
+0059    pos(1,2) = pos(1,2)+0.7;
+0060    pos(1,1) = pos(1,1)-0.7;
+0061    set(locate,<span class="string">'pos'</span>,pos);
+0062    zoom(zoomfactor)
+0063 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2012 11:36:12 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
