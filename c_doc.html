@@ -101,29 +101,29 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 
   <h4>Compiling</h4>
 
-  <p> Makefiles are provided to build the code. However the locations of <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a href="http://www.fftw.org/">FFTW</a> and optionally <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> must be defined in Bash/Shell to be found by the Makefile. Alternatively you may declare them explicitely in the first section of the makefile. The compilers and their options may also be changed in the Makefile. 
+  <p> Makefiles are provided to build the code. However the locations of <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a href="http://www.fftw.org/">FFTW</a> and optionally <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> must be defined in Bash/Shell to be found by the Makefile. Alternatively you may declare them explicitely in the first section of the Makefile. The compilers and their options may also be changed there. 
 
   <p> Once you have set the Makefile up for your system,
   <strong>S2LET</strong> may be compiled by running:
 
   <pre> >> make all</pre> 
 
-  <p> This will build the C library, Matlab interfaces, test/demo programs and documentation. The FITS features will be added to the library if <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> is found (namely libcfitsio.a in $CFITSIO/lib). The <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> support will be build if <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> is found (libhealpix.a in $HEALPIX/lib and the F90 modules in $HEALPIX/include). In terms of binary programs, only the MW programs will be built. This corresponds to the command </p>
+  <p> This will build the C library, Matlab interfaces, test/demo programs and documentation. The FITS features will be added to the library if <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> is found (namely libcfitsio.a in $CFITSIO/lib). The <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> support will be build if <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> is found (libhealpix.a in $HEALPIX/lib and the F90 modules in $HEALPIX/include). In terms of binary programs, all MW programs will be built too. This corresponds to the particular command </p>
 
   <pre> >> make mw_bin</pre> 
 
-<p>To build the HEALPIX related programs,  run</p>
+<p>If you wish to build the HEALPIX related programs, run</p>
   
 <pre> >> make hpx_bin</pre> 
 
-<p>We recommend to run the tests (s2let_test) to check that compilation worked and that the wavelet transform for the MW sampling achieves floating-point precision.
+<p>We recommend to run the tests (<code>s2let_test</code> and <code>s2let_hpx_test</code> if relevant) to check that compilation worked and that the wavelet transform for the MW sampling achieves floating-point precision.
 
   <p> To use the IDL and Java interfaces, you need to build the dynamic library by running:
 
   <pre> >> make dylib</pre> 
 
   <p> You may alternatively build the individual components of
-  <strong>S2LET</strong>.  To build the library only run (which will work without <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> or <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a>):
+  <strong>S2LET</strong>.  To build the library only run (which will automatically incorporate <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> if they are found):
   <pre> >> make lib</pre> 
   <p> To build the test framework for the exact wavelet transform (MW sampling, default) run:
   <pre> >> make test</pre> 
@@ -131,18 +131,18 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <pre> >> make hpx_test</pre> 
   <p> To build the Matlab interfaces (MW by default, Healpix added if found):
   <pre> >> make matlab</pre>
+  <p> The other programs may be compiled individually with similar commands, but we recommand to use the <code>make mw_bin</code> and <code>make hpx_bin</code> instead.</p>
 
   <h4>Documentation</h4>
 
   <p>
-  The <strong>S2LET</strong> code is self documenting.  Although the package
-  ships with <a href="#documentation">source documentation</a>, you may generate html source
-  documentation by running:
+  The <strong>S2LET</strong> code is self documenting. The package
+  ships with <a href="#documentation">source documentation</a>, but you may also re-generate the html source documentation by running:
   <pre> >> make doc</pre>
 
-  <p> Documentation is generated using <a
+  <p> The documentation is generated with <a
    href="http://www.doxygen.org">doxygen</a>, thus you must have doxygen
-  installed on your system to generate the source documentation.
+  installed on your system if you wish to re-generate the documentation.
 
 
   <h4>Cleaning up</h4>
@@ -166,7 +166,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   The C documentation is available <a href="c/files.html">here</a>.  The
   Matlab routines that interface with the C implementation are self
   documenting (documentation can be access through the help command in
-  Matlab), as discussed below. </p>
+  Matlab), which is discussed on <a href="matlab_doc.html">this page</a>. </p>
 
 <br>
 
@@ -174,7 +174,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <a name="example"><h2>Testing and using the library</h2></a>
 
 
-  <p> Five programs may be run to test and familiarize yourself with the framework. They are extensively documented and may serve as starting point to learn to use the functionalities of <strong>S2LET</strong>. The command
+  <p> Five programs may be run to test and familiarize yourself with the C framework. They are extensively documented and may serve as starting point to learn to use the functionalities of <strong>S2LET</strong>. The command
   <pre> >> ./bin/s2let_test</pre>
 	<p>will run various performance and accuracy tests for the exact Wavelet transform built on the MW sampling. All algorithms and high-level features are tested, including the pixel space and harmonic space transforms with and without the multiresolution algorithm.
 
