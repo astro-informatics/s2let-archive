@@ -108,7 +108,15 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 
   <pre> >> make all</pre> 
 
-  <p> This will build the C library, Matlab interfaces, test/demo programs and documentation. The FITS features will be added if <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> is found (namely libcfitsio.a in $CFITSIO/lib). The <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> support will be build if <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> is found (libhealpix.a in $HEALPIX/lib and the F90 modules in $HEALPIX/include). We recommend to run the tests (s2let_test) to check that compilation worked and that the wavelet transform for the MW sampling achieves floating-point precision.
+  <p> This will build the C library, Matlab interfaces, test/demo programs and documentation. The FITS features will be added to the library if <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> is found (namely libcfitsio.a in $CFITSIO/lib). The <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> support will be build if <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> is found (libhealpix.a in $HEALPIX/lib and the F90 modules in $HEALPIX/include). In terms of binary programs, only the MW programs will be built. This corresponds to the command </p>
+
+  <pre> >> make mw_bin</pre> 
+
+<p>To build the HEALPIX related programs,  run</p>
+  
+<pre> >> make hpx_bin</pre> 
+
+<p>We recommend to run the tests (s2let_test) to check that compilation worked and that the wavelet transform for the MW sampling achieves floating-point precision.
 
   <p> To use the IDL and Java interfaces, you need to build the dynamic library by running:
 
@@ -123,8 +131,6 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <pre> >> make hpx_test</pre> 
   <p> To build the Matlab interfaces (MW by default, Healpix added if found):
   <pre> >> make matlab</pre>
-  <p> To build all test and demo programs (optional, requires Healpix), run
-  <pre> >> make bin</pre>
 
   <h4>Documentation</h4>
 

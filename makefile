@@ -213,9 +213,11 @@ default: lib test about tidy
 matlab: $(S2LETOBJSMEX)
 
 .PHONY: all
-all: lib matlab bin tidy
+all: lib matlab mw_bin tidy
 
-bin: test hpx_test hpx_demo denoising_demo axisym_mw_analysis_real axisym_mw_synthesis_real axisym_hpx_analysis_real axisym_hpx_synthesis_real about tidy
+mw_bin: test denoising_demo axisym_mw_analysis_real axisym_mw_synthesis_real about
+
+hpx_bin: hpx_test hpx_demo axisym_hpx_analysis_real axisym_hpx_synthesis_real about
 
 .PHONY: lib
 lib: $(S2LETLIB)/lib$(S2LETLIBN).a
