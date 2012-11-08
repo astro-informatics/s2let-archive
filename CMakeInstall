@@ -8,7 +8,7 @@ rm -rf build
 mkdir build
 cd build
 cmake ..
-make clean all
+make clean all VERBOSE=1
 
 # Cleaning directories
 rm -rf build
