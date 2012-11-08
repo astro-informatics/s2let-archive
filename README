@@ -21,13 +21,13 @@ REFERENCES
      Astronomy & Astrophysics, 2012 (arXiv: TODO)
      
      J. D. McEwen and Y. Wiaux, A novel sampling theorem on the
-     sphere, IEEE Trans. Sig. Proc., in press, 2011 (arXiv:1110.6298).
+     sphere, IEEE Trans. Sig. Proc., 59, 2011 (arXiv:1110.6298).
 
 DOCUMENTATION
      See doc/index.html
 
 INSTALLATION
-     See INSTALL
+     See documentation
 
 REQUIREMENTS
      SSHT (http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html)
