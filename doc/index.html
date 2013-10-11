@@ -72,9 +72,16 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <li><strong>October 2013</strong><br />
 Public release of <strong>S2LET</strong> 1.1b1, fully supporting B-spline, scale-discretised and needlet wavelets.
 </li>
+<li><strong>August 2013</strong><br />
+S2LET code paper accepted for publication in Astronomy & Astrophysics.
+</li>
 <li><strong>November 2012</strong><br />
 Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEALPix samplings.
 </li>
+<li><strong>November 2012</strong><br />
+S2LET code paper submitted to Astronomy & Astrophysics.
+</li>
+
 </ul>
 
 
@@ -99,7 +106,7 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
   resulting wavelet transform implemented in <strong>S2LET</strong> is theoretically exact, i.e. a band-limited signal can be recovered from its wavelet coefficients exactly and the wavelet coefficients capture all the information. <strong>S2LET</strong> also supports the <a href="http://HEALPix.jpl.nasa.gov/">HEALPix</a> sampling scheme, in which case the transforms are not theoretically exact but achieve good numerical accuracy. 
   
   <p>
-  In version 1.1 we added support of the Needlets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0707.0844">Marinucci et al 2008</a>, <a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:math/0606599">Baldi et al 2006</a>) and B-spline wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:astro-ph/0509883">Starck et al 2006</a>), in addition to the scale-discretised wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0712.3519">Wiaux et al 2008</a>).
+  In version 1.1 S2LET also supports needlets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0707.0844">Marinucci et al 2008</a>, <a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:math/0606599">Baldi et al 2006</a>) and B-spline wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:astro-ph/0509883">Starck et al 2006</a>), in addition to the scale-discretised wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0712.3519">Wiaux et al 2008</a>).
  
   <p>
   This page outlines the main features of <strong>S2LET</strong>, installation details as well as the core functionalties and interfaces.  References, version, and license information then follows.
@@ -107,7 +114,7 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
   The <strong>S2LET</strong> code requires the <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a
  href="http://www.fftw.org/">FFTW</a> libraries. The IO FITS features require <a
  href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a>. To support <a
- href="http://HEALPix.jpl.nasa.gov/">HEALPix</a>, a valid installation of its Fortran implementation must be provided.
+ href="http://HEALPix.jpl.nasa.gov/">HEALPix</a>, a valid installation of its Fortran implementation must be provided. More details about an installation from scratch can be found on the <a href="scratch_install.html">Dependencies</a></li> page.
 </p>
 
 <br>
@@ -137,7 +144,7 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
 
 <br>
 
- In addition to scale-discretised wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0712.3519">Wiaux et al 2008</a>), S2LET supports Needlets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0707.0844">Marinucci et al 2008</a>, <a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:math/0606599">Baldi et al 2006</a>) and B-spline wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:astro-ph/0509883">Starck et al 2006</a>). Please refer to these papers for the S2LET paper for the details of the construction of these wavelets. Importantly, in S2LET they are also constructed through a tilling or a windowing of the harmonic line. The figure on the left illustrates the differences between the three constructions and the resulting support of the axisymmetric wavelets.
+ In addition to scale-discretised wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0712.3519">Wiaux et al 2008</a>), S2LET supports Needlets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0707.0844">Marinucci et al 2008</a>, <a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:math/0606599">Baldi et al 2006</a>) and B-spline wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:astro-ph/0509883">Starck et al 2006</a>). Please refer to these papers for the S2LET paper for the details of the construction of these wavelets. Importantly, in S2LET they are also constructed through a tilling or a windowing of the harmonic line. The figure on the left illustrates the differences between the three constructions and the resulting support of the axisymmetric wavelets. Note that the three types of wavelets work with bith the MW sampling theorem and Healpix.
 
 </p><p>
 
@@ -145,7 +152,6 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
 
 </p>
 
-<br>
 <br>
 
 <!--------------------------------------------------------------->  
@@ -159,7 +165,8 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
 
   <h4>Compiling</h4>
 
-  <p> The instuctions and options to build the main C library are detailed on <a href="c_doc.html">this page</a>.
+  <p> If you need to install the dependencies required by S2LET please visit the <a href="scratch_install.html">Dependencies</a></li> page.
+  <br>The instuctions and options to build the main C library are detailed on <a href="c_doc.html">this page</a>.
   <br> Note that we provide a makefile as well as a <a href="http://www.cmake.org/">Cmake</a> configuration file to facilitate cross-platform compilation.
   <br> Instuctions to build and use the Matlab interfaces are detailed <a href="matlab_doc.html">here</a>. 
   <br> Instuctions to build and use the IDL interfaces are detailed <a href="idl_doc.html">here</a>. 
@@ -211,17 +218,51 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
 <blockquote>  Y. Wiaux, J. D. McEwen,  P. Vandergheynst, O. Blanc,
  <a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#wiaux:2007:sdw">Exact reconstruction with directional wavelets on the sphere</a>, Mon. Not. Roy. Astron. Soc., 388(2):770-788, 2008. (<a href="http://arxiv.org/abs/arXiv:0712.3519">ArXiv</a>
  | <a href="http://dx.doi.org/10.1111/j.1365-2966.2008.13448.x">DOI</a>). </blockquote>
+
+
+<p>Needlets are detailed in these papers:</p>
+
+<blockquote> 
+Baldi, P., Kerkyacharian, G., Marinucci, D., Picard, D. 2009, Annals of
+Statistics, 37/3, 1150.<br>
+Marinucci, D., Pietrobon, D., Balbi, A., et al. 2008, Mon. Not. Roy. Astron. Soc.,
+383, 539.
+</blockquote>
+
+<p>B-spline wavelets were first introduced in this paper:</p>
+
+<blockquote> 
+Starck, J.-L., Moudden, Y., Abrial, P., & Nguyen, M. 2006a, Astron. &
+Astrophys., 446, 1191.</blockquote>
+
+<p>The Healpix scheme is detailed in</p>
+
+<blockquote>Gorski, K. M., Hivon, E., Banday, A. J., et al. 2005, ApJ, 622, 759.</blockquote>
+
+
 <br>
 
+
+
 <!--------------------------------------------------------------->
-<a name="version"><h2>Version</h2></a>
+<a name="version"><h2>Release notes</h2></a>
 
   <p>
-  Current version: 1.1b1<br>
-  Release date: November 2013
-  </p><p>
-  Previous versions: <br>
-  - 1.0b1 - November 2012
+  November 2013: &nbsp <strong>Version 1.1b1</strong></p>
+  <ol>
+    <li>Added support of needlets and B-spline wavelets (C, IDL, Matlab, Java, MW, Healpix)</li>
+    <li>Added conversion routines from MW to Healpix and conversely</li>
+  </ol>
+  <br>
+
+  <p>
+  November 2012:  &nbsp  <strong>Version 1.0b1</strong><br>
+  <ol>
+    <li>Added support of scale-discretised wavelets (C, IDL, Matlab, Java)</li>
+    <li>Added support of MW and Healpix pixelisations</li>
+  </ol>
+  <br>
+
   </p>
 
 <br>
