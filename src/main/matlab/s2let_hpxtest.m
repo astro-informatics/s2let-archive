@@ -10,6 +10,9 @@
 clear all;
 close all;
 
+setenv('HEALPIX','/Users/bl/software/Healpix_2.20a')
+setenv('HEALPIXDATA','/Users/bl/software/Healpix_2.20a/data')
+
 % Main parameters
 L = 128;
 nside = 128;
@@ -49,12 +52,12 @@ custom = max(max(abs(flm-flm_rec)))
  
 
 disp('Perform axisym wavelet transform with default parameters')
-[f_wav, f_scal] = s2let_hpx_axisym_analysis(f);
-f_rec = s2let_hpx_axisym_synthesis(f_wav, f_scal);
+[f_wav, f_scal] = s2let_axisym_hpx_analysis(f);
+f_rec = s2let_axisym_hpx_synthesis(f_wav, f_scal);
 default = max(max(abs(f-f_rec)))
 
 
 disp('Perform axisym wavelet transform with custom parameters')
-[f_wav, f_scal] = s2let_hpx_axisym_analysis(f, 'B', B, 'L', L, 'J_min', J_min);
-f_rec = s2let_hpx_axisym_synthesis(f_wav, f_scal, 'B', B, 'L', L, 'J_min', J_min);
+[f_wav, f_scal] = s2let_axisym_hpx_analysis(f, 'B', B, 'L', L, 'J_min', J_min);
+f_rec = s2let_axisym_hpx_synthesis(f_wav, f_scal, 'B', B, 'L', L, 'J_min', J_min);
 custom = max(max(abs(f-f_rec)))

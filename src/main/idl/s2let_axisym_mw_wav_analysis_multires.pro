@@ -1,4 +1,4 @@
-function s2let_axisym_mw_wav_analysis_multires, f, B, J_min, verbose=verbose
+function s2let_axisym_mw_wav_analysis_multires, f, B, J_min, wavtype=wavtype, verbose=verbose
 ;+
 ; S2LET package - Copyright (C) 2012 
 ; Boris Leistedt & Jason McEwen
@@ -16,6 +16,7 @@ function s2let_axisym_mw_wav_analysis_multires, f, B, J_min, verbose=verbose
 ;   f     - input MW map (number of pixels is L*(2*L-1))
 ;   B     - Wavelet parameter
 ;   J_min - First wavelet scale to be used
+;   wavtype - Wavelet type (1: scale-discretised, 2:needlets, 3: cubic splines)
 ;
 ; OUTPUTS:
 ;   f_wav - Struc containing the wavelets
@@ -51,14 +52,15 @@ if s2let_dylib_exists() eq 1 then begin
    sz = (size(f))(1)
    delta = sqrt(1 + 8*(sz))
    L = fix(( 1 + delta ) / 4)
+   if not keyword_set(wavtype) then wavtype = 1
 
    J_max = s2let_j_max(L, B)
-   s2let_valid_wav_parameters, B, L, J_min
+   s2let_valid_wav_parameters, B, L, J_min, wavtype
    if keyword_set(verbose) then begin
    print, '=========================================='
    print, 's2let_axisym_mw_wav_analysis_multires'
    print, '------------------------------------------'
-   help, L, B, J_min, J_max
+   help, L, B, J_min, J_max, wavtype
    endif
 
    f_wav_totalsize = 0;
@@ -70,9 +72,9 @@ if s2let_dylib_exists() eq 1 then begin
    bl = min([s2let_get_wav_bandlimit(B, J_min-1), L])
    f_scal = dcomplex(dblarr(bl*(2*bl-1)))
 
-   r = call_external(soname, 's2let_idl_axisym_mw_wav_analysis_multires_real', f_wav_vec, f_scal, dcomplex(f), B, L, J_min, /CDECL)
+   r = call_external(soname, 's2let_idl_axisym_mw_wav_analysis_multires_real', f_wav_vec, f_scal, dcomplex(f), B, L, J_min, wavtype, /CDECL)
    
-   f_wav = { scal: f_scal, B: B, L: L, J_min: J_min, J_max: J_max, multires: 1, maptype: 'mw' }
+   f_wav = { scal: f_scal, B: B, L: L, J_min: J_min, J_max: J_max, multires: 1, maptype: 'mw', wavtype: wavtype }
    offset = f_wav_totalsize
    for j = J_max, J_min, -1 do begin
       bl = min([s2let_get_wav_bandlimit(B, j), L])

@@ -53,10 +53,11 @@ if s2let_dylib_exists() eq 1 then begin
    B = f_wav.B;
    J_min = f_wav.J_min;
    J_max = f_wav.J_max;
+   wavtype = f_wav.wavtype
    
-   npix = long(L*(2*L-1))
+   npix = long(L)*(2*long(L)-1)
    
-   s2let_valid_wav_parameters, B, L, J_min
+   s2let_valid_wav_parameters, B, L, J_min, wavtype
    ;J_max = s2let_j_max(L, B)
    if keyword_set(verbose) then begin
    print, '=========================================='
@@ -74,7 +75,7 @@ if s2let_dylib_exists() eq 1 then begin
    endfor
 
    f = dblarr(npix)
-   r = call_external(soname, 's2let_idl_axisym_mw_wav_synthesis_real', f, double(f_wav_vec), double(f_scal), B, L, J_min, /CDECL)
+   r = call_external(soname, 's2let_idl_axisym_mw_wav_synthesis_real', f, double(f_wav_vec), double(f_scal), B, L, J_min, wavtype, /CDECL)
 
    if keyword_set(verbose) then print, '=========================================='
 

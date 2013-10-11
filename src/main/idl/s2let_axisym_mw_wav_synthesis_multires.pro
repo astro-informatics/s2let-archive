@@ -53,8 +53,9 @@ if s2let_dylib_exists() eq 1 then begin
    B = f_wav.B;
    J_min = f_wav.J_min;
    J_max = f_wav.J_max;
+   wavtype = f_wav.wavtype
       
-   s2let_valid_wav_parameters, B, L, J_min
+   s2let_valid_wav_parameters, B, L, J_min, wavtype
    if keyword_set(verbose) then begin
    print, '=========================================='
    print, 's2let_axisym_mw_wav_synthesis_multires_real'
@@ -78,7 +79,7 @@ if s2let_dylib_exists() eq 1 then begin
     endfor
 
    f = dcomplex(dblarr(L*(2*L-1)))
-   r = call_external(soname, 's2let_idl_axisym_mw_wav_synthesis_multires_real', f, dcomplex(f_wav_vec), dcomplex(f_scal), B, L, J_min, /CDECL)
+   r = call_external(soname, 's2let_idl_axisym_mw_wav_synthesis_multires_real', f, dcomplex(f_wav_vec), dcomplex(f_scal), B, L, J_min, wavtype, /CDECL)
 
    if keyword_set(verbose) then print, '=========================================='
 

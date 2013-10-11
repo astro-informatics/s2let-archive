@@ -21,7 +21,7 @@ pro s2let_mw_plot_mollweide, maporfile, nlevels=nlevels, title=title, charsize=c
 if not keyword_set(title) then title='MW map'
 if not keyword_set(charsize) then charsize=2.0
 if not keyword_set(nlevels) then nlevels=100
-if total(valid_num(maporfile)) eq 0 then map = s2let_read_mw_real_map(maporfile) else map = maporfile
+if total(valid_num(maporfile)) eq 0 then map = s2let_mw_read_real_map(maporfile) else map = maporfile
 
 
 thecolors = 18 + indgen(255-18)
@@ -31,7 +31,7 @@ valrange = min(map) + indgen(ncolors)*h
 
 sz = (size(map))(1)
 delta = sqrt(1 + 8*(sz))
-L = fix(( 1 + delta ) / 4)
+L = long(fix(( 1 + delta ) / 4))
 
 maparr = dblarr(L, 2*L-1)
 for el = 0, L-1 do begin
@@ -65,7 +65,9 @@ TOL = 1e-5;
 plot, [-2.9,2.9], [-1.42,1.42], xstyle=5, ystyle=5, title=title, color=17, charsize=charsize, /nodata, xrange=[-2.9,2.9], yrange=[-1.42,1.42]
 
 cols = floor(10*(RANDOMN(1, L*(2*L-1))))
-for i = 0, L*(2*L-1)-1 do begin
+npixtot =long(L)*(2*long(L)-1)
+i = long(0)
+repeat begin
 
    arr = s2let_mw_pixel_edges(L, i) ; [t1, t2, p1, p2]
    thetas = [arr(0), arr(1)]  
@@ -89,7 +91,8 @@ for i = 0, L*(2*L-1)-1 do begin
    
    polyfill, x, y, color=thecolors(coli)
    
-endfor
+   i = i + 1
+endrep until i eq npixtot
 
 ;contour, maparr, x, y,  /fill, nlevels=nlevels, xstyle=4, ystyle=4, title=title, color=17, charsize=charsize, /nodata
 

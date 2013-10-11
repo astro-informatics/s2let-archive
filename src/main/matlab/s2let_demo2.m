@@ -8,13 +8,13 @@
 B = 3;
 zoomfactor = 1.4;
 J_min = 2;
-L = 256;
+L = 128;
 J = s2let_jmax(L, B);
 type = 'colour';
 lighting = true;
 
 ns = ceil(sqrt(2+J-J_min+1)) ;
-nx = ns - 1 + rem(2+J-J_min + 1, ns) - 1 ;
+nx = ns - 1 + rem(2+J-J_min + 1, ns) ;
 ny = ns;
 
 [kappa kappa0] = s2let_axisym_tiling(B, L, J_min);
@@ -61,3 +61,6 @@ for j = J_min:5
    set(locate,'pos',pos);
    zoom(zoomfactor)
 end
+
+
+

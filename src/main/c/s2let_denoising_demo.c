@@ -43,6 +43,8 @@ double needletpower(double *wav_lm, int L){
  */
 int main(int argc, char *argv[]) 
 {
+
+
   const int seed = (int)(10000.0*(double)clock()/(double)CLOCKS_PER_SEC);
   // PARAMETERS
   const double SNR_in = 10.0;  // Input SNR
@@ -66,7 +68,8 @@ int main(int argc, char *argv[])
   printf(" - Detected bandlimit L = %i\n",L);
   int J = s2let_j_max(L, B);
   printf(" Parameters for wavelet denoising :\n");
-  printf(" - Input SNR : %fd\n",SNR_in);
+  s2let_switch_wavtype(1);
+  printf(" - Input SNR : %f\n",SNR_in);
   printf(" - Sigma threshold : %i\n", nsigma);
   printf(" - Multiresolution flag : %i\n", multires);
   printf(" - Wavelet parameter : %i\n", B);

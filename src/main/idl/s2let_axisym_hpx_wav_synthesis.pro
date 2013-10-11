@@ -49,15 +49,16 @@ if s2let_dylib_exists() eq 0 then return, reterror('Dynamic library not found') 
    B = f_wav.B;
    J_min = f_wav.J_min;
    J_max = f_wav.J_max;
+   wavtype = f_wav.wavtype
    npix = nside2npix(nside)
    
    ;J_max = s2let_j_max(L, B)
-   s2let_valid_wav_parameters, B, L, J_min
+   s2let_valid_wav_parameters, B, L, J_min, wavtype
    if keyword_set(verbose) then begin
    print, '=========================================='
    print, 's2let_axisym_hpx_wav_synthesis_real'
    print, '------------------------------------------'
-   help, nside, L, B, J_min, J_max
+   help, nside, L, B, J_min, J_max, wavtype
    endif
 
    f_scal = dblarr(npix)
@@ -68,7 +69,7 @@ if s2let_dylib_exists() eq 0 then return, reterror('Dynamic library not found') 
    endfor
 
    f = dblarr(nside2npix(nside))
-   r = call_external(soname, 's2let_idl_axisym_hpx_wav_synthesis_real', f, f_wav_vec, f_scal, nside, B, L, J_min, /CDECL)
+   r = call_external(soname, 's2let_idl_axisym_hpx_wav_synthesis_real', f, f_wav_vec, f_scal, nside, B, L, J_min, wavtype, /CDECL)
 
    if keyword_set(verbose) then print, '=========================================='
 

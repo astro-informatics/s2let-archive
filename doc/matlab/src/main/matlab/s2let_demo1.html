@@ -41,7 +41,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>	s2let_axisym_mw_analysis</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li></ul>
+<li><a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>	s2let_axisym_mw_analysis</li><li><a href="s2let_bandlimit.html" class="code" title="function bl = s2let_bandlimit(j, J_min, B, L)">s2let_bandlimit</a>	s2let_bandlimit</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -70,14 +70,14 @@ This function is called by:
 0018 J_min = 2;
 0019 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
 0020 
-0021 <span class="comment">% Perform decomposition</span>
-0022 [f_wav, f_scal] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true);
-0023 
-0024 zoomfactor = 1.2;
-0025 ns = ceil(sqrt(2+J-J_min+1)) ;
-0026 ny = ns - 1 + rem(2+J-J_min + 1, ns) ;
-0027 nx = ns;
-0028 <span class="comment">% MULTIRESOLUTION PLOT</span>
+0021 zoomfactor = 1.2;
+0022 ns = ceil(sqrt(2+J-J_min+1)) ;
+0023 ny = ns - 1 + rem(2+J-J_min+1 , ns) ;
+0024 nx = ns;
+0025 
+0026 <span class="comment">% Perform decomposition</span>
+0027 [f_wav, f_scal] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true, <span class="string">'downsample'</span>, false);
+0028 <span class="comment">% FULL RESOLUTION PLOT</span>
 0029 figure(<span class="string">'Position'</span>,[100 100 1300 1000])
 0030 subplot(nx, ny, 1);
 0031 ssht_plot_mollweide(f, L);
@@ -87,27 +87,27 @@ This function is called by:
 0035 temp = max(abs(v));
 0036 caxis([-temp temp])
 0037 subplot(nx, ny, 2);
-0038 bl =  min(ceil(B^(J_min)), L);
-0039 ssht_plot_mollweide(f_scal, bl);
-0040 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-0041 v = caxis;
-0042 temp = max(abs(v));
-0043 caxis([-temp temp])
-0044 <span class="comment">%title('Scaling fct')</span>
-0045 <span class="keyword">for</span> j = J_min:J
-0046    subplot(nx, ny, j-J_min+3);
-0047    bl =  min(ceil(B^(j+1)), L);
-0048    ssht_plot_mollweide(f_wav{j-J_min+1}, bl);
-0049    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-0050 v = caxis;
-0051 temp = max(abs(v));
-0052 caxis([-temp temp])
-0053    <span class="comment">%title(['Wavelet scale : ',int2str(j)-J_min+1])</span>
-0054 <span class="keyword">end</span> 
-0055 
-0056 <span class="comment">% Perform decomposition</span>
-0057 [f_wav, f_scal] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true, <span class="string">'downsample'</span>, false);
-0058 <span class="comment">% FULL RESOLUTION PLOT</span>
+0038 ssht_plot_mollweide(f_scal, L);
+0039 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0040 v = caxis;
+0041 temp = max(abs(v));
+0042 caxis([-temp temp])
+0043 <span class="comment">%title('Scaling fct')</span>
+0044 <span class="keyword">for</span> j = J_min:J
+0045    subplot(nx, ny, j-J_min+3);
+0046    ssht_plot_mollweide(f_wav{j-J_min+1}, L);
+0047    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0048 v = caxis;
+0049 temp = max(abs(v));
+0050 caxis([-temp temp])
+0051    <span class="comment">%title(['Wavelet scale : ',int2str(j)-J_min+1])</span>
+0052 <span class="keyword">end</span>
+0053 
+0054 
+0055 <span class="comment">% Perform decomposition</span>
+0056 [f_wav, f_scal] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true);
+0057 
+0058 <span class="comment">% MULTIRESOLUTION PLOT</span>
 0059 figure(<span class="string">'Position'</span>,[100 100 1300 1000])
 0060 subplot(nx, ny, 1);
 0061 ssht_plot_mollweide(f, L);
@@ -117,21 +117,23 @@ This function is called by:
 0065 temp = max(abs(v));
 0066 caxis([-temp temp])
 0067 subplot(nx, ny, 2);
-0068 ssht_plot_mollweide(f_scal, L);
-0069 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-0070 v = caxis;
-0071 temp = max(abs(v));
-0072 caxis([-temp temp])
-0073 <span class="comment">%title('Scaling fct')</span>
-0074 <span class="keyword">for</span> j = J_min:J
-0075    subplot(nx, ny, j-J_min+3);
-0076    ssht_plot_mollweide(f_wav{j-J_min+1}, L);
-0077    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-0078 v = caxis;
-0079 temp = max(abs(v));
-0080 caxis([-temp temp])
-0081    <span class="comment">%title(['Wavelet scale : ',int2str(j)-J_min+1])</span>
-0082 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 07-Nov-2012 13:48:42 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0068 bl = min([ <a href="s2let_bandlimit.html" class="code" title="function bl = s2let_bandlimit(j, J_min, B, L)">s2let_bandlimit</a>(J_min-1,J_min,B,L) L ]);
+0069 ssht_plot_mollweide(f_scal, bl);
+0070 campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0071 v = caxis;
+0072 temp = max(abs(v));
+0073 caxis([-temp temp])
+0074 <span class="comment">%title('Scaling fct')</span>
+0075 <span class="keyword">for</span> j = J_min:J
+0076    subplot(nx, ny, j-J_min+3);
+0077    bl =  min([ <a href="s2let_bandlimit.html" class="code" title="function bl = s2let_bandlimit(j, J_min, B, L)">s2let_bandlimit</a>(j,J_min,B,L) L ]);
+0078    ssht_plot_mollweide(f_wav{j-J_min+1}, bl);
+0079    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+0080 v = caxis;
+0081 temp = max(abs(v));
+0082 caxis([-temp temp])
+0083    <span class="comment">%title(['Wavelet scale : ',int2str(j)-J_min+1])</span>
+0084 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 29-Aug-2013 17:48:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

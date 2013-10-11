@@ -1,4 +1,4 @@
-pro s2let_demo2, L=L, B=B, J_min=J_min, multires=multires
+pro s2let_demo2, L=L, B=B, J_min=J_min, multires=multires, wavtype=wavtype
 ;+
 ; S2LET package - Copyright (C) 2012 
 ; Boris Leistedt & Jason McEwen
@@ -16,25 +16,28 @@ pro s2let_demo2, L=L, B=B, J_min=J_min, multires=multires
 ;   B - The wavelet parameter for the test
 ;   J_min - The first wavelet scale to be used for the transform
 ;   multires - multiresolution flag (1 if yes, else 0)
-;   DEFAULT VALUES: L=128, B=3, J_min=2, multires=0
+;   wavtype - Wavelet type (1: scale-discretised, 2:needlets, 3: cubic splines)
+;   DEFAULT VALUES: L=128, B=3, J_min=2, multires=0, wavtype=1
 ;
 ;----------------------------------------------------------------------
 
 
-if not keyword_set(L) then L = 128
+if not keyword_set(L) then L = 394
 if not keyword_set(multires) then multires = 0
-if not keyword_set(B) then B = 3
-if not keyword_set(J_min) then J_min = 2
+if not keyword_set(B) then B = 2
+if not keyword_set(J_min) then J_min = 3
+if not keyword_set(wavtype) then wavtype = 1
 
 if s2let_dylib_exists() eq 1 then begin
 
    loc = GETENV('S2LET')
    file = loc + '/data/somecmbsimu_hpx_128.fits'
+   ;file = '/Users/bl/Dropbox/Melissa/spectre/out/lsspaperbins/dr6quasars_map_z065145_256_Q.fits'
    read_fits_map, file, f_hpx
 
    f = s2let_healpix2mw(f_hpx, lmax=L)
 
-   if multires eq 0 then f_wav = s2let_axisym_mw_wav_analysis_real(f, B, J_min) else f_wav = s2let_axisym_mw_wav_analysis_multires_real(f, B, J_min)
+   if multires eq 0 then f_wav = s2let_axisym_mw_wav_analysis_real(f, B, J_min, wavtype=wavtype, verbose=verbose) else f_wav = s2let_axisym_mw_wav_analysis_multires_real(f, B, J_min, wavtype=wavtype, verbose=verbose)
 
    if multires eq 0 then f_rec = s2let_axisym_mw_wav_synthesis_real(f_wav) else f_rec = s2let_axisym_mw_wav_synthesis_multires_real(f_wav)
 

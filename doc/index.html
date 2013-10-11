@@ -34,7 +34,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 	<img src="images/wav.png" width="140" height="140" border=0> 
       </td>
       <td width=500 align="left" valign="center">
-	<h1 class="title">S2LET<span class="fade">1.0b1</span></h1>
+	<h1 class="title">S2LET<span class="fade">1.1b1</span></h1>
 	<p id="slogantitle">Fast wavelets on the sphere</p>
       </td>			
     </tr>
@@ -49,6 +49,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <h2>Installation and usage</h2>
 
 <ul>
+<li><a href="scratch_install.html">Dependencies</a></li>
 <li><a href="c_doc.html">C library</a></li>
 <li><a href="idl_doc.html">IDL interfaces</a></li>
 <li><a href="java_doc.html">Java interfaces</a></li>
@@ -68,6 +69,9 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <h2>News</h2>
 
 <ul>
+<li><strong>October 2013</strong><br />
+Public release of <strong>S2LET</strong> 1.1b1, fully supporting B-spline, scale-discretised and needlet wavelets.
+</li>
 <li><strong>November 2012</strong><br />
 Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEALPix samplings.
 </li>
@@ -92,7 +96,11 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
   (<a href="http://arxiv.org/abs/1110.6298">ArXiv</a>
   | <a href="http://dx.doi.org/10.1109/TSP.2011.2166394">DOI</a>) to
   perform exact spherical harmonic transforms on the sphere. The
-  resulting wavelet transform implemented in <strong>S2LET</strong> is theoretically exact, i.e. a band-limited signal can be recovered from its wavelet coefficients exactly and the wavelet coefficients capture all the information. <strong>S2LET</strong> also supports the <a href="http://HEALPix.jpl.nasa.gov/">HEALPix</a> sampling scheme, in which case the transforms are not theoretically exact but achieve good numerical accuracy.  
+  resulting wavelet transform implemented in <strong>S2LET</strong> is theoretically exact, i.e. a band-limited signal can be recovered from its wavelet coefficients exactly and the wavelet coefficients capture all the information. <strong>S2LET</strong> also supports the <a href="http://HEALPix.jpl.nasa.gov/">HEALPix</a> sampling scheme, in which case the transforms are not theoretically exact but achieve good numerical accuracy. 
+  
+  <p>
+  In version 1.1 we added support of the Needlets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0707.0844">Marinucci et al 2008</a>, <a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:math/0606599">Baldi et al 2006</a>) and B-spline wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:astro-ph/0509883">Starck et al 2006</a>), in addition to the scale-discretised wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0712.3519">Wiaux et al 2008</a>).
+ 
   <p>
   This page outlines the main features of <strong>S2LET</strong>, installation details as well as the core functionalties and interfaces.  References, version, and license information then follows.
   
@@ -105,9 +113,9 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
 <br>
 
 <!--------------------------------------------------------------->  
-<a name="wavelets"><h2>Wavelet transform on the sphere</h2></a>
+<a name="wavelets"><h2>Scale discretised wavelets on the sphere</h2></a>
 
-  <p> In <strong>S2LET</strong>, the wavelets are constructed through an exact tilling of harmonic space, following the scale-discretised approach described in <a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#wiaux:2007:sdw">Wiaux et al (2008)</a> (<a href="http://arxiv.org/abs/astro-ph/0506308">ArXiv</a>
+  <p> In <strong>S2LET</strong>, the scale-discretised wavelets are constructed through an exact tilling of harmonic space, following the scale-discretised approach described in <a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#wiaux:2007:sdw">Wiaux et al (2008)</a> (<a href="http://arxiv.org/abs/0712.3519">ArXiv</a>
  | <a href="http://dx.doi.org/10.1111/j.1365-2966.2008.13448.x">DOI</a>). The harmonic line is tiled into wavelet kernels which are localised (i.e. have compact support) in both real and frequency spaces, as shown on the image below for a particular set of wavelet parameters (B=2, J_min=2, harmonic space on the left, corresponding kernels on the right).</p>
 
  <p><img src="images/tiling2.png" width="350" height="240" border=0 align="center"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="images/needlets.png" width="350" height="250" border=0 align="center"> 
@@ -119,6 +127,25 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
  <p>When using <a
  href="http://HEALPix.jpl.nasa.gov/">HEALPix</a> instead of the MW sampling on the sphere, the harmonic transform is not exact and hence the corresponding wavelet transform performed by <strong>S2LET</strong> is only exact in harmonic space. In other words, a set of spherical harmonic coefficients may be projected onto wavelets exactly in harmonic spaces but the HEALPix maps don't capture all the information contained in these coefficients. However good numerical accuracy is achieved in a wide range of situations. </p>
 
+<br>
+
+<!--------------------------------------------------------------->  
+
+
+<a name="wavelets"><h2>Needlets and B-spline wavelets</h2></a>
+ <p>&nbsp;<img src="images/tilling_compar.png" width="390" height="370" border=0 align="left"> 
+
+<br>
+
+ In addition to scale-discretised wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0712.3519">Wiaux et al 2008</a>), S2LET supports Needlets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0707.0844">Marinucci et al 2008</a>, <a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:math/0606599">Baldi et al 2006</a>) and B-spline wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:astro-ph/0509883">Starck et al 2006</a>). Please refer to these papers for the S2LET paper for the details of the construction of these wavelets. Importantly, in S2LET they are also constructed through a tilling or a windowing of the harmonic line. The figure on the left illustrates the differences between the three constructions and the resulting support of the axisymmetric wavelets.
+
+</p><p>
+
+ In terms of usage, S2LET has a unique interface for the wavelet transform to avoid duplication of high-level routines. The default setting uses scale-discretised wavelets, and the wavelet type can be changed with dedicated functions. Thus one can write programs and pipelines with the high-level routines and decide on the type of wavelets later on. 
+
+</p>
+
+<br>
 <br>
 
 <!--------------------------------------------------------------->  
@@ -170,7 +197,7 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
    href="http://www.s2let.org/">http://www.s2let.org/</a>)
   and the related academic paper:</p>
 
-<blockquote> B. Leistedt, J. D. McEwen, P. Vandergheynst and Y. Wiaux, <a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#leistedt:s2let_axisym">S2LET: A code to perform fast wavelet analysis on the sphere</a>, Astronomy & Astrophysics, submitted, 2012 (<a href="http://arxiv.org/abs/1211.1680">ArXiv</a>). </blockquote>
+<blockquote> B. Leistedt, J. D. McEwen, P. Vandergheynst and Y. Wiaux, <a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#leistedt:s2let_axisym">S2LET: A code to perform fast wavelet analysis on the sphere</a>, Astronomy & Astrophysics, in press, 2013 (<a href="http://arxiv.org/abs/1211.1680">ArXiv</a>). </blockquote>
 
 <p>If the MW sampling is used please also cite the following paper: </p>
 
@@ -190,8 +217,12 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
 <a name="version"><h2>Version</h2></a>
 
   <p>
-  Current version: 1.0b1<br>
-  Release date: November 2012
+  Current version: 1.1b1<br>
+  Release date: November 2013
+  </p><p>
+  Previous versions: <br>
+  - 1.0b1 - November 2012
+  </p>
 
 <br>
 

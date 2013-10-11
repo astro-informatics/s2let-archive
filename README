@@ -8,7 +8,10 @@ DESCRIPTION
      The S2LET code provides functionality to perform fast and exact
      scale-discretised wavelet transforms on the sphere.
 
-VERSION
+CURRENT VERSION
+     Release 1.1b1, September 2013
+
+PREVIOUS VERSIONS
      Release 1.0b1, November 2012
 
 AUTHORS
@@ -18,7 +21,7 @@ AUTHORS
 REFERENCES
      B. Leistedt, Y. Wiaux, P. Vandergheynst and J. D. McEwen,
      S2LET: A code to perform fast wavelet analysis on the sphere, 
-     Astronomy & Astrophysics, 2012 (arXiv:1211.1680)
+     Astronomy & Astrophysics, in press, 2013 (arXiv:1211.1680)
      
      J. D. McEwen and Y. Wiaux, A novel sampling theorem on the
      sphere, IEEE Trans. Sig. Proc., 59, 2011 (arXiv:1110.6298).

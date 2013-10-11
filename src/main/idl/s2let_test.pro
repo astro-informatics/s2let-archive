@@ -1,10 +1,10 @@
-pro s2let_test, L=L, B=B, J_min=J_min, multires=multires
+pro s2let_test, L=L, B=B, J_min=J_min, multires=multires, wavtype=wavtype
 ;+
 ; S2LET package - Copyright (C) 2012 
 ; Boris Leistedt & Jason McEwen
 ;
 ; NAME:
-;   s2let_demo
+;   s2let_test
 ;
 ; PURPOSE:
 ;   Test the exactness of all MW spherical harmonics and wavelet
@@ -15,7 +15,8 @@ pro s2let_test, L=L, B=B, J_min=J_min, multires=multires
 ;   B - The wavelet parameter for the test
 ;   J_min - The first wavelet scale to be used for the transform
 ;   multires - multiresolution flag (1 if yes, else 0)
-;   DEFAULT VALUES: L=64, B=3, J_min=2, multires=0
+;   wavtype - Wavelet type (1: scale-discretised, 2:needlets, 3: cubic splines)
+;   DEFAULT VALUES: L=64, B=3, J_min=2, multires=0, wavtype=1
 ;
 ;----------------------------------------------------------------------
 
@@ -23,6 +24,7 @@ if not keyword_set(L) then L = 64
 if not keyword_set(multires) then multires = 0
 if not keyword_set(B) then B = 3
 if not keyword_set(J_min) then J_min = 2
+if not keyword_set(wavtype) then wavtype = 1
 
 if s2let_dylib_exists() eq 1 then begin
 
@@ -41,7 +43,7 @@ if s2let_dylib_exists() eq 1 then begin
 
    f = s2let_mw_alm2map_real(flm)
 
-   if multires eq 0 then f_wav = s2let_axisym_mw_wav_analysis_real(f, B, J_min) else f_wav = s2let_axisym_mw_wav_analysis_multires_real(f, B, J_min)
+   if multires eq 0 then f_wav = s2let_axisym_mw_wav_analysis_real(f, B, J_min, wavtype=wavtype) else f_wav = s2let_axisym_mw_wav_analysis_multires_real(f, B, J_min, wavtype=wavtype)
    if multires eq 0 then f_rec = s2let_axisym_mw_wav_synthesis_real(f_wav) else f_rec = s2let_axisym_mw_wav_synthesis_multires_real(f_wav)
 
    flm_rec = s2let_mw_map2alm_real(f_rec)
@@ -52,7 +54,7 @@ if s2let_dylib_exists() eq 1 then begin
 
    f2 = s2let_mw_alm2map(flm2)
 
-   if multires eq 0 then f_wav2 = s2let_axisym_mw_wav_analysis(f2, B, J_min) else f_wav = s2let_axisym_mw_wav_analysis_multires(f2, B, J_min)
+   if multires eq 0 then f_wav2 = s2let_axisym_mw_wav_analysis(f2, B, J_min, wavtype=wavtype) else f_wav = s2let_axisym_mw_wav_analysis_multires(f2, B, J_min, wavtype=wavtype)
 
    if multires eq 0 then f_rec2 = s2let_axisym_mw_wav_synthesis(f_wav2) else f_rec2 = s2let_axisym_mw_wav_synthesis_multires(f_wav2)
 

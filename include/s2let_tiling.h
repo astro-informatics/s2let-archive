@@ -8,13 +8,23 @@
 #define PI    3.141592653589793238462643383279502884197
 
 /*!
+ * Switch to different wavelet type. 
+ *
+ * \param[in]  typenum Integer: 1 for scale-discretised, 2 for needlets and 3 for spline wavelets.
+ * \retval none
+ */
+void s2let_switch_wavtype(int typenum);
+
+/*!
  * Computes band-limit of a specific wavelet scale.
  *
- * \param[in]  B Wavelet parameter.
  * \param[in]  j Wavelet scale.
+ * \param[in]  J_min Minimum wavelet scale.
+ * \param[in]  j Wavelet scale.
+ * \param[in]  L Total band-limit.
  * \retval band-limit
  */
-int s2let_bandlimit(int B, int j);
+int s2let_bandlimit(int j, int J_min, int B, int L);
 
 /*!
  * Computes minimum harmonic index supported by needlets.

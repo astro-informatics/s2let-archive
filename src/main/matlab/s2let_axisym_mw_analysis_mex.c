@@ -145,10 +145,10 @@ void mexFunction( int nlhs, mxArray *plhs[],
   int bandlimit, wavsize = 0, scalsize = 0;
   if(downsample){
     for (j = J_min; j <= J; j++){
-        bandlimit = MIN(s2let_bandlimit(B, j), L);
+        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
         wavsize += bandlimit * (2 * bandlimit - 1);
      }
-     bandlimit = MIN(s2let_bandlimit(B, J_min-1), L);
+     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
      scalsize = bandlimit * (2 * bandlimit - 1);
   }else{
     wavsize = (J+1-J_min) * L * ( 2 * L - 1 );

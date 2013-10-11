@@ -30,7 +30,7 @@ if s2let_dylib_exists() eq 1 then begin
    soname = s2let_get_dylib()
    sz = (size(flm))(1)
    delta = sqrt(1 + 8*(sz))
-   L = fix(sqrt(sz))
+   L = long(sqrt(sz))
 
    f = dblarr(L*(2*L-1))
 

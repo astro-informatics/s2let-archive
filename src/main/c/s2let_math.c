@@ -26,7 +26,32 @@ double f_needlet(double t)
 
 
 /*!
- * Computes smooth "Schwarts" functions.
+ * Computes cubis B-spline function
+ */
+double b3_spline (double x)
+{
+    if ( ABS(x) < 1e-16 ) return 0;
+    double A1,A2,A3,A4,A5,Val;
+    A1 = ABS ((x - 2) * (x - 2) * (x - 2));
+    A2 = ABS ((x - 1) * (x - 1) * (x - 1));
+    A3 = ABS (x * x * x);
+    A4 = ABS ((x + 1) * (x + 1) * (x + 1));
+    A5 = ABS ((x + 2) * (x + 2) * (x + 2));
+    Val = 1./12. * (A1 - 4. * A2 + 6. * A3 - 4. * A4 + A5);
+    fflush(NULL);
+    return Val;
+}
+
+/*!
+ * Computes spline scaling function
+ */
+double s2let_math_spline_scalingfct(double x, double y){
+  double res = 1.5 * b3_spline(2.0 * x / y);
+  return res;
+}
+
+/*!
+ * Computes smooth "Schwartz" functions for scale-discretised wavelets
  */
 double s2let_math_kappa0_quadtrap_s2dw(double a, double b, int n, int B)
 {
@@ -49,7 +74,7 @@ double s2let_math_kappa0_quadtrap_s2dw(double a, double b, int n, int B)
 }
 
 /*!
- * Computes smooth "Schwarts" functions.
+ * Computes smooth "Schwartz" functions for needlets
  */
 double s2let_math_kappa0_quadtrap_needlet(double a, double b, int n)
 {
@@ -73,7 +98,7 @@ double s2let_math_kappa0_quadtrap_needlet(double a, double b, int n)
 
 
 /*!
- * Random number from seed (Numerical Recipes)
+ * Random number from seed (Numerical Recipes).
  */
 double ran2_dp(int idum) {
   int IM1=2147483563,IM2=2147483399,IMM1=IM1-1, 

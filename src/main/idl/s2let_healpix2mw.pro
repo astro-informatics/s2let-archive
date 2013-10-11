@@ -23,7 +23,7 @@ function s2let_healpix2mw, hpxmap, lmax=lmax
 ;
 ;----------------------------------------------------------------------
 
-
+;print, 'MAP -> ALM'
 flm = s2let_hpx_map2alm_real(hpxmap, lmax)
 
 if not keyword_set(lmax) then begin
@@ -31,6 +31,7 @@ if not keyword_set(lmax) then begin
    lmax = 2*nside
 endif
 
+;print, 'ALM -> MAP'
 mwmap = s2let_mw_alm2map_real(flm)
 
 return, mwmap

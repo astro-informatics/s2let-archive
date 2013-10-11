@@ -11,6 +11,7 @@ extern void healpix_inverse_real_();
 extern void healpix_forward_real_();
 extern void write_healpix_map_();
 extern void read_healpix_map_();
+extern void healpix_forward_real_();
 
 void s2let_hpx_alm2map_real(double* f, const complex double* flm, int nside, int L)
 {

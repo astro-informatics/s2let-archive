@@ -49,7 +49,7 @@ f_wav_vec = [];
 offset = 0;
 for j = args.J_min:J
 	if args.Downsample == true
-      band_limit = min([ ceil(args.B^(j+1)) args.L ]);
+      band_limit = min([ s2let_bandlimit(j,args.J_min,args.B,args.L) args.L ]);
     else
       band_limit = args.L;
     end

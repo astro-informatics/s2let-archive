@@ -1,4 +1,4 @@
-pro s2let_demo1, B=B, J_min=J_min, multires=multires, charsize=charsize
+pro s2let_demo1, B=B, J_min=J_min, multires=multires, wavtype=wavtype, verbose=verbose, charsize=charsize
 ;+
 ; S2LET package - Copyright (C) 2012 
 ; Boris Leistedt & Jason McEwen
@@ -14,7 +14,8 @@ pro s2let_demo1, B=B, J_min=J_min, multires=multires, charsize=charsize
 ;   B - The wavelet parameter for the test
 ;   J_min - The first wavelet scale to be used for the transform
 ;   multires - multiresolution flag (1 if yes, else 0)
-;   DEFAULT VALUES: B=3, J_min=2, multires=0
+;   wavtype - Wavelet type (1: scale-discretised, 2:needlets, 3: cubic splines)
+;   DEFAULT VALUES: B=3, J_min=2, multires=0, wavtype=1
 ;
 ;----------------------------------------------------------------------
 
@@ -23,6 +24,8 @@ if not keyword_set(multires) then multires = 0
 if not keyword_set(B) then B = 3
 if not keyword_set(J_min) then J_min = 2
 if not keyword_set(charsize) then charsize = 2.0
+if not keyword_set(wavtype) then wavtype = 1
+if not keyword_set(verbose) then verbose = 1
 
 if s2let_dylib_exists() eq 1 then begin
 
@@ -31,7 +34,7 @@ if s2let_dylib_exists() eq 1 then begin
 
    f = s2let_mw_read_real_map(file)
 
-   if multires eq 0 then f_wav = s2let_axisym_mw_wav_analysis_real(f, B, J_min) else f_wav = s2let_axisym_mw_wav_analysis_multires_real(f, B, J_min)
+   if multires eq 0 then f_wav = s2let_axisym_mw_wav_analysis_real(f, B, J_min, verbose=verbose, wavtype=wavtype) else f_wav = s2let_axisym_mw_wav_analysis_multires_real(f, B, J_min, verbose=verbose, wavtype=wavtype)
 
    if multires eq 0 then f_rec = s2let_axisym_mw_wav_synthesis_real(f_wav) else f_rec = s2let_axisym_mw_wav_synthesis_multires_real(f_wav)
 

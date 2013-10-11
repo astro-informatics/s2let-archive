@@ -33,7 +33,7 @@ if s2let_dylib_exists() eq 1 then begin
    nside = fix(sqrt(((size(f))(1))/12.0))
 print, 'nside = ', nside
 print, 'lmax = ', lmax
-   flm = dcomplex(dblarr(lmax*lmax))
+   flm = dcomplex(dblarr(lmax^2.0))
 
    r = call_external(soname, 's2let_idl_hpx_map2alm_real', flm, double(f), nside, lmax, /CDECL)
    

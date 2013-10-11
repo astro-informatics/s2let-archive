@@ -12,11 +12,11 @@ void s2let_axisym_mw_allocate_f_wav_multires(complex double **f_wav, complex dou
   int J = s2let_j_max(L, B);
   int j, bandlimit, total = 0;
   for(j = J_min; j <= J; j++){
-    bandlimit = MIN(s2let_bandlimit(B, j), L);
+    bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
     total += bandlimit * (2 * bandlimit - 1);
   }
   *f_wav = (complex double*)calloc(total, sizeof(complex double));
-  bandlimit = MIN(s2let_bandlimit(B, J_min-1), L);
+  bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
   *f_scal = (complex double*)calloc(bandlimit * (2*bandlimit-1), sizeof(complex double));
 }
 
@@ -25,11 +25,11 @@ void s2let_axisym_mw_allocate_f_wav_multires_real(double **f_wav, double **f_sca
   int J = s2let_j_max(L, B);
   int j, bandlimit, total = 0;
   for(j = J_min; j <= J; j++){
-    bandlimit = MIN(s2let_bandlimit(B, j), L);
+    bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
     total += bandlimit * (2 * bandlimit - 1);
   }
   *f_wav = (double*)calloc(total, sizeof(double));
-  bandlimit = MIN(s2let_bandlimit(B, J_min-1), L);
+  bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
   *f_scal = (double*)calloc(bandlimit * (2*bandlimit-1), sizeof(double));
 }
 
@@ -211,12 +211,12 @@ void s2let_axisym_mw_wav_analysis_multires(complex double *f_wav, complex double
 
   s2let_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
 
-  bandlimit = MIN(s2let_bandlimit(B, J_min-1), L);
+  bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
   ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, bandlimit, spin, dl_method, verbosity);
   offset = 0;
   offset_lm = 0;
   for(j = J_min; j <= J; j++){
-    bandlimit = MIN(s2let_bandlimit(B, j), L);
+    bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
     ssht_core_mw_inverse_sov_sym(f_wav + offset, f_wav_lm + offset_lm, bandlimit, spin, dl_method, verbosity);
     offset_lm += bandlimit * bandlimit;
     offset += bandlimit * (2 * bandlimit - 1);
@@ -245,12 +245,12 @@ void s2let_axisym_mw_wav_synthesis_multires(complex double *f, const complex dou
   flm = (complex double*)calloc(L * L, sizeof(complex double));
   s2let_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
 
-  bandlimit = MIN(s2let_bandlimit(B, J_min-1), L);
+  bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
   ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, bandlimit, spin, dl_method, verbosity);
   offset = 0;
   offset_lm = 0;
   for(j = J_min; j <= J; j++){
-    bandlimit = MIN(s2let_bandlimit(B, j), L);
+    bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
     ssht_core_mw_forward_sov_conv_sym(f_wav_lm + offset_lm, f_wav + offset, bandlimit, spin, dl_method, verbosity);
     offset_lm += bandlimit * bandlimit;
     offset += bandlimit * (2 * bandlimit - 1);
@@ -286,12 +286,12 @@ void s2let_axisym_mw_wav_analysis_multires_real(double *f_wav, double *f_scal, c
 
   s2let_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
 
-  bandlimit = MIN(s2let_bandlimit(B, J_min-1), L);
+  bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
   ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, bandlimit, dl_method, verbosity);
   offset = 0;
   offset_lm = 0;
   for(j = J_min; j <= J; j++){
-    bandlimit = MIN(s2let_bandlimit(B, j), L);
+    bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
     ssht_core_mw_inverse_sov_sym_real(f_wav + offset, f_wav_lm + offset_lm, bandlimit, dl_method, verbosity);
     offset_lm += bandlimit * bandlimit;
     offset += bandlimit * (2 * bandlimit - 1);
@@ -319,12 +319,12 @@ void s2let_axisym_mw_wav_synthesis_multires_real(double *f, const double *f_wav,
   flm = (complex double*)calloc(L * L, sizeof(complex double));
   s2let_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
 
-  bandlimit = MIN(s2let_bandlimit(B, J_min-1), L);
+  bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
   ssht_core_mw_forward_sov_conv_sym_real(f_scal_lm, f_scal, bandlimit, dl_method, verbosity);
   offset = 0;
   offset_lm = 0;
   for(j = J_min; j <= J; j++){
-    bandlimit = MIN(s2let_bandlimit(B, j), L);
+    bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
     ssht_core_mw_forward_sov_conv_sym_real(f_wav_lm + offset_lm, f_wav + offset, bandlimit, dl_method, verbosity);
     offset_lm += bandlimit * bandlimit;
     offset += bandlimit * (2 * bandlimit - 1);
@@ -344,7 +344,7 @@ void s2let_axisym_mw_wav_hardthreshold_multires_real(double *g_wav, const double
   int J = s2let_j_max(L, B);
   int i, j, offset = 0;
   for(j = J_min; j <= J; j++){
-    int bl = MIN(s2let_bandlimit(B, j), L);
+    int bl = MIN(s2let_bandlimit(j, J_min, B, L), L);
     for(i = 0; i < bl*(2*bl-1); i++){
       if( abs(g_wav[offset + i]) < treshold[j-J_min] )
 	g_wav[offset + i] = 0;

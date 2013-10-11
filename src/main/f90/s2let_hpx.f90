@@ -1,29 +1,26 @@
 ! ----------------------------------------------------------- !
 
-SUBROUTINE healpix_forward_real( alm, map, nside, L )
+SUBROUTINE healpix_forward_real_noiter_noweights( alm, map, nside, L )
 
   use healpix_types
+  use alm_tools
   use healpix_modules
   implicit none
 
-  integer(i4b) 	:: nside, nlmax, L, el, em
+  integer(i4b)  :: nside, nlmax, L, el, em
   integer(i8b) :: npix
   real(dp), dimension(0:12*nside*nside-1) :: map
-  complex(dp), dimension(0:L*L-1) 	  :: alm
-  real(dp), allocatable, dimension(:,:) :: dw8 
-  real(dp), dimension(2) :: z
+  complex(dp), dimension(0:L*L-1)     :: alm
   complex(dpc), allocatable, dimension(:,:,:)  ::  alm_temp
 
   nlmax = L - 1
   npix = nside2npix(nside)
 
-  allocate(dw8(1:2*nside, 1:1))
   allocate(alm_temp(1:1, 0:nlmax, 0:nlmax))
-  dw8 = 1.0_dp
-  z = 0.0_dp
+  alm_temp = 0.0_dpc
 
   call map2alm(nside, nlmax, nlmax, map(0:npix-1), &
-       alm_temp(1:1,0:nlmax, 0:nlmax), z , dw8 )
+       alm_temp(1:1,0:nlmax, 0:nlmax))
 
   do el = 0, nlmax
      do em = 0, el
@@ -32,7 +29,84 @@ SUBROUTINE healpix_forward_real( alm, map, nside, L )
      enddo
   enddo
 
-  deallocate(dw8, alm_temp)
+  deallocate(alm_temp)
+
+END SUBROUTINE healpix_forward_real_noiter_noweights
+
+! ----------------------------------------------------------- !
+
+SUBROUTINE healpix_forward_real( alm, map, nside, L )
+
+  use healpix_types
+  use alm_tools
+  use healpix_modules
+  implicit none
+
+  integer(i4b), parameter  :: nbiter = 3
+
+  integer(i4b) 	:: nside, iter, n_plm, nlmax, L, el, em
+  integer(i8b) :: npix
+  real(dp), dimension(0:12*nside*nside-1) :: map
+  complex(dp), dimension(0:L*L-1) 	  :: alm
+  complex(dpc), allocatable, dimension(:,:,:)  ::  alm_temp, alm_f
+  real(dp), allocatable, dimension(:)  ::  map_temp
+  real(dp), dimension(:,:), allocatable :: plm
+  real(dp), allocatable, dimension(:,:) :: dw8 
+  real(dp), dimension(2) :: z
+  character(len=FILENAMELEN) :: def_dir, def_file, final_file
+  logical :: filefound
+
+  nlmax = L - 1
+  npix = nside2npix(nside)
+  n_plm =  (nlmax+1) * (nlmax+2) * nside  
+
+  allocate(dw8(1:2*nside, 1:1))
+  allocate(alm_temp(1:1, 0:nlmax, 0:nlmax))
+  allocate(alm_f(1:1, 0:nlmax, 0:nlmax))
+  ALLOCATE(map_temp(0:npix-1))
+  allocate(plm(0:n_plm-1,1:1))
+  dw8 = 1.0_dp
+  alm_temp = 0.0_dpc
+  alm_f = 0.0_dpc
+  map_temp = 0.0_dp
+  z = (/-1.d0 , 1.d0/)
+  plm = 0.0_dp
+
+  if( .true. ) then
+    def_dir = get_healpix_data_dir()
+    def_file = trim(get_healpix_ring_weight_file(nside))
+    filefound = scan_directories(def_dir, def_file, final_file)
+    if( .not. filefound ) then
+      PRINT*, "Ring weight file could not be found! Check healpix directories and files."
+    else
+      call input_map(final_file, dw8, 2*nside, 1, fmissval=0.0_dp)
+      dw8 = 1.0_dp + dw8
+    endif
+  endif
+
+  call plm_gen(nside, nlmax, nlmax, plm)
+  map_temp(0:npix-1) = map(0:npix-1)
+
+  do iter = 0, nbiter
+
+    call map2alm(nside, nlmax, nlmax, map_temp(0:npix-1), &
+       alm_temp(1:1,0:nlmax,0:nlmax), z, dw8, plm(0:n_plm-1,1))
+
+    alm_f = alm_f + alm_temp
+    map_temp = 0.0_dp
+    call alm2map(nside, nlmax, nlmax, alm_f, map_temp, plm(:,1))
+    map_temp = map - map_temp
+
+  enddo
+
+    do el = 0, nlmax
+       do em = 0, el
+          alm( el * el + el + em ) = alm_f(1, el, em)
+          alm( el * el + el - em ) = (-1.0)**real(-em) * CONJG( alm_f(1, el, em) )
+       enddo
+    enddo
+
+  deallocate(dw8, alm_temp, alm_f, map_temp, plm)
 
 END SUBROUTINE healpix_forward_real
 
@@ -41,6 +115,7 @@ END SUBROUTINE healpix_forward_real
 SUBROUTINE healpix_inverse_real( map, alm, nside, L )
 
   use healpix_types
+  use alm_tools
   use healpix_modules
   implicit none
 
@@ -48,12 +123,13 @@ SUBROUTINE healpix_inverse_real( map, alm, nside, L )
   integer(i8b) :: npix
   real(dp), dimension(0:12*nside*nside-1) :: map
   complex(dp), dimension(0:L*L-1) 	  :: alm
-  complex(dpc), allocatable, dimension(:,:,:)  ::  alm_temp
+  complex(dpc), allocatable, dimension(:,:,:)  ::  alm_temp, alm_temp2
 
   nlmax = L - 1
   npix = nside2npix(nside)
 
   allocate(alm_temp(1:1, 0:nlmax, 0:nlmax))
+  alm_temp = 0.0_dpc
 
   do el = 0, nlmax
      do em = 0, el
@@ -62,6 +138,12 @@ SUBROUTINE healpix_inverse_real( map, alm, nside, L )
   enddo
 
   call alm2map(nside, nlmax, nlmax, alm_temp, map)
+
+  !allocate(alm_temp2(1:1, 0:nlmax, 0:nlmax))
+  !alm_temp2 = 0.0_dpc
+  !call map2alm(nside, nlmax, nlmax, map, alm_temp2)
+  !print*, SUM(CDABS(alm_temp2-alm_temp))/real((nlmax+1)*(nlmax+2)/2.0)
+  !alm_temp2)
 
   deallocate(alm_temp)
 

@@ -13,6 +13,6 @@ function J = s2let_jmax(L, B)
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
-J = ceil(log(L) ./ log(B));
+J = s2let_jmax_mex(L, B);
 
 end

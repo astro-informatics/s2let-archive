@@ -49,9 +49,9 @@ f_wav = cell(J+1-args.J_min, 1);
 offset = 0;
 for j = args.J_min:J
   if args.Downsample == true
-    band_limit = min([ ceil(args.B^(j+1)) args.L ]);
+    band_limit = min([ s2let_bandlimit(j,args.J_min,args.B,args.L) args.L ]);
   else
-    band_limit =args. L;
+    band_limit = args.L;
   end
   temp = zeros(band_limit, 2*band_limit-1);
   for t = 0:band_limit-1

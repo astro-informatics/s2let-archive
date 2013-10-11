@@ -32,7 +32,7 @@ typedef unsigned long IDL_ULONG;
 
 int s2let_idl_axisym_hpx_wav_analysis_real(int argc, void* argv[])  
 {  
-  if(argc != 7) return 0;  
+  if(argc != 8) return 0;  
   double *f_wav = (double *) argv[0];
   double *f_scal = (double *) argv[1];
   double *f = (double *) argv[2];
@@ -41,6 +41,9 @@ int s2let_idl_axisym_hpx_wav_analysis_real(int argc, void* argv[])
   IDL_INT *L = (IDL_INT *) argv[5];
   IDL_INT *J_min = (IDL_INT *) argv[6];
 
+  IDL_INT *wavtype = (IDL_INT *) argv[7];
+  s2let_switch_wavtype(*wavtype);
+
   s2let_axisym_hpx_wav_analysis_real(f_wav, f_scal, f, *nside, *B, *L, *J_min);
 
   return 1;  
@@ -48,7 +51,7 @@ int s2let_idl_axisym_hpx_wav_analysis_real(int argc, void* argv[])
 
 int s2let_idl_axisym_hpx_wav_synthesis_real(int argc, void* argv[])  
 {  
-  if(argc != 7) return 0;  
+  if(argc != 8) return 0;  
   double *f = (double *) argv[0];
   double *f_wav = (double *) argv[1];
   double *f_scal = (double *) argv[2];
@@ -56,6 +59,9 @@ int s2let_idl_axisym_hpx_wav_synthesis_real(int argc, void* argv[])
   IDL_INT *B = (IDL_INT *) argv[4];
   IDL_INT *L = (IDL_INT *) argv[5];
   IDL_INT *J_min = (IDL_INT *) argv[6];
+
+  IDL_INT *wavtype = (IDL_INT *) argv[7];
+  s2let_switch_wavtype(*wavtype);
 
   s2let_axisym_hpx_wav_synthesis_real(f, f_wav, f_scal, *nside, *B, *L, *J_min);
 
