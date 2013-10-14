@@ -1,6 +1,6 @@
 
-                    S2LET CODE 
-			   www.s2let.org
+                       S2LET CODE
+                      www.s2let.org
               Fast wavelet transforms on the sphere
   ----------------------------------------------------------------
 
@@ -33,7 +33,7 @@ INSTALLATION
      See documentation
 
 REQUIREMENTS
-     SSHT (http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html)
+     SSHT (http://www.spinsht.org/)
      FFTW (http://www.fftw.org/)
 
 OPTIONAL
