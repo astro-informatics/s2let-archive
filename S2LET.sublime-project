@@ -1,0 +1,33 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+            "file_exclude_patterns": ["*.mexa64"]
+		}
+	],
+
+    "build_systems":
+    [
+        {
+            "name": "S2LET",
+            "cmd": ["make", "all"],
+            "file_regex": "^([^:]*):(\\d+):(?:(\\d+):)? ((?:(?:fatal )?error|note|warning): .*)$",
+            "working_dir": "$project_path",
+            "variants": [
+                {
+                    "name": "Run",
+                    "cmd": ["make", "runtest"]
+                },
+                {
+                    "name": "Run unit tests",
+                    "cmd": ["make", "rununittest"]
+                },
+                {
+                    "name": "Clean",
+                    "cmd": ["make", "clean"]
+                }
+            ]
+        }
+    ]
+}
