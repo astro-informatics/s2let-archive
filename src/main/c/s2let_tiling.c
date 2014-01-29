@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
@@ -13,6 +13,12 @@ s2let_kernel_type s2let_kernel = S2DW;
 //
 //
 
+/*!
+ * Switch to different wavelet type.
+ *
+ * \param[in]  typenum Integer: 1 for scale-discretised, 2 for needlets and 3 for spline wavelets.
+ * \retval none
+ */
 void s2let_switch_wavtype(int typenum)
 {
   //printf("Input wavelet type : %i\n",typenum);
@@ -31,6 +37,15 @@ void s2let_switch_wavtype(int typenum)
   }
 }
 
+/*!
+ * Computes band-limit of a specific wavelet scale.
+ *
+ * \param[in]  j Wavelet scale.
+ * \param[in]  J_min Minimum wavelet scale.
+ * \param[in]  j Wavelet scale.
+ * \param[in]  L Total band-limit.
+ * \retval band-limit
+ */
 int s2let_bandlimit(int j, int J_min, int B, int L)
 {
   if(s2let_kernel == S2DW || s2let_kernel == NEEDLET)
@@ -39,10 +54,17 @@ int s2let_bandlimit(int j, int J_min, int B, int L)
     int Jmax = s2let_j_max(L, B);
     if (j == Jmax) return L;
     //if (j < J_min) return ceil(L / (double) pow(B, Jmax-J_min-1));
-    return ceil(L / (double) pow(B, Jmax-j-2)); 
+    return ceil(L / (double) pow(B, Jmax-j-2));
   }
 }
 
+/*!
+ * Computes minimum harmonic index supported by needlets.
+ *
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval ell_min
+ */
 int s2let_el_min(int B, int J_min)
 {
   if(s2let_kernel == S2DW || s2let_kernel == NEEDLET)
@@ -51,11 +73,27 @@ int s2let_el_min(int B, int J_min)
     return 0;
 }
 
+/*!
+ * Computes needlet maximum level required to ensure exact reconstruction.
+ *
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  B Wavelet parameter.
+ * \retval j_max
+ */
 int s2let_j_max(int L, int B)
 {
   return ceil(log(L) / log(B));
 }
 
+/*!
+ * Allocates axisymmetric tiling kernels in harmonic space.
+ *
+ * \param[out]  kappa Kernel functions for the wavelets.
+ * \param[out]  kappa0 Kernel for the scaling function.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \retval none
+ */
 void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, int B, int L)
 {
   int J = s2let_j_max(L, B);
@@ -125,6 +163,16 @@ void s2let_tiling_phi2_spline(double *phi2, int B, int L, int J_min)
   }
 }
 
+/*!
+ * Generates axisymmetric tiling in harmonic space.
+ *
+ * \param[out]  kappa Kernel functions for the wavelets.
+ * \param[out]  kappa0 Kernel for the scaling function.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_tiling_axisym(double *kappa, double *kappa0, int B, int L, int J_min)
 {
   int j, l;
@@ -142,7 +190,7 @@ void s2let_tiling_axisym(double *kappa, double *kappa0, int B, int L, int J_min)
 
   for (l = 0; l < L; l++)
       kappa0[l] = sqrt(phi2[l+J_min*L]);
-  
+
   for (j = J_min; j <= J; j++){
     for (l = 0; l < L; l++){
       temp = sqrt(phi2[l+(j+1)*L] - phi2[l+j*L]);
@@ -153,19 +201,30 @@ void s2let_tiling_axisym(double *kappa, double *kappa0, int B, int L, int J_min)
       previoustemp = temp;
     }
     for (l = 0; l < L; l++)
-      if( !finite(kappa[l+j*L]) ) 
+      if( !finite(kappa[l+j*L]) )
         kappa[l+j*L] = kappa[l+j*L-1];
   }
   free(phi2);
 }
 
+/*!
+ * Checks exactness of the harmonic tiling kernels by checking
+ * the admissibility condition.
+ *
+ * \param[in]  kappa Kernel functions for the wavelets.
+ * \param[in]  kappa0 Kernel for the scaling function.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval Achieved accuracy (should be lower than e-12).
+ */
 double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, int B, int L, int J_min)
 {
   int l, j;
   int J = s2let_j_max(L, B);
   //int l_min = s2let_el_min(B, J_min);
   double sum = 0;
-		
+
   double *ident;
   ident = (double*)calloc(L, sizeof(double));
 

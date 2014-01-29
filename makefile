@@ -1,12 +1,12 @@
 # S2LET package
-# Copyright (C) 2012 
+# Copyright (C) 2012
 # Boris Leistedt & Jason McEwen
 # ======================================== #
 
 # Directory for SSHT (required)
-SSHTDIR	= ${SSHT}
+SSHTDIR	= ../ssht
 # Directory for FFTW (required)
-FFTWDIR	= /usr/local
+FFTWDIR	= ../fftw-3.2.2_fPIC
 
 # Directory for CFITSIO (optional)
 CFITSIODIR	= ${CFITSIO}
@@ -23,7 +23,7 @@ UNAME 	:= $(shell uname)
 
 # Compilers and options for C
 CC	= gcc
-OPT	= -Wall -O3 -g -DS2LET_VERSION=\"1.1b1\" -DS2LET_BUILD=\"`svnversion -n .`\"
+OPT	= -Wall -g -DS2LET_VERSION=\"1.1b1\" -DS2LET_BUILD=\"`git rev-parse HEAD`\"
 
 # Compilers and options for Fortran
 FCC	= gfortran
@@ -128,7 +128,7 @@ S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_axisym_tiling_mex.o	\
 	  $(S2LETOBJMAT)/s2let_axisym_mw_analysis_mex.o		\
 	  $(S2LETOBJMAT)/s2let_jmax_mex.o	\
 	  $(S2LETOBJMAT)/s2let_bandlimit_mex.o		\
-	  $(S2LETOBJMAT)/s2let_axisym_mw_synthesis_mex.o	
+	  $(S2LETOBJMAT)/s2let_axisym_mw_synthesis_mex.o
 
 S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_axisym_tiling_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_axisym_mw_analysis_mex.$(MEXEXT)	\
@@ -148,7 +148,7 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 	FFLAGS+= -I$(HEALPIXINC)
 	LDFLAGS+= -L$(HEALPIXLIB)
 	LDFLAGS+= -l$(HEALPIXLIBN)
-	LDFLAGS+= -lgfortran -fopenmp 
+	LDFLAGS+= -lgfortran -fopenmp
 	ifneq ($(strip $(GFORTRANLIB)),)
 	  LDFLAGS+= -L$(GFORTRANLIB)
 	endif
@@ -205,7 +205,7 @@ $(S2LETOBJF90)/%.o: $(S2LETOBJF90)/%.f90
 	$(FCC) $(OPTF90) $(FFLAGS) $(HPXOPT) -c $< -o $@
 
 $(S2LETOBJMAT)/%_mex.o: %_mex.c $(S2LETLIB)/lib$(S2LETLIBN).a
-	$(CC) $(OPT) $(FFLAGS) -c $< -o $@ -I${MLABINC} 
+	$(CC) $(OPT) $(FFLAGS) -c $< -o $@ -I${MLABINC}
 
 $(S2LETOBJMEX)/%_mex.$(MEXEXT): $(S2LETOBJMAT)/%_mex.o $(S2LETLIB)/lib$(S2LETLIBN).a
 	$(MEX) $< -o $@ $(LDFLAGSMEX) $(MEXFLAGS) -L$(MLABLIB)
@@ -268,7 +268,7 @@ axisym_hpx_synthesis_real: $(S2LETBIN)/s2let_axisym_hpx_synthesis_real
 
 .PHONY: about
 about: $(S2LETBIN)/s2let_about
-$(S2LETBIN)/s2let_about: $(S2LETOBJ)/s2let_about.o 
+$(S2LETBIN)/s2let_about: $(S2LETOBJ)/s2let_about.o
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_about
 	$(S2LETBIN)/s2let_about
 
@@ -291,6 +291,6 @@ tidy:
 	rm -f $(S2LETTESTOBJ)/*.o
 	rm -f $(S2LETOBJF90)/*.o
 	rm -f $(S2LETOBJMEX)/*.o
-	rm -f *~ 
+	rm -f *~
 
 # ======================================== #
