@@ -5,6 +5,7 @@
 #include "s2let.h"
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 //
 //
@@ -48,14 +49,21 @@ void s2let_switch_wavtype(int typenum)
  */
 int s2let_bandlimit(int j, int J_min, int B, int L)
 {
-  if(s2let_kernel == S2DW || s2let_kernel == NEEDLET)
-    return ceil(pow(B, j+1));
-  if(s2let_kernel == SPLINE){
-    int Jmax = s2let_j_max(L, B);
-    if (j == Jmax) return L;
-    //if (j < J_min) return ceil(L / (double) pow(B, Jmax-J_min-1));
-    return ceil(L / (double) pow(B, Jmax-j-2));
-  }
+    int Jmax;
+    switch (s2let_kernel)
+    {
+    case S2DW:
+    case NEEDLET:
+        return ceil(pow(B, j+1));
+    case SPLINE:
+        Jmax = s2let_j_max(L, B);
+        if (j == Jmax) return L;
+        //if (j < J_min) return ceil(L / (double) pow(B, Jmax-J_min-1));
+        return ceil(L / (double) pow(B, Jmax-j-2));
+    default:
+        // This should never happen
+        return -1;
+    }
 }
 
 /*!
@@ -67,10 +75,17 @@ int s2let_bandlimit(int j, int J_min, int B, int L)
  */
 int s2let_el_min(int B, int J_min)
 {
-  if(s2let_kernel == S2DW || s2let_kernel == NEEDLET)
-    return ceil(pow(B, J_min));
-  if(s2let_kernel == SPLINE)
-    return 0;
+    switch (s2let_kernel)
+    {
+    case S2DW:
+    case NEEDLET:
+        return ceil(pow(B, J_min));
+    case SPLINE:
+        return 0;
+    default:
+        // This should never happen
+        return -1;
+    }
 }
 
 /*!
@@ -97,8 +112,8 @@ int s2let_j_max(int L, int B)
 void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, int B, int L)
 {
   int J = s2let_j_max(L, B);
-  *kappa = (double*)calloc((J+1) * L, sizeof(double));
-  *kappa0 = (double*)calloc(L, sizeof(double));
+  *kappa = calloc((J+1) * L, sizeof **kappa);
+  *kappa0 = calloc(L, sizeof **kappa0);
 }
 
 void s2let_tiling_phi2_s2dw(double *phi2, int B, int L, int J_min)
@@ -208,6 +223,70 @@ void s2let_tiling_axisym(double *kappa, double *kappa0, int B, int L, int J_min)
 }
 
 /*!
+ * Allocates space for directionality components in harmonic
+ * space.
+ *
+ * \param[out]  s_elm Pointer to allocated space for harmonic
+ *                    coefficients of directionality components.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  N Azimuthal band-limit.
+ * \retval none
+ */
+void s2let_tiling_direction_allocate(complex double **s_elm, int L, int N)
+{
+  // TODO: This could be reduced by not storing s_elm with |m| >= N
+  *s_elm = calloc(L*L, sizeof **s_elm);
+}
+
+/*!
+ * Generates the harmonic coefficients for the directionality
+ * component of the tiling functions.
+ * This implementation is based on equation (11) in the wavelet
+ * computation paper.
+ *
+ * \param[out]  s_elm Harmonic coefficienets of directionality
+ *                    components.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  N Azimuthal band-limit.
+ *
+ */
+void s2let_tiling_direction(complex double *s_elm, int L, int N)
+{
+    complex double nu;
+    int el, m, ind;
+
+    if (N % 2)
+        nu = I;
+    else
+        nu = 1;
+
+    // Skip the s_00 component, as it is zero.
+    ind = 1;
+
+    for (el = 1; el < L; ++el)
+    {
+        int gamma;
+        // This if else replaces the -1^(N+l)
+        if ((N+el) % 2)
+            gamma = MIN(N-1, el);
+        else
+            gamma = MIN(N-1, el-1);
+
+        for (m = -el; m <= el; ++m)
+        {
+            // This if/else takes care of the azimuthal
+            // band-limit and replaces the beta factor.
+            if (ABS(m) < N && (N+m) % 2)
+                s_elm[ind] = nu*sqrt(binomial_coefficient(gamma, (gamma - m)/2UL, 1)/pow(2, gamma));
+            else
+                s_elm[ind] = 0.0;
+
+            ++ind;
+        }
+    }
+}
+
+/*!
  * Checks exactness of the harmonic tiling kernels by checking
  * the admissibility condition.
  *
@@ -216,33 +295,62 @@ void s2let_tiling_axisym(double *kappa, double *kappa0, int B, int L, int J_min)
  * \param[in]  B Wavelet parameter.
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
- * \retval Achieved accuracy (should be lower than e-12).
+ * \retval Achieved accuracy (should be lower than e-14).
  */
 double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, int B, int L, int J_min)
 {
-  int l, j;
-  int J = s2let_j_max(L, B);
-  //int l_min = s2let_el_min(B, J_min);
-  double sum = 0;
+    int l, j;
+    int J = s2let_j_max(L, B);
+    //int l_min = s2let_el_min(B, J_min);
+    double error = 0;
 
-  double *ident;
-  ident = (double*)calloc(L, sizeof(double));
+    double *ident;
+    ident = (double*)calloc(L, sizeof(double));
 
-  //printf("Tilling identity: ");
-  for (l = 0; l < L; l++){
-    ident[l] = pow(kappa0[l], 2.0);
-    //sum += ident[l] - 1.0;
-  }
-  //printf(" %2.2f ", ident[0]);
-  for (l = 0; l < L; l++){
-    for (j = J_min; j <= J; j++){
-      ident[l] += pow(kappa[l+j*L], 2.0);
+    for (l = 0; l < L; l++)
+        ident[l] = pow(kappa0[l], 2.0);
+
+    for (l = 0; l < L; l++) {
+        for (j = J_min; j <= J; j++) {
+            ident[l] += pow(kappa[l+j*L], 2.0);
+        }
+
+        error = MAX(error, fabs(ident[l] - 1.0));
     }
-    //printf(" %2.2f ", ident[l]);
-    sum += ident[l] - 1.0;
-  }
 
-  return sum;
-  free(ident);
+    free(ident);
+    return error;
 }
+
+/*!
+ * Checks exactness of the directionality components by checking
+ * the admissibility condition.
+ *
+ * \param[in]  s_elm Harmonic coefficienets of directionality
+ *                   components.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  N Azimuthal band-limit.
+ * \retval Achieved accuracy (should be lower than e-14).
+ */
+double s2let_tiling_direction_check_identity(complex double *s_elm, int L, int N)
+{
+    int el, m, ind;
+    double error = 0.0; // maximum error for all el
+
+    // Skip the s_00 component, as it is zero.
+    ind = 1;
+
+    for (el = 1; el < L; ++el) {
+        double sum = 0.0; // sum for each el
+        for (m = -el; m <= el; ++m) {
+            sum += s_elm[ind] * conj(s_elm[ind]);
+            ++ind;
+        }
+
+        error = MAX(error, fabs(sum - 1.0));
+    }
+
+    return error;
+}
+
 
