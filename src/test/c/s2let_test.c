@@ -65,6 +65,37 @@ void s2let_tiling_direction_test(int L, int N)
 }
 
 /*!
+ * Test the identity relation of the directional wavelets for
+ * the wavelet tiling in harmonic space.
+ *
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  N Azimuthal band-limit.
+ * \retval none
+ */
+void s2let_tiling_wavelet_test(int B, int L, int J_min, int N)
+{
+  complex double *phi;
+  double *psi;
+  double error;
+
+  // Allocate space for the harmonic coefficients
+  s2let_tiling_wavelet_allocate(&phi, &psi, B, L, N);
+
+  // Construct the harmonic coefficients
+  s2let_tiling_wavelet(phi, psi, B, L, J_min, N);
+
+  // Check that they recover the identity relation,
+  // ensuring exactness of the wavelet transform.
+  error = s2let_tiling_wavelet_check_identity(phi, psi, B, L, J_min, N);
+  printf("  - Maximum error : %6.5e\n", error);
+
+  free(phi);
+  free(psi);
+}
+
+/*!
  * Test the exactness of the full resolution wavelet transform in harmonic space.
  *
  * \param[in]  B Wavelet parameter.
@@ -726,6 +757,9 @@ int main(int argc, char *argv[])
   printf("==========================================================\n");
   printf("> Testing directionality components...\n");
   s2let_tiling_direction_test(L, N);
+  printf("==========================================================\n");
+  printf("> Testing directional wavelets...\n");
+  s2let_tiling_wavelet_test(B, L, J_min, N);
   printf("==========================================================\n");
   printf("> Testing axisymmetric wavelets in harmonics space...\n");
   s2let_axisym_lm_wav_test(B, L, J_min, seed);

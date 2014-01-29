@@ -287,6 +287,78 @@ void s2let_tiling_direction(complex double *s_elm, int L, int N)
 }
 
 /*!
+ * Allocates space for directional wavelets in harmonic space.
+ *
+ * \param[out]  psi Pointer to allocated space for harmonic
+ *                  coefficients of directional wavelets.
+ * \param[out]  phi Pointer to allocated space for harmonic
+ *                  coefficients of scaling function.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  N Azimuthal band-limit.
+ * \retval none
+ */
+void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, int L, int N)
+{
+  // TODO: This could be reduced by not storing psi_j_elm with |m| >= N
+  int J = s2let_j_max(L, B);
+  *psi = calloc((J+1) * L*L, sizeof **psi);
+  *phi = calloc(L, sizeof **phi);
+}
+
+/*!
+ * Generates the harmonic coefficients for the directional tiling wavelets.
+ * This implementation is based on equation (7) in the wavelet
+ * computation paper.
+ *
+ * \param[out]  psi Harmonic coefficienets of directional wavelets.
+ * \param[out]  phi Harmonic coefficienets of scaling function.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  N Azimuthal band-limit.
+ *
+ */
+void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_min, int N)
+{
+    double *kappa;
+    double *kappa0;
+    complex double *s_elm;
+    int j, el, m;
+    int J = s2let_j_max(L, B);
+
+    // TODO: Allocate kappa0 directly inside phi. For this, we should probably
+    //       separate the allocation functions to do only one allocation per
+    //       function.
+    s2let_tiling_axisym_allocate(&kappa, &kappa0, B, L);
+    s2let_tiling_axisym(kappa, kappa0, B, L, J_min);
+    s2let_tiling_direction_allocate(&s_elm, L, N);
+    s2let_tiling_direction(s_elm, L, N);
+
+    for (el = 0; el < L; ++el)
+    {
+        phi[el] = kappa0[el];
+    }
+
+    for (j = J_min; j <= J; ++j)
+    {
+        int ind = 0;
+        for (el = 0; el < L; ++el)
+        {
+            for (m = -el; m <= el; ++m)
+            {
+                psi[j*L*L + ind] = kappa[j*L + el] * s_elm[ind];
+                ++ind;
+            }
+        }
+    }
+
+    free(kappa);
+    free(kappa0);
+    free(s_elm);
+}
+
+/*!
  * Checks exactness of the harmonic tiling kernels by checking
  * the admissibility condition.
  *
@@ -305,13 +377,13 @@ double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, int B, 
     double error = 0;
 
     double *ident;
-    ident = (double*)calloc(L, sizeof(double));
+    ident = calloc(L, sizeof *ident);
 
     for (l = 0; l < L; l++)
         ident[l] = pow(kappa0[l], 2.0);
 
     for (l = 0; l < L; l++) {
-        for (j = J_min; j <= J; j++) {
+        for (j = 0; j <= J; j++) {
             ident[l] += pow(kappa[l+j*L], 2.0);
         }
 
@@ -326,7 +398,7 @@ double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, int B, 
  * Checks exactness of the directionality components by checking
  * the admissibility condition.
  *
- * \param[in]  s_elm Harmonic coefficienets of directionality
+ * \param[in]  s_elm Harmonic coefficients of directionality
  *                   components.
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  N Azimuthal band-limit.
@@ -340,9 +412,11 @@ double s2let_tiling_direction_check_identity(complex double *s_elm, int L, int N
     // Skip the s_00 component, as it is zero.
     ind = 1;
 
-    for (el = 1; el < L; ++el) {
+    for (el = 1; el < L; ++el)
+    {
         double sum = 0.0; // sum for each el
-        for (m = -el; m <= el; ++m) {
+        for (m = -el; m <= el; ++m)
+        {
             sum += s_elm[ind] * conj(s_elm[ind]);
             ++ind;
         }
@@ -353,4 +427,49 @@ double s2let_tiling_direction_check_identity(complex double *s_elm, int L, int N
     return error;
 }
 
+/*!
+ * Checks exactness of the directional wavelets by checking
+ * the admissibility condition.
+ *
+ * \param[in]  psi Harmonic coefficients of directional wavelets.
+ * \param[in]  phi Harmonic coefficients of scaling function.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  N Azimuthal band-limit.
+ * \retval Achieved accuracy (should be lower than e-14).
+ */
+double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int B, int L, int J_min, int N)
+{
+    int j, el, m, ind;
+    int J = s2let_j_max(L, B);
+    double error = 0.0; // maximum error for all el
 
+    double *ident;
+    ident = calloc(L, sizeof *ident);
+
+    for (el = 0; el < L; ++el)
+    {
+        ident[el] += phi[el] * phi[el];
+    }
+
+    for (j = 0; j <= J; ++j)
+    {
+        ind = 0;
+        for (el = 0; el < L; ++el)
+        {
+            for (m = -el; m <= el; ++m)
+            {
+                ident[el] += psi[j*L*L + ind] * conj(psi[j*L*L + ind]);
+                ++ind;
+            }
+        }
+    }
+
+    for (el = 0; el < L; ++el)
+    {
+        error = MAX(error, fabs(ident[el] - 1.0));
+    }
+
+    return error;
+}
