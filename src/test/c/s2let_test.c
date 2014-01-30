@@ -95,6 +95,31 @@ void s2let_tiling_wavelet_test(int B, int L, int J_min, int N)
   free(psi);
 }
 
+void s2let_binomial_coefficient_test(int n_max)
+{
+    int n, k;
+    int firstError = 0;
+
+    long error;
+
+    for (n = 1; n <= n_max; ++n)
+    {
+        for (k = 0; k <= n/2; ++k)
+        {
+            error = binomial_coefficient(n, k, 0) -
+                        binomial_coefficient(n, k, 1);
+
+            if (error && !firstError)
+            {
+                printf("  - First error at: n = %d, k = %d, error = %ld\n", n, k, error);
+                firstError = 1;
+            }
+        }
+    }
+
+    printf("  - Maximum error: %ld\n", error);
+}
+
 /*!
  * Test the exactness of the full resolution wavelet transform in harmonic space.
  *
@@ -752,6 +777,10 @@ int main(int argc, char *argv[])
   printf("L = %i  N = %i  B = %i  l_wav_min = %i  seed = %i\n", L, N, B, l_min, seed);
   s2let_switch_wavtype(3);
   printf("----------------------------------------------------------\n");
+  printf("> Testing logfact binomial coefficient implementation...\n");
+  // Don't use more than 62 as the argument.
+  s2let_binomial_coefficient_test(62);
+  printf("==========================================================\n");
   printf("> Testing axisymmetric kernels...\n");
   s2let_tiling_axisym_test(B, L, J_min);
   printf("==========================================================\n");
