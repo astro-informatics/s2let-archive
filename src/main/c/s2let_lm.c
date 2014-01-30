@@ -1,27 +1,50 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
-#include <complex.h> 
+#include <complex.h>
 #include <ssht.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 
 double s2let_lm_power(complex double *flm, int L){
-  int i;
-  double totalpower = 0.0;
-  for(i = 0; i < L*L; i++)
-    totalpower += pow(cabs(flm[i]), 2.0);
-  totalpower = totalpower / (L * L);
-  return totalpower; 
+    int i;
+    double totalpower = 0.0;
+    for(i = 0; i < L*L; ++i)
+        totalpower += pow(cabs(flm[i]), 2.0);
+    totalpower = totalpower / (L * L);
+    return totalpower;
 }
 
-
+/*!
+ * Allocate spherical harmonic coefficients for a given
+ * bandlimit L.
+ *
+ * \param[out]  flm Pointer to allocated space for spherical
+ *                  harmonic coefficients.
+ * \param[in]  L Angular harmonic band-limit.
+ * \retval none
+ */
 void s2let_lm_allocate(complex double **flm, int L)
 {
-  *flm = (complex double*)calloc(L * L, sizeof(complex double));
+    *flm = calloc(L * L, sizeof **flm);
+}
+
+/*!
+ * Allocate Wigner coefficients for given bandlimits L and N.
+ *
+ * \param[out]  flmn Pointer to allocated space for Wigner
+ *                   coefficients.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  N Azimuthal harmonic band-limit.
+ * \retval none
+ */
+void s2let_lmn_allocate(complex double **flmn, int L, int N)
+{
+    *flmn = calloc((2*N-1) * L * L, sizeof **flmn);
 }
 
 /*!
@@ -34,11 +57,10 @@ void s2let_lm_allocate(complex double **flm, int L)
  */
 void s2let_lm_random_flm(complex double *flm, int L, int seed)
 {
-  int i;
-  srand( time(NULL) );
-  for (i=0; i<L*L; i++){
-    flm[i] = (2.0*ran2_dp(seed) - 1.0) + I * (2.0*ran2_dp(seed) - 1.0);
-  }
+    int i;
+    srand( time(NULL) );
+    for (i=0; i<L*L; ++i)
+        flm[i] = (2.0*ran2_dp(seed) - 1.0) + I * (2.0*ran2_dp(seed) - 1.0);
 }
 
 /*!
@@ -50,18 +72,18 @@ void s2let_lm_random_flm(complex double *flm, int L, int seed)
  * \retval none
  */
 void s2let_lm_random_flm_real(complex double *flm, int L, int seed) {
-  int el, m, msign, i, i_op;
-  for (el=0; el<L; el++) {
-    m = 0;
-    i = el*el + el + m ;
-    flm[i] = (2.0*ran2_dp(seed) - 1.0);
-    for (m=1; m<=el; m++) {
-      i = el*el + el + m ;
-      flm[i] = (2.0*ran2_dp(seed) - 1.0) + I * (2.0*ran2_dp(seed) - 1.0);
-      i_op = el*el + el - m ;
-      msign = m & 1;
-      msign = 1 - msign - msign; // (-1)^m
-      flm[i_op] = msign * conj(flm[i]);
+    int el, m, msign, i, i_op;
+    for (el = 0; el < L; ++el) {
+        m = 0;
+        i = el*el + el + m;
+        flm[i] = (2.0*ran2_dp(seed) - 1.0);
+        for (m = 1; m <= el; ++m) {
+            i = el*el + el + m;
+            flm[i] = (2.0*ran2_dp(seed) - 1.0) + I * (2.0*ran2_dp(seed) - 1.0);
+            i_op = el*el + el - m;
+            msign = m & 1;
+            msign = 1 - msign - msign; // (-1)^m
+            flm[i_op] = msign * conj(flm[i]);
+        }
     }
-  }
 }

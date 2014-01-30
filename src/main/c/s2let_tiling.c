@@ -22,20 +22,20 @@ s2let_kernel_type s2let_kernel = S2DW;
  */
 void s2let_switch_wavtype(int typenum)
 {
-  //printf("Input wavelet type : %i\n",typenum);
-  if (typenum == 1){
+    //printf("Input wavelet type : %i\n",typenum);
+    if (typenum == 1){
     //printf("Kernel switch 1: using scale-discretised wavelets.\n");
-    s2let_kernel = S2DW;
-  } else if (typenum == 2){
+        s2let_kernel = S2DW;
+    } else if (typenum == 2){
     //printf("Kernel switch 2: using needlets.\n");
-    s2let_kernel = NEEDLET;
-  } else if (typenum == 3){
+        s2let_kernel = NEEDLET;
+    } else if (typenum == 3){
     //printf("Kernel switch 3: using cubic splines wavelets.\n");
-    s2let_kernel = SPLINE;
-  } else {
-    printf("Kernel number should be 1, 2 or 3. Default is 1.\n");
-    s2let_kernel = S2DW;
-  }
+        s2let_kernel = SPLINE;
+    } else {
+        printf("Kernel number should be 1, 2 or 3. Default is 1.\n");
+        s2let_kernel = S2DW;
+    }
 }
 
 /*!
