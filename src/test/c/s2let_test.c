@@ -97,10 +97,13 @@ void s2let_tiling_wavelet_test(int B, int L, int J_min, int N)
 
 void s2let_binomial_coefficient_test(int n_max)
 {
-    int n, k;
+    const int nRepeat = 100000;
+    int n, k, i;
     int firstError = 0;
 
     long error;
+
+    clock_t time_start, time_end;
 
     for (n = 1; n <= n_max; ++n)
     {
@@ -118,6 +121,22 @@ void s2let_binomial_coefficient_test(int n_max)
     }
 
     printf("  - Maximum error: %ld\n", error);
+
+    printf("  - Duration for %d computations of (%d,%d)\n", nRepeat, n_max, n_max/2);
+
+    time_start = clock();
+    for (i = 0; i < nRepeat; ++i)
+        binomial_coefficient(n_max, n_max/2, 0);
+    time_end = clock();
+    printf("    logfact implementation: %4.4f seconds\n",
+           (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+    time_start = clock();
+    for (i = 0; i < nRepeat; ++i)
+        binomial_coefficient(n_max, n_max/2, 1);
+    time_end = clock();
+    printf("    exact implementation: %4.4f seconds\n",
+           (time_end - time_start) / (double)CLOCKS_PER_SEC);
 }
 
 /*!
