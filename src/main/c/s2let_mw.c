@@ -1,9 +1,9 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
-#include <complex.h> 
+#include <complex.h>
 #include <ssht.h>
 #include <stdlib.h>
 #include <math.h>
@@ -36,12 +36,12 @@ void s2let_mw_map2alm_real(complex double* flm, const double* f, int L) {
 
 void s2let_mw_allocate(complex double **f, int L)
 {
-  *f = (complex double*)calloc(L * (2*L-1), sizeof(complex double));
+  *f = calloc(L * (2*L-1), sizeof **f);
 }
 
 void s2let_mw_allocate_real(double **f, int L)
 {
-  *f = (double*)calloc(L * (2*L-1), sizeof(double));
+  *f = calloc(L * (2*L-1), sizeof **f);
 }
 
 double s2let_mw_power(complex double *f, int L){
@@ -50,7 +50,7 @@ double s2let_mw_power(complex double *f, int L){
   s2let_mw_map2alm(flm, f, L);
   double res = s2let_lm_power(flm, L);
   free(flm);
-  return res; 
+  return res;
 }
 
 double s2let_mw_power_real(double *f, int L){
@@ -59,5 +59,5 @@ double s2let_mw_power_real(double *f, int L){
   s2let_mw_map2alm_real(flm, f, L);
   double res = s2let_lm_power(flm, L);
   free(flm);
-  return res; 
+  return res;
 }

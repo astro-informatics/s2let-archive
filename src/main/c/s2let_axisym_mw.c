@@ -1,12 +1,22 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
-#include <complex.h> 
+#include <complex.h>
 #include <ssht.h>
 #include <stdlib.h>
 
+/*!
+ * Allocates arrays for wavelets and scaling functions in pixel space (MW sampling).
+ *
+ * \param[out]  f_wav Array of wavelets maps, MW sampling.
+ * \param[out]  f_scal Scaling function map, MW sampling.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_allocate_f_wav_multires(complex double **f_wav, complex double **f_scal, int B, int L, int J_min)
 {
   int J = s2let_j_max(L, B);
@@ -20,6 +30,16 @@ void s2let_axisym_mw_allocate_f_wav_multires(complex double **f_wav, complex dou
   *f_scal = (complex double*)calloc(bandlimit * (2*bandlimit-1), sizeof(complex double));
 }
 
+/*!
+ * Allocates arrays for multiresolution wavelets and scaling functions in pixel space (MW sampling).
+ *
+ * \param[out]  f_wav Array of wavelets maps, MW sampling.
+ * \param[out]  f_scal Scaling function map, MW sampling.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_allocate_f_wav_multires_real(double **f_wav, double **f_scal, int B, int L, int J_min)
 {
   int J = s2let_j_max(L, B);
@@ -33,6 +53,16 @@ void s2let_axisym_mw_allocate_f_wav_multires_real(double **f_wav, double **f_sca
   *f_scal = (double*)calloc(bandlimit * (2*bandlimit-1), sizeof(double));
 }
 
+/*!
+ * Allocates arrays for final wavelets and scaling functions in pixel space (MW sampling).
+ *
+ * \param[out]  f_wav Array of wavelets maps, MW sampling.
+ * \param[out]  f_scal Scaling function map, MW sampling.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_allocate_f_wav(complex double **f_wav, complex double **f_scal, int B, int L, int J_min)
 {
   int J = s2let_j_max(L, B);
@@ -40,6 +70,16 @@ void s2let_axisym_mw_allocate_f_wav(complex double **f_wav, complex double **f_s
   *f_scal = (complex double*)calloc(L * (2*L-1), sizeof(complex double));
 }
 
+/*!
+ * Allocates arrays for final wavelets and scaling functions in pixel space (MW sampling).
+ *
+ * \param[out]  f_wav Array of wavelets maps, MW sampling.
+ * \param[out]  f_scal Scaling function map, MW sampling.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_allocate_f_wav_real(double **f_wav, double **f_scal, int B, int L, int J_min)
 {
   int J = s2let_j_max(L, B);
@@ -47,6 +87,19 @@ void s2let_axisym_mw_allocate_f_wav_real(double **f_wav, double **f_scal, int B,
   *f_scal = (double*)calloc(L * (2*L-1), sizeof(double));
 }
 
+/*!
+ * Spherical wavelets : full resolution analysis in real space, MW sampling.
+ * Perform wavelet transform in real space (from scratch, gives wavelet maps).
+ * Sampling scheme : MW sampling.
+ *
+ * \param[out]  f_wav Array of wavelets maps, MW sampling.
+ * \param[out]  f_scal Scaling function map, MW sampling..
+ * \param[in]  f Input function (MW sampling)
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_wav_analysis(complex double *f_wav, complex double *f_scal, const complex double *f, int B, int L, int J_min)
 {
   int spin = 0;
@@ -83,6 +136,19 @@ void s2let_axisym_mw_wav_analysis(complex double *f_wav, complex double *f_scal,
   free(f_wav_lm);
 }
 
+/*!
+ * Perform wavelet transform in real space (from scratch, gives wavelet maps).
+ * Sampling scheme : MW sampling.
+ * Spherical wavelets : synthesis in real space, MW sampling.
+ *
+ * \param[out]  f Input function (MW sampling)
+ * \param[in]  f_wav Array of wavelets maps, MW sampling.
+ * \param[in]  f_scal Scaling function map, MW sampling.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_wav_synthesis(complex double *f, const complex double *f_wav, const complex double *f_scal, int B, int L, int J_min)
 {
   int spin = 0;
@@ -119,6 +185,20 @@ void s2let_axisym_mw_wav_synthesis(complex double *f, const complex double *f_wa
   free(f_wav_lm);
 }
 
+/*!
+ * Perform wavelet transform in real space (from scratch, gives wavelet maps).
+ * Input function is real.
+ * Sampling scheme : MW sampling.
+ * Spherical wavelets : analysis in real space, MW sampling.
+ *
+ * \param[out]  f_wav Array of wavelets maps, MW sampling.
+ * \param[out]  f_scal Scaling function map, MW sampling.
+ * \param[in]  f Input function (MW sampling)
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_wav_analysis_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min)
 {
   int verbosity = 0;
@@ -154,6 +234,20 @@ void s2let_axisym_mw_wav_analysis_real(double *f_wav, double *f_scal, const doub
   free(f_wav_lm);
 }
 
+/*!
+ * Perform wavelet transform in real space (from scratch, gives wavelet maps).
+ * Input function is real.
+ * Sampling scheme : MW sampling.
+ * Spherical wavelets : synthesis in real space, MW sampling.
+ *
+ * \param[out]  f Input function (MW sampling)
+ * \param[in]  f_wav Array of wavelets maps, MW sampling.
+ * \param[in]  f_scal Scaling function map, MW sampling.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_wav_synthesis_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min)
 {
   int verbosity = 0;
@@ -189,6 +283,19 @@ void s2let_axisym_mw_wav_synthesis_real(double *f, const double *f_wav, const do
   free(f_wav_lm);
 }
 
+/*!
+ * Spherical wavelets : multiresolution analysis in real space, MW sampling.
+ * Perform multiresolution wavelet transform in real space (from scratch, gives wavelet maps).
+ * Sampling scheme : MW sampling.
+ *
+ * \param[out]  f_wav Array of wavelets maps, MW sampling.
+ * \param[out]  f_scal Scaling function map, MW sampling.
+ * \param[in]  f Input function (MW sampling)
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_wav_analysis_multires(complex double *f_wav, complex double *f_scal, const complex double *f, int B, int L, int J_min)
 {
   int spin = 0;
@@ -227,6 +334,19 @@ void s2let_axisym_mw_wav_analysis_multires(complex double *f_wav, complex double
   free(f_wav_lm);
 }
 
+/*!
+ * Spherical wavelets : multiresolution synthesis in real space, MW sampling.
+ * Perform multiresolution wavelet transform in real space (from scratch, gives wavelet maps).
+ * Sampling scheme : MW sampling.
+ *
+ * \param[out]  f Input function (MW sampling)
+ * \param[in]  f_wav Array of wavelets maps, MW sampling.
+ * \param[in]  f_scal Scaling function map, MW sampling.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_wav_synthesis_multires(complex double *f, const complex double *f_wav, const complex double *f_scal, int B, int L, int J_min)
 {
   int spin = 0;
@@ -265,6 +385,20 @@ void s2let_axisym_mw_wav_synthesis_multires(complex double *f, const complex dou
   free(f_wav_lm);
 }
 
+/*!
+ * Spherical wavelets : multiresolution analysis in real space, MW sampling.
+ * Perform multiresolution wavelet transform in real space (from scratch, gives wavelet maps).
+ * Input function is real.
+ * Sampling scheme : MW sampling.
+ *
+ * \param[out]  f_wav Array of wavelets maps, MW sampling.
+ * \param[out]  f_scal Scaling function map, MW sampling.
+ * \param[in]  f Input function (MW sampling)
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_wav_analysis_multires_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min)
 {
   int verbosity = 0;
@@ -302,6 +436,20 @@ void s2let_axisym_mw_wav_analysis_multires_real(double *f_wav, double *f_scal, c
   free(f_wav_lm);
 }
 
+/*!
+ * Spherical wavelets : multiresolution synthesis in real space, MW sampling.
+ * Perform wavelet transform in real space (from scratch, gives wavelet maps).
+ * Input function is real.
+ * Sampling scheme : MW sampling.
+ *
+ * \param[out]  f Input function (MW sampling)
+ * \param[in]  f_wav Array of wavelets maps, MW sampling.
+ * \param[in]  f_scal Scaling function map, MW sampling.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
 void s2let_axisym_mw_wav_synthesis_multires_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min)
 {
   int verbosity = 0;
@@ -339,32 +487,52 @@ void s2let_axisym_mw_wav_synthesis_multires_real(double *f, const double *f_wav,
   free(f_wav_lm);
 }
 
-void s2let_axisym_mw_wav_hardthreshold_multires_real(double *g_wav, const double *treshold, int B, int L, int J_min)
+/*!
+ * Threshold real wavelets in real space, MW sampling, multiresolution.
+ *
+ * \param[inout]  g_wav Array of wavelets maps, MW sampling.
+ * \param[in]  threshold A threshold rule, i.e. a number for every scale j.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
+void s2let_axisym_mw_wav_hardthreshold_multires_real(double *g_wav, const double *threshold, int B, int L, int J_min)
 {
   int J = s2let_j_max(L, B);
   int i, j, offset = 0;
   for(j = J_min; j <= J; j++){
     int bl = MIN(s2let_bandlimit(j, J_min, B, L), L);
     for(i = 0; i < bl*(2*bl-1); i++){
-      if( abs(g_wav[offset + i]) < treshold[j-J_min] )
+      if( abs(g_wav[offset + i]) < threshold[j-J_min] )
 	g_wav[offset + i] = 0;
     }
     offset += bl*(2*bl-1);
-  }	
+  }
 }
 
 
-void s2let_axisym_mw_wav_hardthreshold_real(double *g_wav, const double *treshold, int B, int L, int J_min)
+/*!
+ * Threshold real wavelets in real space, MW sampling, full resolution.
+ *
+ * \param[inout]  g_wav Array of wavelets maps, MW sampling.
+ * \param[in]  threshold A threshold rule, i.e. a number for every scale j.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
+void s2let_axisym_mw_wav_hardthreshold_real(double *g_wav, const double *threshold, int B, int L, int J_min)
 {
   int J = s2let_j_max(L, B);
   int i, j, offset = 0;
   for(j = J_min; j <= J; j++){
     int bl = L;
     for(i = 0; i < bl*(2*bl-1); i++){
-      if( abs(g_wav[offset + i]) < treshold[j-J_min] )
+      if( abs(g_wav[offset + i]) < threshold[j-J_min] )
 	g_wav[offset + i] = 0;
     }
     offset += bl*(2*bl-1);
-  }	
+  }
 }
 

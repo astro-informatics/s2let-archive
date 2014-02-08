@@ -3,6 +3,8 @@
 # Boris Leistedt & Jason McEwen
 # ======================================== #
 
+# Directory for SO3 (required)
+SO3DIR = ../so3
 # Directory for SSHT (required)
 SSHTDIR	= ../ssht
 # Directory for FFTW (required)
@@ -68,17 +70,22 @@ S2LETDIR = .
 S2LETLIB = $(S2LETDIR)/lib
 S2LETINC = $(S2LETDIR)/include
 S2LETBIN = $(S2LETDIR)/bin
-S2LETLIBN= s2let
+S2LETLIBNM = s2let
 S2LETSRC = $(S2LETDIR)/src/main/c
 S2LETOBJ = $(S2LETDIR)/src/main/c
 S2LETTESTSRC = $(S2LETDIR)/src/test/c
 S2LETTESTOBJ = $(S2LETDIR)/src/test/c
 S2LETOBJF90 = $(S2LETDIR)/src/main/f90
 
+# === SO3 ===
+SO3LIB = $(SO3DIR)/lib/c
+SO3INC = $(SO3DIR)/include/c
+SO3LIBNM = so3
+
 # === SSHT ===
 SSHTLIB	= $(SSHTDIR)/lib/c
 SSHTINC	= $(SSHTDIR)/include/c
-SSHTLIBN= ssht
+SSHTLIBNM = ssht
 
 # === FFTW ===
 FFTWINC	    = $(FFTWDIR)/include
@@ -96,7 +103,7 @@ endif
 ifneq ($(strip $(HEALPIXDIR)),)
 HEALPIXINC    = $(HEALPIXDIR)/include_f90
 HEALPIXLIB     = $(HEALPIXDIR)/lib_f90
-HEALPIXLIBN   = healpix
+HEALPIXLIBNM   = healpix
 endif
 
 # ======================================== #
@@ -110,15 +117,16 @@ vpath %.c $(S2LETTESTSRC)
 vpath %.h $(S2LETINC)
 vpath %_mex.c $(S2LETSRCMAT)
 
-LDFLAGS = -L$(S2LETLIB) -l$(S2LETLIBN) -lc -L$(SSHTLIB) -l$(SSHTLIBN) -L$(FFTWLIB) -l$(FFTWLIBNM) -lm
+LDFLAGS = -L$(S2LETLIB) -l$(S2LETLIBNM) -lc -L$(SO3LIB) -l$(SO3LIBNM) -L$(SSHTLIB) -l$(SSHTLIBNM) -L$(FFTWLIB) -l$(FFTWLIBNM) -lm
 
-LDFLAGSMEX = -L$(S2LETLIB) -l$(S2LETLIBN) -lc -L$(SSHTLIB) -l$(SSHTLIBN) -L$(FFTWLIB) $(FFTWLIB)/lib$(FFTWLIBNM).a -lm
+LDFLAGSMEX = -L$(S2LETLIB) -l$(S2LETLIBNM) -lc -L$(SO3LIB) -l$(SO3LIBNM) -L$(SSHTLIB) -l$(SSHTLIBNM) -L$(FFTWLIB) $(FFTWLIB)/lib$(FFTWLIBNM).a -lm
 
-FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(S2LETINC)
+FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(SO3INC) -I$(S2LETINC)
 
 S2LETOBJS= $(S2LETOBJ)/s2let_axisym_lm.o 	\
 	  $(S2LETOBJ)/s2let_axisym_mw.o 	\
 	  $(S2LETOBJ)/s2let_transform_lmn.o 	\
+	  $(S2LETOBJ)/s2let_transform_mw.o 	\
 	  $(S2LETOBJ)/s2let_idl_mw.o 	\
 	  $(S2LETOBJ)/s2let_lm.o	\
 	  $(S2LETOBJ)/s2let_math.o 	\
@@ -148,7 +156,7 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 
 	FFLAGS+= -I$(HEALPIXINC)
 	LDFLAGS+= -L$(HEALPIXLIB)
-	LDFLAGS+= -l$(HEALPIXLIBN)
+	LDFLAGS+= -l$(HEALPIXLIBNM)
 	LDFLAGS+= -lgfortran -fopenmp
 	ifneq ($(strip $(GFORTRANLIB)),)
 	  LDFLAGS+= -L$(GFORTRANLIB)
@@ -159,7 +167,7 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 	LDFLAGSMEX+= -L$(GFORTRANLIB)
 	endif
 	LDFLAGSMEX+= -L$(HEALPIXLIB)
-	LDFLAGSMEX+= -l$(HEALPIXLIBN)
+	LDFLAGSMEX+= -l$(HEALPIXLIBNM)
 
 	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_bandlimit_mex.$(MEXEXT)
 	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_bandlimit_mex.o
@@ -205,13 +213,13 @@ $(S2LETTESTOBJ)/%.o: %.c
 $(S2LETOBJF90)/%.o: $(S2LETOBJF90)/%.f90
 	$(FCC) $(OPTF90) $(FFLAGS) $(HPXOPT) -c $< -o $@
 
-$(S2LETOBJMAT)/%_mex.o: %_mex.c $(S2LETLIB)/lib$(S2LETLIBN).a
+$(S2LETOBJMAT)/%_mex.o: %_mex.c $(S2LETLIB)/lib$(S2LETLIBNM).a
 	$(CC) $(OPT) $(FFLAGS) -c $< -o $@ -I${MLABINC}
 
-$(S2LETOBJMEX)/%_mex.$(MEXEXT): $(S2LETOBJMAT)/%_mex.o $(S2LETLIB)/lib$(S2LETLIBN).a
+$(S2LETOBJMEX)/%_mex.$(MEXEXT): $(S2LETOBJMAT)/%_mex.o $(S2LETLIB)/lib$(S2LETLIBNM).a
 	$(MEX) $< -o $@ $(LDFLAGSMEX) $(MEXFLAGS) -L$(MLABLIB)
 
-$(S2LETBIN)/%: $(S2LETOBJ)/%.o $(S2LETLIB)/lib$(S2LETLIBN).a
+$(S2LETBIN)/%: $(S2LETOBJ)/%.o $(S2LETLIB)/lib$(S2LETLIBNM).a
 	$(CC) $(OPT) $< -o $@ $(LDFLAGS)
 
 # ======================================== #
@@ -230,30 +238,30 @@ mw_bin: test denoising_demo axisym_mw_analysis_real axisym_mw_synthesis_real abo
 hpx_bin: hpx_test hpx_demo axisym_hpx_analysis_real axisym_hpx_synthesis_real about
 
 .PHONY: lib
-lib: $(S2LETLIB)/lib$(S2LETLIBN).a
-$(S2LETLIB)/lib$(S2LETLIBN).a: $(S2LETOBJS)
-	ar -r $(S2LETLIB)/lib$(S2LETLIBN).a $(S2LETOBJS)
+lib: $(S2LETLIB)/lib$(S2LETLIBNM).a
+$(S2LETLIB)/lib$(S2LETLIBNM).a: $(S2LETOBJS)
+	ar -r $(S2LETLIB)/lib$(S2LETLIBNM).a $(S2LETOBJS)
 
 .PHONY: dylib
-dylib: $(S2LETLIB)/lib$(S2LETLIBN).$(DYLIBEXT)
-$(S2LETLIB)/lib$(S2LETLIBN).$(DYLIBEXT): $(S2LETOBJS)
-	$(DYLIBCMD) $(FFLAGS) $(LDFLAGS) -I$(S2LETINC)/idl_export.h -o $(S2LETLIB)/lib$(S2LETLIBN).$(DYLIBEXT) $(S2LETOBJS)
-	cp $(S2LETLIB)/lib$(S2LETLIBN).$(DYLIBEXT) $(S2LETDIR)/src/main/resources/lib/darwin_universal/
-	cp $(S2LETLIB)/lib$(S2LETLIBN).$(DYLIBEXT) $(S2LETDIR)/target/classes/lib/darwin_universal/
+dylib: $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT)
+$(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT): $(S2LETOBJS)
+	$(DYLIBCMD) $(FFLAGS) $(LDFLAGS) -I$(S2LETINC)/idl_export.h -o $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETOBJS)
+	cp $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETDIR)/src/main/resources/lib/darwin_universal/
+	cp $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETDIR)/target/classes/lib/darwin_universal/
 
 .PHONY: test
 test: $(S2LETBIN)/s2let_test
-$(S2LETBIN)/s2let_test: $(S2LETTESTOBJ)/s2let_test.o $(S2LETLIB)/lib$(S2LETLIBN).a
+$(S2LETBIN)/s2let_test: $(S2LETTESTOBJ)/s2let_test.o $(S2LETLIB)/lib$(S2LETLIBNM).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_test $(LDFLAGS)
 
 .PHONY: hpx_demo
 hpx_demo: $(S2LETBIN)/s2let_hpx_demo
-$(S2LETBIN)/s2let_hpx_demo: $(S2LETOBJ)/s2let_hpx_demo.o $(S2LETLIB)/lib$(S2LETLIBN).a
+$(S2LETBIN)/s2let_hpx_demo: $(S2LETOBJ)/s2let_hpx_demo.o $(S2LETLIB)/lib$(S2LETLIBNM).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_hpx_demo $(LDFLAGS)
 
 .PHONY: hpx_test
 hpx_test: $(S2LETBIN)/s2let_hpx_test
-$(S2LETBIN)/s2let_hpx_test: $(S2LETTESTOBJ)/s2let_hpx_test.o $(S2LETLIB)/lib$(S2LETLIBN).a
+$(S2LETBIN)/s2let_hpx_test: $(S2LETTESTOBJ)/s2let_hpx_test.o $(S2LETLIB)/lib$(S2LETLIBNM).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_hpx_test $(LDFLAGS)
 
 
@@ -282,7 +290,7 @@ cleandoc:
 
 .PHONY: clean
 clean:	tidy
-	rm -f $(S2LETLIB)/lib$(S2LETLIBN).*
+	rm -f $(S2LETLIB)/lib$(S2LETLIBNM).*
 	rm -f $(S2LETOBJMEX)/*_mex.$(MEXEXT)
 	rm -f $(S2LETBIN)/*
 
