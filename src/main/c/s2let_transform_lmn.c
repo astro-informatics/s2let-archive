@@ -89,7 +89,7 @@ void s2let_wav_analysis_harmonic(
                 for (m = -el; m <= el; ++m)
                 {
                     f_wav_lmn[offset + lmn2ind(el,m,n,L,N)] =
-                        flm[lm2ind(el,m)] * psi;
+                        8*PI*PI/(2*el+1) * flm[lm2ind(el,m)] * psi;
                 }
             }
         }
@@ -153,6 +153,7 @@ void s2let_wav_synthesis_harmonic(
                 for (m = -el; m <= el; ++m)
                 {
                     flm[lm2ind(el,m)] +=
+                        (2*el+1)/(8*PI*PI) *
                         f_wav_lmn[offset + lmn2ind(el,m,n,L,N)] * psi;
                 }
             }
