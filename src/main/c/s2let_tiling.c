@@ -252,6 +252,7 @@ void s2let_tiling_direction_allocate(complex double **s_elm, int L, int N)
  */
 void s2let_tiling_direction(complex double *s_elm, int L, int N)
 {
+    // TODO: Add spin parameter to avoid computation of el < |s|
     complex double nu;
     int el, m, ind;
 
@@ -321,6 +322,8 @@ void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, in
  */
 void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_min, int N)
 {
+    // TODO: Add spin parameter to avoid computation of el < |s|
+    // TODO: Correctly compute spin scaling functions
     double *kappa;
     double *kappa0;
     complex double *s_elm;

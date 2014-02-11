@@ -168,7 +168,7 @@ void s2let_axisym_lm_wav_test(int B, int L, int J_min, int seed)
   s2let_lm_allocate(&flm_rec, L);
 
   // Generate a random spherical harmonic decomposition
-  s2let_lm_random_flm(flm, L, seed);
+  s2let_lm_random_flm(flm, L, 0, seed);
 
   // Allocate space for the wavelet scales (their harmonic coefficients)
   s2let_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, B, L, J_min);
@@ -228,7 +228,7 @@ void s2let_axisym_lm_wav_multires_test(int B, int L, int J_min, int seed)
   s2let_lm_allocate(&flm_rec, L);
 
   // Generate a random spherical harmonic decomposition
-  s2let_lm_random_flm(flm, L, seed);
+  s2let_lm_random_flm(flm, L, 0, seed);
 
   // Allocate space for the wavelet scales (their harmonic coefficients)
   s2let_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
@@ -267,14 +267,19 @@ void s2let_axisym_lm_wav_multires_test(int B, int L, int J_min, int seed)
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int seed)
+void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin, int seed)
 {
   clock_t time_start, time_end;
   complex double *psi;
   double *phi;
+
+  // Spin scaling functions don't work properly yet
+  if (spin)
+    J_min = 0;
 
   // Allocate the wavelet kernels
   s2let_tiling_wavelet_allocate(&psi, &phi, B, L, N);
@@ -291,21 +296,21 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int seed)
   s2let_lm_allocate(&flm_rec, L);
 
   // Generate a random spherical harmonic decomposition
-  s2let_lm_random_flm(flm, L, seed);
+  s2let_lm_random_flm(flm, L, spin, seed);
 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
   s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
-  s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, psi, phi, B, L, J_min, N);
+  s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, psi, phi, B, L, J_min, N, spin);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial harmonic coefficients from those of the wavelets
   time_start = clock();
-  s2let_wav_synthesis_harmonic(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, B, L, J_min, N);
+  s2let_wav_synthesis_harmonic(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, B, L, J_min, N, spin);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -354,7 +359,7 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
   s2let_lm_allocate(&flm_rec, L);
 
   // Generate a random spherical harmonic decomposition
-  s2let_lm_random_flm(flm, L, seed);
+  s2let_lm_random_flm(flm, L, 0, seed);
 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
   s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
@@ -410,7 +415,7 @@ void s2let_axisym_wav_test(int B, int L, int J_min, int seed)
   s2let_mw_allocate(&f_rec, L);
 
   // Generate random harmonic coefficients for a complex signal
-  s2let_lm_random_flm(flm, L, seed);
+  s2let_lm_random_flm(flm, L, 0, seed);
 
   // Construct the corresponding signal on the sphere (MW sampling)
   ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
@@ -531,7 +536,7 @@ void s2let_axisym_wav_multires_test(int B, int L, int J_min, int seed)
   s2let_mw_allocate(&f_rec, L);
 
   // Generate random harmonic coefficients for a complex signal
-  s2let_lm_random_flm(flm, L, seed);
+  s2let_lm_random_flm(flm, L, 0, seed);
 
   // Construct the corresponding signal on the sphere (MW sampling)
   ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
@@ -656,7 +661,7 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int seed)
     s2let_mw_allocate(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
-    s2let_lm_random_flm(flm, L, seed);
+    s2let_lm_random_flm(flm, L, 0, seed);
 
     // Construct the corresponding signal on the sphere (MW sampling)
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
@@ -720,7 +725,7 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int se
     s2let_mw_allocate(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
-    s2let_lm_random_flm(flm, L, seed);
+    s2let_lm_random_flm(flm, L, 0, seed);
 
     // Construct the corresponding signal on the sphere (MW sampling)
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
@@ -779,7 +784,7 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
 
       printf("  -> Iteration : %i on %i \n",repeat+1,NREPEAT);
 
-      s2let_lm_random_flm(flm, L, seed);
+      s2let_lm_random_flm(flm, L, 0, seed);
       s2let_mw_allocate(&f, L);
       s2let_mw_alm2map(f, flm, L);
       s2let_axisym_mw_allocate_f_wav(&f_wav, &f_scal, B, L, J_min);
@@ -848,7 +853,7 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
 
       printf("  -> Iteration : %i on %i \n",repeat+1,NREPEAT);
 
-      s2let_lm_random_flm(flm, L, seed);
+      s2let_lm_random_flm(flm, L, 0, seed);
       s2let_mw_allocate(&f, L);
       s2let_mw_alm2map(f, flm, L);
       s2let_axisym_mw_allocate_f_wav_multires(&f_wav, &f_scal, B, L, J_min);
@@ -921,7 +926,7 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
 
       //printf("  -> Iteration : %i on %i \n",repeat+1,NREPEAT);
 
-      s2let_lm_random_flm(flm, L, seed);
+      s2let_lm_random_flm(flm, L, 0, seed);
 
       s2let_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, B, L, J_min);
 
@@ -990,7 +995,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
       //printf("  -> Iteration : %i on %i \n",repeat+1,NREPEAT);
 
-      s2let_lm_random_flm(flm, L, seed);
+      s2let_lm_random_flm(flm, L, 0, seed);
 
       s2let_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
 
@@ -1036,10 +1041,11 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
 int main(int argc, char *argv[])
 {
-  const int L = 128;
+  const int L = 32;
   const int N = 16;
   const int B = 3;
   const int J_min = 2;
+  const int spin = 2;
 
   // This is too often zero, so we add 1 (zero will result in all random
   // numbers being the same).
@@ -1050,7 +1056,8 @@ int main(int argc, char *argv[])
   printf("Testing S2LET facilities with the MW sampling\n");
   printf("=====================================================================\n");
   printf("PARAMETERS: ");
-  printf("L = %i  N = %i  B = %i  l_wav_min = %i  seed = %i\n", L, N, B, l_min, seed);
+  printf("L = %i  N = %i  B = %i  l_wav_min = %i  spin = %i  seed = %i\n",
+         L, N, B, l_min, spin, seed);
   s2let_switch_wavtype(3);
   printf("---------------------------------------------------------------------\n");
   printf("> Testing logfact binomial coefficient implementation...\n");
@@ -1073,7 +1080,7 @@ int main(int argc, char *argv[])
   s2let_axisym_lm_wav_multires_test(B, L, J_min, seed);
   printf("---------------------------------------------------------------------\n");
   printf("> Testing directional wavelets in harmonic space...\n");
-  s2let_wav_transform_harmonic_test(B, L, J_min, N, seed);
+  s2let_wav_transform_harmonic_test(B, L, J_min, N, spin, seed);
   printf("---------------------------------------------------------------------\n");
   printf("> Testing directional multiresolution algorithm in harmonic space...\n");
   s2let_wav_transform_harmonic_multires_test(B, L, J_min, N, seed);

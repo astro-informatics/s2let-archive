@@ -52,14 +52,17 @@ void s2let_lmn_allocate(complex double **flmn, int L, int N)
  *
  * \param[out]  flm Harmonic coefficients.
  * \param[in]  L Band-limit.
+ * \parma[in]  spin Spin number.
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_lm_random_flm(complex double *flm, int L, int seed)
+void s2let_lm_random_flm(complex double *flm, int L, int spin, int seed)
 {
-    int i;
+    int i, i_min;
     srand( time(NULL) );
-    for (i=0; i<L*L; ++i)
+    // el < |s| are zero, so start with el = |s|, m = -el.
+    i_min = abs(spin)*abs(spin);
+    for (i=i_min; i<L*L; ++i)
         flm[i] = (2.0*ran2_dp(seed) - 1.0) + I * (2.0*ran2_dp(seed) - 1.0);
 }
 

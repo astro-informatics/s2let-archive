@@ -38,7 +38,8 @@ void s2let_wav_analysis_harmonic(
     int B,
     int L,
     int J_min,
-    int N
+    int N,
+    int spin
 );
 
 void s2let_wav_synthesis_harmonic(
@@ -50,7 +51,8 @@ void s2let_wav_synthesis_harmonic(
     int B,
     int L,
     int J_min,
-    int N
+    int N,
+    int spin
 );
 
 /** Multi-resolution harmonic-space wavelet transform **/
