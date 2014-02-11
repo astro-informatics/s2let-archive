@@ -335,14 +335,19 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, int seed)
+void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, int spin, int seed)
 {
   clock_t time_start, time_end;
   complex double *psi;
   double *phi;
+
+  // Spin scaling functions don't work properly yet
+  if (spin)
+    J_min = 0;
 
   // Allocate the wavelet kernels
   s2let_tiling_wavelet_allocate(&psi, &phi, B, L, N);
@@ -359,21 +364,21 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
   s2let_lm_allocate(&flm_rec, L);
 
   // Generate a random spherical harmonic decomposition
-  s2let_lm_random_flm(flm, L, 0, seed);
+  s2let_lm_random_flm(flm, L, spin, seed);
 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
   s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
-  s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, psi, phi, B, L, J_min, N);
+  s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, psi, phi, B, L, J_min, N, spin);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial harmonic coefficients from those of the wavelets
   time_start = clock();
-  s2let_wav_synthesis_harmonic_multires(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, B, L, J_min, N);
+  s2let_wav_synthesis_harmonic_multires(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, B, L, J_min, N, spin);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1083,7 +1088,7 @@ int main(int argc, char *argv[])
   s2let_wav_transform_harmonic_test(B, L, J_min, N, spin, seed);
   printf("---------------------------------------------------------------------\n");
   printf("> Testing directional multiresolution algorithm in harmonic space...\n");
-  s2let_wav_transform_harmonic_multires_test(B, L, J_min, N, seed);
+  s2let_wav_transform_harmonic_multires_test(B, L, J_min, N, spin, seed);
   printf("=====================================================================\n");
   printf("> Testing axisymmetric wavelets in pixel space...\n");
   s2let_axisym_wav_test(B, L, J_min, seed);

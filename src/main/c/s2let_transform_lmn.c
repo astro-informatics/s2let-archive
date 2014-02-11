@@ -228,6 +228,7 @@ void s2let_wav_synthesis_harmonic(
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \retval none
  */
 void s2let_wav_analysis_harmonic_multires(
@@ -239,7 +240,8 @@ void s2let_wav_analysis_harmonic_multires(
     int B,
     int L,
     int J_min,
-    int N
+    int N,
+    int spin
 ) {
     int j, el, m ,n;
     int J = s2let_j_max(L, B);
@@ -255,7 +257,7 @@ void s2let_wav_analysis_harmonic_multires(
         bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
         for (n = -N+1; n < N; ++n)
         {
-            for (el = ABS(n); el < bandlimit; ++el)
+            for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
             {
                 psi = conj(wav_lm[j*L*L + el*el + el + n]);
                 for (m = -el; m <= el; ++m)
@@ -268,6 +270,7 @@ void s2let_wav_analysis_harmonic_multires(
         offset += (2*N-1) * bandlimit*bandlimit;
     }
 
+    // TODO: Handle spin correctly
     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
     for (el = 0; el < bandlimit; ++el)
     {
@@ -295,6 +298,7 @@ void s2let_wav_analysis_harmonic_multires(
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \retval none
  */
 void s2let_wav_synthesis_harmonic_multires(
@@ -306,7 +310,8 @@ void s2let_wav_synthesis_harmonic_multires(
     int B,
     int L,
     int J_min,
-    int N
+    int N,
+    int spin
 ) {
     int j, el, m ,n;
     int J = s2let_j_max(L, B);
@@ -323,7 +328,7 @@ void s2let_wav_synthesis_harmonic_multires(
         bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
         for (n = -N+1; n < N; ++n)
         {
-            for (el = ABS(n); el < bandlimit; ++el)
+            for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
             {
                 psi = wav_lm[j*L*L + el*el + el + n];
                 for (m = -el; m <= el; ++m)
@@ -337,6 +342,7 @@ void s2let_wav_synthesis_harmonic_multires(
         offset += (2*N-1) * bandlimit*bandlimit;
     }
 
+    // TODO: Handle spin correctly
     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
     for (el = 0; el < bandlimit; ++el)
     {
