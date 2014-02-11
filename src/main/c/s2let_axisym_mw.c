@@ -19,15 +19,16 @@
  */
 void s2let_axisym_mw_allocate_f_wav_multires(complex double **f_wav, complex double **f_scal, int B, int L, int J_min)
 {
-  int J = s2let_j_max(L, B);
-  int j, bandlimit, total = 0;
-  for(j = J_min; j <= J; j++){
-    bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
-    total += bandlimit * (2 * bandlimit - 1);
-  }
-  *f_wav = (complex double*)calloc(total, sizeof(complex double));
-  bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
-  *f_scal = (complex double*)calloc(bandlimit * (2*bandlimit-1), sizeof(complex double));
+    int J = s2let_j_max(L, B);
+    int j, bandlimit, total = 0;
+    for (j = J_min; j <= J; ++j)
+    {
+        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        total += bandlimit * (2 * bandlimit - 1);
+    }
+    *f_wav = calloc(total, sizeof **f_wav);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    *f_scal = calloc(bandlimit * (2*bandlimit-1), sizeof **f_scal);
 }
 
 /*!
@@ -42,15 +43,16 @@ void s2let_axisym_mw_allocate_f_wav_multires(complex double **f_wav, complex dou
  */
 void s2let_axisym_mw_allocate_f_wav_multires_real(double **f_wav, double **f_scal, int B, int L, int J_min)
 {
-  int J = s2let_j_max(L, B);
-  int j, bandlimit, total = 0;
-  for(j = J_min; j <= J; j++){
-    bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
-    total += bandlimit * (2 * bandlimit - 1);
-  }
-  *f_wav = (double*)calloc(total, sizeof(double));
-  bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
-  *f_scal = (double*)calloc(bandlimit * (2*bandlimit-1), sizeof(double));
+    int J = s2let_j_max(L, B);
+    int j, bandlimit, total = 0;
+    for (j = J_min; j <= J; ++j)
+    {
+        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        total += bandlimit * (2 * bandlimit - 1);
+    }
+    *f_wav = calloc(total, sizeof **f_wav);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    *f_scal = calloc(bandlimit * (2*bandlimit-1), sizeof **f_scal);
 }
 
 /*!
@@ -66,8 +68,8 @@ void s2let_axisym_mw_allocate_f_wav_multires_real(double **f_wav, double **f_sca
 void s2let_axisym_mw_allocate_f_wav(complex double **f_wav, complex double **f_scal, int B, int L, int J_min)
 {
   int J = s2let_j_max(L, B);
-  *f_wav = (complex double*)calloc((J+1-J_min) * L *(2*L-1), sizeof(complex double));
-  *f_scal = (complex double*)calloc(L * (2*L-1), sizeof(complex double));
+  *f_wav = calloc((J+1-J_min) * L *(2*L-1), sizeof **f_wav);
+  *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
 }
 
 /*!
@@ -83,8 +85,8 @@ void s2let_axisym_mw_allocate_f_wav(complex double **f_wav, complex double **f_s
 void s2let_axisym_mw_allocate_f_wav_real(double **f_wav, double **f_scal, int B, int L, int J_min)
 {
   int J = s2let_j_max(L, B);
-  *f_wav = (double*)calloc((J+1-J_min) * L *(2*L-1), sizeof(double));
-  *f_scal = (double*)calloc(L * (2*L-1), sizeof(double));
+  *f_wav = calloc((J+1-J_min) * L *(2*L-1), sizeof **f_wav);
+  *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
 }
 
 /*!

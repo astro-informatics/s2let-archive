@@ -7,8 +7,8 @@
 
 #include <complex.h>
 
-//void s2let_axisym_mw_allocate_f_wav_multires(complex double **f_wav, complex double **f_scal, int B, int L, int J_min);
-//void s2let_axisym_mw_allocate_f_wav_multires_real(double **f_wav, double **f_scal, int B, int L, int J_min);
+/** Allocation helpers **/
+
 void s2let_allocate_mw_f_wav(
     complex double **f_wav,
     complex double **f_scal,
@@ -17,7 +17,19 @@ void s2let_allocate_mw_f_wav(
     int J_min,
     int N
 );
+
+void s2let_allocate_mw_f_wav_multires(
+    complex double **f_wav,
+    complex double **f_scal,
+    int B,
+    int L,
+    int J_min,
+    int N
+);
 //void s2let_allocate_mw_f_wav_real(double **f_wav, double **f_scal, int B, int L, int J_min);
+//void s2let_axisym_mw_allocate_f_wav_multires_real(double **f_wav, double **f_scal, int B, int L, int J_min);
+
+/** Pixel-space wavelet transform **/
 
 void s2let_wav_analysis_mw(
     complex double *f_wav,
@@ -42,8 +54,27 @@ void s2let_wav_synthesis_mw(
 // void s2let_axisym_mw_wav_analysis_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);
 // void s2let_axisym_mw_wav_synthesis_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min);
 
-// void s2let_axisym_mw_wav_analysis_multires(complex double *f_wav, complex double *f_scal, const complex double *f, int B, int L, int J_min);
-// void s2let_axisym_mw_wav_synthesis_multires(complex double *f, const complex double *f_wav, const complex double *f_scal, int B, int L, int J_min);
+/** Multi-resolution harmonic-space wavelet transform **/
+
+void s2let_wav_analysis_mw_multires(
+    complex double *f_wav,
+    complex double *f_scal,
+    const complex double *f,
+    int B,
+    int L,
+    int J_min,
+    int N
+);
+
+void s2let_wav_synthesis_mw_multires(
+    complex double *f,
+    const complex double *f_wav,
+    const complex double *f_scal,
+    int B,
+    int L,
+    int J_min,
+    int N
+);
 
 // void s2let_axisym_mw_wav_analysis_multires_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);
 // void s2let_axisym_mw_wav_synthesis_multires_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min);

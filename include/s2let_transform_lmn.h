@@ -27,7 +27,7 @@ void s2let_allocate_f_wav_lmn_multires(
     int N
 );
 
-/** Harmonic wavelet transform **/
+/** Harmonic-space wavelet transform **/
 
 void s2let_wav_analysis_harmonic(
     complex double *f_wav_lmn,
@@ -53,7 +53,7 @@ void s2let_wav_synthesis_harmonic(
     int N
 );
 
-/** Multi-resolution harmonic wavelet transform **/
+/** Multi-resolution harmonic-space wavelet transform **/
 
 void s2let_wav_analysis_harmonic_multires(
     complex double *f_wav_lmn,
