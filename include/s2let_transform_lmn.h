@@ -7,6 +7,8 @@
 
 #include <complex.h>
 
+/** Allocation helpers **/
+
 void s2let_allocate_f_wav_lmn(
     complex double **f_wav_lmn,
     complex double **f_scal_lm,
@@ -16,15 +18,16 @@ void s2let_allocate_f_wav_lmn(
     int N
 );
 
-/*void s2let_allocate_f_wav_lmn_multires(
+void s2let_allocate_f_wav_lmn_multires(
     complex double **f_wav_lmn,
-    complex double **f_scal_lmn,
+    complex double **f_scal_lm,
     int B,
     int L,
     int J_min,
     int N
-);*/
+);
 
+/** Harmonic wavelet transform **/
 
 void s2let_wav_analysis_harmonic(
     complex double *f_wav_lmn,
@@ -50,8 +53,30 @@ void s2let_wav_synthesis_harmonic(
     int N
 );
 
-//void s2let_axisym_lm_wav_analysis_multires(complex double *f_wav_lm, complex double *f_scal_lm, const complex double *flm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
-//void s2let_axisym_lm_wav_synthesis_multires(complex double *flm, const complex double *f_wav_lm, const complex double *f_scal_lm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min);
+/** Multi-resolution harmonic wavelet transform **/
 
+void s2let_wav_analysis_harmonic_multires(
+    complex double *f_wav_lmn,
+    complex double *f_scal_lm,
+    const complex double *flm,
+    const complex double *wav_lm,
+    const double *scal_l,
+    int B,
+    int L,
+    int J_min,
+    int N
+);
+
+void s2let_wav_synthesis_harmonic_multires(
+    complex double *flm,
+    const complex double *f_wav_lmn,
+    const complex double *f_scal_lm,
+    const complex double *wav_lm,
+    const double *scal_l,
+    int B,
+    int L,
+    int J_min,
+    int N
+);
 
 #endif

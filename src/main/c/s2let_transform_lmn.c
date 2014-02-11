@@ -46,6 +46,40 @@ void s2let_allocate_f_wav_lmn(
 }
 
 /*!
+ * Allocates multi-resolution arrays for directional wavelet transform in
+ * harmonic space.
+ *
+ * \param[out]  f_wav_lmn Wigner coefficients of the wavelet contributions.
+ *                        The size of each wavelet depends on its band-limit.
+ * \param[out]  f_scal_lm Spherical harmonic coefficients of the scaling
+ *                        contribution (L*L).
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  N Azimuthal band-limit.
+ * \retval none
+ */
+void s2let_allocate_f_wav_lmn_multires(
+    complex double **f_wav_lmn,
+    complex double **f_scal_lm,
+    int B,
+    int L,
+    int J_min,
+    int N
+) {
+    int J = s2let_j_max(L, B);
+    int j, bandlimit, total = 0;
+    for (j = J_min; j <= J; ++j)
+    {
+        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        total += (2*N-1) * bandlimit * bandlimit;
+    }
+    *f_wav_lmn = calloc(total, sizeof **f_wav_lmn);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    *f_scal_lm = calloc(bandlimit * bandlimit, sizeof **f_scal_lm);
+}
+
+/*!
  * Spherical wavelets: full resolution analysis in harmonic space.
  * Perform directional wavelet transform from precomputed kernels
  * to give Wigner coefficients.
@@ -162,6 +196,139 @@ void s2let_wav_synthesis_harmonic(
     }
 
     for (el = 0; el < L; ++el)
+    {
+        phi = scal_l[el];
+        for (m = -el; m <= el; ++m)
+        {
+            flm[lm2ind(el,m)] +=
+                f_scal_lm[lm2ind(el,m)] * phi;
+        }
+    }
+}
+
+/*!
+ * Spherical wavelets: multi-resolution analysis in harmonic space.
+ * Perform directional wavelet transform from precomputed kernels
+ * to give Wigner coefficients.
+ *
+ * \param[out]  f_wav_lmn Wavelet transform (Wigner coefficients of wavelet contribution).
+ * \param[out]  f_scal_lm Wavelet transform (spherical harmonic coefficients of scaling contribution).
+ * \param[in]  flm Spherical harmonic decomposition of input function.
+ * \param[in]  wav_lm Wavelet kernels.
+ * \param[in]  scal_l Scaling function kernels.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
+void s2let_wav_analysis_harmonic_multires(
+    complex double *f_wav_lmn,
+    complex double *f_scal_lm,
+    const complex double *flm,
+    const complex double *wav_lm,
+    const double *scal_l,
+    int B,
+    int L,
+    int J_min,
+    int N
+) {
+    int j, el, m ,n;
+    int J = s2let_j_max(L, B);
+    int bandlimit;
+
+    complex double psi;
+    double phi;
+
+    int offset = 0;
+
+    for (j = J_min; j <= J; j++)
+    {
+        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        for (n = -N+1; n < N; ++n)
+        {
+            for (el = ABS(n); el < bandlimit; ++el)
+            {
+                psi = conj(wav_lm[j*L*L + el*el + el + n]);
+                for (m = -el; m <= el; ++m)
+                {
+                    f_wav_lmn[offset + lmn2ind(el,m,n,bandlimit,N)] =
+                        8*PI*PI/(2*el+1) * flm[lm2ind(el,m)] * psi;
+                }
+            }
+        }
+        offset += (2*N-1) * bandlimit*bandlimit;
+    }
+
+    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    for (el = 0; el < bandlimit; ++el)
+    {
+        phi = scal_l[el];
+        for (m = -el; m <= el; ++m)
+        {
+            f_scal_lm[lm2ind(el,m)] =
+                flm[lm2ind(el,m)] * phi;
+        }
+    }
+}
+
+
+/*!
+ * Spherical wavelets: multi-resolution synthesis in harmonic space.
+ * Perform directional wavelet transform from precomputed kernels
+ * to give Wigner coefficients.
+ *
+ * \param[out]  flm Spherical harmonic decomposition of input function.
+ * \param[in]  f_wav_lmn Wavelet transform (Wigner coefficients of wavelet contribution).
+ * \param[in]  f_scal_lm Wavelet transform (spherical harmonic coefficients of scaling contribution).
+ * \param[in]  wav_lm Wavelet kernels.
+ * \param[in]  scal_l Scaling function kernels.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
+void s2let_wav_synthesis_harmonic_multires(
+    complex double *flm,
+    const complex double *f_wav_lmn,
+    const complex double *f_scal_lm,
+    const complex double *wav_lm,
+    const double *scal_l,
+    int B,
+    int L,
+    int J_min,
+    int N
+) {
+    int j, el, m ,n;
+    int J = s2let_j_max(L, B);
+    int bandlimit;
+
+    complex double psi;
+    double phi;
+
+    int offset = 0;
+
+
+    for (j = J_min; j <= J; ++j)
+    {
+        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        for (n = -N+1; n < N; ++n)
+        {
+            for (el = ABS(n); el < bandlimit; ++el)
+            {
+                psi = wav_lm[j*L*L + el*el + el + n];
+                for (m = -el; m <= el; ++m)
+                {
+                    flm[lm2ind(el,m)] +=
+                        (2*el+1)/(8*PI*PI) *
+                        f_wav_lmn[offset + lmn2ind(el,m,n,bandlimit,N)] * psi;
+                }
+            }
+        }
+        offset += (2*N-1) * bandlimit*bandlimit;
+    }
+
+    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    for (el = 0; el < bandlimit; ++el)
     {
         phi = scal_l[el];
         for (m = -el; m <= el; ++m)

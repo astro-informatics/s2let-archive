@@ -27,15 +27,15 @@ static inline int lm2ind(int el, int m)
 void s2let_axisym_lm_allocate_f_wav(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min)
 {
     int J = s2let_j_max(L, B);
-    *f_wav_lm = (complex double*)calloc((J+1-J_min) * L * L, sizeof(complex double));
-    *f_scal_lm = (complex double*)calloc(L * L, sizeof(complex double));
+    *f_wav_lm = calloc((J+1-J_min) * L * L, sizeof **f_wav_lm);
+    *f_scal_lm = calloc(L * L, sizeof **f_scal_lm);
 }
 
 /*!
  * Allocates multiresolution arrays for wavelet transforms in harmonic space.
  *
  * \param[out]  f_wav_lm Harmonic coefficients of the wavelet contributions. The size of each wavelet depends on its band-limit.
- * \param[out]  f_scal_lm Harmonic coefficients of the scaling contribution (L*L).
+ * \param[out]  f_scal_lm Harmonic coefficients of the scaling contribution.
  * \param[in]  B Wavelet parameter.
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
@@ -50,9 +50,9 @@ void s2let_axisym_lm_allocate_f_wav_multires(complex double **f_wav_lm, complex 
         bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
         total += bandlimit * bandlimit;
     }
-    *f_wav_lm = (complex double*)calloc(total, sizeof(complex double));
+    *f_wav_lm = calloc(total, sizeof **f_wav_lm);
     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
-    *f_scal_lm = (complex double*)calloc(bandlimit * bandlimit, sizeof(complex double));
+    *f_scal_lm = calloc(bandlimit * bandlimit, sizeof **f_scal_lm);
 }
 
 /*!

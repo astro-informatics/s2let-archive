@@ -322,6 +322,69 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int seed)
   free(phi);
 }
 
+/*!
+ * Test the exactness of the multi-resolution directional wavelet transform
+ * in harmonic space.
+ *
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  N Azimuthal band-limit.
+ * \param[in]  seed Random seed.
+ * \retval none
+ */
+void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, int seed)
+{
+  clock_t time_start, time_end;
+  complex double *psi;
+  double *phi;
+
+  // Allocate the wavelet kernels
+  s2let_tiling_wavelet_allocate(&psi, &phi, B, L, N);
+
+  // Compute the wavelet kernels
+  time_start = clock();
+  s2let_tiling_wavelet(psi, phi, B, L, J_min, N);
+  time_end = clock();
+  printf("  - Generate wavelets  : %4.4f seconds\n",
+     (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+  complex double *f_wav_lmn, *f_scal_lm, *flm, *flm_rec;
+  s2let_lm_allocate(&flm, L);
+  s2let_lm_allocate(&flm_rec, L);
+
+  // Generate a random spherical harmonic decomposition
+  s2let_lm_random_flm(flm, L, seed);
+
+  // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
+  s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
+
+  // Perform the wavelet transform through exact harmonic tiling
+  time_start = clock();
+  s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, psi, phi, B, L, J_min, N);
+  time_end = clock();
+  printf("  - Wavelet analysis   : %4.4f seconds\n",
+     (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+  // Reconstruct the initial harmonic coefficients from those of the wavelets
+  time_start = clock();
+  s2let_wav_synthesis_harmonic_multires(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, B, L, J_min, N);
+  time_end = clock();
+  printf("  - Wavelet synthesis  : %4.4f seconds\n",
+     (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+  // Compute the maximum absolute error on the harmonic coefficients
+  printf("  - Maximum abs error  : %6.5e\n",
+     maxerr_cplx(flm, flm_rec, L*L));fflush(NULL);
+
+  free(flm);
+  free(flm_rec);
+  free(f_wav_lmn);
+  free(f_scal_lm);
+  free(psi);
+  free(phi);
+}
+
 
 /*!
  * Test the exactness of the full resolution wavelet transform in real space for complex functions.
@@ -914,7 +977,9 @@ int main(int argc, char *argv[])
   const int B = 3;
   const int J_min = 2;
 
-  const int seed = (int)(10000.0*(double)clock()/(double)CLOCKS_PER_SEC);
+  // This is too often zero, so we add 1 (zero will result in all random
+  // numbers being the same).
+  const int seed = (int)((double)clock()/(double)CLOCKS_PER_SEC) + 1;
   int l_min = s2let_el_min(B, J_min);
 
   printf("=====================================================================\n");
@@ -945,6 +1010,9 @@ int main(int argc, char *argv[])
   printf("---------------------------------------------------------------------\n");
   printf("> Testing directional wavelets in harmonic space...\n");
   s2let_wav_transform_harmonic_test(B, L, J_min, N, seed);
+  printf("---------------------------------------------------------------------\n");
+  printf("> Testing directional multiresolution algorithm in harmonic space...\n");
+  s2let_wav_transform_harmonic_multires_test(B, L, J_min, N, seed);
   printf("=====================================================================\n");
   printf("> Testing axisymmetric wavelets in pixel space...\n");
   s2let_axisym_wav_test(B, L, J_min, seed);
