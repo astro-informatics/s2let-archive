@@ -271,7 +271,7 @@ void s2let_wav_analysis_mw_multires(
     ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
 
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
-    s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, B, L, J_min, N);
+    s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, B, L, J_min, N, spin);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
     ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, bandlimit, spin, dl_method, verbosity);
@@ -363,7 +363,7 @@ void s2let_wav_synthesis_mw_multires(
     }
 
     s2let_lm_allocate(&flm, L);
-    s2let_wav_synthesis_harmonic_multires(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, B, L, J_min, N);
+    s2let_wav_synthesis_harmonic_multires(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, B, L, J_min, N, spin);
 
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
