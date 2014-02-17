@@ -25,7 +25,7 @@ void s2let_tiling_direction(complex double *s_elm, int L, int N);
 
 void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, int L, int N);
 
-void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_min, int N);
+void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_min, int N, int spin);
 
 /*!
  * Generates smooth functions to construct the tiling.
@@ -42,6 +42,6 @@ double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, int B, 
 
 double s2let_tiling_direction_check_identity(complex double *s_elm, int L, int N);
 
-double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int B, int L, int J_min, int N);
+double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int B, int L, int J_min, int N, int spin);
 
 #endif

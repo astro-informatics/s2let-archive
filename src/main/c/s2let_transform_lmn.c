@@ -133,8 +133,7 @@ void s2let_wav_analysis_harmonic(
         offset += (2*N-1) * L*L;
     }
 
-    // TODO: Handle spin correctly
-    for (el = 0; el < L; ++el)
+    for (el = ABS(spin); el < L; ++el)
     {
         phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
@@ -200,8 +199,7 @@ void s2let_wav_synthesis_harmonic(
         offset += (2*N-1) * L*L;
     }
 
-    // TODO: Handle spin correctly
-    for (el = 0; el < L; ++el)
+    for (el = ABS(spin); el < L; ++el)
     {
         phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
@@ -267,9 +265,8 @@ void s2let_wav_analysis_harmonic_multires(
         offset += (2*N-1) * bandlimit*bandlimit;
     }
 
-    // TODO: Handle spin correctly
     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
-    for (el = 0; el < bandlimit; ++el)
+    for (el = ABS(spin); el < bandlimit; ++el)
     {
         phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
@@ -339,9 +336,8 @@ void s2let_wav_synthesis_harmonic_multires(
         offset += (2*N-1) * bandlimit*bandlimit;
     }
 
-    // TODO: Handle spin correctly
     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
-    for (el = 0; el < bandlimit; ++el)
+    for (el = ABS(spin); el < bandlimit; ++el)
     {
         phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)

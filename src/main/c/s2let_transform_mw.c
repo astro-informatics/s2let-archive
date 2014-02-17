@@ -115,7 +115,7 @@ void s2let_wav_analysis_mw(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, B, L, N);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N);
+    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
 
@@ -189,7 +189,7 @@ void s2let_wav_synthesis_mw(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, B, L, N);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N);
+    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
@@ -263,7 +263,7 @@ void s2let_wav_analysis_mw_multires(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, B, L, N);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N);
+    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
 
@@ -340,7 +340,7 @@ void s2let_wav_synthesis_mw_multires(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, B, L, N);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N);
+    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);

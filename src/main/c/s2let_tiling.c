@@ -318,9 +318,10 @@ void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, in
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  *
  */
-void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_min, int N)
+void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_min, int N, int spin)
 {
     // TODO: Add spin parameter to avoid computation of el < |s|
     // TODO: Correctly compute spin scaling functions
@@ -338,15 +339,15 @@ void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_
     s2let_tiling_direction_allocate(&s_elm, L, N);
     s2let_tiling_direction(s_elm, L, N);
 
-    for (el = 0; el < L; ++el)
+    for (el = ABS(spin); el < L; ++el)
     {
         phi[el] = sqrt((2*el+1)/(4.0*PI)) * kappa0[el];
     }
 
     for (j = J_min; j <= J; ++j)
     {
-        int ind = 0;
-        for (el = 0; el < L; ++el)
+        int ind = spin*spin;
+        for (el = ABS(spin); el < L; ++el)
         {
             for (m = -el; m <= el; ++m)
             {
@@ -440,9 +441,10 @@ double s2let_tiling_direction_check_identity(complex double *s_elm, int L, int N
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \retval Achieved accuracy (should be lower than e-14).
  */
-double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int B, int L, int J_min, int N)
+double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int B, int L, int J_min, int N, int spin)
 {
     int j, el, m, ind;
     int J = s2let_j_max(L, B);
@@ -451,15 +453,15 @@ double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int
     double *ident;
     ident = calloc(L, sizeof *ident);
 
-    for (el = 0; el < L; ++el)
+    for (el = ABS(spin); el < L; ++el)
     {
         ident[el] += 4.0*PI/(2*el+1) * phi[el] * phi[el];
     }
 
     for (j = 0; j <= J; ++j)
     {
-        ind = 0;
-        for (el = 0; el < L; ++el)
+        ind = spin*spin;
+        for (el = ABS(spin); el < L; ++el)
         {
             for (m = -el; m <= el; ++m)
             {
@@ -470,7 +472,7 @@ double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int
         }
     }
 
-    for (el = 0; el < L; ++el)
+    for (el = ABS(spin); el < L; ++el)
     {
         error = MAX(error, fabs(ident[el] - 1.0));
     }

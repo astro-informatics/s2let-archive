@@ -72,9 +72,10 @@ void s2let_tiling_direction_test(int L, int N)
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \retval none
  */
-void s2let_tiling_wavelet_test(int B, int L, int J_min, int N)
+void s2let_tiling_wavelet_test(int B, int L, int J_min, int N, int spin)
 {
   complex double *phi;
   double *psi;
@@ -84,11 +85,11 @@ void s2let_tiling_wavelet_test(int B, int L, int J_min, int N)
   s2let_tiling_wavelet_allocate(&phi, &psi, B, L, N);
 
   // Construct the harmonic coefficients
-  s2let_tiling_wavelet(phi, psi, B, L, J_min, N);
+  s2let_tiling_wavelet(phi, psi, B, L, J_min, N, spin);
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
-  error = s2let_tiling_wavelet_check_identity(phi, psi, B, L, J_min, N);
+  error = s2let_tiling_wavelet_check_identity(phi, psi, B, L, J_min, N, spin);
   printf("  - Maximum error : %6.5e\n", error);
 
   free(phi);
@@ -277,16 +278,12 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
   complex double *psi;
   double *phi;
 
-  // Spin scaling functions don't work properly yet
-  if (spin)
-    J_min = 0;
-
   // Allocate the wavelet kernels
   s2let_tiling_wavelet_allocate(&psi, &phi, B, L, N);
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_tiling_wavelet(psi, phi, B, L, J_min, N);
+  s2let_tiling_wavelet(psi, phi, B, L, J_min, N, spin);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -345,16 +342,12 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
   complex double *psi;
   double *phi;
 
-  // Spin scaling functions don't work properly yet
-  if (spin)
-    J_min = 0;
-
   // Allocate the wavelet kernels
   s2let_tiling_wavelet_allocate(&psi, &phi, B, L, N);
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_tiling_wavelet(psi, phi, B, L, J_min, N);
+  s2let_tiling_wavelet(psi, phi, B, L, J_min, N, spin);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1076,7 +1069,7 @@ int main(int argc, char *argv[])
   s2let_tiling_direction_test(L, N);
   printf("---------------------------------------------------------------------\n");
   printf("> Testing directional wavelets...\n");
-  s2let_tiling_wavelet_test(B, L, J_min, N);
+  s2let_tiling_wavelet_test(B, L, J_min, N, spin);
   printf("=====================================================================\n");
   printf("> Testing axisymmetric wavelets in harmonic space...\n");
   s2let_axisym_lm_wav_test(B, L, J_min, seed);
