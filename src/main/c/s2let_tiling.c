@@ -340,7 +340,7 @@ void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_
 
     for (el = 0; el < L; ++el)
     {
-        phi[el] = kappa0[el];
+        phi[el] = sqrt((2*el+1)/(4.0*PI)) * kappa0[el];
     }
 
     for (j = J_min; j <= J; ++j)
@@ -350,7 +350,7 @@ void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_
         {
             for (m = -el; m <= el; ++m)
             {
-                psi[j*L*L + ind] = kappa[j*L + el] * s_elm[ind];
+                psi[j*L*L + ind] = sqrt((2*el+1)/(8.0*PI*PI)) * kappa[j*L + el] * s_elm[ind];
                 ++ind;
             }
         }
@@ -453,7 +453,7 @@ double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int
 
     for (el = 0; el < L; ++el)
     {
-        ident[el] += phi[el] * phi[el];
+        ident[el] += 4.0*PI/(2*el+1) * phi[el] * phi[el];
     }
 
     for (j = 0; j <= J; ++j)
@@ -463,7 +463,8 @@ double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int
         {
             for (m = -el; m <= el; ++m)
             {
-                ident[el] += psi[j*L*L + ind] * conj(psi[j*L*L + ind]);
+                ident[el] += 8.0*PI*PI/(2*el+1) *
+                             psi[j*L*L + ind] * conj(psi[j*L*L + ind]);
                 ++ind;
             }
         }

@@ -122,11 +122,11 @@ void s2let_wav_analysis_harmonic(
         {
             for (el = MAX(ABS(spin), ABS(n)); el < L; ++el)
             {
-                psi = conj(wav_lm[j*L*L + el*el + el + n]);
+                psi = 8*PI*PI/(2*el+1) * conj(wav_lm[j*L*L + el*el + el + n]);
                 for (m = -el; m <= el; ++m)
                 {
                     f_wav_lmn[offset + lmn2ind(el,m,n,L,N)] =
-                        8*PI*PI/(2*el+1) * flm[lm2ind(el,m)] * psi;
+                        flm[lm2ind(el,m)] * psi;
                 }
             }
         }
@@ -136,11 +136,10 @@ void s2let_wav_analysis_harmonic(
     // TODO: Handle spin correctly
     for (el = 0; el < L; ++el)
     {
-        phi = scal_l[el];
+        phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
         {
-            f_scal_lm[lm2ind(el,m)] =
-                flm[lm2ind(el,m)] * phi;
+            f_scal_lm[lm2ind(el,m)] = flm[lm2ind(el,m)] * phi;
         }
     }
 }
@@ -194,7 +193,6 @@ void s2let_wav_synthesis_harmonic(
                 for (m = -el; m <= el; ++m)
                 {
                     flm[lm2ind(el,m)] +=
-                        (2*el+1)/(8*PI*PI) *
                         f_wav_lmn[offset + lmn2ind(el,m,n,L,N)] * psi;
                 }
             }
@@ -205,11 +203,10 @@ void s2let_wav_synthesis_harmonic(
     // TODO: Handle spin correctly
     for (el = 0; el < L; ++el)
     {
-        phi = scal_l[el];
+        phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
         {
-            flm[lm2ind(el,m)] +=
-                f_scal_lm[lm2ind(el,m)] * phi;
+            flm[lm2ind(el,m)] += f_scal_lm[lm2ind(el,m)] * phi;
         }
     }
 }
@@ -259,11 +256,11 @@ void s2let_wav_analysis_harmonic_multires(
         {
             for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
             {
-                psi = conj(wav_lm[j*L*L + el*el + el + n]);
+                psi = 8*PI*PI/(2*el+1) * conj(wav_lm[j*L*L + el*el + el + n]);
                 for (m = -el; m <= el; ++m)
                 {
                     f_wav_lmn[offset + lmn2ind(el,m,n,bandlimit,N)] =
-                        8*PI*PI/(2*el+1) * flm[lm2ind(el,m)] * psi;
+                        flm[lm2ind(el,m)] * psi;
                 }
             }
         }
@@ -274,7 +271,7 @@ void s2let_wav_analysis_harmonic_multires(
     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
     for (el = 0; el < bandlimit; ++el)
     {
-        phi = scal_l[el];
+        phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
         {
             f_scal_lm[lm2ind(el,m)] =
@@ -334,7 +331,7 @@ void s2let_wav_synthesis_harmonic_multires(
                 for (m = -el; m <= el; ++m)
                 {
                     flm[lm2ind(el,m)] +=
-                        (2*el+1)/(8*PI*PI) *
+
                         f_wav_lmn[offset + lmn2ind(el,m,n,bandlimit,N)] * psi;
                 }
             }
@@ -346,7 +343,7 @@ void s2let_wav_synthesis_harmonic_multires(
     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
     for (el = 0; el < bandlimit; ++el)
     {
-        phi = scal_l[el];
+        phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
         {
             flm[lm2ind(el,m)] +=
