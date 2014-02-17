@@ -85,6 +85,7 @@ void s2let_allocate_mw_f_wav_multires(
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \retval none
  */
 void s2let_wav_analysis_mw(
@@ -94,9 +95,9 @@ void s2let_wav_analysis_mw(
     int B,
     int L,
     int J_min,
-    int N
+    int N,
+    int spin
 ) {
-    int spin = 0;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
     so3_parameters_t so3_parameters = {};
@@ -125,7 +126,8 @@ void s2let_wav_analysis_mw(
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
     s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, B, L, J_min, N, spin);
 
-    ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, L, spin, dl_method, verbosity);
+    // Note, this is a spin-0 transform!
+    ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, L, 0, dl_method, verbosity);
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
@@ -159,6 +161,7 @@ void s2let_wav_analysis_mw(
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \retval none
  */
 void s2let_wav_synthesis_mw(
@@ -168,9 +171,9 @@ void s2let_wav_synthesis_mw(
     int B,
     int L,
     int J_min,
-    int N
+    int N,
+    int spin
 ) {
-    int spin = 0;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
     so3_parameters_t so3_parameters = {};
@@ -194,7 +197,8 @@ void s2let_wav_synthesis_mw(
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
 
-    ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, L, spin, dl_method, verbosity);
+    // Note, this is a spin-0 transform!
+    ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, L, 0, dl_method, verbosity);
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
