@@ -65,7 +65,8 @@ void s2let_wav_analysis_mw_multires(
     int B,
     int L,
     int J_min,
-    int N
+    int N,
+    int spin
 );
 
 void s2let_wav_synthesis_mw_multires(
@@ -75,7 +76,8 @@ void s2let_wav_synthesis_mw_multires(
     int B,
     int L,
     int J_min,
-    int N
+    int N,
+    int spin
 );
 
 // void s2let_axisym_mw_wav_analysis_multires_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);

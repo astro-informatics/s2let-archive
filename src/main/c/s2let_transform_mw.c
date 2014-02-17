@@ -237,6 +237,7 @@ void s2let_wav_synthesis_mw(
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \retval none
  */
 void s2let_wav_analysis_mw_multires(
@@ -246,10 +247,10 @@ void s2let_wav_analysis_mw_multires(
     int B,
     int L,
     int J_min,
-    int N
+    int N,
+    int spin
 ) {
     int bandlimit;
-    int spin = 0;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
     so3_parameters_t so3_parameters = {};
@@ -278,7 +279,8 @@ void s2let_wav_analysis_mw_multires(
     s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, B, L, J_min, N, spin);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
-    ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, bandlimit, spin, dl_method, verbosity);
+    // Note, this is a spin-0 transform!
+    ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, bandlimit, 0, dl_method, verbosity);
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
@@ -314,6 +316,7 @@ void s2let_wav_analysis_mw_multires(
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \retval none
  */
 void s2let_wav_synthesis_mw_multires(
@@ -323,10 +326,10 @@ void s2let_wav_synthesis_mw_multires(
     int B,
     int L,
     int J_min,
-    int N
+    int N,
+    int spin
 ) {
     int bandlimit;
-    int spin = 0;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
     so3_parameters_t so3_parameters = {};
@@ -350,7 +353,8 @@ void s2let_wav_synthesis_mw_multires(
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
-    ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, bandlimit, spin, dl_method, verbosity);
+    // Note, this is a spin-0 transform!
+    ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, bandlimit, 0, dl_method, verbosity);
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)

@@ -641,8 +641,8 @@ void s2let_axisym_wav_multires_real_test(int B, int L, int J_min, int seed)
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
- * \param[in]  seed Random seed.
  * \param[in]  spin Spin number.
+ * \param[in]  seed Random seed.
  * \retval none
  */
 void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int seed)
@@ -705,13 +705,13 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
  * \param[in]  L Angular harmonic band-limit.
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int seed)
+void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
-    int spin = 0;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
     //int J = s2let_j_max(L, B);
@@ -723,7 +723,7 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int se
     s2let_mw_allocate(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
-    s2let_lm_random_flm(flm, L, 0, seed);
+    s2let_lm_random_flm(flm, L, spin, seed);
 
     // Construct the corresponding signal on the sphere (MW sampling)
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
@@ -734,14 +734,14 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int se
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min, N);
+    s2let_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min, N, spin);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, B, L, J_min, N);
+    s2let_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, B, L, J_min, N, spin);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1093,7 +1093,7 @@ int main(int argc, char *argv[])
   s2let_wav_transform_mw_test(B, L, J_min, N, spin, seed);
   printf("---------------------------------------------------------------------\n");
   printf("> Testing directional multiresolution algorithm in pixel space...\n");
-  s2let_wav_transform_mw_multires_test(B, L, J_min, N, seed);
+  s2let_wav_transform_mw_multires_test(B, L, J_min, N, spin, seed);
   printf("=====================================================================\n");
   printf("> Testing real axisymmetric wavelets in pixel space...\n");
   s2let_axisym_wav_real_test(B, L, J_min, seed);
