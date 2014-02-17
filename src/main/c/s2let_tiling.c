@@ -257,9 +257,9 @@ void s2let_tiling_direction(complex double *s_elm, int L, int N)
     int el, m, ind;
 
     if (N % 2)
-        nu = I;
-    else
         nu = 1;
+    else
+        nu = I;
 
     // Skip the s_00 component, as it is zero.
     ind = 1;
