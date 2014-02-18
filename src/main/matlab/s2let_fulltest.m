@@ -11,10 +11,10 @@ clear all;
 close all;
 
 % Main parameters
-L = 64;
+L = 128;
 B = 2;
-N = 3;
-spin = 2;
+N = 5;
+spin = 0;
 J_min = 1;
 J = s2let_jmax(L, B);
 
@@ -32,6 +32,20 @@ flm = rand(size(flm)) + sqrt(-1)*rand(size(flm));
 flm = 2.*(flm - (1+sqrt(-1))./2);
 disp('Construct the corresponding signal on the sphere')
 f = ssht_inverse(flm, L, 'Method', 'MW');
+
+
+disp('Perform axisym wavelet transform with default parameters')
+[f_wav, f_scal] = s2let_transform_analysis_mw(f, 'N', N);
+f_rec = s2let_transform_synthesis_mw(f_wav, f_scal, 'N', N);
+default = max(max(abs(f-f_rec)))
+
+disp('Perform axisym wavelet transform with default parameters')
+[f_wav, f_scal] = s2let_transform_analysis_mw(f, 'N', N, 'downsample', false);
+f_rec = s2let_transform_synthesis_mw(f_wav, f_scal, 'N', N, 'downsample', false);
+default = max(max(abs(f-f_rec)))
+
+stop
+
 
 disp('Perform axisym wavelet transform with default parameters')
 [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f);
