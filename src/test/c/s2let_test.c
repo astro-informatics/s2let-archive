@@ -803,14 +803,78 @@ void s2let_axisym_vs_directional_transform_mw_test(B, L, J_min, seed)
     s2let_wav_analysis_mw(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin);
 
     // Account for the different wavelet normalisations
-    for (i = 0; i <= (J-J_min+1)*L*(2*L-1); ++i)
+    for (i = 0; i < (J-J_min+1)*L*(2*L-1); ++i)
         f_wav_dir[i] *= sqrt(2*PI);
 
     // Compute the maximum absolute error in the computed wavelet transform
     wav_error = maxerr_cplx(f_wav_axisym, f_wav_dir, (J-J_min+1)*L*(2*L-1));
     scal_error = maxerr_cplx(f_scal_axisym, f_scal_dir, L*(2*L-1));
-    printf("  - Maximum abs error  : %6.5e, %6.5e\n",
-           wav_error, scal_error);fflush(NULL);
+
+    printf("  - Maximum abs error in wavelets :         %6.5e\n", wav_error);
+    printf("  - Maximum abs error in scaling function : %6.5e\n", scal_error);
+    fflush(NULL);
+}
+
+/*!
+ * Test that the directional multi-resolution algorithms reduce to
+ * the axisymmetric ones, provided spin = 0, N = 1
+ *
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  seed Random seed.
+ * \retval none
+ */
+void s2let_axisym_vs_directional_transform_mw_multires_test(B, L, J_min, seed)
+{
+    int spin = 0;
+    int N = 1;
+    int J = s2let_j_max(L, B);
+    int verbosity = 0;
+    int samples, bandlimit, i, j;
+    ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+
+    double wav_error, scal_error;
+
+    complex double *f, *flm;
+    s2let_lm_allocate(&flm, L);
+    s2let_mw_allocate(&f, L);
+
+    // Generate random harmonic coefficients for a complex signal
+    s2let_lm_random_flm(flm, L, spin, seed);
+
+    // Construct the corresponding signal on the sphere (MW sampling)
+    ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
+
+    // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
+    // from both transforms.
+    complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
+    s2let_axisym_mw_allocate_f_wav_multires(&f_wav_axisym, &f_scal_axisym, B, L, J_min);
+    s2let_allocate_mw_f_wav_multires(&f_wav_dir, &f_scal_dir, B, L, J_min, N);
+
+    // Do both transforms
+    s2let_axisym_mw_wav_analysis_multires(f_wav_axisym, f_scal_axisym, f, B, L, J_min);
+    s2let_wav_analysis_mw_multires(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin);
+
+    samples = 0;
+    for (j = J_min; j <= J; ++j)
+    {
+        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        samples += bandlimit * (2 * bandlimit - 1);
+    }
+
+    // Account for the different wavelet normalisations
+    for (i = 0; i < samples; ++i)
+        f_wav_dir[i] *= sqrt(2*PI);
+
+    // Compute the maximum absolute error in the computed wavelet transform
+    wav_error = maxerr_cplx(f_wav_axisym, f_wav_dir, (J-J_min+1)*L*(2*L-1));
+    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    scal_error = maxerr_cplx(f_scal_axisym, f_scal_dir, bandlimit*(2*bandlimit-1));
+
+    printf("  - Maximum abs error in wavelets :         %6.5e\n", wav_error);
+    printf("  - Maximum abs error in scaling function : %6.5e\n", scal_error);
+    fflush(NULL);
 }
 
 void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
@@ -1149,6 +1213,10 @@ int main(int argc, char *argv[])
   printf("=====================================================================\n");
   printf("> Comparing directional and axisymmetric algorithm in pixel space...\n");
   s2let_axisym_vs_directional_transform_mw_test(B, L, J_min, seed);
+  printf("---------------------------------------------------------------------\n");
+  printf("> Comparing directional and axisymmetric multiresolution algorithm\n");
+  printf("  in pixel space...\n");
+  s2let_axisym_vs_directional_transform_mw_multires_test(B, L, J_min, seed);
   printf("=====================================================================\n");
   printf("> Testing real axisymmetric wavelets in pixel space...\n");
   s2let_axisym_wav_real_test(B, L, J_min, seed);
