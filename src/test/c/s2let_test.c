@@ -771,7 +771,7 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_transform_axisym_vs_directional_transform_mw_test(B, L, J_min, seed)
+void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
 {
     int spin = 0;
     int N = 1;
@@ -825,7 +825,7 @@ void s2let_transform_axisym_vs_directional_transform_mw_test(B, L, J_min, seed)
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_axisym_vs_directional_transform_mw_multires_test(B, L, J_min, seed)
+void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
 {
     int spin = 0;
     int N = 1;
@@ -849,11 +849,11 @@ void s2let_axisym_vs_directional_transform_mw_multires_test(B, L, J_min, seed)
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     // from both transforms.
     complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
-    s2let_axisym_mw_allocate_f_wav_multires(&f_wav_axisym, &f_scal_axisym, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav_axisym, &f_scal_axisym, B, L, J_min);
     s2let_allocate_mw_f_wav_multires(&f_wav_dir, &f_scal_dir, B, L, J_min, N);
 
     // Do both transforms
-    s2let_axisym_mw_wav_analysis_multires(f_wav_axisym, f_scal_axisym, f, B, L, J_min);
+    s2let_transform_axisym_wav_analysis_mw_multires(f_wav_axisym, f_scal_axisym, f, B, L, J_min);
     s2let_wav_analysis_mw_multires(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin);
 
     samples = 0;
@@ -1212,11 +1212,11 @@ int main(int argc, char *argv[])
   s2let_wav_transform_mw_multires_test(B, L, J_min, N, spin, seed);
   printf("=====================================================================\n");
   printf("> Comparing directional and axisymmetric algorithm in pixel space...\n");
-  s2let_axisym_vs_directional_transform_mw_test(B, L, J_min, seed);
+  s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed);
   printf("---------------------------------------------------------------------\n");
   printf("> Comparing directional and axisymmetric multiresolution algorithm\n");
   printf("  in pixel space...\n");
-  s2let_axisym_vs_directional_transform_mw_multires_test(B, L, J_min, seed);
+  s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed);
   printf("=====================================================================\n");
   printf("> Testing real axisymmetric wavelets in pixel space...\n");
   s2let_transform_axisym_wav_real_test(B, L, J_min, seed);

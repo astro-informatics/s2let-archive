@@ -137,8 +137,6 @@ S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_transform_axisym_tiling_mex.o	\
 	  $(S2LETOBJMAT)/s2let_transform_tiling_mex.o		\
 	  $(S2LETOBJMAT)/s2let_transform_axisym_analysis_mw_mex.o		\
 	  $(S2LETOBJMAT)/s2let_transform_axisym_synthesis_mw_mex.o		\
-	  $(S2LETOBJMAT)/s2let_transform_analysis_mw_mex.o		\
-	  $(S2LETOBJMAT)/s2let_transform_synthesis_mw_mex.o		\
 	  $(S2LETOBJMAT)/s2let_jmax_mex.o	\
 	  $(S2LETOBJMAT)/s2let_bandlimit_mex.o
 

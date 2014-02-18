@@ -12,13 +12,19 @@ close all;
 
 % Main parameters
 L = 64;
-B = 3;
+B = 2;
+N = 3;
+spin = 2;
 J_min = 1;
 J = s2let_jmax(L, B);
 
 disp('Checks tilling of harmonic space for axysimmetric wavelets')
 [kappa kappa0] = s2let_transform_axisym_tiling(B, L, J_min);
 error_on_axisym_tilling = s2let_check_axisym_tiling(kappa, kappa0, L, J)
+
+disp('Checks tilling of harmonic space for directional wavelets')
+[psi phi] = s2let_wavelet_tiling(B, L, N, spin, J_min);
+error_on_axisym_tilling = s2let_check_tiling(psi, phi, L, spin, J)
 
 disp('Generates band-limited function')
 flm = zeros(L^2,1); 

@@ -117,7 +117,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   int l, j, el, m;
 
   iout = 0;
-  plhs[iout] = mxCreateDoubleMatrix(J+1, L*L, mxCOMPLEX);
+  plhs[iout] = mxCreateDoubleMatrix(L*L, J+1, mxCOMPLEX);
   psi_lm_out_real = mxGetPr(plhs[iout]);
   psi_lm_out_imag = mxGetPi(plhs[iout]);
   for (j = J_min; j <= J; ++j)
@@ -135,13 +135,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }
 
   iout = 1;
-  plhs[iout] = mxCreateDoubleMatrix(1, L*L, mxREAL);
+  plhs[iout] = mxCreateDoubleMatrix(1, L, mxREAL);
   phi_l_out = mxGetPr(plhs[iout]);
   for(l=0; l<L; l++)
-    phi_l_out[l*l+l] = phi_l[l]; 
+    phi_l_out[l] = phi_l[l]; 
 
-  free(psi_lm_out_real);
-  free(psi_lm_out_imag);
   free(phi_l);
+  free(psi_lm);
 
 }
