@@ -139,7 +139,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
           "spin must be integer.");
   }
   spin = (int)mxGetScalar(prhs[iin]);
-
   // Perform wavelet transform in harmonic space and then reconstruction.
   if(downsample){
     // Multiresolution algorithm

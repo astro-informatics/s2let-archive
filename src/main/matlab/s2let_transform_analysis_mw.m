@@ -45,7 +45,6 @@ args = p.Results;
 f_vec = s2let_mw_arr2vec(f);
 
 [f_wav_vec, f_scal_vec] = s2let_transform_analysis_mw_mex(f_vec, args.B, args.L, args.J_min, args.N, args.Spin, args.Reality, args.Downsample);
-anynan = [any(isnan(f_wav_vec)), any(isnan(f_scal_vec))]
 
 f_scal = s2let_mw_vec2arr(f_scal_vec);
 

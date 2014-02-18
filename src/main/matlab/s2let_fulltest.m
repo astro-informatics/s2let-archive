@@ -11,10 +11,10 @@ clear all;
 close all;
 
 % Main parameters
-L = 128;
+L = 32;
 B = 2;
-N = 5;
-spin = 0;
+N = 2;
+Spin = 2;
 J_min = 1;
 J = s2let_jmax(L, B);
 
@@ -23,8 +23,8 @@ disp('Checks tilling of harmonic space for axysimmetric wavelets')
 error_on_axisym_tilling = s2let_check_axisym_tiling(kappa, kappa0, L, J)
 
 disp('Checks tilling of harmonic space for directional wavelets')
-[psi phi] = s2let_wavelet_tiling(B, L, N, spin, J_min);
-error_on_axisym_tilling = s2let_check_tiling(psi, phi, L, spin, J)
+[psi phi] = s2let_wavelet_tiling(B, L, N, Spin, J_min);
+error_on_axisym_tilling = s2let_check_tiling(psi, phi, L, Spin, J)
 
 disp('Generates band-limited function')
 flm = zeros(L^2,1); 
@@ -32,17 +32,39 @@ flm = rand(size(flm)) + sqrt(-1)*rand(size(flm));
 flm = 2.*(flm - (1+sqrt(-1))./2);
 disp('Construct the corresponding signal on the sphere')
 f = ssht_inverse(flm, L, 'Method', 'MW');
+disp('Construct the corresponding spin signal on the sphere')
+f_s = ssht_inverse(flm, L, 'Method', 'MW', 'Spin', Spin);
 
+disp('Perform scalar directional wavelet transform with default parameters')
+[f_wav, f_scal] = s2let_transform_analysis_mw(f, 'N', N, 'downsample', false);
+f_rec = s2let_transform_synthesis_mw(f_wav, f_scal, 'N', N, 'downsample', false);
+default = max(max(abs(f-f_rec)))
 
-disp('Perform axisym wavelet transform with default parameters')
+disp('Perform spin directional wavelet transform with default parameters')
+[f_wav, f_scal] = s2let_transform_analysis_mw(f_s, 'N', N, 'Spin', Spin, 'downsample', false);
+f_rec = s2let_transform_synthesis_mw(f_wav, f_scal, 'N', N, 'Spin', Spin, 'downsample', false);
+default = max(max(abs(f_s-f_rec)))
+
+disp('Perform spin directional wavelet transform with custom parameters')
+[f_wav, f_scal] = s2let_transform_analysis_mw(f_s,  'B', B, 'L', L, 'J_min', J_min, 'N', N, 'Spin', Spin, 'downsample', true);
+f_rec = s2let_transform_synthesis_mw(f_wav, f_scal,  'B', B, 'L', L, 'J_min', J_min, 'N', N, 'Spin', Spin, 'downsample', true);
+default = max(max(abs(f_s-f_rec)))
+
+disp('Perform multiresolution scalar directional wavelet transform with default parameters')
 [f_wav, f_scal] = s2let_transform_analysis_mw(f, 'N', N);
 f_rec = s2let_transform_synthesis_mw(f_wav, f_scal, 'N', N);
 default = max(max(abs(f-f_rec)))
 
-disp('Perform axisym wavelet transform with default parameters')
-[f_wav, f_scal] = s2let_transform_analysis_mw(f, 'N', N, 'downsample', false);
-f_rec = s2let_transform_synthesis_mw(f_wav, f_scal, 'N', N, 'downsample', false);
-default = max(max(abs(f-f_rec)))
+disp('Perform multiresolution spin directional wavelet transform with default parameters')
+[f_wav, f_scal] = s2let_transform_analysis_mw(f_s, 'N', N, 'Spin', Spin);
+f_rec = s2let_transform_synthesis_mw(f_wav, f_scal, 'N', N, 'Spin', Spin);
+default = max(max(abs(f_s-f_rec)))
+
+disp('Perform multiresolution spin directional wavelet transform with custom parameters')
+[f_wav, f_scal] = s2let_transform_analysis_mw(f_s,  'B', B, 'L', L, 'J_min', J_min, 'N', N, 'Spin', Spin, 'downsample', false);
+f_rec = s2let_transform_synthesis_mw(f_wav, f_scal,  'B', B, 'L', L, 'J_min', J_min, 'N', N, 'Spin', Spin, 'downsample', false);
+default = max(max(abs(f_s-f_rec)))
+
 
 stop
 

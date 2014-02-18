@@ -15,7 +15,7 @@ f = ssht_inverse(flm, L, 'Reality', false);
 %[f, L] = s2let_mw_read_real_map(inputfile);
 
 B = 4;
-N = 5;
+N = 3;
 J_min = 2;
 J = s2let_jmax(L, B);
 
@@ -23,6 +23,44 @@ zoomfactor = 2.2;
 ns = ceil(sqrt(2+J-J_min+1)) ;
 ny = 4; % ns - 1 + rem(2+J-J_min+1 , ns) ;
 nx = 4; % ns;
+
+
+
+[f_wav, f_scal] = s2let_transform_analysis_mw(f, 'B', B, 'J_min', J_min, 'N', N, 'downsample', true);
+
+% FULL RESOLUTION PLOT
+figure('Position',[100 100 1300 1000])
+subplot(nx, ny, 1);
+ssht_plot_mollweide(real(f), L);
+%title('Initial data')
+campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
+subplot(nx, ny, 2);
+bl = min([ s2let_bandlimit(J_min-1,J_min,B,L) L ]);
+ssht_plot_mollweide(real(f_scal), bl);
+campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
+%title('Scaling fct')
+ind = 3
+for j = J_min:J
+	for en = 1:2*N-1
+   		subplot(nx, ny, ind);
+   		bl =  min([ s2let_bandlimit(j,J_min,B,L) L ]);	
+   		ssht_plot_mollweide(real(f_wav{j-J_min+1,en}), bl);
+   		campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+		v = caxis;
+		temp = max(abs(v));
+		caxis([-temp temp])
+		   %title(['Wavelet scale : ',int2str(j)-J_min+1])
+		ind = ind + 1
+	end
+end
+
+
 
 
 [f_wav, f_scal] = s2let_transform_analysis_mw(f, 'B', B, 'J_min', J_min, 'N', N, 'downsample', false);
@@ -56,4 +94,5 @@ for j = J_min:J
 		ind = ind + 1
 	end
 end
+
 

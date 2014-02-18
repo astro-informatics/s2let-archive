@@ -1156,7 +1156,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 int main(int argc, char *argv[])
 {
   const int L = 32;
-  const int N = 16;
+  const int N = 8;
   const int B = 3;
   const int J_min = 2;
   const int spin = 2;
