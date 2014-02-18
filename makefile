@@ -8,7 +8,7 @@ SO3DIR = ../so3
 # Directory for SSHT (required)
 SSHTDIR	= ../ssht
 # Directory for FFTW (required)
-FFTWDIR	= ../fftw-3.2.2_fPIC
+FFTWDIR	= ${FFTW}
 
 # Directory for CFITSIO (optional)
 CFITSIODIR	= ${CFITSIO}
@@ -123,8 +123,8 @@ LDFLAGSMEX = -L$(S2LETLIB) -l$(S2LETLIBNM) -lc -L$(SO3LIB) -l$(SO3LIBNM) -L$(SSH
 
 FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(SO3INC) -I$(S2LETINC)
 
-S2LETOBJS= $(S2LETOBJ)/s2let_axisym_lm.o 	\
-	  $(S2LETOBJ)/s2let_axisym_mw.o 	\
+S2LETOBJS= $(S2LETOBJ)/s2let_transform_axisym_lm.o 	\
+	  $(S2LETOBJ)/s2let_transform_axisym_mw.o 	\
 	  $(S2LETOBJ)/s2let_transform_lmn.o 	\
 	  $(S2LETOBJ)/s2let_transform_mw.o 	\
 	  $(S2LETOBJ)/s2let_idl_mw.o 	\
@@ -133,24 +133,28 @@ S2LETOBJS= $(S2LETOBJ)/s2let_axisym_lm.o 	\
 	  $(S2LETOBJ)/s2let_mw.o	\
 	  $(S2LETOBJ)/s2let_tiling.o
 
-S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_axisym_tiling_mex.o	\
-	  $(S2LETOBJMAT)/s2let_axisym_mw_analysis_mex.o		\
+S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_transform_axisym_tiling_mex.o	\
+	  $(S2LETOBJMAT)/s2let_transform_tiling_mex.o		\
+	  $(S2LETOBJMAT)/s2let_transform_axisym_analysis_mw_mex.o		\
+	  $(S2LETOBJMAT)/s2let_transform_axisym_synthesis_mw_mex.o		\
+	  $(S2LETOBJMAT)/s2let_transform_analysis_mw_mex.o		\
+	  $(S2LETOBJMAT)/s2let_transform_synthesis_mw_mex.o		\
 	  $(S2LETOBJMAT)/s2let_jmax_mex.o	\
-	  $(S2LETOBJMAT)/s2let_bandlimit_mex.o		\
-	  $(S2LETOBJMAT)/s2let_axisym_mw_synthesis_mex.o
+	  $(S2LETOBJMAT)/s2let_bandlimit_mex.o
 
-S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_axisym_tiling_mex.$(MEXEXT)	\
-	  $(S2LETOBJMEX)/s2let_axisym_mw_analysis_mex.$(MEXEXT)	\
+S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_transform_axisym_tiling_mex.$(MEXEXT)	\
+	  $(S2LETOBJMEX)/s2let_transform_tiling_mex.$(MEXEXT)	\
+	  $(S2LETOBJMEX)/s2let_transform_axisym_analysis_mw_mex.$(MEXEXT)	\
+	  $(S2LETOBJMEX)/s2let_transform_axisym_synthesis_mw_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_jmax_mex.$(MEXEXT)	\
-	  $(S2LETOBJMEX)/s2let_bandlimit_mex.$(MEXEXT)	\
-	  $(S2LETOBJMEX)/s2let_axisym_mw_synthesis_mex.$(MEXEXT)
+	  $(S2LETOBJMEX)/s2let_bandlimit_mex.$(MEXEXT)
 
 # ======================================== #
 
 ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 
 	S2LETOBJS+= $(S2LETOBJ)/s2let_hpx.o
-	S2LETOBJS+= $(S2LETOBJ)/s2let_axisym_hpx.o
+	S2LETOBJS+= $(S2LETOBJ)/s2let_transform_axisym_hpx.o
 	S2LETOBJS+= $(S2LETOBJ)/s2let_idl_hpx.o
 	S2LETOBJS+= $(S2LETOBJF90)/s2let_hpx.o
 
@@ -174,10 +178,10 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_jmax_mex.$(MEXEXT)
 	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_jmax_mex.o
 
-	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_axisym_hpx_analysis_mex.$(MEXEXT)
-	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_axisym_hpx_synthesis_mex.$(MEXEXT)
-	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_axisym_hpx_analysis_mex.o
-	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_axisym_hpx_synthesis_mex.o
+	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_transform_axisym_analysis_hpx_mex.$(MEXEXT)
+	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_transform_axisym_synthesis_hpx_mex.$(MEXEXT)
+	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_transform_axisym_analysis_hpx_mex.o
+	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_transform_axisym_synthesis_hpx_mex.o
 
 	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_map2alm_mex.$(MEXEXT)
 	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_alm2map_mex.$(MEXEXT)
@@ -233,9 +237,9 @@ matlab: $(S2LETOBJSMEX)
 .PHONY: all
 all: lib matlab mw_bin tidy
 
-mw_bin: test denoising_demo axisym_mw_analysis_real axisym_mw_synthesis_real about
+mw_bin: test denoising_demo transform_axisym_analysis_mw_real transform_axisym_synthesis_mw_real about
 
-hpx_bin: hpx_test hpx_demo axisym_hpx_analysis_real axisym_hpx_synthesis_real about
+hpx_bin: hpx_test hpx_demo transform_axisym_analysis_hpx_real transform_axisym_synthesis_hpx_real about
 
 .PHONY: lib
 lib: $(S2LETLIB)/lib$(S2LETLIBNM).a
@@ -267,13 +271,13 @@ $(S2LETBIN)/s2let_hpx_test: $(S2LETTESTOBJ)/s2let_hpx_test.o $(S2LETLIB)/lib$(S2
 
 denoising_demo: $(S2LETBIN)/s2let_denoising_demo
 
-axisym_mw_analysis_real: $(S2LETBIN)/s2let_axisym_mw_analysis_real
+transform_axisym_analysis_mw_real: $(S2LETBIN)/s2let_transform_axisym_analysis_mw_real
 
-axisym_mw_synthesis_real: $(S2LETBIN)/s2let_axisym_mw_synthesis_real
+transform_axisym_synthesis_mw_real: $(S2LETBIN)/s2let_transform_axisym_synthesis_mw_real
 
-axisym_hpx_analysis_real: $(S2LETBIN)/s2let_axisym_hpx_analysis_real
+transform_axisym_analysis_hpx_real: $(S2LETBIN)/s2let_transform_axisym_analysis_hpx_real
 
-axisym_hpx_synthesis_real: $(S2LETBIN)/s2let_axisym_hpx_synthesis_real
+transform_axisym_synthesis_hpx_real: $(S2LETBIN)/s2let_transform_axisym_synthesis_hpx_real
 
 .PHONY: about
 about: $(S2LETBIN)/s2let_about
