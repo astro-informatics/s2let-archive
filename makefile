@@ -8,7 +8,7 @@ SO3DIR = ../so3
 # Directory for SSHT (required)
 SSHTDIR	= ../ssht
 # Directory for FFTW (required)
-FFTWDIR	= ../fftw-3.2.2_fPIC
+FFTWDIR	= ${FFTW}
 
 # Directory for CFITSIO (optional)
 CFITSIODIR	= ${CFITSIO}
@@ -16,7 +16,7 @@ CFITSIODIR	= ${CFITSIO}
 HEALPIXDIR	= ${HEALPIX}
 
 # Directory for MATLAB (optional)
-MLAB	=  /usr/local/MATLAB/R2013a
+MLAB	=  /Applications/MATLAB_R2013a.app
 # Directory for DOXYGEN (optional)
 #DOXYGEN_PATH = /Applications/Doxygen.app/Contents/Resources/doxygen
 DOXYGEN_PATH = doxygen
@@ -119,15 +119,9 @@ vpath %_mex.c $(S2LETSRCMAT)
 
 LDFLAGS = -L$(S2LETLIB) -l$(S2LETLIBNM) -lc -L$(SO3LIB) -l$(SO3LIBNM) -L$(SSHTLIB) -l$(SSHTLIBNM) -L$(FFTWLIB) -l$(FFTWLIBNM) -lm
 
-LDFLAGSMEX = -L$(S2LETLIB) -l$(S2LETLIBNM) -lc -L$(SO3LIB) -l$(SO3LIBNM) -L$(SSHTLIB) -l$(SSHTLIBNM) -L$(FFTWLIB) -l$(FFTWLIBNM) -lm
+LDFLAGSMEX = -L$(S2LETLIB) -l$(S2LETLIBNM) -lc -L$(SO3LIB) -l$(SO3LIBNM) -L$(SSHTLIB) -l$(SSHTLIBNM) -L$(FFTWLIB) $(FFTWLIB)/lib$(FFTWLIBNM).a -lm
 
 FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(SO3INC) -I$(S2LETINC)
-
-ifeq ($(UNAME), Linux)
-  # Add -fPIC flag (required for mex build).
-  # (Note that fftw must also be built with -fPIC.)
-  FFLAGS += -fPIC
-endif
 
 S2LETOBJS= $(S2LETOBJ)/s2let_transform_axisym_lm.o 	\
 	  $(S2LETOBJ)/s2let_transform_axisym_mw.o 	\
