@@ -1,0 +1,59 @@
+% s2let_demo4
+% Analyse Earth tomography data as a real MW map.
+% Compute the wavelet maps and plot them.
+% Plot 1 : multiresolution wavelet scales
+% Plot 2 : full resolution wavelet scales
+%
+% S2LET package to perform Wavelets on the Sphere.
+% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% See LICENSE.txt for license details
+
+load('EGM2008_Topography_flms_L0128');
+f = ssht_inverse(flm, L, 'Reality', false);
+
+%inputfile = 'data/earth_tomo_mw_128.fits';
+%[f, L] = s2let_mw_read_real_map(inputfile);
+
+B = 4;
+N = 5;
+J_min = 2;
+J = s2let_jmax(L, B);
+
+zoomfactor = 2.2;
+ns = ceil(sqrt(2+J-J_min+1)) ;
+ny = 4; % ns - 1 + rem(2+J-J_min+1 , ns) ;
+nx = 4; % ns;
+
+
+[f_wav, f_scal] = s2let_transform_analysis_mw(f, 'B', B, 'J_min', J_min, 'N', N, 'downsample', false);
+
+% FULL RESOLUTION PLOT
+figure('Position',[100 100 1300 1000])
+subplot(nx, ny, 1);
+ssht_plot_mollweide(real(f), L);
+%title('Initial data')
+campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
+subplot(nx, ny, 2);
+ssht_plot_mollweide(real(f_scal), L);
+campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
+%title('Scaling fct')
+ind = 3
+for j = J_min:J
+	for en = 1:2*N-1
+   		subplot(nx, ny, ind);
+   		ssht_plot_mollweide(real(f_wav{j-J_min+1,en}), L);
+   		campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+		v = caxis;
+		temp = max(abs(v));
+		caxis([-temp temp])
+		   %title(['Wavelet scale : ',int2str(j)-J_min+1])
+		ind = ind + 1
+	end
+end
+

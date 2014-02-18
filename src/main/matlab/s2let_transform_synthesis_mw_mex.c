@@ -6,46 +6,46 @@
 #include "mex.h"
 
 /**
- * MATLAB interface: s2let_axisym_synthesis.
+ * MATLAB interface: s2let_transform_synthesis.
  * This function for internal use only.
- * Compute axisymmetric wavelet transform (synthesis)
+ * Compute spin directional wavelet transform (synthesis)
  * with output in pixel space.
  *
  * Usage: 
  *   f = ...
- *        s2let_transform_axisym_synthesis_mw_mex(f_wav, f_scal, B, L, J_min, reality, downsample);
+ *        s2let_transform_synthesis_mw_mex(f_wav, f_scal, B, L, J_min, N, spin, reality);
  *
  */
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
-  int n, i, j, B, L, J_min, f_m, f_n, reality, downsample;
+  int n, i, j, B, L, J_min, N, spin, f_m, f_n, reality, downsample;
   double *f_wav_real, *f_scal_real, *f_real, *f_wav_imag, *f_scal_imag, *f_imag;
   complex double *f_wav = NULL, *f_scal = NULL, *f = NULL;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
   int iin = 0, iout = 0;
 
   // Check number of arguments
-  if(nrhs!=7) {
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:nrhs",
-          "Require seven inputs.");
+  if(nrhs!=9) {
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:nrhs",
+          "Require nine inputs.");
   }
   if(nlhs!=1) {
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidOutput:nlhs",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidOutput:nlhs",
           "Require two outputs.");
   }
 
   // Parse reality flag
-  iin = 5;
+  iin = 7;
   if( !mxIsLogicalScalar(prhs[iin]) )
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:reality",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:reality",
           "Reality flag must be logical.");
   reality = mxIsLogicalScalarTrue(prhs[iin]);
 
   // Parse multiresolution flag
-  iin = 6;
+  iin = 8;
   if( !mxIsLogicalScalar(prhs[iin]) )
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:downsample",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:downsample",
           "Multiresolution flag must be logical.");
   downsample = mxIsLogicalScalarTrue(prhs[iin]);
 
@@ -87,12 +87,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if( !mxIsDouble(prhs[iin]) || 
       mxIsComplex(prhs[iin]) || 
       mxGetNumberOfElements(prhs[iin])!=1 ) {
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:waveletParameter",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be integer.");
   }
   B = (int)mxGetScalar(prhs[iin]);
   if (mxGetScalar(prhs[iin]) > (double)B || B <= 1)
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:waveletParameter",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be positive integer greater than 2");
 
   // Parse harmonic band-limit L
@@ -100,13 +100,13 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if( !mxIsDouble(prhs[iin]) || 
       mxIsComplex(prhs[iin]) || 
       mxGetNumberOfElements(prhs[iin])!=1 ) {
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:LbandLimit",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
   }
   L = (int)mxGetScalar(prhs[iin]);
 
   if (mxGetScalar(prhs[iin]) > (double)L || L <= 0)
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:bandLimitNonInt",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:bandLimitNonInt",
           "Harmonic band-limit L must be positive integer.");
  
   // Parse first scale J_min
@@ -114,40 +114,60 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if( !mxIsDouble(prhs[iin]) || 
       mxIsComplex(prhs[iin]) || 
       mxGetNumberOfElements(prhs[iin])!=1 ) {
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:Jmin",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:Jmin",
           "First scale J_min must be integer.");
   }
   J_min = (int)mxGetScalar(prhs[iin]);
   if (mxGetScalar(prhs[iin]) > (double)J_min || J_min < 0)
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:Jmin",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
 
   // Compute ultimate scale J_max
   int J = s2let_j_max(L, B);
 
   if( J_min > J+1 ) {
-    mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:Jmin",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:Jmin",
           "First scale J_min must be larger than that!");
   }
+
+   // Parse azimuthal/directional band-limit N
+  iin = 5;
+  if( !mxIsDouble(prhs[iin]) || 
+      mxIsComplex(prhs[iin]) || 
+      mxGetNumberOfElements(prhs[iin])!=1 ) {
+    mexErrMsgIdAndTxt("s2let_transform_analysis_mw_mex:InvalidInput:NbandLimit",
+          "Azimuthal/directional band-limit N must be integer.");
+  }
+  N = (int)mxGetScalar(prhs[iin]);
+
+    // Parse spin 
+  iin = 6;
+  if( !mxIsDouble(prhs[iin]) || 
+      mxIsComplex(prhs[iin]) || 
+      mxGetNumberOfElements(prhs[iin])!=1 ) {
+    mexErrMsgIdAndTxt("s2let_transform_analysis_mw_mex:InvalidInput:spin",
+          "spin must be integer.");
+  }
+  spin = (int)mxGetScalar(prhs[iin]);
 
   // Perform wavelet transform in harmonic space and then reconstruction.
   if(downsample){
     // Multiresolution algorithm
     if(reality){
-      s2let_mw_allocate_real(&f_r, L);
-      s2let_transform_axisym_wav_synthesis_mw_multires_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
+    //  s2let_mw_allocate_real(&f_r, L);
+    //  s2let_transform_wav_synthesis_mw_multires_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
     }else{
       s2let_mw_allocate(&f, L);
-      s2let_transform_axisym_wav_synthesis_mw_multires(f, f_wav, f_scal, B, L, J_min); 
+      s2let_wav_synthesis_mw_multires(f, f_wav, f_scal, B, L, J_min, N, spin); 
     }
   }else{
     // Full resolution algorithm
     if(reality){
-      s2let_mw_allocate_real(&f_r, L);
-      s2let_transform_axisym_wav_synthesis_mw_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
+    //  s2let_mw_allocate_real(&f_r, L);
+    //  s2let_transform_wav_synthesis_mw_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
     }else{
       s2let_mw_allocate(&f, L);
-      s2let_transform_axisym_wav_synthesis_mw(f, f_wav, f_scal, B, L, J_min); 
+      s2let_wav_synthesis_mw(f, f_wav, f_scal, B, L, J_min, N, spin); 
     }
   }
   
@@ -155,12 +175,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   // Output function f
   if(reality){
 
-    iout = 0;
-    plhs[iout] = mxCreateDoubleMatrix(1, L*(2*L-1), mxREAL);
-    f_real = mxGetPr(plhs[iout]);
-    for (i=0; i<L*(2*L-1); i++)
-      f_real[i] = creal(f_r[i]);
-
+    
   }else{
 
     iout = 0;
@@ -174,9 +189,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }
 
    if(reality){
-    free(f_r);
-    free(f_wav_r);
-    free(f_scal_r);
+    //free(f_r);
+    //free(f_wav_r);
+    //free(f_scal_r);
   }else{
     free(f);
     free(f_wav);
