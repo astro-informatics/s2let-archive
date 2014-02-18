@@ -11,10 +11,10 @@ clear all;
 close all;
 
 % Main parameters
-L = 32;
-B = 2;
-N = 2;
-Spin = 2;
+L = 128;
+B = 4;
+N = 4;
+Spin = 0;
 J_min = 1;
 J = s2let_jmax(L, B);
 

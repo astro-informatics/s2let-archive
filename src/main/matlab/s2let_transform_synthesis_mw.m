@@ -46,7 +46,7 @@ p.parse(f_wav, f_scal, varargin{:});
 args = p.Results;
 
 f_scal_vec = s2let_mw_arr2vec(f_scal);
-if(all(f_scal_vec == 0))
+if(all(isreal(f_scal_vec)))
   f_scal_vec = complex(f_scal_vec,0);
 end
 J = s2let_jmax(args.L, args.B);
@@ -70,6 +70,10 @@ for j = args.J_min:J
       end
       offset = offset + band_limit * (2 * band_limit - 1);
   end
+end
+
+if(all(isreal(f_wav_vec)))
+  f_wav_vec = complex(f_wav_vec,0);
 end
 
 f_vec = s2let_transform_synthesis_mw_mex(f_wav_vec, f_scal_vec, args.B, args.L, args.J_min, args.N, args.Spin, args.Reality, args.Downsample);
