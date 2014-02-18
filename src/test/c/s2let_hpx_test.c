@@ -22,7 +22,7 @@
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_axisym_hpx_test(double *accuracy, double *timing, int nside, int L, int seed)
+void s2let_transform_axisym_hpx_test(double *accuracy, double *timing, int nside, int L, int seed)
 {
   clock_t time_start, time_end;
   double *f, *f_rec;
@@ -71,7 +71,7 @@ void s2let_axisym_hpx_test(double *accuracy, double *timing, int nside, int L, i
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_axisym_hpx_wav_test(double *accuracy, double *timing, int nside, int B, int L, int J_min, int seed)
+void s2let_transform_axisym_hpx_wav_test(double *accuracy, double *timing, int nside, int B, int L, int J_min, int seed)
 {
   clock_t time_start, time_end;
 
@@ -90,11 +90,11 @@ void s2let_axisym_hpx_wav_test(double *accuracy, double *timing, int nside, int 
 
   // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
   double *f_wav, *f_scal;
-  s2let_axisym_hpx_allocate_f_wav_real(&f_wav, &f_scal, nside, B, L, J_min);
+  s2let_transform_axisym_hpx_allocate_f_wav_real(&f_wav, &f_scal, nside, B, L, J_min);
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (Healpix sampling)
   fflush(NULL);time_start = clock();
-  s2let_axisym_hpx_wav_analysis_real(f_wav, f_scal, f, nside, B, L, J_min);
+  s2let_transform_axisym_hpx_wav_analysis_real(f_wav, f_scal, f, nside, B, L, J_min);
   time_end = clock();fflush(NULL);
   //printf("  - Wavelet analysis   : %4.4f seconds\n", 
 	// (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -102,7 +102,7 @@ void s2let_axisym_hpx_wav_test(double *accuracy, double *timing, int nside, int 
 
   // Reconstruct the initial healpix map from the wavelet healpix maps
   time_start = clock();
-  s2let_axisym_hpx_wav_synthesis_real(f_rec, f_wav, f_scal, nside, B, L, J_min);
+  s2let_transform_axisym_hpx_wav_synthesis_real(f_rec, f_wav, f_scal, nside, B, L, J_min);
   time_end = clock();
   //printf("  - Wavelet synthesis  : %4.4f seconds\n", 
 	// (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
       accuracy_tot = 0.0;
       timing_tot = 0.0;
       for (repeat=0; repeat<NREPEAT; repeat++){
-        s2let_axisym_hpx_test(&accuracy, &timing, nside, L, seed);
+        s2let_transform_axisym_hpx_test(&accuracy, &timing, nside, L, seed);
         accuracy_tot += accuracy;
         timing_tot += timing;
       }
@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
       accuracy_tot = 0.0;
       timing_tot = 0.0;
       for (repeat=0; repeat<NREPEAT; repeat++){
-        s2let_axisym_hpx_test(&accuracy, &timing, nside, L, seed);
+        s2let_transform_axisym_hpx_test(&accuracy, &timing, nside, L, seed);
         accuracy_tot += accuracy;
         timing_tot += timing;
       }
@@ -330,7 +330,7 @@ int main(int argc, char *argv[])
       accuracy_tot = 0.0;
       timing_tot = 0.0;
       for (repeat=0; repeat<NREPEAT; repeat++){
-        s2let_axisym_hpx_wav_test(&accuracy, &timing, nside, B, L, J_min, seed);
+        s2let_transform_axisym_hpx_wav_test(&accuracy, &timing, nside, B, L, J_min, seed);
         accuracy_tot += accuracy;
         timing_tot += timing;
       }

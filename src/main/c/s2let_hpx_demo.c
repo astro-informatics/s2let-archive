@@ -36,11 +36,11 @@ int main(int argc, char *argv[])
 
   // Allocate space for wavelet maps (corresponding to the triplet B/L/J_min)
   double *f_wav, *f_scal;
-  s2let_axisym_hpx_allocate_f_wav_real(&f_wav, &f_scal, nside, B, L, J_min);
+  s2let_transform_axisym_hpx_allocate_f_wav_real(&f_wav, &f_scal, nside, B, L, J_min);
 
   // Perform wavelet analysis from scratch with all signals given as Healpix maps
   clock_t time_start = clock();
-  s2let_axisym_hpx_wav_analysis_real(f_wav, f_scal, f, nside, B, L, J_min);
+  s2let_transform_axisym_wav_analysis_hpx_real(f_wav, f_scal, f, nside, B, L, J_min);
   clock_t time_end = clock();
   printf(" - Wavelet analysis   : %4.4f seconds\n", 
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);

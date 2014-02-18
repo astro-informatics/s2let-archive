@@ -31,7 +31,7 @@ typedef unsigned long IDL_ULONG;
 #endif
 
 
-int s2let_idl_axisym_mw_wav_analysis_real(int argc, void* argv[])  
+int s2let_idl_transform_axisym_wav_analysis_mw_real(int argc, void* argv[])  
 {  
   if(argc != 7) return 0;  
   double *f_wav = (double *) argv[0];
@@ -44,12 +44,12 @@ int s2let_idl_axisym_mw_wav_analysis_real(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_axisym_mw_wav_analysis_real(f_wav, f_scal, f, *B, *L, *J_min);
+  s2let_transform_axisym_wav_analysis_mw_real(f_wav, f_scal, f, *B, *L, *J_min);
 
   return 1;  
 }    
 
-int s2let_idl_axisym_mw_wav_synthesis_real(int argc, void* argv[])  
+int s2let_idl_transform_axisym_wav_synthesis_mw_real(int argc, void* argv[])  
 {  
   if(argc != 7) return 0;  
   double *f = (double *) argv[0];
@@ -62,13 +62,13 @@ int s2let_idl_axisym_mw_wav_synthesis_real(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_axisym_mw_wav_synthesis_real(f, f_wav, f_scal, *B, *L, *J_min);
+  s2let_transform_axisym_wav_synthesis_mw_real(f, f_wav, f_scal, *B, *L, *J_min);
 
   return 1;  
 }    
 
 
-int s2let_idl_axisym_mw_wav_analysis(int argc, void* argv[])  
+int s2let_idl_transform_axisym_wav_analysis_mw(int argc, void* argv[])  
 {  
   if(argc != 7) return 0;  
   complex double *f_wav = (complex double *) argv[0];
@@ -81,12 +81,12 @@ int s2let_idl_axisym_mw_wav_analysis(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_axisym_mw_wav_analysis(f_wav, f_scal, f, *B, *L, *J_min);
+  s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, *B, *L, *J_min);
 
   return 1;  
 }    
 
-int s2let_idl_axisym_mw_wav_synthesis(int argc, void* argv[])  
+int s2let_idl_transform_axisym_wav_synthesis_mw(int argc, void* argv[])  
 {  
   if(argc != 7) return 0;  
   complex double *f = (complex double *) argv[0];
@@ -99,13 +99,13 @@ int s2let_idl_axisym_mw_wav_synthesis(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_axisym_mw_wav_synthesis(f, f_wav, f_scal, *B, *L, *J_min);
+  s2let_transform_axisym_wav_synthesis_mw(f, f_wav, f_scal, *B, *L, *J_min);
 
   return 1;  
 }    
 
 
-int s2let_idl_axisym_mw_wav_analysis_multires(int argc, void* argv[])  
+int s2let_idl_transform_axisym_wav_analysis_mw_multires(int argc, void* argv[])  
 {  
   if(argc != 7) return 0;  
   complex double *f_wav = (complex double *) argv[0];
@@ -118,12 +118,12 @@ int s2let_idl_axisym_mw_wav_analysis_multires(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_axisym_mw_wav_analysis_multires(f_wav, f_scal, f, *B, *L, *J_min);
+  s2let_transform_axisym_wav_analysis_mw_multires(f_wav, f_scal, f, *B, *L, *J_min);
 
   return 1;  
 }    
 
-int s2let_idl_axisym_mw_wav_synthesis_multires(int argc, void* argv[])  
+int s2let_idl_transform_axisym_wav_synthesis_mw_multires(int argc, void* argv[])  
 {  
   if(argc != 7) return 0;  
   complex double *f = (complex double *) argv[0];
@@ -136,12 +136,12 @@ int s2let_idl_axisym_mw_wav_synthesis_multires(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_axisym_mw_wav_synthesis_multires(f, f_wav, f_scal, *B, *L, *J_min);
+  s2let_transform_axisym_wav_synthesis_mw_multires(f, f_wav, f_scal, *B, *L, *J_min);
 
   return 1;  
 }    
 
-int s2let_idl_axisym_mw_wav_analysis_multires_real(int argc, void* argv[])  
+int s2let_idl_transform_axisym_wav_analysis_mw_multires_real(int argc, void* argv[])  
 {  
   if(argc != 7) return 0;  
   double *f_wav = (double *) argv[0];
@@ -154,12 +154,12 @@ int s2let_idl_axisym_mw_wav_analysis_multires_real(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_axisym_mw_wav_analysis_multires_real(f_wav, f_scal, f, *B, *L, *J_min);
+  s2let_transform_axisym_wav_analysis_mw_multires_real(f_wav, f_scal, f, *B, *L, *J_min);
 
   return 1;  
 }    
 
-int s2let_idl_axisym_mw_wav_synthesis_multires_real(int argc, void* argv[])  
+int s2let_idl_transform_axisym_wav_synthesis_mw_multires_real(int argc, void* argv[])  
 {  
   if(argc != 7) return 0;  
   double *f = (double *) argv[0];
@@ -172,7 +172,7 @@ int s2let_idl_axisym_mw_wav_synthesis_multires_real(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_axisym_mw_wav_synthesis_multires_real(f, f_wav, f_scal, *B, *L, *J_min);
+  s2let_transform_axisym_wav_synthesis_mw_multires_real(f, f_wav, f_scal, *B, *L, *J_min);
 
   return 1;  
 }    

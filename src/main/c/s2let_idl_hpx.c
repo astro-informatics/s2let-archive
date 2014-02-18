@@ -44,7 +44,7 @@ int s2let_idl_axisym_hpx_wav_analysis_real(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[7];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_axisym_hpx_wav_analysis_real(f_wav, f_scal, f, *nside, *B, *L, *J_min);
+  s2let_transform_axisym_wav_analysis_hpx_real(f_wav, f_scal, f, *nside, *B, *L, *J_min);
 
   return 1;  
 }    
@@ -63,7 +63,7 @@ int s2let_idl_axisym_hpx_wav_synthesis_real(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[7];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_axisym_hpx_wav_synthesis_real(f, f_wav, f_scal, *nside, *B, *L, *J_min);
+  s2let_transform_axisym_wav_synthesis_hpx_real(f, f_wav, f_scal, *nside, *B, *L, *J_min);
 
   return 1;  
 }    

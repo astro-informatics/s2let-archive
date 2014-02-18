@@ -17,7 +17,7 @@ ns = ceil(sqrt(2+J-J_min+1)) ;
 nx = ns - 1 + rem(2+J-J_min + 1, ns) ;
 ny = ns;
 
-[kappa kappa0] = s2let_axisym_tiling(B, L, J_min);
+[kappa kappa0] = s2let_transform_axisym_tiling(B, L, J_min);
 
 s2let_plot_axisym_tiling(B, L, J_min);
 

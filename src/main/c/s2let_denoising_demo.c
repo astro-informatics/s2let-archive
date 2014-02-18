@@ -101,18 +101,18 @@ int main(int argc, char *argv[])
   printf(" Performing wavelet decomposition...");fflush(NULL);
   // Perform wavelet analysis from scratch with all signals given as MW maps
   if(multires){
-    s2let_axisym_mw_allocate_f_wav_multires_real(&g_wav, &g_scal, B, L, J_min);
-    s2let_axisym_mw_wav_analysis_multires_real(g_wav, g_scal, g, B, L, J_min);
+    s2let_transform_axisym_mw_allocate_f_wav_multires_real(&g_wav, &g_scal, B, L, J_min);
+    s2let_transform_axisym_wav_analysis_mw_multires_real(g_wav, g_scal, g, B, L, J_min);
   }else{
-    s2let_axisym_mw_allocate_f_wav_real(&g_wav, &g_scal, B, L, J_min);
-    s2let_axisym_mw_wav_analysis_real(g_wav, g_scal, g, B, L, J_min);
+    s2let_transform_axisym_mw_allocate_f_wav_real(&g_wav, &g_scal, B, L, J_min);
+    s2let_transform_axisym_wav_analysis_mw_real(g_wav, g_scal, g, B, L, J_min);
   }
   printf(" done\n");
 
   // Compute simple threshold for needlet coefficients based on noise model
   printf(" Construct the threshold rule for the Gaussian noise\n");
-  s2let_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
-  s2let_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
+  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
   double *treshold = (double*)calloc((J-J_min+1), sizeof(double));
   for(j = J_min; j <= J; j++)
     treshold[j-J_min] = sigmanoise * nsigma * sqrt(needletpower(wav_lm + j * L, L));
@@ -120,11 +120,11 @@ int main(int argc, char *argv[])
   printf(" Hard thresholding the wavelets...");fflush(NULL);
   s2let_mw_allocate_real(&f_denois, L);
   if(multires){
-    s2let_axisym_mw_wav_hardthreshold_multires_real(g_wav, treshold, B, L, J_min);
-    s2let_axisym_mw_wav_synthesis_multires_real(f_denois, g_wav, g_scal, B, L, J_min);
+    s2let_transform_axisym_mw_wav_hardthreshold_multires_real(g_wav, treshold, B, L, J_min);
+    s2let_transform_axisym_wav_synthesis_mw_multires_real(f_denois, g_wav, g_scal, B, L, J_min);
   }else{
-    s2let_axisym_mw_wav_hardthreshold_real(g_wav, treshold, B, L, J_min);
-    s2let_axisym_mw_wav_synthesis_real(f_denois, g_wav, g_scal, B, L, J_min);
+    s2let_transform_axisym_mw_wav_hardthreshold_real(g_wav, treshold, B, L, J_min);
+    s2let_transform_axisym_wav_synthesis_mw_real(f_denois, g_wav, g_scal, B, L, J_min);
   }
   printf(" done\n");
 	
