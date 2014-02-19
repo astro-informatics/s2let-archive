@@ -324,10 +324,10 @@ static double s2let_spin_lowered_normalization(int el, int spin)
         factor *= el+s;
     }
 
-    if (s > 0)
-        return sqrt(s);
+    if (spin > 0)
+        return sqrt((double)factor);
     else
-        return sqrt(1/s);
+        return sqrt(1/(double)factor);
 }
 
 /*!
@@ -393,7 +393,7 @@ void s2let_tiling_wavelet(
 
     for (j = J_min; j <= J; ++j)
     {
-        int ind = spin*spin;
+        int ind = el_min*el_min;
         for (el = el_min; el < L; ++el)
         {
             for (m = -el; m <= el; ++m)
