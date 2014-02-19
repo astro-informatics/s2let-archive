@@ -13,22 +13,22 @@
  *
  * Usage:
  *   f = ...
- *        s2let_transform_synthesis_mw_mex(f_wav, f_scal, B, L, J_min, N, spin, reality, downsample, spin_lowered);
+ *        s2let_transform_synthesis_mw_mex(f_wav, f_scal, B, L, J_min, N, spin, reality, downsample, spin_lowered, original_spin);
  *
  */
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
-  int n, i, j, B, L, J_min, N, spin, f_m, f_n, reality, downsample, normalization;
+  int n, i, j, B, L, J_min, N, spin, f_m, f_n, reality, downsample, normalization, original_spin;
   double *f_wav_real, *f_scal_real, *f_real, *f_wav_imag, *f_scal_imag, *f_imag;
   complex double *f_wav = NULL, *f_scal = NULL, *f = NULL;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
   int iin = 0, iout = 0;
 
   // Check number of arguments
-  if(nrhs!=10) {
+  if(nrhs!=11) {
     mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:nrhs",
-          "Require ten inputs.");
+          "Require eleven inputs.");
   }
   if(nlhs!=1) {
     mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidOutput:nlhs",
@@ -58,6 +58,16 @@ void mexFunction( int nlhs, mxArray *plhs[],
     normalization = S2LET_WAV_NORM_SPIN_LOWERED;
   else
     normalization = S2LET_WAV_NORM_DEFAULT;
+
+  // Parse original spin
+  iin = 10;
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
+      mxGetNumberOfElements(prhs[iin])!=1 ) {
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:spinloweredfrom",
+          "SpinLoweredFrom must be integer.");
+  }
+  original_spin = (int)mxGetScalar(prhs[iin]);
 
   // Parse input wavelets f_wav
   iin = 0;
@@ -168,7 +178,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     //  s2let_transform_wav_synthesis_mw_multires_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
     }else{
       s2let_mw_allocate(&f, L);
-      s2let_wav_synthesis_mw_multires(f, f_wav, f_scal, B, L, J_min, N, spin, normalization);
+      s2let_wav_synthesis_mw_multires(f, f_wav, f_scal, B, L, J_min, N, spin, normalization, original_spin);
     }
   }else{
     // Full resolution algorithm
@@ -177,7 +187,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     //  s2let_transform_wav_synthesis_mw_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
     }else{
       s2let_mw_allocate(&f, L);
-      s2let_wav_synthesis_mw(f, f_wav, f_scal, B, L, J_min, N, spin, normalization);
+      s2let_wav_synthesis_mw(f, f_wav, f_scal, B, L, J_min, N, spin, normalization, original_spin);
     }
   }
 

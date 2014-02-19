@@ -40,7 +40,8 @@ void s2let_wav_analysis_mw(
     int J_min,
     int N,
     int spin,
-    s2let_wav_norm_t normalization
+    s2let_wav_norm_t normalization,
+    int original_spin
 );
 
 void s2let_wav_synthesis_mw(
@@ -52,7 +53,8 @@ void s2let_wav_synthesis_mw(
     int J_min,
     int N,
     int spin,
-    s2let_wav_norm_t normalization
+    s2let_wav_norm_t normalization,
+    int original_spin
 );
 
 // void s2let_axisym_mw_wav_analysis_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);
@@ -69,7 +71,8 @@ void s2let_wav_analysis_mw_multires(
     int J_min,
     int N,
     int spin,
-    s2let_wav_norm_t normalization
+    s2let_wav_norm_t normalization,
+    int original_spin
 );
 
 void s2let_wav_synthesis_mw_multires(
@@ -81,7 +84,8 @@ void s2let_wav_synthesis_mw_multires(
     int J_min,
     int N,
     int spin,
-    s2let_wav_norm_t normalization
+    s2let_wav_norm_t normalization,
+    int original_spin
 );
 
 // void s2let_axisym_mw_wav_analysis_multires_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);

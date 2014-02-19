@@ -6,25 +6,25 @@
 #include "mex.h"
 
 /**
- * MATLAB interface: s2let_transform_tiling_mex.
+ * MATLAB interface: s2let_wavelet_tiling_mex.
  * This function for internal use only.
  * Compute tiling in harmonic space for directional wavelets.
  *
  * Usage:
- *   [psi_lm phi_l] = s2let_transform_tiling_mex(B, L, N, spin, J_min, SpinLowered);
+ *   [psi_lm phi_l] = s2let_wavelet_tiling_mex(B, L, N, spin, J_min, SpinLowered, original_spin);
  *
  */
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
 
-  int B, L, J_min, spin, N, normalization;
+  int B, L, J_min, spin, N, normalization, original_spin;
   int iin = 0, iout = 0;
 
   // Check number of arguments
-  if(nrhs!=6) {
+  if(nrhs!=7) {
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:nrhs",
-		      "Require six inputs.");
+		      "Require seven inputs.");
   }
   if(nlhs!=2) {
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidOutput:nlhs",
@@ -107,6 +107,17 @@ void mexFunction( int nlhs, mxArray *plhs[],
   else
     normalization = S2LET_WAV_NORM_DEFAULT;
 
+  // Parse original spin
+  iin = 6;
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
+      mxGetNumberOfElements(prhs[iin])!=1 ) {
+    mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:SpinLoweredFrom",
+          "SpinLoweredFrom must be integer.");
+  }
+  original_spin = (int)mxGetScalar(prhs[iin]);
+
+
   // Compute ultimate scale J_max
   int J = s2let_j_max(L, B);
 
@@ -121,7 +132,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   s2let_tiling_wavelet_allocate(&psi_lm, &phi_l, B, L, N);
 
   // Run S2LET function
-  s2let_tiling_wavelet(psi_lm, phi_l, B, L, J_min, N, spin, normalization);
+  s2let_tiling_wavelet(psi_lm, phi_l, B, L, J_min, N, spin, normalization, original_spin);
 
   // Output psi_lm and phi_l
   double *psi_lm_out_real, *psi_lm_out_imag, *phi_l_out;

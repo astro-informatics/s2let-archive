@@ -27,6 +27,9 @@ function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)
 %                        false [Apply the usual normalisation factors such
 %                               that the wavelets fulfil the admissibility
 %                               condition (default)]}
+%  'SpinLoweredFrom' = [integer; if the SpinLowered option is used, this
+%                       option indicates which spin number the wavelets
+%                       should be lowered from (default = 0)]
 %
 % S2LET package to perform Wavelets transform on the Sphere.
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen
@@ -48,6 +51,7 @@ p.addParamValue('Spin', 0, @isnumeric);
 p.addParamValue('Downsample', true, @islogical);
 p.addParamValue('Reality', false, @islogical);
 p.addParamValue('SpinLowered', false, @islogical);
+p.addParamValue('SpinLoweredFrom', 0, @isnumeric);
 p.parse(f_wav, f_scal, varargin{:});
 args = p.Results;
 
@@ -82,7 +86,9 @@ if(all(isreal(f_wav_vec)))
   f_wav_vec = complex(f_wav_vec,0);
 end
 
-f_vec = s2let_transform_synthesis_mw_mex(f_wav_vec, f_scal_vec, args.B, args.L, args.J_min, args.N, args.Spin, args.Reality, args.Downsample, args.SpinLowered);
+f_vec = s2let_transform_synthesis_mw_mex(f_wav_vec, f_scal_vec, args.B, args.L, args.J_min, ...
+                                         args.N, args.Spin, args.Reality, args.Downsample, ...
+                                         args.SpinLowered, args.SpinLoweredFrom);
 
 f = s2let_mw_vec2arr(f_vec);
 

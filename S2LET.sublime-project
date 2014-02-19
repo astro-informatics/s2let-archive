@@ -3,7 +3,7 @@
 	[
 		{
 			"path": ".",
-            "file_exclude_patterns": ["*.mexa64"],
+            "file_exclude_patterns": ["*.mexa64", "*~"],
             "detect_indentation": false,
             "tab_size": 4,
             "translate_tabs_to_spaces": true
