@@ -1,6 +1,6 @@
 function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)
 
-% s2let_transform_synthesis_mw 
+% s2let_transform_synthesis_mw
 % Compute spin directional wavelet transform, output in pixel space.
 %
 % Default usage :
@@ -22,6 +22,11 @@ function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)
 %                        false       [full resolution wavelets] }
 %  'J_min'           = { Minimum needlet scale to consider;
 %                        0 <= J_min < log_B(L) (default=0) }
+%  'SpinLowered'     = { true  [Apply normalisation factors for spin-lowered
+%                               wavelets and scaling function.],
+%                        false [Apply the usual normalisation factors such
+%                               that the wavelets fulfil the admissibility
+%                               condition (default)]}
 %
 % S2LET package to perform Wavelets transform on the Sphere.
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen
@@ -33,15 +38,16 @@ sz = size(temp);
 Lguessed = min([sz(1) sz(2)]);
 
 p = inputParser;
-p.addRequired('f_wav'); 
-p.addRequired('f_scal', @isnumeric); 
-p.addParamValue('B', 2, @isnumeric);   
-p.addParamValue('L', Lguessed, @isnumeric);   
-p.addParamValue('J_min', 0, @isnumeric); 
-p.addParamValue('N', Lguessed, @isnumeric);   
-p.addParamValue('Spin', 0, @isnumeric); 
+p.addRequired('f_wav');
+p.addRequired('f_scal', @isnumeric);
+p.addParamValue('B', 2, @isnumeric);
+p.addParamValue('L', Lguessed, @isnumeric);
+p.addParamValue('J_min', 0, @isnumeric);
+p.addParamValue('N', Lguessed, @isnumeric);
+p.addParamValue('Spin', 0, @isnumeric);
 p.addParamValue('Downsample', true, @islogical);
 p.addParamValue('Reality', false, @islogical);
+p.addParamValue('SpinLowered', false, @islogical);
 p.parse(f_wav, f_scal, varargin{:});
 args = p.Results;
 
@@ -76,7 +82,7 @@ if(all(isreal(f_wav_vec)))
   f_wav_vec = complex(f_wav_vec,0);
 end
 
-f_vec = s2let_transform_synthesis_mw_mex(f_wav_vec, f_scal_vec, args.B, args.L, args.J_min, args.N, args.Spin, args.Reality, args.Downsample);
+f_vec = s2let_transform_synthesis_mw_mex(f_wav_vec, f_scal_vec, args.B, args.L, args.J_min, args.N, args.Spin, args.Reality, args.Downsample, args.SpinLowered);
 
 f = s2let_mw_vec2arr(f_vec);
 

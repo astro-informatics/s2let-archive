@@ -44,7 +44,7 @@ p.addParamValue('N', Lguessed, @isnumeric);
 p.addParamValue('Spin', 0, @isnumeric);
 p.addParamValue('Downsample', true, @islogical);
 p.addParamValue('Reality', false, @islogical);
-p.addParamValue('SpinLowered', false, @islogical)
+p.addParamValue('SpinLowered', false, @islogical);
 p.parse(f, varargin{:});
 args = p.Results;
 

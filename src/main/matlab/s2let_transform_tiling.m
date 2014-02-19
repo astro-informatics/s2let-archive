@@ -34,7 +34,7 @@ p.addRequired('L', @isnumeric);
 p.addRequired('N', @isnumeric);
 p.addRequired('Spin', @isnumeric);
 p.addRequired('J_min', @isnumeric);
-p.addParamValue('SpinLowered', false, @islogical)
+p.addParamValue('SpinLowered', false, @islogical);
 p.parse(B, L, N, Spin, J_min, varargin{:});
 args = p.Results;
 

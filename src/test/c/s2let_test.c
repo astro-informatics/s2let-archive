@@ -677,7 +677,7 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_wav_synthesis_mw(f_rec, f_wav, f_scal, B, L, J_min, N, spin);
+    s2let_wav_synthesis_mw(f_rec, f_wav, f_scal, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -741,7 +741,7 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, B, L, J_min, N, spin);
+    s2let_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
