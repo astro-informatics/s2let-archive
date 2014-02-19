@@ -1,6 +1,6 @@
 function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)
 
-% s2let_transform_analysis_mw 
+% s2let_transform_analysis_mw
 % Compute spin directional wavelet transform, output in pixel space.
 %
 % Default usage :
@@ -22,6 +22,11 @@ function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)
 %                        false       [full resolution wavelets] }
 %  'Reality'         = { false        [do not assume f real (default)],
 %                        true         [assume f real (improves performance)] }
+%  'SpinLowered'     = { true  [Apply normalisation factors for spin-lowered
+%                               wavelets and scaling function.],
+%                        false [Apply the usual normalisation factors such
+%                               that the wavelets fulfil the admissibility
+%                               condition (default)]}
 %
 % S2LET package to perform Wavelets transform on the Sphere.
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen
@@ -31,20 +36,21 @@ sz = size(f);
 Lguessed = min([sz(1) sz(2)]);
 
 p = inputParser;
-p.addRequired('f', @isnumeric); 
-p.addParamValue('B', 2, @isnumeric);   
-p.addParamValue('L', Lguessed, @isnumeric);   
-p.addParamValue('J_min', 0, @isnumeric); 
-p.addParamValue('N', Lguessed, @isnumeric);   
-p.addParamValue('Spin', 0, @isnumeric); 
+p.addRequired('f', @isnumeric);
+p.addParamValue('B', 2, @isnumeric);
+p.addParamValue('L', Lguessed, @isnumeric);
+p.addParamValue('J_min', 0, @isnumeric);
+p.addParamValue('N', Lguessed, @isnumeric);
+p.addParamValue('Spin', 0, @isnumeric);
 p.addParamValue('Downsample', true, @islogical);
 p.addParamValue('Reality', false, @islogical);
+p.addParamValue('SpinLowered', false, @islogical)
 p.parse(f, varargin{:});
 args = p.Results;
 
 f_vec = s2let_mw_arr2vec(f);
 
-[f_wav_vec, f_scal_vec] = s2let_transform_analysis_mw_mex(f_vec, args.B, args.L, args.J_min, args.N, args.Spin, args.Reality, args.Downsample);
+[f_wav_vec, f_scal_vec] = s2let_transform_analysis_mw_mex(f_vec, args.B, args.L, args.J_min, args.N, args.Spin, args.Reality, args.Downsample, args.SpinLowered);
 
 f_scal = s2let_mw_vec2arr(f_scal_vec);
 

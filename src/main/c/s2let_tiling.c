@@ -308,6 +308,29 @@ void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, in
 }
 
 /*!
+ * Computes the normalization factor for spin-lowered wavelets,
+ * which is sqrt((l+s)!/(l-s)!).
+ *
+ * \param[in]  el    Harmonic index el.
+ * \param[in]  spin  Spin number.
+ */
+static double s2let_spin_lowered_normalization(int el, int spin)
+{
+    int factor = 1;
+    int s;
+
+    for (s = -ABS(spin)+1; s <= ABS(spin); ++s)
+    {
+        factor *= el+s;
+    }
+
+    if (s > 0)
+        return sqrt(s);
+    else
+        return sqrt(1/s);
+}
+
+/*!
  * Generates the harmonic coefficients for the directional tiling wavelets.
  * This implementation is based on equation (7) in the wavelet
  * computation paper.
@@ -319,10 +342,20 @@ void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, in
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
  * \param[in]  spin Spin number.
+ * \param[in]  normalization Indicates how to normalise the wavelets
+ *                           and scaling function.
  *
  */
-void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_min, int N, int spin)
-{
+void s2let_tiling_wavelet(
+    complex double *psi,
+    double *phi,
+    int B,
+    int L,
+    int J_min,
+    int N,
+    int spin,
+    s2let_wav_norm_t normalization
+) {
     // TODO: Add spin parameter to avoid computation of el < |s|
     // TODO: Correctly compute spin scaling functions
     double *kappa;
@@ -342,6 +375,8 @@ void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_
     for (el = ABS(spin); el < L; ++el)
     {
         phi[el] = sqrt((2*el+1)/(4.0*PI)) * kappa0[el];
+        if (normalization == S2LET_WAV_NORM_SPIN_LOWERED)
+            phi[el] *= s2let_spin_lowered_normalization(el, spin);
     }
 
     for (j = J_min; j <= J; ++j)
@@ -352,6 +387,8 @@ void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_
             for (m = -el; m <= el; ++m)
             {
                 psi[j*L*L + ind] = sqrt((2*el+1)/(8.0*PI*PI)) * kappa[j*L + el] * s_elm[ind];
+                if (normalization == S2LET_WAV_NORM_SPIN_LOWERED)
+                    psi[j*L*L + ind] *= s2let_spin_lowered_normalization(el, spin);
                 ++ind;
             }
         }

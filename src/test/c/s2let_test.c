@@ -85,7 +85,7 @@ void s2let_tiling_wavelet_test(int B, int L, int J_min, int N, int spin)
   s2let_tiling_wavelet_allocate(&phi, &psi, B, L, N);
 
   // Construct the harmonic coefficients
-  s2let_tiling_wavelet(phi, psi, B, L, J_min, N, spin);
+  s2let_tiling_wavelet(phi, psi, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT);
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
@@ -283,7 +283,7 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_tiling_wavelet(psi, phi, B, L, J_min, N, spin);
+  s2let_tiling_wavelet(psi, phi, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -347,7 +347,7 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_tiling_wavelet(psi, phi, B, L, J_min, N, spin);
+  s2let_tiling_wavelet(psi, phi, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -670,7 +670,7 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min, N, spin);
+    s2let_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -734,7 +734,7 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min, N, spin);
+    s2let_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -800,7 +800,7 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
 
     // Do both transforms
     s2let_transform_axisym_wav_analysis_mw(f_wav_axisym, f_scal_axisym, f, B, L, J_min);
-    s2let_wav_analysis_mw(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin);
+    s2let_wav_analysis_mw(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT);
 
     // Account for the different wavelet normalisations
     for (i = 0; i < (J-J_min+1)*L*(2*L-1); ++i)
@@ -854,7 +854,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
 
     // Do both transforms
     s2let_transform_axisym_wav_analysis_mw_multires(f_wav_axisym, f_scal_axisym, f, B, L, J_min);
-    s2let_wav_analysis_mw_multires(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin);
+    s2let_wav_analysis_mw_multires(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT);
 
     samples = 0;
     for (j = J_min; j <= J; ++j)

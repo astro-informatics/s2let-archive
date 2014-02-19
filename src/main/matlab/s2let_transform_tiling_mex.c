@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
@@ -10,21 +10,21 @@
  * This function for internal use only.
  * Compute tiling in harmonic space for directional wavelets.
  *
- * Usage: 
- *   [psi_lm phi_l] = s2let_transform_tiling_mex(B, L, N, spin, J_min);
+ * Usage:
+ *   [psi_lm phi_l] = s2let_transform_tiling_mex(B, L, N, spin, J_min, SpinLowered);
  *
  */
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
 
-  int B, L, J_min, spin, N;
+  int B, L, J_min, spin, N, normalization;
   int iin = 0, iout = 0;
 
   // Check number of arguments
-  if(nrhs!=5) {
+  if(nrhs!=6) {
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:nrhs",
-		      "Require three inputs.");
+		      "Require six inputs.");
   }
   if(nlhs!=2) {
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidOutput:nlhs",
@@ -33,8 +33,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse wavelet parameter B
   iin = 0;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be integer.");
@@ -46,8 +46,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse harmonic band-limit L
   iin = 1;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:LbandLimit",
 		      "Harmonic band-limit L must be integer.");
@@ -65,8 +65,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse directional band-limit N
   iin = 2;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:LbandLimit",
           "Directional band-limit N must be integer.");
@@ -75,18 +75,18 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse spin
   iin = 3;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:LbandLimit",
           "spin must be integer.");
   }
   spin = (int)mxGetScalar(prhs[iin]);
- 
+
   // Parse first scale J_min
   iin = 4;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:Jmin",
           "First scale J_min must be integer.");
@@ -95,6 +95,17 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if (mxGetScalar(prhs[iin]) > (double)J_min || J_min < 0)
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
+
+  // Parse normalization flag
+  iin = 5;
+  if( !mxIsLogicalScalar(prhs[iin])) {
+    mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:SpinLowered",
+          "SpinLowered flag must be logical.");
+  }
+  if (mxIsLogicalScalarTrue(prhs[iin]))
+    normalization = S2LET_WAV_NORM_SPIN_LOWERED;
+  else
+    normalization = S2LET_WAV_NORM_DEFAULT;
 
   // Compute ultimate scale J_max
   int J = s2let_j_max(L, B);
@@ -110,7 +121,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   s2let_tiling_wavelet_allocate(&psi_lm, &phi_l, B, L, N);
 
   // Run S2LET function
-  s2let_tiling_wavelet(psi_lm, phi_l, B, L, J_min, N, spin);
+  s2let_tiling_wavelet(psi_lm, phi_l, B, L, J_min, N, spin, normalization);
 
   // Output psi_lm and phi_l
   double *psi_lm_out_real, *psi_lm_out_imag, *phi_l_out;
@@ -138,7 +149,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   plhs[iout] = mxCreateDoubleMatrix(1, L, mxREAL);
   phi_l_out = mxGetPr(plhs[iout]);
   for(l=0; l<L; l++)
-    phi_l_out[l] = phi_l[l]; 
+    phi_l_out[l] = phi_l[l];
 
   free(phi_l);
   free(psi_lm);

@@ -25,7 +25,7 @@ void s2let_tiling_direction(complex double *s_elm, int L, int N);
 
 void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, int L, int N);
 
-void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_min, int N, int spin);
+void s2let_tiling_wavelet(complex double *psi, double *phi, int B, int L, int J_min, int N, int spin, s2let_wav_norm_t normalisation);
 
 /*!
  * Generates smooth functions to construct the tiling.

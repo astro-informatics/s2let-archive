@@ -39,7 +39,8 @@ void s2let_wav_analysis_mw(
     int L,
     int J_min,
     int N,
-    int spin
+    int spin,
+    s2let_wav_norm_t normalization
 );
 
 void s2let_wav_synthesis_mw(
@@ -66,7 +67,8 @@ void s2let_wav_analysis_mw_multires(
     int L,
     int J_min,
     int N,
-    int spin
+    int spin,
+    s2let_wav_norm_t normalization
 );
 
 void s2let_wav_synthesis_mw_multires(
