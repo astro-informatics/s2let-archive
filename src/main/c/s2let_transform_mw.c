@@ -86,6 +86,12 @@ void s2let_allocate_mw_f_wav_multires(
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
  * \param[in]  spin Spin number.
+ * \param[in]  normalization Indicates how to normalise the wavelets
+ *                           and scaling function.
+ * \param[in]  original_spin If normalization has value
+ *                           S2LET_WAV_NORM_SPIN_LOWERED, this parameter
+ *                           indicates which spin number the wavelets
+ *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
 void s2let_wav_analysis_mw(
@@ -96,7 +102,9 @@ void s2let_wav_analysis_mw(
     int L,
     int J_min,
     int N,
-    int spin
+    int spin,
+    s2let_wav_norm_t normalization,
+    int original_spin
 ) {
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
@@ -116,7 +124,7 @@ void s2let_wav_analysis_mw(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, B, L, N);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, normalization, original_spin);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
 
@@ -162,6 +170,12 @@ void s2let_wav_analysis_mw(
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
  * \param[in]  spin Spin number.
+ * \param[in]  normalization Indicates how to normalise the wavelets
+ *                           and scaling function.
+ * \param[in]  original_spin If normalization has value
+ *                           S2LET_WAV_NORM_SPIN_LOWERED, this parameter
+ *                           indicates which spin number the wavelets
+ *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
 void s2let_wav_synthesis_mw(
@@ -172,7 +186,9 @@ void s2let_wav_synthesis_mw(
     int L,
     int J_min,
     int N,
-    int spin
+    int spin,
+    s2let_wav_norm_t normalization,
+    int original_spin
 ) {
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
@@ -192,7 +208,7 @@ void s2let_wav_synthesis_mw(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, B, L, N);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, normalization, original_spin);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
@@ -238,6 +254,12 @@ void s2let_wav_synthesis_mw(
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
  * \param[in]  spin Spin number.
+ * \param[in]  normalization Indicates how to normalise the wavelets
+ *                           and scaling function.
+ * \param[in]  original_spin If normalization has value
+ *                           S2LET_WAV_NORM_SPIN_LOWERED, this parameter
+ *                           indicates which spin number the wavelets
+ *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
 void s2let_wav_analysis_mw_multires(
@@ -248,7 +270,9 @@ void s2let_wav_analysis_mw_multires(
     int L,
     int J_min,
     int N,
-    int spin
+    int spin,
+    s2let_wav_norm_t normalization,
+    int original_spin
 ) {
     int bandlimit;
     int verbosity = 0;
@@ -268,7 +292,7 @@ void s2let_wav_analysis_mw_multires(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, B, L, N);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, normalization, original_spin);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
 
@@ -317,6 +341,12 @@ void s2let_wav_analysis_mw_multires(
  * \param[in]  J_min First wavelet scale to be used.
  * \param[in]  N Azimuthal band-limit.
  * \param[in]  spin Spin number.
+ * \param[in]  normalization Indicates how to normalise the wavelets
+ *                           and scaling function.
+ * \param[in]  original_spin If normalization has value
+ *                           S2LET_WAV_NORM_SPIN_LOWERED, this parameter
+ *                           indicates which spin number the wavelets
+ *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
 void s2let_wav_synthesis_mw_multires(
@@ -327,7 +357,9 @@ void s2let_wav_synthesis_mw_multires(
     int L,
     int J_min,
     int N,
-    int spin
+    int spin,
+    s2let_wav_norm_t normalization,
+    int original_spin
 ) {
     int bandlimit;
     int verbosity = 0;
@@ -347,7 +379,7 @@ void s2let_wav_synthesis_mw_multires(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, B, L, N);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, normalization, original_spin);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);

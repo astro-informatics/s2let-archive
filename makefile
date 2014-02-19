@@ -134,7 +134,7 @@ S2LETOBJS= $(S2LETOBJ)/s2let_transform_axisym_lm.o 	\
 	  $(S2LETOBJ)/s2let_tiling.o
 
 S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_transform_axisym_tiling_mex.o	\
-	  $(S2LETOBJMAT)/s2let_transform_tiling_mex.o		\
+	  $(S2LETOBJMAT)/s2let_wavelet_tiling_mex.o		\
 	  $(S2LETOBJMAT)/s2let_transform_axisym_analysis_mw_mex.o		\
 	  $(S2LETOBJMAT)/s2let_transform_axisym_synthesis_mw_mex.o		\
 	  $(S2LETOBJMAT)/s2let_transform_analysis_mw_mex.o		\
@@ -143,7 +143,7 @@ S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_transform_axisym_tiling_mex.o	\
 	  $(S2LETOBJMAT)/s2let_bandlimit_mex.o
 
 S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_transform_axisym_tiling_mex.$(MEXEXT)	\
-	  $(S2LETOBJMEX)/s2let_transform_tiling_mex.$(MEXEXT)	\
+	  $(S2LETOBJMEX)/s2let_wavelet_tiling_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_transform_axisym_analysis_mw_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_transform_axisym_synthesis_mw_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_transform_analysis_mw_mex.$(MEXEXT)	\
