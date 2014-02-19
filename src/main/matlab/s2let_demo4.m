@@ -16,13 +16,48 @@ f = ssht_inverse(flm, L, 'Reality', false);
 
 B = 4;
 N = 3;
-J_min = 2;
+J_min = 1;
 J = s2let_jmax(L, B);
 
 zoomfactor = 2.2;
 ns = ceil(sqrt(2+J-J_min+1)) ;
-ny = 4; % ns - 1 + rem(2+J-J_min+1 , ns) ;
-nx = 4; % ns;
+ny = 5; % ns - 1 + rem(2+J-J_min+1 , ns) ;
+nx = 3; % ns;
+
+
+[f_wav, f_scal] = s2let_transform_analysis_mw(f, 'B', B, 'J_min', J_min, 'N', N, 'downsample', false);
+
+% FULL RESOLUTION PLOT
+figure('Position',[100 100 1300 1000])
+subplot(nx, ny, 1);
+ssht_plot_mollweide(real(f), L);
+%title('Initial data')
+campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
+subplot(nx, ny, 2);
+ssht_plot_mollweide(real(f_scal), L);
+campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+v = caxis;
+temp = max(abs(v));
+caxis([-temp temp])
+%title('Scaling fct')
+ind = 3
+for j = J_min:J
+	for en = 1:2*N-1
+   		subplot(nx, ny, ind);
+   		ssht_plot_mollweide(real(f_wav{j-J_min+1,en}), L);
+   		campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
+		v = caxis;
+		temp = max(abs(v));
+		caxis([-temp temp])
+		   %title(['Wavelet scale : ',int2str(j)-J_min+1])
+		ind = ind + 1
+	end
+end
+
+
 
 
 
@@ -60,39 +95,5 @@ for j = J_min:J
 	end
 end
 
-
-
-
-[f_wav, f_scal] = s2let_transform_analysis_mw(f, 'B', B, 'J_min', J_min, 'N', N, 'downsample', false);
-
-% FULL RESOLUTION PLOT
-figure('Position',[100 100 1300 1000])
-subplot(nx, ny, 1);
-ssht_plot_mollweide(real(f), L);
-%title('Initial data')
-campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-v = caxis;
-temp = max(abs(v));
-caxis([-temp temp])
-subplot(nx, ny, 2);
-ssht_plot_mollweide(real(f_scal), L);
-campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-v = caxis;
-temp = max(abs(v));
-caxis([-temp temp])
-%title('Scaling fct')
-ind = 3
-for j = J_min:J
-	for en = 1:2*N-1
-   		subplot(nx, ny, ind);
-   		ssht_plot_mollweide(real(f_wav{j-J_min+1,en}), L);
-   		campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
-		v = caxis;
-		temp = max(abs(v));
-		caxis([-temp temp])
-		   %title(['Wavelet scale : ',int2str(j)-J_min+1])
-		ind = ind + 1
-	end
-end
 
 

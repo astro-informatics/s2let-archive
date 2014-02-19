@@ -143,6 +143,8 @@ double maxerr_cplx(complex double *a, complex double *b, int size)
   double value = 0;
   int i;
   for(i = 0; i<size; i++){
+    //if( cabs( a[i]-b[i] ) > 0.001 )
+    //  printf("%f+i%f %f+i%f %f\n",creal(a[i]), cimag(a[i]), creal(b[i]), cimag(b[i]), cabs( a[i]-b[i] ));
     value = MAX( cabs( a[i]-b[i] ), value );
   }
   return value;
@@ -156,6 +158,7 @@ double maxerr(double *a, double *b, int size)
   double value = 0;
   int i;
   for(i = 0; i<size; i++){
+    //printf("%f %f - ", a[i],b[i]);
     value = MAX( abs( a[i]-b[i] ), value );
   }
   return value;
