@@ -190,6 +190,11 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_hpx_map2alm_mex.o
 	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_hpx_alm2map_mex.o
 
+	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_map2alm_spin_mex.$(MEXEXT)
+	S2LETOBJSMEX+= $(S2LETOBJMEX)/s2let_hpx_alm2map_spin_mex.$(MEXEXT)
+	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_hpx_map2alm_spin_mex.o
+	S2LETOBJSMAT+= $(S2LETOBJMAT)/s2let_hpx_alm2map_spin_mex.o
+
 endif
 
 # ======================================== #
