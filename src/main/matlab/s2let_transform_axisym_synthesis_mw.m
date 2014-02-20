@@ -18,7 +18,7 @@ function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)
 %  'L'               = { Harmonic band-limit; L > 1 (default=guessed from input) }
 %  'Downsample'      = { true        [multiresolution algorithm (default)],
 %                        false       [full resolution wavelets] }
-%  'J_min'           = { Minimum needlet scale to consider;
+%  'J_min'           = { Minimum wavelet scale to consider;
 %                        0 <= J_min < log_B(L) (default=0) }
 %
 % S2LET package to perform Wavelets transform on the Sphere.

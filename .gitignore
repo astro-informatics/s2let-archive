@@ -1,5 +1,7 @@
 *.sublime-workspace
 
+*.DS_Store
 *.o
 *.mexa64
+*.mexmaci64
 *~

@@ -16,7 +16,7 @@ function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)
 %  'L'               = { Harmonic band-limit; L > 1 (default=guessed from input) }
 %  'N'               = { Azimuthal/directional band-limit; N > 1 (default=L) }
 %  'Spin'               = { Spin; (default=0) }
-%  'J_min'           = { Minimum needlet scale to consider;
+%  'J_min'           = { Minimum wavelet scale to consider;
 %                        0 <= J_min < log_B(L) (default=0) }
 %  'Downsample'      = { true        [multiresolution algorithm (default)],
 %                        false       [full resolution wavelets] }

@@ -14,7 +14,7 @@ function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)
 % Option :
 %  'B'               = { Dilation factor; B > 1 (default=2) }
 %  'L'               = { Harmonic band-limit; L > 1 (default=guessed from input) }
-%  'J_min'           = { Minimum needlet scale to consider;
+%  'J_min'           = { Minimum wavelet scale to consider;
 %                        0 <= J_min < log_B(L) (default=0) }
 %  'Downsample'      = { true        [multiresolution algorithm (default)],
 %                        false       [full resolution wavelets] }

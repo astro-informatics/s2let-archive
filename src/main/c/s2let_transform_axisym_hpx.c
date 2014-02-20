@@ -19,16 +19,16 @@ void s2let_transform_axisym_wav_analysis_hpx_real(double *f_wav, double *f_scal,
   int J = s2let_j_max(L, B);
 
   double *wav_lm, *scal_lm;
-  s2let_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
-  s2let_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
+  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
 
   complex double *flm, *f_wav_lm, *f_scal_lm;
   flm = (complex double*)calloc(L * L, sizeof(complex double));
-  s2let_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
 
   s2let_hpx_map2alm_real(flm, f, nside, L);
 
-  s2let_axisym_lm_wav_analysis_hpx_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
 
   bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
   s2let_hpx_alm2map_real(f_scal, f_scal_lm, nside, bandlimit);
@@ -47,18 +47,18 @@ void s2let_transform_axisym_wav_analysis_hpx_real(double *f_wav, double *f_scal,
   free(f_wav_lm);
 }
 
-void s2let_transform_axisym_wav_synthesis_real(double *f, const double *f_wav, const double *f_scal, int nside, int B, int L, int J_min)
+void s2let_transform_axisym_wav_synthesis_hpx_real(double *f, const double *f_wav, const double *f_scal, int nside, int B, int L, int J_min)
 {
   int bandlimit, j, offset, offset_lm;
   int J = s2let_j_max(L, B);
 
   double *wav_lm, *scal_lm;
-  s2let_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
-  s2let_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
+  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
 
   complex double *flm, *f_wav_lm, *f_scal_lm;
   flm = (complex double*)calloc(L * L, sizeof(complex double));
-  s2let_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
 
   bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
   s2let_hpx_map2alm_real(f_scal_lm, f_scal, nside, bandlimit);
@@ -71,7 +71,7 @@ void s2let_transform_axisym_wav_synthesis_real(double *f, const double *f_wav, c
     offset += 12 * nside * nside;
   }
 
-  s2let_axisym_lm_wav_synthesis_multires(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav_synthesis_multires(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
 
   s2let_hpx_alm2map_real(f, flm, nside, L);
 

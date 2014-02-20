@@ -110,8 +110,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
 
   // Perform wavelet transform in harmonic space and then reconstruction.
-  s2let_transform_axisym_hpx_allocate_f_wav_real(&f_wav_r, &f_scal_r, nside, B, L, J_min);
-  s2let_transform_axisym_hpx_wav_analysis_real(f_wav_r, f_scal_r, f_r, nside, B, L, J_min);
+  s2let_transform_axisym_allocate_hpx_f_wav_real(&f_wav_r, &f_scal_r, nside, B, L, J_min);
+  s2let_transform_axisym_wav_analysis_hpx_real(f_wav_r, f_scal_r, f_r, nside, B, L, J_min);
 
   // Compute size of wavelet array
   int wavsize, scalsize;
