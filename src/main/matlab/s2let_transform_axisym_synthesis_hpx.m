@@ -15,7 +15,7 @@ function f = s2let_transform_axisym_synthesis_hpx(f_wav, f_scal, varargin)
 %  'nside'           = { HEALPIX resolution; (default=guessed)}
 %  'B'               = { Dilation factor; B > 1 (default=2) }
 %  'L'               = { Harmonic band-limit; L > 1 (default=2*nside) }
-%  'J_min'           = { Minimum needlet scale to consider;
+%  'J_min'           = { Minimum wavelet scale to consider;
 %                        0 <= J_min < log_B(L) (default=0) }
 %
 % S2LET package to perform Wavelets transform on the Sphere.

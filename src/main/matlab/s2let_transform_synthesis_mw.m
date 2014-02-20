@@ -20,7 +20,7 @@ function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)
 %  'Spin'               = { Spin; (default=0) }
 %  'Downsample'      = { true        [multiresolution algorithm (default)],
 %                        false       [full resolution wavelets] }
-%  'J_min'           = { Minimum needlet scale to consider;
+%  'J_min'           = { Minimum wavelet scale to consider;
 %                        0 <= J_min < log_B(L) (default=0) }
 %  'SpinLowered'     = { true  [Apply normalisation factors for spin-lowered
 %                               wavelets and scaling function.],
