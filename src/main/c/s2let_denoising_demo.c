@@ -1,10 +1,10 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
 #include <assert.h>
-#include <complex.h> 
+#include <complex.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,7 +33,7 @@ double needletpower(double *wav_lm, int L){
   double totalpower = 0;
   for(i = 0; i < L; i++)
     totalpower += pow(wav_lm[i], 2.0);
-  return totalpower; 
+  return totalpower;
 }
 
 /*!
@@ -41,7 +41,7 @@ double needletpower(double *wav_lm, int L){
  * COMMAND : bin/s2let_denoising_demo
  * ARGUMENTS : none
  */
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
 
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
   double *f, *noise, *g, *g_wav, *g_scal, *wav_lm, *scal_lm, *f_denois, *remaining_noise;
   complex double *noise_lm;
 
-  printf("--------------------------------------------------\n");	
+  printf("--------------------------------------------------\n");
   printf(" S2LET library : denoising example\n");
   printf(" Earth tomography signal, MW sampling\n");
   printf("--------------------------------------------------\n");
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
   printf(" - Total number of wavelets : %i\n", J);
   printf(" - First wavelet scale to be used : %i\n", J_min);
 
-  s2let_mw_allocate_real(&f, L); 
+  s2let_mw_allocate_real(&f, L);
   s2let_fits_mw_read_map(f, file, L); // Read MW map from file
   printf(" File successfully read from file\n");
 
@@ -101,10 +101,10 @@ int main(int argc, char *argv[])
   printf(" Performing wavelet decomposition...");fflush(NULL);
   // Perform wavelet analysis from scratch with all signals given as MW maps
   if(multires){
-    s2let_transform_axisym_mw_allocate_f_wav_multires_real(&g_wav, &g_scal, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_multires_real(&g_wav, &g_scal, B, L, J_min);
     s2let_transform_axisym_wav_analysis_mw_multires_real(g_wav, g_scal, g, B, L, J_min);
   }else{
-    s2let_transform_axisym_mw_allocate_f_wav_real(&g_wav, &g_scal, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_real(&g_wav, &g_scal, B, L, J_min);
     s2let_transform_axisym_wav_analysis_mw_real(g_wav, g_scal, g, B, L, J_min);
   }
   printf(" done\n");
@@ -120,14 +120,14 @@ int main(int argc, char *argv[])
   printf(" Hard thresholding the wavelets...");fflush(NULL);
   s2let_mw_allocate_real(&f_denois, L);
   if(multires){
-    s2let_transform_axisym_mw_wav_hardthreshold_multires_real(g_wav, treshold, B, L, J_min);
+    s2let_transform_axisym_wav_hardthreshold_multires_real(g_wav, treshold, B, L, J_min);
     s2let_transform_axisym_wav_synthesis_mw_multires_real(f_denois, g_wav, g_scal, B, L, J_min);
   }else{
-    s2let_transform_axisym_mw_wav_hardthreshold_real(g_wav, treshold, B, L, J_min);
+    s2let_transform_axisym_wav_hardthreshold_real(g_wav, treshold, B, L, J_min);
     s2let_transform_axisym_wav_synthesis_mw_real(f_denois, g_wav, g_scal, B, L, J_min);
   }
   printf(" done\n");
-	
+
   // Remaining noise
   s2let_mw_allocate_real(&remaining_noise, L);
   for(i = 0; i < L*(2*L-1); i++)
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
   double SNR_denoised = 10.0 * log10( s2let_mw_power_real(f, L) / s2let_mw_power_real(remaining_noise, L));
   printf(" -> SNR before denoising = %f\n", SNR_actual);
   printf(" -> SNR after denoising  = %f\n", SNR_denoised);
-	
+
   // Finally write the denoised signal
   printf(" Write output files\n");
   sprintf(outfile, "%s%s%s", "data/earth_tomo_mw_128", "_noisy" , ".fits");
@@ -162,5 +162,5 @@ int main(int argc, char *argv[])
   free(noise_lm);
 
   printf("--------------------------------------------------\n");
-  return 0;		
+  return 0;
 }
