@@ -14,6 +14,6 @@ function elmin = s2let_elmin(B, j)
 % Copyright (C) 2012  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
-elmin = ceil(B^j);
+elmin = floor(B^(j-1) + 1);
 
 end
