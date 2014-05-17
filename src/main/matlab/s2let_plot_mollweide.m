@@ -56,7 +56,7 @@ switch args.Function
         error('Invalid Function parameter. Must be one of "real", "imag", "abs".')
 end
 
-figure(1);
+figure(11);
 
 if args.Downsample
     bl = min([s2let_bandlimit(J_min-1, J_min, B, L), L]);
@@ -65,7 +65,7 @@ else
 end
 ssht_plot_mollweide(f(scal), bl)
 
-figure(2);
+figure(12);
 
 iplot = 1;
 for j = J_min:J

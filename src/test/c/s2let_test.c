@@ -403,7 +403,7 @@ void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
   clock_t time_start, time_end;
   int spin = 0;
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
   //int J = s2let_j_max(L, B);
 
   complex double *f, *f_rec, *flm, *flm_rec;
@@ -462,7 +462,7 @@ void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
 {
   clock_t time_start, time_end;
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
   //int J = s2let_j_max(L, B);
 
   complex *flm, *flm_rec;
@@ -524,7 +524,7 @@ void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
   clock_t time_start, time_end;
   int spin = 0;
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
   //int J = s2let_j_max(L, B);
 
   complex double *f, *f_rec, *flm, *flm_rec;
@@ -584,7 +584,7 @@ void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int 
 {
   clock_t time_start, time_end;
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
   //int J = s2let_j_max(L, B);
 
   complex *flm, *flm_rec;
@@ -649,7 +649,7 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
 {
     clock_t time_start, time_end;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
     //int J = s2let_j_max(L, B);
 
     complex double *f, *f_rec, *flm, *flm_rec;
@@ -713,7 +713,7 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
 {
     clock_t time_start, time_end;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
     //int J = s2let_j_max(L, B);
 
     complex double *f, *f_rec, *flm, *flm_rec;
@@ -778,7 +778,7 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
     int J = s2let_j_max(L, B);
     int verbosity = 0;
     int i;
-    ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
     double wav_error, scal_error;
 
@@ -832,7 +832,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     int J = s2let_j_max(L, B);
     int verbosity = 0;
     int samples, bandlimit, i, j;
-    ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
     double wav_error, scal_error;
 
@@ -1155,8 +1155,8 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
 int main(int argc, char *argv[])
 {
-  const int L = 32;
-  const int N = 8;
+  const int L = 256;
+  const int N = 32;
   const int B = 3;
   const int J_min = 2;
   const int spin = 2;
@@ -1172,7 +1172,7 @@ int main(int argc, char *argv[])
   printf("PARAMETERS: ");
   printf("L = %i  N = %i  B = %i  l_wav_min = %i  spin = %i  seed = %i\n",
          L, N, B, l_min, spin, seed);
-  s2let_switch_wavtype(3);
+  //s2let_switch_wavtype(3);
   printf("---------------------------------------------------------------------\n");
   printf("> Testing logfact binomial coefficient implementation...\n");
   // Don't use more than 62 as the argument.

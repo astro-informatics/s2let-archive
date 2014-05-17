@@ -106,7 +106,7 @@ void s2let_transform_axisym_wav_analysis_mw(complex double *f_wav, complex doubl
 {
   int spin = 0;
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
   int j, offset, offset_lm;
   int J = s2let_j_max(L, B);
@@ -155,7 +155,7 @@ void s2let_transform_axisym_wav_synthesis_mw(complex double *f, const complex do
 {
   int spin = 0;
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
   int j, offset, offset_lm;
   int J = s2let_j_max(L, B);
@@ -204,7 +204,7 @@ void s2let_transform_axisym_wav_synthesis_mw(complex double *f, const complex do
 void s2let_transform_axisym_wav_analysis_mw_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min)
 {
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
   int j, offset, offset_lm;
   int J = s2let_j_max(L, B);
@@ -253,7 +253,7 @@ void s2let_transform_axisym_wav_analysis_mw_real(double *f_wav, double *f_scal, 
 void s2let_transform_axisym_wav_synthesis_mw_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min)
 {
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
   int j, offset, offset_lm;
   int J = s2let_j_max(L, B);
@@ -302,7 +302,7 @@ void s2let_transform_axisym_wav_analysis_mw_multires(complex double *f_wav, comp
 {
   int spin = 0;
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
   int bandlimit, j, offset, offset_lm;
   int J = s2let_j_max(L, B);
@@ -353,7 +353,7 @@ void s2let_transform_axisym_wav_synthesis_mw_multires(complex double *f, const c
 {
   int spin = 0;
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
   int bandlimit, j, offset, offset_lm;
   int J = s2let_j_max(L, B);
@@ -404,7 +404,7 @@ void s2let_transform_axisym_wav_synthesis_mw_multires(complex double *f, const c
 void s2let_transform_axisym_wav_analysis_mw_multires_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min)
 {
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
   int bandlimit, j, offset, offset_lm;
   int J = s2let_j_max(L, B);
@@ -455,7 +455,7 @@ void s2let_transform_axisym_wav_analysis_mw_multires_real(double *f_wav, double 
 void s2let_transform_axisym_wav_synthesis_mw_multires_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min)
 {
   int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
   int bandlimit, j, offset, offset_lm;
   int J = s2let_j_max(L, B);

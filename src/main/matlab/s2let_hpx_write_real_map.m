@@ -1,10 +1,10 @@
-function s2let_hpx_rite_real_map(f, file)
+function s2let_hpx_write_real_map(f, file)
 
 % s2let_hpx_rite_real_map 
 % Write a real Healpix map to a FITS file
 % Default usage :
 %
-%   s2let_hpx_rite_real_map(f, file)
+%   s2let_hpx_write_real_map(f, file)
 %
 % f the Healpix map to be written,
 % file the name of the output FITS file.

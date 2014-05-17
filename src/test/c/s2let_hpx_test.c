@@ -220,9 +220,11 @@ void s2let_hpx_io_test(int nside, int L, int seed)
   // Remove the file if it exists
   remove(file);
   // Write the signal to file
+  printf("Write the signal to file\n");
   s2let_hpx_write_map(file, f, nside);
 
   // Read the signal from file
+  printf("Read the signal from file\n");
   s2let_hpx_read_map(f_rec, file, nside);
   // Clean
   remove(file);
@@ -270,12 +272,14 @@ void s2let_mw_io_test(int L, int seed)
   // Remove the file if it exists
   remove(file);
   // Write the signal to file
+  printf("Write the signal to file\n");
   s2let_fits_mw_write_map(file, f, L);
 
   // Read the band-limit from file
   int Lread = s2let_fits_mw_read_bandlimit(file);
 
   // Read the signal from file
+  printf("Read the signal from file\n");
   s2let_fits_mw_read_map(f_rec, file, Lread);
   // Clean
   remove(file);
@@ -291,6 +295,69 @@ void s2let_mw_io_test(int L, int seed)
   free(f_rec);
   free(flm);
   free(flm_rec);
+}
+/*!
+ * Test the Input-Output facilities for the MW sampling (to FITS filts)
+ *
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  seed Random seed.
+ * \retval none
+ */
+void s2let_mw_io_spin_test(int L, int seed)
+{
+  int verbosity = 0;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+
+  complex double *flmQ, *flmU, *flm_recQ, *flm_recU;
+  double *fQ, *fU, *fQ_rec, *fU_rec;
+  s2let_lm_allocate(&flmQ, L);
+  s2let_lm_allocate(&flmU, L);
+  s2let_lm_allocate(&flm_recQ, L);
+  s2let_lm_allocate(&flm_recU, L);
+  s2let_mw_allocate_real(&fQ, L);
+  s2let_mw_allocate_real(&fU, L);
+  s2let_mw_allocate_real(&fQ_rec, L);
+  s2let_mw_allocate_real(&fU_rec, L);
+  // Generate random harmonic coefficients
+  s2let_lm_random_flm_real(flmQ, L, seed);
+  s2let_lm_random_flm_real(flmU, L, seed);
+  // Construct the corresponding real signal, on MW sampling 
+  ssht_core_mw_inverse_sov_sym_real(fQ, flmQ, L, dl_method, verbosity);
+  // Construct the corresponding real signal, on MW sampling 
+  ssht_core_mw_inverse_sov_sym_real(fU, flmU, L, dl_method, verbosity);
+
+  char file[100] = "temp.fits";
+
+  // Remove the file if it exists
+  remove(file);
+  // Write the signal to file
+  s2let_fits_mw_write_spin_maps(file, fQ, fU, L);
+
+  // Read the band-limit from file
+  int Lread = s2let_fits_mw_read_bandlimit(file);
+
+  // Read the signal from file
+  s2let_fits_mw_read_spin_maps(fQ_rec, fU_rec, file, L);
+  // Clean
+  //remove(file);
+
+  ssht_core_mw_forward_sov_conv_sym_real(flm_recQ, fQ_rec, L, dl_method, verbosity);
+  ssht_core_mw_forward_sov_conv_sym_real(flm_recU, fU_rec, L, dl_method, verbosity);
+
+  // Compute the maximum absolute error on the harmonic coefficients
+  printf("  - Maximum abs error  : %6.5e\n", 
+   maxerr_cplx(flmQ, flm_recQ, L*L));
+  printf("  - Maximum abs error  : %6.5e\n", 
+   maxerr_cplx(flmU, flm_recU, L*L));
+  
+  free(flmQ);
+  free(flmU);
+  free(flm_recQ);
+  free(flm_recU);
+  free(fQ);
+  free(fU);
+  free(fQ_rec);
+  free(fU_rec);
 }
 
 int main(int argc, char *argv[]) 
@@ -311,11 +378,14 @@ int main(int argc, char *argv[])
   printf("PARAMETERS: ");
   printf("  L = %i   B = %i   nside = %i   seed = %i\n", L, B, nside, seed);
   printf("----------------------------------------------------------\n");
-  printf("> Testing spin SHT functions for HEALPIX sampling...\n");
-  s2let_hpx_spinalm_test(nside, spin, L, seed);
- /* printf("----------------------------------------------------------\n");
   printf("> Testing IO functions for MW sampling...\n");
   s2let_mw_io_test(L, seed);
+  printf("----------------------------------------------------------\n");
+  printf("> Testing spin IO functions for MW sampling...\n");
+  s2let_mw_io_spin_test(L, seed);
+ /* printf("----------------------------------------------------------\n");
+  printf("> Testing spin SHT functions for HEALPIX sampling...\n");
+  s2let_hpx_spinalm_test(nside, spin, L, seed);
   printf("----------------------------------------------------------\n");
   printf("> Testing IO functions for HEALPIX sampling...\n");
   s2let_hpx_io_test(nside, L, seed);

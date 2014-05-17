@@ -14,8 +14,8 @@ setenv('HEALPIX','/Users/bl/software/Healpix_2.20a')
 setenv('HEALPIXDATA','/Users/bl/software/Healpix_2.20a/data')
 
 % Main parameters
-L = 16;
-nside = 32;
+L = 4;
+nside = 2;
 B = 2;
 J_min = 1;
 J = s2let_jmax(L, B);
@@ -40,7 +40,11 @@ end
 
 disp('Perform spin spherical harmonic decomposition with default parameters')
 [fQ, fU] = s2let_hpx_alm2map_spin(E_lm, B_lm, nside, 'L', L);
-[E_lm_rec, B_lm_rec] = s2let_hpx_map2alm_spin(fQ, fU, 'L', L);
+file = 'mapsQUtemp.fits';
+s2let_hpx_write_real_spin_maps(fQ, fU, file);
+[fQ_bis, fU_bis, nside]= s2let_hpx_read_real_spin_maps(file);
+stop
+[E_lm_rec, B_lm_rec] = s2let_hpx_map2alm_spin(fQ_bis, fU_bis, 'L', L);
 default = max(max(abs(E_lm-E_lm_rec)))
 default = max(max(abs(B_lm-B_lm_rec)))
 

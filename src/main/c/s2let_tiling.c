@@ -316,7 +316,7 @@ void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, in
  */
 static double s2let_spin_lowered_normalization(int el, int spin)
 {
-    int factor = 1;
+    double factor = 1;
     int s;
 
     for (s = -ABS(spin)+1; s <= ABS(spin); ++s)
@@ -325,9 +325,9 @@ static double s2let_spin_lowered_normalization(int el, int spin)
     }
 
     if (spin > 0)
-        return sqrt((double)factor);
+        return sqrt(factor);
     else
-        return sqrt(1/(double)factor);
+        return sqrt(1.0/factor);
 }
 
 /*!

@@ -16,7 +16,7 @@ CFITSIODIR	= ${CFITSIO}
 HEALPIXDIR	= ${HEALPIX}
 
 # Directory for MATLAB (optional)
-MLAB	=  /Applications/MATLAB_R2013a.app
+MLAB	=  /Applications/MATLAB_R2013b.app
 # Directory for DOXYGEN (optional)
 #DOXYGEN_PATH = /Applications/Doxygen.app/Contents/Resources/doxygen
 DOXYGEN_PATH = doxygen
@@ -31,7 +31,7 @@ OPT	= -Wall -g -DS2LET_VERSION=\"1.1b1\" -DS2LET_BUILD=\"`git rev-parse HEAD`\"
 FCC	= gfortran
 OPTF90 	= -O3 -ffree-form
 # To be defined if LGFORTRAN cannot be found in the path
-# GFORTRANLIB = /sw/lib/gcc4.6/lib
+# GFORTRANLIB = /usr/local/lib
 
 # Config for dynamic library
 ifeq ($(UNAME), Linux)
@@ -101,8 +101,8 @@ endif
 
 # === HEALPIX ===
 ifneq ($(strip $(HEALPIXDIR)),)
-HEALPIXINC    = $(HEALPIXDIR)/include_f90
-HEALPIXLIB     = $(HEALPIXDIR)/lib_f90
+HEALPIXINC    = $(HEALPIXDIR)/include_gfortran
+HEALPIXLIB     = $(HEALPIXDIR)/lib_gfortran
 HEALPIXLIBNM   = healpix
 endif
 
@@ -168,7 +168,7 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 	  LDFLAGS+= -L$(GFORTRANLIB)
 	endif
 
-	LDFLAGSMEX+= -lgfortran -lgomp
+	LDFLAGSMEX+= -lgfortran -lgomp 
 	ifneq ($(strip $(GFORTRANLIB)),)
 	LDFLAGSMEX+= -L$(GFORTRANLIB)
 	endif
@@ -261,9 +261,11 @@ $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT): $(S2LETOBJS)
 	cp $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETDIR)/target/classes/lib/darwin_universal/
 
 .PHONY: test
-test: $(S2LETBIN)/s2let_test
+test: $(S2LETBIN)/s2let_test $(S2LETBIN)/s2let_test_csv
 $(S2LETBIN)/s2let_test: $(S2LETTESTOBJ)/s2let_test.o $(S2LETLIB)/lib$(S2LETLIBNM).a
 	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_test $(LDFLAGS)
+$(S2LETBIN)/s2let_test_csv: $(S2LETTESTOBJ)/s2let_test_csv.o $(S2LETLIB)/lib$(S2LETLIBNM).a
+	$(CC) $(OPT) $< -o $(S2LETBIN)/s2let_test_csv $(LDFLAGS)
 
 .PHONY: hpx_demo
 hpx_demo: $(S2LETBIN)/s2let_hpx_demo

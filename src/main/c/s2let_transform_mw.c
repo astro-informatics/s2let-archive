@@ -107,7 +107,7 @@ void s2let_wav_analysis_mw(
     int original_spin
 ) {
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
     so3_parameters_t so3_parameters = {};
     so3_parameters.verbosity = verbosity;
     so3_parameters.L = L;
@@ -191,7 +191,7 @@ void s2let_wav_synthesis_mw(
     int original_spin
 ) {
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
     so3_parameters_t so3_parameters = {};
     so3_parameters.verbosity = verbosity;
     so3_parameters.L = L;
@@ -276,7 +276,7 @@ void s2let_wav_analysis_mw_multires(
 ) {
     int bandlimit;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
     so3_parameters_t so3_parameters = {};
     so3_parameters.verbosity = verbosity;
     so3_parameters.N = N;
@@ -363,7 +363,7 @@ void s2let_wav_synthesis_mw_multires(
 ) {
     int bandlimit;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_TRAPANI;
+    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
     so3_parameters_t so3_parameters = {};
     so3_parameters.verbosity = verbosity;
     so3_parameters.N = N;
