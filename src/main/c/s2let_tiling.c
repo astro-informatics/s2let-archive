@@ -128,14 +128,13 @@ void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, const s2let_p
     *kappa0 = calloc(L, sizeof **kappa0);
 }
 
-void s2let_tiling_phi2_s2dw(double *phi2, int B, int L, int J_min)
+void s2let_tiling_phi2_s2dw(double *phi2, const s2let_parameters_t *parameters)
 {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int B = parameters->B;
 
     int j, l;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     int n = 300;
 
     double kappanorm = s2let_math_kappa0_quadtrap_s2dw(1.0 / (double)B, 1.0, n, B);
@@ -152,14 +151,13 @@ void s2let_tiling_phi2_s2dw(double *phi2, int B, int L, int J_min)
     }
 }
 
-void s2let_tiling_phi2_needlet(double *phi2, int B, int L, int J_min)
+void s2let_tiling_phi2_needlet(double *phi2, const s2let_parameters_t *parameters)
 {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int B = parameters->B;
 
     int j, l;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     int n = 300;
     double u;
 
@@ -178,14 +176,13 @@ void s2let_tiling_phi2_needlet(double *phi2, int B, int L, int J_min)
     }
 }
 
-void s2let_tiling_phi2_spline(double *phi2, int B, int L, int J_min)
+void s2let_tiling_phi2_spline(double *phi2, const s2let_parameters_t *parameters)
 {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int B = parameters->B;
 
     int j = 0, l;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     phi2[(J+1-j)*L] = 1.0;
     for (l = 1; l < L; l++){
         phi2[l+(J+1-j)*L] = 1.0;
@@ -215,7 +212,6 @@ void s2let_tiling_phi2_spline(double *phi2, int B, int L, int J_min)
 void s2let_tiling_axisym(double *kappa, double *kappa0, const s2let_parameters_t *parameters)
 {
     int L = parameters->L;
-    int B = parameters->B;
     int J_min = parameters->J_min;
 
     int j, l;
@@ -225,11 +221,11 @@ void s2let_tiling_axisym(double *kappa, double *kappa0, const s2let_parameters_t
     double *phi2 = (double*)calloc((J+2) * L, sizeof(double));
 
     if(s2let_kernel == SPLINE)
-        s2let_tiling_phi2_spline(phi2, B, L, J_min); // SPLINE tiling
+        s2let_tiling_phi2_spline(phi2, parameters); // SPLINE tiling
     if(s2let_kernel == S2DW)
-        s2let_tiling_phi2_s2dw(phi2, B, L, J_min); // S2DW tiling
+        s2let_tiling_phi2_s2dw(phi2, parameters); // S2DW tiling
     if(s2let_kernel == NEEDLET)
-        s2let_tiling_phi2_needlet(phi2, B, L, J_min); // Needlet tiling
+        s2let_tiling_phi2_needlet(phi2, parameters); // Needlet tiling
 
     for (l = 0; l < L; l++)
         kappa0[l] = sqrt(phi2[l+J_min*L]);
