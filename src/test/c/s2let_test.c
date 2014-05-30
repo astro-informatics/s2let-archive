@@ -446,6 +446,11 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
  */
 void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   int spin = 0;
   int verbosity = 0;
@@ -466,7 +471,7 @@ void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
 
   // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
   complex double *f_wav, *f_scal;
-  s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, B, L, J_min);
+  s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
   time_start = clock();
@@ -567,6 +572,11 @@ void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
  */
 void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   int spin = 0;
   int verbosity = 0;
@@ -587,7 +597,7 @@ void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
 
   // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
   complex double *f_wav, *f_scal;
-  s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, B, L, J_min);
+  s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
   time_start = clock();
@@ -1008,7 +1018,7 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     // from both transforms.
     complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
-    s2let_transform_axisym_allocate_mw_f_wav(&f_wav_axisym, &f_scal_axisym, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav(&f_wav_axisym, &f_scal_axisym, &parameters);
     s2let_allocate_mw_f_wav(&f_wav_dir, &f_scal_dir, &parameters);
 
     // Do both transforms
@@ -1068,7 +1078,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     // from both transforms.
     complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
-    s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav_axisym, &f_scal_axisym, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav_axisym, &f_scal_axisym, &parameters);
     s2let_allocate_mw_f_wav_multires(&f_wav_dir, &f_scal_dir, &parameters);
 
     // Do both transforms
@@ -1098,6 +1108,10 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
 
 void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.J_min = J_min;
+
   complex double *f, *flm, *flm_rec, *f_rec, *f_wav, *f_scal;
   clock_t time_start, time_end;
   int sc, repeat;
@@ -1110,6 +1124,8 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
 
     L *= 2;
 
+    parameters.L = L;
+
     s2let_lm_allocate(&flm, L);
 
     printf(" > L =  %i \n", L);
@@ -1120,7 +1136,7 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
       s2let_lm_random_flm(flm, L, 0, seed);
       s2let_mw_allocate(&f, L);
       s2let_mw_alm2map(f, flm, L);
-      s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, B, L, J_min);
+      s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
       time_start = clock();
       s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min);
@@ -1167,6 +1183,10 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
 
 void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.J_min = J_min;
+
   complex double *f, *flm, *flm_rec, *f_rec, *f_wav, *f_scal;
   clock_t time_start, time_end;
   int sc, repeat;
@@ -1179,6 +1199,8 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
 
     L *= 2;
 
+    parameters.L = L;
+
     s2let_lm_allocate(&flm, L);
 
     printf(" > L =  %i \n", L);
@@ -1189,7 +1211,7 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
       s2let_lm_random_flm(flm, L, 0, seed);
       s2let_mw_allocate(&f, L);
       s2let_mw_alm2map(f, flm, L);
-      s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, B, L, J_min);
+      s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
 
       time_start = clock();
       s2let_transform_axisym_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min);

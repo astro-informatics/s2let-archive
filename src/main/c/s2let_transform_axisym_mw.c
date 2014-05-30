@@ -8,6 +8,29 @@
 #include <stdlib.h>
 
 /*!
+ * Allocates arrays for final wavelets and scaling functions in pixel space (MW sampling).
+ *
+ * \param[out]  f_wav Array of wavelets maps, MW sampling.
+ * \param[out]  f_scal Scaling function map, MW sampling.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
+void s2let_transform_axisym_allocate_mw_f_wav(
+    complex double **f_wav,
+    complex double **f_scal,
+    const s2let_parameters_t *parameters
+) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+
+    int J = s2let_j_max(parameters);
+    *f_wav = calloc((J+1-J_min) * L *(2*L-1), sizeof **f_wav);
+    *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
+}
+
+/*!
  * Allocates arrays for wavelets and scaling functions in pixel space (MW sampling).
  *
  * \param[out]  f_wav Array of wavelets maps, MW sampling.
@@ -17,23 +40,45 @@
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_allocate_mw_f_wav_multires(complex double **f_wav, complex double **f_scal, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.B = B;
-    parameters.L = L;
-    parameters.J_min = J_min;
+void s2let_transform_axisym_allocate_mw_f_wav_multires(
+    complex double **f_wav,
+    complex double **f_scal,
+    const s2let_parameters_t *parameters
+) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     int j, bandlimit, total = 0;
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
+        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         total += bandlimit * (2 * bandlimit - 1);
     }
     *f_wav = calloc(total, sizeof **f_wav);
-    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     *f_scal = calloc(bandlimit * (2*bandlimit-1), sizeof **f_scal);
+}
+
+/*!
+ * Allocates arrays for final wavelets and scaling functions in pixel space (MW sampling).
+ *
+ * \param[out]  f_wav Array of wavelets maps, MW sampling.
+ * \param[out]  f_scal Scaling function map, MW sampling.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
+void s2let_transform_axisym_allocate_mw_f_wav_real(double **f_wav, double **f_scal, int B, int L, int J_min)
+{
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
+    int J = s2let_j_max(&parameters);
+    *f_wav = calloc((J+1-J_min) * L *(2*L-1), sizeof **f_wav);
+    *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
 }
 
 /*!
@@ -63,48 +108,6 @@ void s2let_transform_axisym_allocate_mw_f_wav_multires_real(double **f_wav, doub
     *f_wav = calloc(total, sizeof **f_wav);
     bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     *f_scal = calloc(bandlimit * (2*bandlimit-1), sizeof **f_scal);
-}
-
-/*!
- * Allocates arrays for final wavelets and scaling functions in pixel space (MW sampling).
- *
- * \param[out]  f_wav Array of wavelets maps, MW sampling.
- * \param[out]  f_scal Scaling function map, MW sampling.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
-void s2let_transform_axisym_allocate_mw_f_wav(complex double **f_wav, complex double **f_scal, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
-
-    int J = s2let_j_max(&parameters);
-    *f_wav = calloc((J+1-J_min) * L *(2*L-1), sizeof **f_wav);
-    *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
-}
-
-/*!
- * Allocates arrays for final wavelets and scaling functions in pixel space (MW sampling).
- *
- * \param[out]  f_wav Array of wavelets maps, MW sampling.
- * \param[out]  f_scal Scaling function map, MW sampling.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
-void s2let_transform_axisym_allocate_mw_f_wav_real(double **f_wav, double **f_scal, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
-
-    int J = s2let_j_max(&parameters);
-    *f_wav = calloc((J+1-J_min) * L *(2*L-1), sizeof **f_wav);
-    *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
 }
 
 /*!
