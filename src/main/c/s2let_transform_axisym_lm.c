@@ -76,13 +76,11 @@ void s2let_transform_axisym_lm_allocate_f_wav_multires(
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void s2let_transform_axisym_lm_allocate_wav(double **wav_lm, double **scal_lm, int B, int L)
+void s2let_transform_axisym_lm_allocate_wav(double **wav_lm, double **scal_lm, const s2let_parameters_t *parameters)
 {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
 
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     *wav_lm = (double*)calloc((J+1) * L, sizeof(double));
     *scal_lm = (double*)calloc(L, sizeof(double));
 }

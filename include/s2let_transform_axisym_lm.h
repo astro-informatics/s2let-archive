@@ -20,7 +20,7 @@ void s2let_transform_axisym_lm_allocate_f_wav_multires(
     const s2let_parameters_t *parameters
 );
 
-void s2let_transform_axisym_lm_allocate_wav(double **wav_lm, double **scal_lm, int B, int L);
+void s2let_transform_axisym_lm_allocate_wav(double **wav_lm, double **scal_lm, const s2let_parameters_t *parameters);
 void s2let_transform_axisym_lm_wav(double *wav_lm, double *scal_lm, int B, int L, int J_min);
 
 void s2let_transform_axisym_lm_wav_analysis(
