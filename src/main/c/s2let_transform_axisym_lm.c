@@ -24,13 +24,15 @@ static inline int lm2ind(int el, int m)
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_lm_allocate_f_wav(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+void s2let_transform_axisym_lm_allocate_f_wav(
+    complex double **f_wav_lm,
+    complex double **f_scal_lm,
+    const s2let_parameters_t *parameters
+) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     *f_wav_lm = calloc((J+1-J_min) * L * L, sizeof **f_wav_lm);
     *f_scal_lm = calloc(L * L, sizeof **f_scal_lm);
 }
@@ -45,22 +47,23 @@ void s2let_transform_axisym_lm_allocate_f_wav(complex double **f_wav_lm, complex
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_lm_allocate_f_wav_multires(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.B = B;
-    parameters.L = L;
-    parameters.J_min = J_min;
+void s2let_transform_axisym_lm_allocate_f_wav_multires(
+    complex double **f_wav_lm,
+    complex double **f_scal_lm,
+    const s2let_parameters_t *parameters
+) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     int j, bandlimit, total = 0;
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
+        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         total += bandlimit * bandlimit;
     }
     *f_wav_lm = calloc(total, sizeof **f_wav_lm);
-    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     *f_scal_lm = calloc(bandlimit * bandlimit, sizeof **f_scal_lm);
 }
 

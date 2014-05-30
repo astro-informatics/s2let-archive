@@ -169,6 +169,11 @@ void s2let_binomial_coefficient_test(int n_max)
  */
 void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   double *wav_lm, *scal_lm;
 
@@ -190,7 +195,7 @@ void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
   s2let_lm_random_flm(flm, L, 0, seed);
 
   // Allocate space for the wavelet scales (their harmonic coefficients)
-  s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
@@ -229,6 +234,11 @@ void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
  */
 void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   double *wav_lm, *scal_lm;
 
@@ -250,7 +260,7 @@ void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int se
   s2let_lm_random_flm(flm, L, 0, seed);
 
   // Allocate space for the wavelet scales (their harmonic coefficients)
-  s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
@@ -1227,6 +1237,10 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
 
 void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.J_min = J_min;
+
   complex double *flm, *flm_rec, *f_wav_lm, *f_scal_lm;
   clock_t time_start, time_end;
   int sc, repeat;
@@ -1240,6 +1254,8 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
 
     L *= 2;
 
+    parameters.L = L;
+
     s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
     s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
     s2let_lm_allocate(&flm, L);
@@ -1251,7 +1267,7 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
 
       s2let_lm_random_flm(flm, L, 0, seed);
 
-      s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, B, L, J_min);
+      s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, &parameters);
 
       time_start = clock();
       s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
@@ -1296,6 +1312,10 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
 
 void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.J_min = J_min;
+
   complex double *flm, *flm_rec, *f_wav_lm, *f_scal_lm;
   clock_t time_start, time_end;
   int sc, repeat;
@@ -1309,6 +1329,8 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
     L *= 2;
 
+    parameters.L = L;
+
     s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
     s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
     s2let_lm_allocate(&flm, L);
@@ -1320,7 +1342,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
       s2let_lm_random_flm(flm, L, 0, seed);
 
-      s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
+      s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, &parameters);
 
       time_start = clock();
       s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
