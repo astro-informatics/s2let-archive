@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
   printf("Performing wavelet decomposition...");fflush(NULL);
   double *f = (double*)calloc(L * (2 * L - 1), sizeof(double));
   if(multires){
-    s2let_transform_axisym_wav_synthesis_mw_multires_real(f, f_wav, f_scal, B, L, J_min);
+    s2let_transform_axisym_wav_synthesis_mw_multires_real(f, f_wav, f_scal, &parameters);
   }else{
     s2let_transform_axisym_wav_synthesis_mw_real(f, f_wav, f_scal, &parameters);
   }

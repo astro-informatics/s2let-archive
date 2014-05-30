@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
   // Perform wavelet analysis from scratch with all signals given as MW maps
   if(multires){
     s2let_transform_axisym_allocate_mw_f_wav_multires_real(&g_wav, &g_scal, &parameters);
-    s2let_transform_axisym_wav_analysis_mw_multires_real(g_wav, g_scal, g, B, L, J_min);
+    s2let_transform_axisym_wav_analysis_mw_multires_real(g_wav, g_scal, g, &parameters);
   }else{
     s2let_transform_axisym_allocate_mw_f_wav_real(&g_wav, &g_scal, &parameters);
     s2let_transform_axisym_wav_analysis_mw_real(g_wav, g_scal, g, &parameters);
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
   s2let_mw_allocate_real(&f_denois, L);
   if(multires){
     s2let_transform_axisym_wav_hardthreshold_multires_real(g_wav, treshold, B, L, J_min);
-    s2let_transform_axisym_wav_synthesis_mw_multires_real(f_denois, g_wav, g_scal, B, L, J_min);
+    s2let_transform_axisym_wav_synthesis_mw_multires_real(f_denois, g_wav, g_scal, &parameters);
   }else{
     s2let_transform_axisym_wav_hardthreshold_real(g_wav, treshold, B, L, J_min);
     s2let_transform_axisym_wav_synthesis_mw_real(f_denois, g_wav, g_scal, &parameters);

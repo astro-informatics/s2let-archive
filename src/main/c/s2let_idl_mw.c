@@ -184,7 +184,12 @@ int s2let_idl_transform_axisym_wav_analysis_mw_multires_real(int argc, void* arg
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_transform_axisym_wav_analysis_mw_multires_real(f_wav, f_scal, f, *B, *L, *J_min);
+  s2let_parameters_t parameters = {};
+  parameters.B = *B;
+  parameters.L = *L;
+  parameters.J_min = *J_min;
+
+  s2let_transform_axisym_wav_analysis_mw_multires_real(f_wav, f_scal, f, &parameters);
 
   return 1;
 }
@@ -202,7 +207,12 @@ int s2let_idl_transform_axisym_wav_synthesis_mw_multires_real(int argc, void* ar
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_transform_axisym_wav_synthesis_mw_multires_real(f, f_wav, f_scal, *B, *L, *J_min);
+  s2let_parameters_t parameters = {};
+  parameters.B = *B;
+  parameters.L = *L;
+  parameters.J_min = *J_min;
+
+  s2let_transform_axisym_wav_synthesis_mw_multires_real(f, f_wav, f_scal, &parameters);
 
   return 1;
 }

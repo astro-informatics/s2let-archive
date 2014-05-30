@@ -461,38 +461,40 @@ void s2let_transform_axisym_wav_synthesis_mw_real(
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_wav_analysis_mw_multires_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.B = B;
-    parameters.L = L;
-    parameters.J_min = J_min;
+void s2let_transform_axisym_wav_analysis_mw_multires_real(
+    double *f_wav,
+    double *f_scal,
+    const double *f,
+    const s2let_parameters_t *parameters
+) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
     int bandlimit, j, offset, offset_lm;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     //int l_min = s2let_transform_axisym_el_min(B, J_min);
 
     double *wav_lm, *scal_lm;
-    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
-    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
+    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, parameters);
+    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, parameters);
 
     complex double *flm, *f_wav_lm, *f_scal_lm;
     flm = (complex double*)calloc(L * L, sizeof(complex double));
-    s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, &parameters);
+    s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, parameters);
 
     ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
 
-    s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
+    s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, parameters);
 
-    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, bandlimit, dl_method, verbosity);
     offset = 0;
     offset_lm = 0;
     for(j = J_min; j <= J; j++){
-        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
+        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         ssht_core_mw_inverse_sov_sym_real(f_wav + offset, f_wav_lm + offset_lm, bandlimit, dl_method, verbosity);
         offset_lm += bandlimit * bandlimit;
         offset += bandlimit * (2 * bandlimit - 1);
@@ -517,40 +519,42 @@ void s2let_transform_axisym_wav_analysis_mw_multires_real(double *f_wav, double 
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_wav_synthesis_mw_multires_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.B = B;
-    parameters.L = L;
-    parameters.J_min = J_min;
+void s2let_transform_axisym_wav_synthesis_mw_multires_real(
+    double *f,
+    const double *f_wav,
+    const double *f_scal,
+    const s2let_parameters_t *parameters
+) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
     int bandlimit, j, offset, offset_lm;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     //int l_min = s2let_transform_axisym_el_min(B, J_min);
 
     double *wav_lm, *scal_lm;
-    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
-    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
+    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, parameters);
+    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, parameters);
 
     complex double *flm, *f_wav_lm, *f_scal_lm;
     flm = (complex double*)calloc(L * L, sizeof(complex double));
-    s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, &parameters);
+    s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, parameters);
 
-    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     ssht_core_mw_forward_sov_conv_sym_real(f_scal_lm, f_scal, bandlimit, dl_method, verbosity);
     offset = 0;
     offset_lm = 0;
     for(j = J_min; j <= J; j++){
-        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
+        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         ssht_core_mw_forward_sov_conv_sym_real(f_wav_lm + offset_lm, f_wav + offset, bandlimit, dl_method, verbosity);
         offset_lm += bandlimit * bandlimit;
         offset += bandlimit * (2 * bandlimit - 1);
     }
 
-    s2let_transform_axisym_lm_wav_synthesis_multires(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
+    s2let_transform_axisym_lm_wav_synthesis_multires(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, parameters);
 
     ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
 
