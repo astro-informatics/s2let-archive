@@ -719,8 +719,16 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
 void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
 {
     clock_t time_start, time_end;
-    int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+    parameters.N = N;
+    parameters.spin = 0;
+
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
     //int J = s2let_j_max(L, B);
 
     double *f, *f_rec;
@@ -738,7 +746,7 @@ void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, B, L, J_min, N);
+    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -856,8 +864,16 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
 void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, int seed)
 {
     clock_t time_start, time_end;
-    int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+    parameters.N = N;
+    parameters.spin = 0;
+
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
     //int J = s2let_j_max(L, B);
 
     double *f, *f_rec;
@@ -875,7 +891,7 @@ void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, i
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min, N);
+    s2let_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -1312,7 +1328,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
 int main(int argc, char *argv[])
 {
-  const int L = 64;
+  const int L = 32;
   const int N = 16;
   const int B = 3;
   const int J_min = 0;

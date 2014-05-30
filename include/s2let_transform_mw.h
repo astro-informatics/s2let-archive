@@ -24,19 +24,13 @@ void s2let_allocate_mw_f_wav_multires(
 void s2let_allocate_mw_f_wav_real(
     double **f_wav,
     double **f_scal,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 void s2let_allocate_mw_f_wav_multires_real(
     double **f_wav,
     double **f_scal,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 /** Pixel-space wavelet transform **/
