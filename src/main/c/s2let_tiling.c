@@ -260,8 +260,9 @@ void s2let_tiling_axisym(double *kappa, double *kappa0, int B, int L, int J_min)
  * \param[in]  N Azimuthal band-limit.
  * \retval none
  */
-void s2let_tiling_direction_allocate(complex double **s_elm, int L, int N)
+void s2let_tiling_direction_allocate(complex double **s_elm, const s2let_parameters_t *parameters)
 {
+  int L = parameters->L;
   // TODO: This could be reduced by not storing s_elm with |m| >= N
   *s_elm = calloc(L*L, sizeof **s_elm);
 }
@@ -415,7 +416,7 @@ void s2let_tiling_wavelet(
     //       function.
     s2let_tiling_axisym_allocate(&kappa, &kappa0, &parameters);
     s2let_tiling_axisym(kappa, kappa0, B, L, J_min);
-    s2let_tiling_direction_allocate(&s_elm, L, N);
+    s2let_tiling_direction_allocate(&s_elm, &parameters);
     s2let_tiling_direction(s_elm, L, N);
 
     el_min = MAX(ABS(spin), ABS(original_spin));

@@ -52,11 +52,15 @@ void s2let_tiling_axisym_test(int B, int L, int J_min)
  */
 void s2let_tiling_direction_test(int L, int N)
 {
+  s2let_parameters_t parameters = {};
+  parameters.L = L;
+  parameters.N = N;
+
   complex double *s_elm;
   double error;
 
   // Allocate space for the harmonic coefficients
-  s2let_tiling_direction_allocate(&s_elm, L, N);
+  s2let_tiling_direction_allocate(&s_elm, &parameters);
 
   // Construct the harmonic coefficients
   s2let_tiling_direction(s_elm, L, N);
