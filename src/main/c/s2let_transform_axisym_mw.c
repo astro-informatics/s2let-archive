@@ -564,36 +564,6 @@ void s2let_transform_axisym_wav_synthesis_mw_multires_real(
 }
 
 /*!
- * Threshold real wavelets in real space, MW sampling, multiresolution.
- *
- * \param[inout]  g_wav Array of wavelets maps, MW sampling.
- * \param[in]  threshold A threshold rule, i.e. a number for every scale j.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \retval none
- */
-void s2let_transform_axisym_wav_hardthreshold_multires_real(double *g_wav, const double *threshold, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.B = B;
-    parameters.L = L;
-    parameters.J_min = J_min;
-
-    int J = s2let_j_max(&parameters);
-    int i, j, offset = 0;
-    for(j = J_min; j <= J; j++){
-        int bl = MIN(s2let_bandlimit(j, &parameters), L);
-        for(i = 0; i < bl*(2*bl-1); i++){
-            if( abs(g_wav[offset + i]) < threshold[j-J_min] )
-                g_wav[offset + i] = 0;
-        }
-        offset += bl*(2*bl-1);
-    }
-}
-
-
-/*!
  * Threshold real wavelets in real space, MW sampling, full resolution.
  *
  * \param[inout]  g_wav Array of wavelets maps, MW sampling.
@@ -603,13 +573,15 @@ void s2let_transform_axisym_wav_hardthreshold_multires_real(double *g_wav, const
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_wav_hardthreshold_real(double *g_wav, const double *threshold, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+void s2let_transform_axisym_wav_hardthreshold_real(
+    double *g_wav,
+    const double *threshold,
+    const s2let_parameters_t *parameters
+) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     int i, j, offset = 0;
     for(j = J_min; j <= J; j++){
         int bl = L;
@@ -620,4 +592,35 @@ void s2let_transform_axisym_wav_hardthreshold_real(double *g_wav, const double *
         offset += bl*(2*bl-1);
     }
 }
+
+/*!
+ * Threshold real wavelets in real space, MW sampling, multiresolution.
+ *
+ * \param[inout]  g_wav Array of wavelets maps, MW sampling.
+ * \param[in]  threshold A threshold rule, i.e. a number for every scale j.
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \retval none
+ */
+void s2let_transform_axisym_wav_hardthreshold_multires_real(
+    double *g_wav,
+    const double *threshold,
+    const s2let_parameters_t *parameters
+) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+
+    int J = s2let_j_max(parameters);
+    int i, j, offset = 0;
+    for(j = J_min; j <= J; j++){
+        int bl = MIN(s2let_bandlimit(j, parameters), L);
+        for(i = 0; i < bl*(2*bl-1); i++){
+            if( abs(g_wav[offset + i]) < threshold[j-J_min] )
+                g_wav[offset + i] = 0;
+        }
+        offset += bl*(2*bl-1);
+    }
+}
+
 

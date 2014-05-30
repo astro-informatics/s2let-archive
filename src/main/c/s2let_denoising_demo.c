@@ -124,10 +124,10 @@ int main(int argc, char *argv[])
   printf(" Hard thresholding the wavelets...");fflush(NULL);
   s2let_mw_allocate_real(&f_denois, L);
   if(multires){
-    s2let_transform_axisym_wav_hardthreshold_multires_real(g_wav, treshold, B, L, J_min);
+    s2let_transform_axisym_wav_hardthreshold_multires_real(g_wav, treshold, &parameters);
     s2let_transform_axisym_wav_synthesis_mw_multires_real(f_denois, g_wav, g_scal, &parameters);
   }else{
-    s2let_transform_axisym_wav_hardthreshold_real(g_wav, treshold, B, L, J_min);
+    s2let_transform_axisym_wav_hardthreshold_real(g_wav, treshold, &parameters);
     s2let_transform_axisym_wav_synthesis_mw_real(f_denois, g_wav, g_scal, &parameters);
   }
   printf(" done\n");
