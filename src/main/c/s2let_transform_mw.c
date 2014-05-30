@@ -71,13 +71,13 @@ void s2let_allocate_mw_f_wav_multires(
 
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         // We actually only need N samples of the orientational angle.
         total += (2*N-1) * bandlimit * (2 * bandlimit - 1);
     }
 
     *f_wav = calloc(total, sizeof **f_wav);
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     *f_scal = calloc(bandlimit * (2*bandlimit-1), sizeof **f_scal);
 }
 
@@ -140,13 +140,13 @@ void s2let_allocate_mw_f_wav_multires_real(
 
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         // We actually only need N samples of the orientational angle.
         total += (2*N-1) * bandlimit * (2 * bandlimit - 1);
     }
 
     *f_wav = calloc(total, sizeof **f_wav);
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     *f_scal = calloc(bandlimit * (2*bandlimit-1), sizeof **f_scal);
 }
 
@@ -537,6 +537,11 @@ void s2let_wav_analysis_mw_multires(
     s2let_wav_norm_t normalization,
     int original_spin
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+
     int bandlimit;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -565,14 +570,14 @@ void s2let_wav_analysis_mw_multires(
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
     s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, B, L, J_min, N, spin);
 
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     // Note, this is a spin-0 transform!
     ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, bandlimit, 0, dl_method, verbosity);
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         so3_parameters.L = bandlimit;
         so3_core_inverse_via_ssht(
             f_wav + offset,
@@ -624,6 +629,11 @@ void s2let_wav_synthesis_mw_multires(
     s2let_wav_norm_t normalization,
     int original_spin
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+
     int bandlimit;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -647,14 +657,14 @@ void s2let_wav_synthesis_mw_multires(
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
 
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     // Note, this is a spin-0 transform!
     ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, bandlimit, 0, dl_method, verbosity);
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         so3_parameters.L = bandlimit;
         so3_core_forward_via_ssht(
             f_wav_lmn + offset_lmn,
@@ -710,6 +720,11 @@ void s2let_wav_analysis_mw_multires_real(
     int J_min,
     int N
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+
     int bandlimit;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -740,14 +755,14 @@ void s2let_wav_analysis_mw_multires_real(
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
     s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, B, L, J_min, N, spin);
 
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     // Note, this is a spin-0 transform!
     ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, bandlimit, dl_method, verbosity);
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         so3_parameters.L = bandlimit;
         so3_core_inverse_via_ssht_real(
             f_wav + offset,
@@ -796,6 +811,11 @@ void s2let_wav_synthesis_mw_multires_real(
     int J_min,
     int N
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+
     int bandlimit;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -821,7 +841,7 @@ void s2let_wav_synthesis_mw_multires_real(
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
 
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     // Note, this is a spin-0 transform!
     ssht_core_mw_forward_sov_conv_sym_real(f_scal_lm, f_scal, bandlimit, dl_method, verbosity);
     offset = 0;
@@ -830,7 +850,7 @@ void s2let_wav_synthesis_mw_multires_real(
     {
         int n, el, m;
 
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         so3_parameters.L = bandlimit;
         so3_core_forward_via_ssht_real(
             f_wav_lmn + offset_lmn + (N-1) * bandlimit*bandlimit,

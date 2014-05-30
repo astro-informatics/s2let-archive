@@ -9,7 +9,7 @@
 
 void s2let_switch_wavtype(int typenum);
 
-int s2let_bandlimit(int j, int J_min, int B, int L);
+int s2let_bandlimit(int j, const s2let_parameters_t *parameters);
 
 int s2let_el_min(int B, int J_min);
 

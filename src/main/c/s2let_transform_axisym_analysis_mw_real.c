@@ -42,6 +42,12 @@ int main(int argc, char *argv[])
   if (sscanf(argv[4], "%i", &multires) != 1)
     exit(-2);
 
+  s2let_parameters_t parameters = {};
+
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   printf("Parameters for wavelet transform :\n");
   int J = s2let_j_max(L, B);
   printf("- Multiresolution flag : %i\n", multires);
@@ -80,7 +86,7 @@ int main(int argc, char *argv[])
     printf("- Outfile_wav[j=%i] = %s\n",j,outfile);
     remove(outfile); // In case the file exists
     if(multires)
-      bl = MIN(s2let_bandlimit(j, J_min, B, L), L);
+      bl = MIN(s2let_bandlimit(j, &parameters), L);
     else
       bl = L;
     s2let_fits_mw_write_map(outfile, f_wav + offset, bl); // Now write the map to fits file
@@ -91,7 +97,7 @@ int main(int argc, char *argv[])
   printf("- Outfile_scal = %s\n",outfile);
   remove(outfile); // In case the file exists
   if(multires)
-    bl = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bl = MIN(s2let_bandlimit(J_min-1, &parameters), L);
   else
     bl = L;
   s2let_fits_mw_write_map(outfile, f_scal, bl); // Now write the map to fits file

@@ -47,8 +47,12 @@ void s2let_switch_wavtype(int typenum)
  * \param[in]  L Total band-limit.
  * \retval band-limit
  */
-int s2let_bandlimit(int j, int J_min, int B, int L)
+int s2let_bandlimit(int j, const s2let_parameters_t *parameters)
 {
+    int B = parameters->B;
+    int L = parameters->L;
+    // int J_min = parameters->J_min;
+
     int Jmax;
     switch (s2let_kernel)
     {

@@ -43,15 +43,20 @@ void s2let_transform_axisym_lm_allocate_f_wav(complex double **f_wav_lm, complex
  */
 void s2let_transform_axisym_lm_allocate_f_wav_multires(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min)
 {
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+
     int J = s2let_j_max(L, B);
     int j, bandlimit, total = 0;
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         total += bandlimit * bandlimit;
     }
     *f_wav_lm = calloc(total, sizeof **f_wav_lm);
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     *f_scal_lm = calloc(bandlimit * bandlimit, sizeof **f_scal_lm);
 }
 
@@ -217,13 +222,18 @@ void s2let_transform_axisym_lm_wav_synthesis(
  */
 void s2let_transform_axisym_lm_wav_analysis_multires(complex double *f_wav_lm, complex double *f_scal_lm, const complex double *flm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min)
 {
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+
     int bandlimit, offset, j, l, m;
     int J = s2let_j_max(L, B);
     double wav0, scal0;
 
     offset = 0;
     for (j = J_min; j <= J; j++){
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         for (l = 0; l < bandlimit; l++){
             wav0 = sqrt((4.0*PI)/(2.0*l+1.0)) * wav_lm[j*L+l];
             for (m = -l; m <= l; m++){
@@ -232,7 +242,7 @@ void s2let_transform_axisym_lm_wav_analysis_multires(complex double *f_wav_lm, c
         }
         offset += bandlimit * bandlimit;
     }
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     for (l = 0; l < bandlimit; l++){
         scal0 = sqrt((4.0*PI)/(2.0*l+1.0)) * scal_lm[l];
         for (m = -l; m <= l; m++){
@@ -257,6 +267,11 @@ void s2let_transform_axisym_lm_wav_analysis_multires(complex double *f_wav_lm, c
  */
 void s2let_transform_axisym_lm_wav_synthesis_multires(complex double *flm, const complex double *f_wav_lm, const complex double *f_scal_lm, const double *wav_lm, const double *scal_lm, int B, int L, int J_min)
 {
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+
     int bandlimit, offset, j, l, m;
     int J = s2let_j_max(L, B);
     double wav0, scal0;
@@ -264,7 +279,7 @@ void s2let_transform_axisym_lm_wav_synthesis_multires(complex double *flm, const
 
     offset = 0;
     for (j = J_min; j <= J; j++){
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         for (l = 0; l < bandlimit; l++){
             wav0 = sqrt((4.0*PI)/(2.0*l+1.0)) * wav_lm[j*L+l];
             for (m = -l; m <= l; m++){
@@ -273,7 +288,7 @@ void s2let_transform_axisym_lm_wav_synthesis_multires(complex double *flm, const
         }
         offset += bandlimit * bandlimit;
     }
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     for (l = 0; l < bandlimit; l++){
         scal0 = sqrt((4.0*PI)/(2.0*l+1.0)) * scal_lm[l];
         for (m = -l; m <= l; m++){

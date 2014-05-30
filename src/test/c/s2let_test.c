@@ -1032,7 +1032,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     samples = 0;
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         samples += bandlimit * (2 * bandlimit - 1);
     }
 
@@ -1042,7 +1042,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
 
     // Compute the maximum absolute error in the computed wavelet transform
     wav_error = maxerr_cplx(f_wav_axisym, f_wav_dir, (J-J_min+1)*L*(2*L-1));
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     scal_error = maxerr_cplx(f_scal_axisym, f_scal_dir, bandlimit*(2*bandlimit-1));
 
     printf("  - Maximum abs error in wavelets :         %6.5e\n", wav_error);

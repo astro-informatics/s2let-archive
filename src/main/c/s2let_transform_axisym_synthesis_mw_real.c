@@ -39,6 +39,12 @@ int main(int argc, char *argv[])
   if (sscanf(argv[4], "%i", &L) != 1)
     exit(-2);
 
+  s2let_parameters_t parameters = {};
+
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   printf("Parameters for wavelet transform :\n");
   int J = s2let_j_max(L, B);
   printf("- Wavelet parameter : %i\n", B);
@@ -60,7 +66,7 @@ int main(int argc, char *argv[])
     printf("- Infile_wav[j=%i] = %s\n",j,file);
     bl = s2let_fits_mw_read_bandlimit(file);
     printf("  Detected bandlimit bl = %i\n",bl);
-    if( bl != MIN(s2let_bandlimit(j, J_min, B, L), L) )
+    if( bl != MIN(s2let_bandlimit(j, &parameters), L) )
       multires_ok = 0;
     if( bl != L )
       monores_ok = 0;
@@ -70,7 +76,7 @@ int main(int argc, char *argv[])
   printf("- Infile_scal = %s\n",file);
   bl = s2let_fits_mw_read_bandlimit(file);
   printf("  Detected bandlimit bl = %i\n",bl);
-  if( bl != MIN(s2let_bandlimit(J_min-1, J_min, B, L), L) )
+  if( bl != MIN(s2let_bandlimit(J_min-1, &parameters), L) )
     multires_ok = 0;
   if( bl != L )
     monores_ok = 0;
@@ -104,7 +110,7 @@ int main(int argc, char *argv[])
   for(j = J_min; j <= J; j++){
     sprintf(file, "%s%s%s%s%d%s", fileroot, "_wav_", params, "_", j, ".fits");
     if(multires)
-      bl = MIN(s2let_bandlimit(j, J_min, B, L), L);
+      bl = MIN(s2let_bandlimit(j, &parameters), L);
     else
       bl = L;
     s2let_fits_mw_read_map(f_wav + offset, file, bl); // Now write the map to fits file
@@ -113,7 +119,7 @@ int main(int argc, char *argv[])
   // Read the scaling function
   sprintf(file, "%s%s%s%s", fileroot, "_scal_", params, ".fits");
   if(multires)
-    bl = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    bl = MIN(s2let_bandlimit(J_min-1, &parameters), L);
   else
     bl = L;
   s2let_fits_mw_read_map(f_scal, file, bl);
