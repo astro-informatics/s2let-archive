@@ -95,20 +95,19 @@ void s2let_transform_axisym_lm_allocate_wav(double **wav_lm, double **scal_lm, c
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_lm_wav(double *wav_lm, double *scal_lm, int B, int L, int J_min)
+void s2let_transform_axisym_lm_wav(double *wav_lm, double *scal_lm, const s2let_parameters_t *parameters)
 {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
     int j, l;
-    int J = s2let_j_max(&parameters);
-//int J_min = 0;
-//int l_min = s2let_transform_axisym_el_min(B, J_min);
+    int J = s2let_j_max(parameters);
+    //int J_min = 0;
+    //int l_min = s2let_transform_axisym_el_min(B, J_min);
     double k0;
     double *kappa, *kappa0;
-    s2let_tiling_axisym_allocate(&kappa, &kappa0, &parameters);
-    s2let_tiling_axisym(kappa, kappa0, &parameters);
+    s2let_tiling_axisym_allocate(&kappa, &kappa0, parameters);
+    s2let_tiling_axisym(kappa, kappa0, parameters);
 
     for (j = J_min; j <= J; j++){
         for (l = 0; l < L; l++){

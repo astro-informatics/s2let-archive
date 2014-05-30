@@ -182,7 +182,7 @@ void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -247,7 +247,7 @@ void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int se
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1257,7 +1257,7 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
     parameters.L = L;
 
     s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
-    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
     s2let_lm_allocate(&flm, L);
 
     printf(" > L =  %i \n", L);
@@ -1332,7 +1332,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
     parameters.L = L;
 
     s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
-    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
     s2let_lm_allocate(&flm, L);
 
     printf(" > L =  %i \n", L);

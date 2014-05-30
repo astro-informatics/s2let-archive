@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
   // Compute simple threshold for needlet coefficients based on noise model
   printf(" Construct the threshold rule for the Gaussian noise\n");
   s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
-  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
   double *treshold = (double*)calloc((J-J_min+1), sizeof(double));
   for(j = J_min; j <= J; j++)
     treshold[j-J_min] = sigmanoise * nsigma * sqrt(needletpower(wav_lm + j * L, L));
