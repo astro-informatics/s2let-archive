@@ -212,14 +212,14 @@ void s2let_tiling_phi2_spline(double *phi2, int B, int L, int J_min)
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_tiling_axisym(double *kappa, double *kappa0, int B, int L, int J_min)
+void s2let_tiling_axisym(double *kappa, double *kappa0, const s2let_parameters_t *parameters)
 {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int B = parameters->B;
+    int J_min = parameters->J_min;
 
     int j, l;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
 
     double previoustemp = 0.0, temp;
     double *phi2 = (double*)calloc((J+2) * L, sizeof(double));
@@ -413,7 +413,7 @@ void s2let_tiling_wavelet(
     //       separate the allocation functions to do only one allocation per
     //       function.
     s2let_tiling_axisym_allocate(&kappa, &kappa0, &parameters);
-    s2let_tiling_axisym(kappa, kappa0, B, L, J_min);
+    s2let_tiling_axisym(kappa, kappa0, &parameters);
     s2let_tiling_direction_allocate(&s_elm, &parameters);
     s2let_tiling_direction(s_elm, L, N);
 

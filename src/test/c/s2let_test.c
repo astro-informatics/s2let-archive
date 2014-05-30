@@ -31,7 +31,7 @@ void s2let_tiling_axisym_test(int B, int L, int J_min)
   s2let_tiling_axisym_allocate(&kappa, &kappa0, &parameters);
 
   // Construct the tiling of harmonic space
-  s2let_tiling_axisym(kappa, kappa0, B, L, J_min);
+  s2let_tiling_axisym(kappa, kappa0, &parameters);
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
