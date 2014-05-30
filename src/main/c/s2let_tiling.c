@@ -449,14 +449,12 @@ void s2let_tiling_wavelet(complex double *psi, double *phi, const s2let_paramete
  * \param[in]  J_min First wavelet scale to be used.
  * \retval Achieved accuracy (should be lower than e-14).
  */
-double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, int B, int L, int J_min)
+double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, const s2let_parameters_t *parameters)
 {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
 
     int l, j;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     //int l_min = s2let_el_min(B, J_min);
     double error = 0;
 
@@ -488,8 +486,10 @@ double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, int B, 
  * \param[in]  N Azimuthal band-limit.
  * \retval Achieved accuracy (should be lower than e-14).
  */
-double s2let_tiling_direction_check_identity(complex double *s_elm, int L, int N)
+double s2let_tiling_direction_check_identity(complex double *s_elm, const s2let_parameters_t *parameters)
 {
+    int L = parameters->L;
+
     int el, m, ind;
     double error = 0.0; // maximum error for all el
 
@@ -524,14 +524,13 @@ double s2let_tiling_direction_check_identity(complex double *s_elm, int L, int N
  * \param[in]  spin Spin number.
  * \retval Achieved accuracy (should be lower than e-14).
  */
-double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int B, int L, int J_min, int N, int spin)
+double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, const s2let_parameters_t *parameters)
 {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int spin = parameters->spin;
 
     int j, el, m, ind;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     double error = 0.0; // maximum error for all el
 
     double *ident;

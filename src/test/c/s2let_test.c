@@ -35,7 +35,7 @@ void s2let_tiling_axisym_test(int B, int L, int J_min)
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
-  double res = s2let_tiling_axisym_check_identity(kappa, kappa0, B, L, J_min);
+  double res = s2let_tiling_axisym_check_identity(kappa, kappa0, &parameters);
   printf("  - Maximum error : %6.5e\n", res);
 
   free(kappa);
@@ -67,7 +67,7 @@ void s2let_tiling_direction_test(int L, int N)
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
-  error = s2let_tiling_direction_check_identity(s_elm, L, N);
+  error = s2let_tiling_direction_check_identity(s_elm, &parameters);
   printf("  - Maximum error : %6.5e\n", error);
 
   free(s_elm);
@@ -107,7 +107,7 @@ void s2let_tiling_wavelet_test(int B, int L, int J_min, int N, int spin)
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
-  error = s2let_tiling_wavelet_check_identity(phi, psi, B, L, J_min, N, spin);
+  error = s2let_tiling_wavelet_check_identity(phi, psi, &parameters);
   printf("  - Maximum error : %6.5e\n", error);
 
   free(phi);
