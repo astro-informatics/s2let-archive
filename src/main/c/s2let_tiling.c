@@ -384,21 +384,13 @@ static double s2let_spin_lowered_normalization(int el, int spin)
  *                           were lowered from. Otherwise, it is ignored.
  *
  */
-void s2let_tiling_wavelet(
-    complex double *psi,
-    double *phi,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin,
-    s2let_wav_norm_t normalization,
-    int original_spin
-) {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
-    parameters.N = N;
+void s2let_tiling_wavelet(complex double *psi, double *phi, const s2let_parameters_t *parameters) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int spin = parameters->spin;
+    s2let_wav_norm_t normalization = parameters->normalization;
+    int original_spin = parameters->original_spin;
+
 
     // TODO: Add spin parameter to avoid computation of el < |s|
     // TODO: Correctly compute spin scaling functions
@@ -406,7 +398,7 @@ void s2let_tiling_wavelet(
     double *kappa0;
     complex double *s_elm;
     int j, el, m, el_min;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
 
     // Effectively ignore original_spin if we don't use spin-lowered
     // wavelets.
@@ -416,10 +408,10 @@ void s2let_tiling_wavelet(
     // TODO: Allocate kappa0 directly inside phi. For this, we should probably
     //       separate the allocation functions to do only one allocation per
     //       function.
-    s2let_tiling_axisym_allocate(&kappa, &kappa0, &parameters);
-    s2let_tiling_axisym(kappa, kappa0, &parameters);
-    s2let_tiling_direction_allocate(&s_elm, &parameters);
-    s2let_tiling_direction(s_elm, &parameters);
+    s2let_tiling_axisym_allocate(&kappa, &kappa0, parameters);
+    s2let_tiling_axisym(kappa, kappa0, parameters);
+    s2let_tiling_direction_allocate(&s_elm, parameters);
+    s2let_tiling_direction(s_elm, parameters);
 
     el_min = MAX(ABS(spin), ABS(original_spin));
 

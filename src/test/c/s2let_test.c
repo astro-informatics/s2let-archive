@@ -91,6 +91,9 @@ void s2let_tiling_wavelet_test(int B, int L, int J_min, int N, int spin)
   parameters.L = L;
   parameters.J_min = J_min;
   parameters.N = N;
+  parameters.spin = spin;
+  parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+  parameters.original_spin = 0;
 
   complex double *phi;
   double *psi;
@@ -100,7 +103,7 @@ void s2let_tiling_wavelet_test(int B, int L, int J_min, int N, int spin)
   s2let_tiling_wavelet_allocate(&phi, &psi, &parameters);
 
   // Construct the harmonic coefficients
-  s2let_tiling_wavelet(phi, psi, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+  s2let_tiling_wavelet(phi, psi, &parameters);
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
@@ -294,6 +297,9 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
   parameters.L = L;
   parameters.J_min = J_min;
   parameters.N = N;
+  parameters.spin = spin;
+  parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+  parameters.original_spin = 0;
 
   clock_t time_start, time_end;
   complex double *psi;
@@ -304,7 +310,7 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_tiling_wavelet(psi, phi, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+  s2let_tiling_wavelet(psi, phi, &parameters);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -364,6 +370,9 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
   parameters.L = L;
   parameters.J_min = J_min;
   parameters.N = N;
+  parameters.spin = spin;
+  parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+  parameters.original_spin = 0;
 
   clock_t time_start, time_end;
   complex double *psi;
@@ -374,7 +383,7 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_tiling_wavelet(psi, phi, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+  s2let_tiling_wavelet(psi, phi, &parameters);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);

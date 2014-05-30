@@ -181,9 +181,13 @@ void s2let_wav_analysis_mw(
     int original_spin
 ) {
     s2let_parameters_t parameters = {};
-    parameters.L = L;
     parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
     parameters.N = N;
+    parameters.spin = spin;
+    parameters.normalization = normalization;
+    parameters.original_spin = original_spin;
 
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -203,7 +207,7 @@ void s2let_wav_analysis_mw(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, normalization, original_spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
 
@@ -270,9 +274,13 @@ void s2let_wav_synthesis_mw(
     int original_spin
 ) {
     s2let_parameters_t parameters = {};
-    parameters.L = L;
     parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
     parameters.N = N;
+    parameters.spin = spin;
+    parameters.normalization = normalization;
+    parameters.original_spin = original_spin;
 
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -292,7 +300,7 @@ void s2let_wav_synthesis_mw(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, normalization, original_spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
@@ -356,9 +364,13 @@ void s2let_wav_analysis_mw_real(
     int N
 ) {
     s2let_parameters_t parameters = {};
-    parameters.L = L;
     parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
     parameters.N = N;
+    parameters.spin = 0;
+    parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+    parameters.original_spin = 0;
 
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -381,7 +393,7 @@ void s2let_wav_analysis_mw_real(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
 
@@ -444,9 +456,13 @@ void s2let_wav_synthesis_mw_real(
     int N
 ) {
     s2let_parameters_t parameters = {};
-    parameters.L = L;
     parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
     parameters.N = N;
+    parameters.spin = 0;
+    parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+    parameters.original_spin = 0;
 
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -469,7 +485,7 @@ void s2let_wav_synthesis_mw_real(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
@@ -558,6 +574,9 @@ void s2let_wav_analysis_mw_multires(
     parameters.L = L;
     parameters.J_min = J_min;
     parameters.N = N;
+    parameters.spin = spin;
+    parameters.normalization = normalization;
+    parameters.original_spin = original_spin;
 
     int bandlimit;
     int verbosity = 0;
@@ -577,7 +596,7 @@ void s2let_wav_analysis_mw_multires(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, normalization, original_spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
 
@@ -651,6 +670,9 @@ void s2let_wav_synthesis_mw_multires(
     parameters.L = L;
     parameters.J_min = J_min;
     parameters.N = N;
+    parameters.spin = spin;
+    parameters.normalization = normalization;
+    parameters.original_spin = original_spin;
 
     int bandlimit;
     int verbosity = 0;
@@ -670,7 +692,7 @@ void s2let_wav_synthesis_mw_multires(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, normalization, original_spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
@@ -743,6 +765,9 @@ void s2let_wav_analysis_mw_multires_real(
     parameters.L = L;
     parameters.J_min = J_min;
     parameters.N = N;
+    parameters.spin = 0;
+    parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+    parameters.original_spin = 0;
 
     int bandlimit;
     int verbosity = 0;
@@ -764,7 +789,7 @@ void s2let_wav_analysis_mw_multires_real(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
 
@@ -835,6 +860,9 @@ void s2let_wav_synthesis_mw_multires_real(
     parameters.L = L;
     parameters.J_min = J_min;
     parameters.N = N;
+    parameters.spin = 0;
+    parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+    parameters.original_spin = 0;
 
     int bandlimit;
     int verbosity = 0;
@@ -856,7 +884,7 @@ void s2let_wav_synthesis_mw_multires_real(
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, spin);
+    s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);

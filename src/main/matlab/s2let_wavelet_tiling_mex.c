@@ -123,6 +123,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
   parameters.B = B;
   parameters.J_min = J_min;
   parameters.N = N;
+  parameters.spin = spin;
+  parameters.normalization = normalization;
+  parameters.original_spin = original_spin;
 
   // Compute ultimate scale J_max
   int J = s2let_j_max(&parameters);
@@ -138,7 +141,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   s2let_tiling_wavelet_allocate(&psi_lm, &phi_l, &parameters);
 
   // Run S2LET function
-  s2let_tiling_wavelet(psi_lm, phi_l, B, L, J_min, N, spin, normalization, original_spin);
+  s2let_tiling_wavelet(psi_lm, phi_l, &parameters);
 
   // Output psi_lm and phi_l
   double *psi_lm_out_real, *psi_lm_out_imag, *phi_l_out;
