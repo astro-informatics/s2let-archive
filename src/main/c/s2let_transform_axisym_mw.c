@@ -361,7 +361,7 @@ void s2let_transform_axisym_wav_analysis_mw_multires(complex double *f_wav, comp
 
     ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
 
-    s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+    s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, bandlimit, spin, dl_method, verbosity);
@@ -426,7 +426,7 @@ void s2let_transform_axisym_wav_synthesis_mw_multires(complex double *f, const c
         offset += bandlimit * (2 * bandlimit - 1);
     }
 
-    s2let_transform_axisym_lm_wav_synthesis_multires(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+    s2let_transform_axisym_lm_wav_synthesis_multires(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
 
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
@@ -473,7 +473,7 @@ void s2let_transform_axisym_wav_analysis_mw_multires_real(double *f_wav, double 
 
     ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
 
-    s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+    s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, bandlimit, dl_method, verbosity);
@@ -538,7 +538,7 @@ void s2let_transform_axisym_wav_synthesis_mw_multires_real(double *f, const doub
         offset += bandlimit * (2 * bandlimit - 1);
     }
 
-    s2let_transform_axisym_lm_wav_synthesis_multires(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+    s2let_transform_axisym_lm_wav_synthesis_multires(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
 
     ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
 
