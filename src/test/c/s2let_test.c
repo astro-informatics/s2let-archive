@@ -475,14 +475,14 @@ void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
   time_start = clock();
-  s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min);
+  s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial signal from the wavelet maps from scratch
   time_start = clock();
-  s2let_transform_axisym_wav_synthesis_mw(f_rec, f_wav, f_scal, B, L, J_min);
+  s2let_transform_axisym_wav_synthesis_mw(f_rec, f_wav, f_scal, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1032,7 +1032,7 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
     s2let_allocate_mw_f_wav(&f_wav_dir, &f_scal_dir, &parameters);
 
     // Do both transforms
-    s2let_transform_axisym_wav_analysis_mw(f_wav_axisym, f_scal_axisym, f, B, L, J_min);
+    s2let_transform_axisym_wav_analysis_mw(f_wav_axisym, f_scal_axisym, f, &parameters);
     s2let_wav_analysis_mw(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
 
     // Account for the different wavelet normalisations
@@ -1149,7 +1149,7 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
       s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
       time_start = clock();
-      s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min);
+      s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, &parameters);
       time_end = clock();
       tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
       //printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1157,7 +1157,7 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
       s2let_mw_allocate(&f_rec, L);
 
       time_start = clock();
-      s2let_transform_axisym_wav_synthesis_mw(f_rec, f_wav, f_scal, B, L, J_min);
+      s2let_transform_axisym_wav_synthesis_mw(f_rec, f_wav, f_scal, &parameters);
       time_end = clock();
       tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
 

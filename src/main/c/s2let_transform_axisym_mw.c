@@ -120,32 +120,34 @@ void s2let_transform_axisym_allocate_mw_f_wav_multires_real(double **f_wav, doub
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_wav_analysis_mw(complex double *f_wav, complex double *f_scal, const complex double *f, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
-    parameters.J_min = J_min;
+void s2let_transform_axisym_wav_analysis_mw(
+    complex double *f_wav,
+    complex double *f_scal,
+    const complex double *f,
+    const s2let_parameters_t *parameters
+) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
     int spin = 0;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
     int j, offset, offset_lm;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     //int l_min = s2let_transform_axisym_el_min(B, J_min);
 
     double *wav_lm, *scal_lm;
-    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
-    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
+    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, parameters);
+    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, parameters);
 
     complex double *flm, *f_wav_lm, *f_scal_lm;
     flm = (complex double*)calloc(L * L, sizeof(complex double));
-    s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, &parameters);
+    s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, parameters);
 
     ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
 
-    s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
+    s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, parameters);
 
     ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, L, spin, dl_method, verbosity);
     offset = 0;
@@ -174,28 +176,30 @@ void s2let_transform_axisym_wav_analysis_mw(complex double *f_wav, complex doubl
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_wav_synthesis_mw(complex double *f, const complex double *f_wav, const complex double *f_scal, int B, int L, int J_min)
-{
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
-    parameters.J_min = J_min;
+void s2let_transform_axisym_wav_synthesis_mw(
+    complex double *f,
+    const complex double *f_wav,
+    const complex double *f_scal,
+    const s2let_parameters_t *parameters
+) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
     int spin = 0;
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
     int j, offset, offset_lm;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     //int l_min = s2let_transform_axisym_el_min(B, J_min);
 
     double *wav_lm, *scal_lm;
-    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
-    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
+    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, parameters);
+    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, parameters);
 
     complex double *flm, *f_wav_lm, *f_scal_lm;
     flm = (complex double*)calloc(L * L, sizeof(complex double));
-    s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, &parameters);
+    s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, parameters);
 
     ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, L, spin, dl_method, verbosity);
     offset = 0;
@@ -206,7 +210,7 @@ void s2let_transform_axisym_wav_synthesis_mw(complex double *f, const complex do
         offset += L * (2 * L - 1);
     }
 
-    s2let_transform_axisym_lm_wav_synthesis(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
+    s2let_transform_axisym_lm_wav_synthesis(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, parameters);
 
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 

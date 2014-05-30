@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
@@ -31,9 +31,9 @@ typedef unsigned long IDL_ULONG;
 #endif
 
 
-int s2let_idl_transform_axisym_wav_analysis_mw_real(int argc, void* argv[])  
-{  
-  if(argc != 7) return 0;  
+int s2let_idl_transform_axisym_wav_analysis_mw_real(int argc, void* argv[])
+{
+  if(argc != 7) return 0;
   double *f_wav = (double *) argv[0];
   double *f_scal = (double *) argv[1];
   double *f = (double *) argv[2];
@@ -46,12 +46,12 @@ int s2let_idl_transform_axisym_wav_analysis_mw_real(int argc, void* argv[])
 
   s2let_transform_axisym_wav_analysis_mw_real(f_wav, f_scal, f, *B, *L, *J_min);
 
-  return 1;  
-}    
+  return 1;
+}
 
-int s2let_idl_transform_axisym_wav_synthesis_mw_real(int argc, void* argv[])  
-{  
-  if(argc != 7) return 0;  
+int s2let_idl_transform_axisym_wav_synthesis_mw_real(int argc, void* argv[])
+{
+  if(argc != 7) return 0;
   double *f = (double *) argv[0];
   double *f_wav = (double *) argv[1];
   double *f_scal = (double *) argv[2];
@@ -64,13 +64,13 @@ int s2let_idl_transform_axisym_wav_synthesis_mw_real(int argc, void* argv[])
 
   s2let_transform_axisym_wav_synthesis_mw_real(f, f_wav, f_scal, *B, *L, *J_min);
 
-  return 1;  
-}    
+  return 1;
+}
 
 
-int s2let_idl_transform_axisym_wav_analysis_mw(int argc, void* argv[])  
-{  
-  if(argc != 7) return 0;  
+int s2let_idl_transform_axisym_wav_analysis_mw(int argc, void* argv[])
+{
+  if(argc != 7) return 0;
   complex double *f_wav = (complex double *) argv[0];
   complex double *f_scal = (complex double *) argv[1];
   complex double *f = (complex double *) argv[2];
@@ -81,14 +81,19 @@ int s2let_idl_transform_axisym_wav_analysis_mw(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, *B, *L, *J_min);
+  s2let_parameters_t parameters = {};
+  parameters.B = *B;
+  parameters.L = *L;
+  parameters.J_min = *J_min;
 
-  return 1;  
-}    
+  s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, &parameters);
 
-int s2let_idl_transform_axisym_wav_synthesis_mw(int argc, void* argv[])  
-{  
-  if(argc != 7) return 0;  
+  return 1;
+}
+
+int s2let_idl_transform_axisym_wav_synthesis_mw(int argc, void* argv[])
+{
+  if(argc != 7) return 0;
   complex double *f = (complex double *) argv[0];
   complex double *f_wav = (complex double *) argv[1];
   complex double *f_scal = (complex double *) argv[2];
@@ -99,15 +104,20 @@ int s2let_idl_transform_axisym_wav_synthesis_mw(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_transform_axisym_wav_synthesis_mw(f, f_wav, f_scal, *B, *L, *J_min);
+  s2let_parameters_t parameters = {};
+  parameters.B = *B;
+  parameters.L = *L;
+  parameters.J_min = *J_min;
 
-  return 1;  
-}    
+  s2let_transform_axisym_wav_synthesis_mw(f, f_wav, f_scal, &parameters);
+
+  return 1;
+}
 
 
-int s2let_idl_transform_axisym_wav_analysis_mw_multires(int argc, void* argv[])  
-{  
-  if(argc != 7) return 0;  
+int s2let_idl_transform_axisym_wav_analysis_mw_multires(int argc, void* argv[])
+{
+  if(argc != 7) return 0;
   complex double *f_wav = (complex double *) argv[0];
   complex double *f_scal = (complex double *) argv[1];
   complex double *f = (complex double *) argv[2];
@@ -120,12 +130,12 @@ int s2let_idl_transform_axisym_wav_analysis_mw_multires(int argc, void* argv[])
 
   s2let_transform_axisym_wav_analysis_mw_multires(f_wav, f_scal, f, *B, *L, *J_min);
 
-  return 1;  
-}    
+  return 1;
+}
 
-int s2let_idl_transform_axisym_wav_synthesis_mw_multires(int argc, void* argv[])  
-{  
-  if(argc != 7) return 0;  
+int s2let_idl_transform_axisym_wav_synthesis_mw_multires(int argc, void* argv[])
+{
+  if(argc != 7) return 0;
   complex double *f = (complex double *) argv[0];
   complex double *f_wav = (complex double *) argv[1];
   complex double *f_scal = (complex double *) argv[2];
@@ -138,12 +148,12 @@ int s2let_idl_transform_axisym_wav_synthesis_mw_multires(int argc, void* argv[])
 
   s2let_transform_axisym_wav_synthesis_mw_multires(f, f_wav, f_scal, *B, *L, *J_min);
 
-  return 1;  
-}    
+  return 1;
+}
 
-int s2let_idl_transform_axisym_wav_analysis_mw_multires_real(int argc, void* argv[])  
-{  
-  if(argc != 7) return 0;  
+int s2let_idl_transform_axisym_wav_analysis_mw_multires_real(int argc, void* argv[])
+{
+  if(argc != 7) return 0;
   double *f_wav = (double *) argv[0];
   double *f_scal = (double *) argv[1];
   double *f = (double *) argv[2];
@@ -156,12 +166,12 @@ int s2let_idl_transform_axisym_wav_analysis_mw_multires_real(int argc, void* arg
 
   s2let_transform_axisym_wav_analysis_mw_multires_real(f_wav, f_scal, f, *B, *L, *J_min);
 
-  return 1;  
-}    
+  return 1;
+}
 
-int s2let_idl_transform_axisym_wav_synthesis_mw_multires_real(int argc, void* argv[])  
-{  
-  if(argc != 7) return 0;  
+int s2let_idl_transform_axisym_wav_synthesis_mw_multires_real(int argc, void* argv[])
+{
+  if(argc != 7) return 0;
   double *f = (double *) argv[0];
   double *f_wav = (double *) argv[1];
   double *f_scal = (double *) argv[2];
@@ -174,55 +184,55 @@ int s2let_idl_transform_axisym_wav_synthesis_mw_multires_real(int argc, void* ar
 
   s2let_transform_axisym_wav_synthesis_mw_multires_real(f, f_wav, f_scal, *B, *L, *J_min);
 
-  return 1;  
-}    
+  return 1;
+}
 
 
-int s2let_idl_mw_map2alm(int argc, void* argv[])  
-{  
-  if(argc != 3) return 0;  
+int s2let_idl_mw_map2alm(int argc, void* argv[])
+{
+  if(argc != 3) return 0;
   complex double *flm = (complex double *) argv[0];
   complex double *f = (complex double *) argv[1];
   IDL_INT *L = (IDL_INT *) argv[2];
 
   s2let_mw_map2alm(flm, f, *L);
 
-  return 1;  
-}    
+  return 1;
+}
 
-int s2let_idl_mw_alm2map(int argc, void* argv[])  
-{  
-  if(argc != 3) return 0;  
+int s2let_idl_mw_alm2map(int argc, void* argv[])
+{
+  if(argc != 3) return 0;
   complex double *f = (complex double *) argv[0];
   complex double *flm = (complex double *) argv[1];
   IDL_INT *L = (IDL_INT *) argv[2];
 
   s2let_mw_alm2map(f, flm, *L);
 
-  return 1;  
-}    
+  return 1;
+}
 
 
-int s2let_idl_mw_map2alm_real(int argc, void* argv[])  
-{  
-  if(argc != 3) return 0;  
+int s2let_idl_mw_map2alm_real(int argc, void* argv[])
+{
+  if(argc != 3) return 0;
   complex double *flm = (complex double *) argv[0];
   double *f = (double *) argv[1];
   IDL_INT *L = (IDL_INT *) argv[2];
 
   s2let_mw_map2alm_real(flm, f, *L);
 
-  return 1;  
-}    
+  return 1;
+}
 
-int s2let_idl_mw_alm2map_real(int argc, void* argv[])  
-{  
-  if(argc != 3) return 0;  
+int s2let_idl_mw_alm2map_real(int argc, void* argv[])
+{
+  if(argc != 3) return 0;
   double *f = (double *) argv[0];
   complex double *flm = (complex double *) argv[1];
   IDL_INT *L = (IDL_INT *) argv[2];
 
   s2let_mw_alm2map_real(f, flm, *L);
 
-  return 1;  
-}    
+  return 1;
+}

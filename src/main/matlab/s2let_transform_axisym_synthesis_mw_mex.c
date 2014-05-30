@@ -152,7 +152,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
       s2let_transform_axisym_wav_synthesis_mw_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
     }else{
       s2let_mw_allocate(&f, L);
-      s2let_transform_axisym_wav_synthesis_mw(f, f_wav, f_scal, B, L, J_min);
+      s2let_transform_axisym_wav_synthesis_mw(f, f_wav, f_scal, &parameters);
     }
   }
 
