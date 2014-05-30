@@ -19,7 +19,7 @@
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
-  int n, i, j, B, L, J_min, N, spin, f_m, f_n, reality, downsample, normalization, original_spin;
+  int i, j, B, L, J_min, N, spin, f_m, f_n, reality, downsample, normalization, original_spin;
   double *f_wav_real, *f_scal_real, *f_real, *f_wav_imag, *f_scal_imag, *f_imag;
   complex double *f_wav = NULL, *f_scal = NULL, *f = NULL;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
@@ -174,8 +174,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if(downsample){
     // Multiresolution algorithm
     if(reality){
-    //  s2let_mw_allocate_real(&f_r, L);
-    //  s2let_transform_wav_synthesis_mw_multires_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
+      s2let_mw_allocate_real(&f_r, L);
+      s2let_wav_synthesis_mw_multires_real(f_r, f_wav_r, f_scal_r, B, L, J_min, N);
     }else{
       s2let_mw_allocate(&f, L);
       s2let_wav_synthesis_mw_multires(f, f_wav, f_scal, B, L, J_min, N, spin, normalization, original_spin);
@@ -183,8 +183,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }else{
     // Full resolution algorithm
     if(reality){
-    //  s2let_mw_allocate_real(&f_r, L);
-    //  s2let_transform_wav_synthesis_mw_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
+      s2let_mw_allocate_real(&f_r, L);
+      s2let_wav_synthesis_mw_real(f_r, f_wav_r, f_scal_r, B, L, J_min, N);
     }else{
       s2let_mw_allocate(&f, L);
       s2let_wav_synthesis_mw(f, f_wav, f_scal, B, L, J_min, N, spin, normalization, original_spin);
@@ -193,11 +193,17 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
 
   // Output function f
-  if(reality){
-
-
-  }else{
-
+  if (reality)
+  {
+    iout = 0;
+    plhs[iout] = mxCreateDoubleMatrix(1, L*(2*L-1), mxREAL);
+    f_real = mxGetPr(plhs[iout]);
+    for (i=0; i<L*(2*L-1); i++){
+      f_real[i] = f_r[i];
+    }
+  }
+  else
+  {
     iout = 0;
     plhs[iout] = mxCreateDoubleMatrix(1, L*(2*L-1), mxCOMPLEX);
     f_real = mxGetPr(plhs[iout]);
@@ -208,10 +214,10 @@ void mexFunction( int nlhs, mxArray *plhs[],
     }
   }
 
-   if(reality){
-    //free(f_r);
-    //free(f_wav_r);
-    //free(f_scal_r);
+  if(reality){
+    free(f_r);
+    free(f_wav_r);
+    free(f_scal_r);
   }else{
     free(f);
     free(f_wav);

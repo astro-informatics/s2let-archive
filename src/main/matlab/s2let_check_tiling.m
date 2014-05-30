@@ -1,6 +1,6 @@
 function error_on_tiling = s2let_check_tiling(psi, phi, L, spin, J)
 
-% s2let_check_axisym_tilling - Checks exactness of the tilling.
+% s2let_check_axisym_tiling - Checks exactness of the tiling.
 % -- Spin directional wavelets on the sphere.
 %
 % S2LET package to perform Wavelets transform on the Sphere.
@@ -24,7 +24,7 @@ end
 
 error_on_tiling = 0;
 for l=abs(spin):L-1
-    error_on_tiling = error_on_tiling + identity(1,l+1) - 1.0; 
+    error_on_tiling = error_on_tiling + identity(1,l+1) - 1.0;
 end
 
 end

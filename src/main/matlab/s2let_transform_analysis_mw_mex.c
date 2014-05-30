@@ -21,12 +21,12 @@
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
+
   int i, j, B, L, J_min, N, spin, f_m, f_n, reality, downsample, normalization, original_spin;
   double *f_wav_real, *f_scal_real, *f_real, *f_wav_imag, *f_scal_imag, *f_imag;
   complex double *f_wav = NULL, *f_scal = NULL, *f = NULL;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
   int iin = 0, iout = 0;
-
   // Check number of arguments
   if(nrhs!=10) {
     mexErrMsgIdAndTxt("s2let_transform_analysis_mw_mex:InvalidInput:nrhs",
@@ -150,7 +150,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }
   N = (int)mxGetScalar(prhs[iin]);
 
-    // Parse spin
+  // Parse spin
   iin = 5;
   if( !mxIsDouble(prhs[iin]) ||
       mxIsComplex(prhs[iin]) ||
@@ -160,11 +160,16 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }
   spin = (int)mxGetScalar(prhs[iin]);
 
+  if (reality && spin)
+    mexErrMsgIdAndTxt("s2let_transform_analysis_mw_mex:InvalidInput:realspin",
+                      "Real signals must have spin zero.");
+
   // Perform wavelet transform in harmonic space and then reconstruction.
   if(downsample){
     // Multiresolution algorithm
     if(reality){
-
+      s2let_allocate_mw_f_wav_multires_real(&f_wav_r, &f_scal_r, B, L, J_min, N);
+      s2let_wav_analysis_mw_multires_real(f_wav_r, f_scal_r, f_r, B, L, J_min, N);
     }else{
       s2let_allocate_mw_f_wav_multires(&f_wav, &f_scal, B, L, J_min, N);
       s2let_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min, N, spin, normalization, original_spin);
@@ -172,7 +177,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }else{
     // Full resolution algorithm
     if(reality){
-
+      s2let_allocate_mw_f_wav_real(&f_wav_r, &f_scal_r, B, L, J_min, N);
+      s2let_wav_analysis_mw_real(f_wav_r, f_scal_r, f_r, B, L, J_min, N);
     }else{
       s2let_allocate_mw_f_wav(&f_wav, &f_scal, B, L, J_min, N);
       s2let_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min, N, spin, normalization, original_spin);
@@ -194,11 +200,24 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }
 
   // Output wavelets
-  if(reality){
+  if (reality)
+  {
+    iout = 0;
+    plhs[iout] = mxCreateDoubleMatrix(1, wavsize, mxREAL);
+    f_wav_real = mxGetPr(plhs[iout]);
+    for (i=0; i<wavsize; i++){
+      f_wav_real[ i ] = f_wav_r[ i ];
+    }
 
-
-  }else{
-
+    iout = 1;
+    plhs[iout] = mxCreateDoubleMatrix(1, scalsize, mxREAL);
+    f_scal_real = mxGetPr(plhs[iout]);
+    for (i=0; i<scalsize; i++){
+      f_scal_real[i] = f_scal_r[i];
+    }
+  }
+  else
+  {
     iout = 0;
     plhs[iout] = mxCreateDoubleMatrix(1, wavsize, mxCOMPLEX);
     f_wav_real = mxGetPr(plhs[iout]);
@@ -216,13 +235,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
       f_scal_real[i] = creal( f_scal[i] );
       f_scal_imag[i] = cimag( f_scal[i] );
     }
-
   }
 
    if(reality){
-    //free(f_r);
-    //free(f_wav_r);
-    //free(f_scal_r);
+    free(f_r);
+    free(f_wav_r);
+    free(f_scal_r);
   }else{
     free(f);
     free(f_wav);

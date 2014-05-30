@@ -1,11 +1,11 @@
 function s2let_plot_axisym_tiling(B, L, J_min)
 
-% plot_axisym_tilling - Plot tilling in harmonic space.
+% plot_axisym_tiling - Plot tiling in harmonic space.
 % -- Axisymmetric wavelets on the sphere.
 %
 % Default usage :
 %
-%   plot_axisym_tilling(B, L, J_min)
+%   plot_axisym_tiling(B, L, J_min)
 %
 % B is the wavelet parameter,
 % L is the angular band-limit,
@@ -27,12 +27,12 @@ yi = interp1(x,kappa0,xi,'pchip');
 semilogx(xi, yi, 'k', 'LineWidth', 2);
 %h = text(2, 1.07, 'k0', 'Color', [0 0 0]);
 hold on;
-for j = J_min:J  
+for j = J_min:J
   colour = rand(1,3)*0.9;
   %plot(0:L-1, kappa(j+1,:), 'LineWidth', 2, 'Color', colour);
     yi = interp1(x,kappa(j+1,:),xi,'pchip');
     plot(xi, yi, 'LineWidth', 2, 'Color', colour);
-  %h = text(B.^j, 1.07, strcat('j',num2str(j+1)), 'Color', colour);  
+  %h = text(B.^j, 1.07, strcat('j',num2str(j+1)), 'Color', colour);
 end
 %title('Harmonic tiling');
 %xlabel('el');

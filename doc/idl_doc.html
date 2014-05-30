@@ -4,7 +4,7 @@
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
 <meta name="description" content="s2let: fast wavelets on the sphere" />
 <meta name="keywords" content="s2let, spherical, harmonics, spherical
-harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wavelets, tilling" />
+harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wavelets, tiling" />
 <meta name="author" content="Boris Leistedt & Jason McEwen" />
 <link rel="stylesheet" type="text/css" href="style.css" title="1024px style" media="screen,projection" />
 <title>S2LET:IDL</title>
@@ -13,7 +13,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <body>
 <div id="wrap">
 
-  
+
 <!--------------------------- HEADER --------------------------->
 <div id="header">
 
@@ -22,21 +22,21 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <a href="index.html#wavelets">Wavelets </a> |
   <a href="index.html#installation">Installation</a> |
   <a href="index.html#download">Download</a> |
-  <a href="index.html#referencing">Referencing</a> |  
+  <a href="index.html#referencing">Referencing</a> |
   <a href="index.html#version">Version</a> |
   <a href="index.html#license">License</a> |
-  <a href="index.html#authors">Authors</a> 
+  <a href="index.html#authors">Authors</a>
   </p>
 
   <table border="0" cellspacing="0">
     <tr>
       <td width=200 align="right" valign="top">
-	<img src="images/wav.png" width="140" height="140" border=0> 
+	<img src="images/wav.png" width="140" height="140" border=0>
       </td>
       <td width=500 align="left" valign="center">
 	<h1 class="title">S2LET<span class="fade">1.1b1</span></h1>
 	<p id="slogantitle">Fast wavelets on the sphere</p>
-      </td>			
+      </td>
     </tr>
   </table>
 
@@ -89,7 +89,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <!--------------------------- CONTENT --------------------------->
 <div id="content">
 
-<!--------------------------------------------------------------->  
+<!--------------------------------------------------------------->
 <a name="installation"><h2>Installing and using the IDL interfaces</h2></a>
 
   <p> The Healpix package provides all the routines to read, write and manipulate Healpix maps in IDL. <strong>S2LET</strong> completes this framework by providing similar routines for the MW sampling. Interfaces for the spherical harmonic and the wavelet transforms are provided for both samplings and allow for the same flexibility as in the C and Matlab code. In particular, <strong>S2LET</strong> enables to work either with MW of Healpix maps from the FITS files to the output wavelets plotted in Mollweide projection.
@@ -128,11 +128,11 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   Write a MW map to a FITS file
 
   <a href="../src/main/idl/s2let_hpx_alm2map_real.pro">s2let_hpx_alm2map_real</a>
-  Interface to the Fortran function alm2map in Healpix 
+  Interface to the Fortran function alm2map in Healpix
   (ring ordered, inverse spherical harmonic transform)
 
   <a href="../src/main/idl/s2let_hpx_map2alm_real.pro">s2let_hpx_map2alm_real</a>
-  Interface to the Fortran function map2alm in Healpix 
+  Interface to the Fortran function map2alm in Healpix
   (ring ordered, forward spherical harmonic transform)
 
   <a href="../src/main/idl/s2let_axisym_hpx_wav_analysis.pro">s2let_axisym_hpx_wav_analysis</a>
@@ -147,24 +147,24 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <p> To access the documentation for each function in IDL, simply
   run:
   <pre> >> DOC_LIBRARY, "&ltfunction&gt"</pre>
-  <p> where <code>&ltfunction&gt</code> is the function name. 
-  
+  <p> where <code>&ltfunction&gt</code> is the function name.
+
 
   <h4>Demos</h4>
 
   <p> A number of demos are provided to illustrate the use of the
-  idl interface. 
+  idl interface.
 
   <pre>
   <a href="../src/main/idl/s2let_test.pro">s2let_test</a>
   Run and test all functionalties of the wavelet transform (MW sampling)
 
   <a href="../src/main/idl/s2let_demo1.pro">s2let_demo1</a>
-  Compute and plot wavelets of Earth tomography data 
+  Compute and plot wavelets of Earth tomography data
   (full and multi-resolution, MW sampling)
 
   <a href="../src/main/idl/s2let_demo2.pro">s2let_demo2</a>
-  Compute and plot wavelets of a random CMB simulation 
+  Compute and plot wavelets of a random CMB simulation
   (Healpix sampling converted into MW)
 
   <a href="../src/main/idl/s2let_hpx_demo.pro">s2let_hpx_demo</a>
@@ -180,7 +180,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 
   <p>
   <a href="#header">Back to top</a><br >
-  
+
   <p>&copy; 2012 <a href="http://www.ixkael.com/blog">Boris Leistedt</a> & <a href="http://www.jasonmcewen.org">Jason McEwen</a> | Design by
   <a href="http://andreasviklund.com/">Andreas Viklund</a> </p>
 

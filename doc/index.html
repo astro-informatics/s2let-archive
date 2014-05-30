@@ -4,7 +4,7 @@
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
 <meta name="description" content="s2let: fast wavelets on the sphere" />
 <meta name="keywords" content="s2let, spherical, harmonics, spherical
-harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wavelets, tilling" />
+harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wavelets, tiling" />
 <meta name="author" content="Boris Leistedt & Jason McEwen" />
 <link rel="stylesheet" type="text/css" href="style.css" title="1024px style" media="screen,projection" />
 <title>S2LET</title>
@@ -13,7 +13,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <body>
 <div id="wrap">
 
-  
+
 <!--------------------------- HEADER --------------------------->
 <div id="header">
 
@@ -22,21 +22,21 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <a href="#wavelets">Wavelets</a> |
   <a href="#installation">Installation</a> |
   <a href="#download">Download</a> |
-  <a href="#referencing">Referencing</a> |  
+  <a href="#referencing">Referencing</a> |
   <a href="#version">Version</a> |
   <a href="#license">License</a> |
-  <a href="#authors">Authors</a> 
+  <a href="#authors">Authors</a>
   </p>
 
   <table border="0" cellspacing="0">
     <tr>
       <td width=200 align="right" valign="top">
-	<img src="images/wav.png" width="140" height="140" border=0> 
+	<img src="images/wav.png" width="140" height="140" border=0>
       </td>
       <td width=500 align="left" valign="center">
 	<h1 class="title">S2LET<span class="fade">1.1b1</span></h1>
 	<p id="slogantitle">Fast wavelets on the sphere</p>
-      </td>			
+      </td>
     </tr>
   </table>
 
@@ -45,7 +45,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 
 <!--------------------------- SIDEBAR --------------------------->
 <div id="sidebar">
-   
+
 <h2>Installation and usage</h2>
 
 <ul>
@@ -99,18 +99,18 @@ S2LET code paper submitted to Astronomy & Astrophysics.
  href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> code
   built on the <a
   href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#mcewen:fssht">MW
-  sampling theorem</a> 
+  sampling theorem</a>
   (<a href="http://arxiv.org/abs/1110.6298">ArXiv</a>
   | <a href="http://dx.doi.org/10.1109/TSP.2011.2166394">DOI</a>) to
   perform exact spherical harmonic transforms on the sphere. The
-  resulting wavelet transform implemented in <strong>S2LET</strong> is theoretically exact, i.e. a band-limited signal can be recovered from its wavelet coefficients exactly and the wavelet coefficients capture all the information. <strong>S2LET</strong> also supports the <a href="http://HEALPix.jpl.nasa.gov/">HEALPix</a> sampling scheme, in which case the transforms are not theoretically exact but achieve good numerical accuracy. 
-  
+  resulting wavelet transform implemented in <strong>S2LET</strong> is theoretically exact, i.e. a band-limited signal can be recovered from its wavelet coefficients exactly and the wavelet coefficients capture all the information. <strong>S2LET</strong> also supports the <a href="http://HEALPix.jpl.nasa.gov/">HEALPix</a> sampling scheme, in which case the transforms are not theoretically exact but achieve good numerical accuracy.
+
   <p>
   In version 1.1 S2LET also supports needlets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0707.0844">Marinucci et al 2008</a>, <a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:math/0606599">Baldi et al 2006</a>) and B-spline wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:astro-ph/0509883">Starck et al 2006</a>), in addition to the scale-discretised wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0712.3519">Wiaux et al 2008</a>).
- 
+
   <p>
   This page outlines the main features of <strong>S2LET</strong>, installation details as well as the core functionalties and interfaces.  References, version, and license information then follows.
-  
+
   The <strong>S2LET</strong> code requires the <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a
  href="http://www.fftw.org/">FFTW</a> libraries. The IO FITS features require <a
  href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a>. To support <a
@@ -119,13 +119,13 @@ S2LET code paper submitted to Astronomy & Astrophysics.
 
 <br>
 
-<!--------------------------------------------------------------->  
+<!--------------------------------------------------------------->
 <a name="wavelets"><h2>Scale discretised wavelets on the sphere</h2></a>
 
-  <p> In <strong>S2LET</strong>, the scale-discretised wavelets are constructed through an exact tilling of harmonic space, following the scale-discretised approach described in <a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#wiaux:2007:sdw">Wiaux et al (2008)</a> (<a href="http://arxiv.org/abs/0712.3519">ArXiv</a>
+  <p> In <strong>S2LET</strong>, the scale-discretised wavelets are constructed through an exact tiling of harmonic space, following the scale-discretised approach described in <a href="http://www.mrao.cam.ac.uk/~jdm57/publications.html#wiaux:2007:sdw">Wiaux et al (2008)</a> (<a href="http://arxiv.org/abs/0712.3519">ArXiv</a>
  | <a href="http://dx.doi.org/10.1111/j.1365-2966.2008.13448.x">DOI</a>). The harmonic line is tiled into wavelet kernels which are localised (i.e. have compact support) in both real and frequency spaces, as shown on the image below for a particular set of wavelet parameters (B=2, J_min=2, harmonic space on the left, corresponding kernels on the right).</p>
 
- <p><img src="images/tiling2.png" width="350" height="240" border=0 align="center"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="images/needlets.png" width="350" height="250" border=0 align="center"> 
+ <p><img src="images/tiling2.png" width="350" height="240" border=0 align="center"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="images/needlets.png" width="350" height="250" border=0 align="center">
 
   <p> With an exact spherical harmonic transform as the one provided in <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, the wavelet transform implemented in <strong>S2LET</strong> is theoretically exact in both pixel and harmonic spaces. In other words one can decompose a band-limited signal in a set of wavelet maps that exactly capture all the information, and reconstruct the initial signal at floating-point precision. Due to the nature of the tiling in harmonic space, the individual wavelet maps have different band-limits and hence can be reconstructed at different resolutions, i.e. with the minimal number of samples. The left and right panels below are the wavelet decomposition of Earth tomography data at full (left) and multi-resolution (right). Due to the exactness of all transforms, these two approaches are equivalent and capture all the information contained in the initial band-limited map.
 
@@ -136,19 +136,19 @@ S2LET code paper submitted to Astronomy & Astrophysics.
 
 <br>
 
-<!--------------------------------------------------------------->  
+<!--------------------------------------------------------------->
 
 
 <a name="wavelets"><h2>Needlets and B-spline wavelets</h2></a>
- <p>&nbsp;<img src="images/tilling_compar.png" width="390" height="370" border=0 align="left"> 
+ <p>&nbsp;<img src="images/tiling_compar.png" width="390" height="370" border=0 align="left">
 
 <br>
 
- In addition to scale-discretised wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0712.3519">Wiaux et al 2008</a>), S2LET supports Needlets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0707.0844">Marinucci et al 2008</a>, <a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:math/0606599">Baldi et al 2006</a>) and B-spline wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:astro-ph/0509883">Starck et al 2006</a>). Please refer to these papers for the S2LET paper for the details of the construction of these wavelets. Importantly, in S2LET they are also constructed through a tilling or a windowing of the harmonic line. The figure on the left illustrates the differences between the three constructions and the resulting support of the axisymmetric wavelets. Note that the three types of wavelets work with bith the MW sampling theorem and Healpix.
+ In addition to scale-discretised wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0712.3519">Wiaux et al 2008</a>), S2LET supports Needlets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:0707.0844">Marinucci et al 2008</a>, <a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:math/0606599">Baldi et al 2006</a>) and B-spline wavelets (<a href="http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:astro-ph/0509883">Starck et al 2006</a>). Please refer to these papers for the S2LET paper for the details of the construction of these wavelets. Importantly, in S2LET they are also constructed through a tiling or a windowing of the harmonic line. The figure on the left illustrates the differences between the three constructions and the resulting support of the axisymmetric wavelets. Note that the three types of wavelets work with bith the MW sampling theorem and Healpix.
 
 </p><p>
 
- In terms of usage, S2LET has a unique interface for the wavelet transform to avoid duplication of high-level routines. The default setting uses scale-discretised wavelets, and the wavelet type can be changed with dedicated functions. Thus one can write programs and pipelines with the high-level routines and decide on the type of wavelets later on. 
+ In terms of usage, S2LET has a unique interface for the wavelet transform to avoid duplication of high-level routines. The default setting uses scale-discretised wavelets, and the wavelet type can be changed with dedicated functions. Thus one can write programs and pipelines with the high-level routines and decide on the type of wavelets later on.
 
 </p>
 
@@ -156,7 +156,7 @@ S2LET code paper submitted to Astronomy & Astrophysics.
 <br><br><br>
 
 
-<!--------------------------------------------------------------->  
+<!--------------------------------------------------------------->
 <a name="installation"><h2>Installation and documentation</h2></a>
 
   <p> The core functionalities of <strong>S2LET</strong> are written in C and are self-documenting. The core C library only requires <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a href="http://www.fftw.org/">FFTW</a>. The extra IO and HEALPix features require the <a
@@ -170,17 +170,17 @@ S2LET code paper submitted to Astronomy & Astrophysics.
   <p> If you need to install the dependencies required by S2LET please visit the <a href="scratch_install.html">Dependencies</a></li> page.
   <br>The instuctions and options to build the main C library are detailed on <a href="c_doc.html">this page</a>.
   <br> Note that we provide a makefile as well as a <a href="http://www.cmake.org/">Cmake</a> configuration file to facilitate cross-platform compilation.
-  <br> Instuctions to build and use the Matlab interfaces are detailed <a href="matlab_doc.html">here</a>. 
-  <br> Instuctions to build and use the IDL interfaces are detailed <a href="idl_doc.html">here</a>. 
+  <br> Instuctions to build and use the Matlab interfaces are detailed <a href="matlab_doc.html">here</a>.
+  <br> Instuctions to build and use the IDL interfaces are detailed <a href="idl_doc.html">here</a>.
   </p>
 
   <h4>Source code documentation</h4>
 
-  <p><strong>S2LET</strong> ships with source and HTML documentation. 
+  <p><strong>S2LET</strong> ships with source and HTML documentation.
   <br> - The C documentation is generated by <a href="http://www.doxygen.org">doxygen</a> and available <a href="c_doc.html">here</a>.
   <br> - The Matlab routines that interface with the C implementation are self
   documenting, and documentation can be accessed through the help command in
-  Matlab). HTML documentation is available <a href="matlab_doc.html">here</a> and is built with <a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a>. 
+  Matlab). HTML documentation is available <a href="matlab_doc.html">here</a> and is built with <a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a>.
   <br> - The documentation for IDL interfaces is available <a href="idl_doc.html">here</a> and can be rebuilt in IDL with the function s2let_make_doc. The DOC_LIBRARY routine can also be used to display the documentation while running IDL.</p>
 <br>
 
@@ -224,7 +224,7 @@ S2LET code paper submitted to Astronomy & Astrophysics.
 
 <p>Needlets are detailed in these papers:</p>
 
-<blockquote> 
+<blockquote>
 Baldi, P., Kerkyacharian, G., Marinucci, D., Picard, D. 2009, Annals of
 Statistics, 37/3, 1150.<br>
 Marinucci, D., Pietrobon, D., Balbi, A., et al. 2008, Mon. Not. Roy. Astron. Soc.,
@@ -233,7 +233,7 @@ Marinucci, D., Pietrobon, D., Balbi, A., et al. 2008, Mon. Not. Roy. Astron. Soc
 
 <p>B-spline wavelets were first introduced in this paper:</p>
 
-<blockquote> 
+<blockquote>
 Starck, J.-L., Moudden, Y., Abrial, P., & Nguyen, M. 2006a, Astron. &
 Astrophys., 446, 1191.</blockquote>
 
@@ -272,7 +272,7 @@ Astrophys., 446, 1191.</blockquote>
 <!--------------------------------------------------------------->
 <a name="license"><h2>License</h2></a>
 
-<blockquote>  
+<blockquote>
 <p>
 S2LET package to perform fast wavelet transform on the sphere<br>
 Copyright (C) 2012 Boris Leistedt & Jason McEwen
@@ -289,7 +289,7 @@ WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 General Public License for more details (<a href="../LICENSE.txt">LICENSE.txt</a>).
 
-<p> 
+<p>
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
@@ -323,7 +323,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
   &raquo;</p>
 </td>
   </tr></table>
- 
+
 
 <br><br><br><br><br><br><br>
 
@@ -336,7 +336,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
   <p>
   <a href="#header">Back to top</a><br >
-  
+
   <p>&copy; 2012 <a href="http://www.ixkael.com/blog">Boris Leistedt</a> & <a href="http://www.jasonmcewen.org">Jason McEwen</a> | Design by
   <a href="http://andreasviklund.com/">Andreas Viklund</a> </p>
 
