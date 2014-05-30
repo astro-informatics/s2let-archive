@@ -18,8 +18,8 @@ void s2let_transform_axisym_wav_synthesis_mw(complex double *f, const complex do
 void s2let_transform_axisym_wav_analysis_mw_multires(complex double *f_wav, complex double *f_scal, const complex double *f, const s2let_parameters_t *parameters);
 void s2let_transform_axisym_wav_synthesis_mw_multires(complex double *f, const complex double *f_wav, const complex double *f_scal, const s2let_parameters_t *parameters);
 
-void s2let_transform_axisym_wav_analysis_mw_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);
-void s2let_transform_axisym_wav_synthesis_mw_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min);
+void s2let_transform_axisym_wav_analysis_mw_real(double *f_wav, double *f_scal, const double *f, const s2let_parameters_t *parameters);
+void s2let_transform_axisym_wav_synthesis_mw_real(double *f, const double *f_wav, const double *f_scal, const s2let_parameters_t *parameters);
 
 void s2let_transform_axisym_wav_analysis_mw_multires_real(double *f_wav, double *f_scal, const double *f, int B, int L, int J_min);
 void s2let_transform_axisym_wav_synthesis_mw_multires_real(double *f, const double *f_wav, const double *f_scal, int B, int L, int J_min);

@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     s2let_transform_axisym_wav_analysis_mw_multires_real(f_wav, f_scal, f, B, L, J_min);
   }else{
     s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
-    s2let_transform_axisym_wav_analysis_mw_real(f_wav, f_scal, f, B, L, J_min);
+    s2let_transform_axisym_wav_analysis_mw_real(f_wav, f_scal, f, &parameters);
   }
   printf("done\n");
 
