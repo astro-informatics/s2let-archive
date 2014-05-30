@@ -9,7 +9,7 @@ B = 2;
 zoomfactor = 1.4;
 J_min = 2;
 L = 512;
-Spin = 2;
+Spin = 0;
 N = 15;
 J = s2let_jmax(L, B);
 type = 'colour';
@@ -44,12 +44,12 @@ temp = max(abs(v));
 caxis([-temp temp])
 
 
-colormap(jet)    
-fname = [pltroot,'/s2let_demo5_', configstr, '_scal_jet.png']
-print('-r200', '-dpng', fname)
-colormap(hot)
-fname = [pltroot,'/s2let_demo5_', configstr, '_scal_hot.png']
-print('-r200', '-dpng', fname)
+%colormap(jet)    
+%fname = [pltroot,'/s2let_demo5_', configstr, '_scal_jet.png']
+%print('-r200', '-dpng', fname)
+%colormap(hot)
+%fname = [pltroot,'/s2let_demo5_', configstr, '_scal_hot.png']
+%print('-r200', '-dpng', fname)
 
 figure('Position',[100 100 1200 600]) 
 ind = 0;
