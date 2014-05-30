@@ -279,8 +279,11 @@ void s2let_tiling_direction_allocate(complex double **s_elm, const s2let_paramet
  * \param[in]  N Azimuthal band-limit.
  *
  */
-void s2let_tiling_direction(complex double *s_elm, int L, int N)
+void s2let_tiling_direction(complex double *s_elm, const s2let_parameters_t *parameters)
 {
+    int L = parameters->L;
+    int N = parameters->N;
+
     // TODO: Add spin parameter to avoid computation of el < |s|
     complex double nu;
     int el, m, ind;
@@ -395,6 +398,7 @@ void s2let_tiling_wavelet(
     s2let_parameters_t parameters = {};
     parameters.L = L;
     parameters.B = B;
+    parameters.N = N;
 
     // TODO: Add spin parameter to avoid computation of el < |s|
     // TODO: Correctly compute spin scaling functions
@@ -415,7 +419,7 @@ void s2let_tiling_wavelet(
     s2let_tiling_axisym_allocate(&kappa, &kappa0, &parameters);
     s2let_tiling_axisym(kappa, kappa0, &parameters);
     s2let_tiling_direction_allocate(&s_elm, &parameters);
-    s2let_tiling_direction(s_elm, L, N);
+    s2let_tiling_direction(s_elm, &parameters);
 
     el_min = MAX(ABS(spin), ABS(original_spin));
 

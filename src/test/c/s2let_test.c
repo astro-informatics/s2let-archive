@@ -63,7 +63,7 @@ void s2let_tiling_direction_test(int L, int N)
   s2let_tiling_direction_allocate(&s_elm, &parameters);
 
   // Construct the harmonic coefficients
-  s2let_tiling_direction(s_elm, L, N);
+  s2let_tiling_direction(s_elm, &parameters);
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
