@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
   parameters.J_min = J_min;
 
   printf("Parameters for wavelet transform :\n");
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
   printf("- Multiresolution flag : %i\n", multires);
   printf("- Wavelet parameter : %i\n", B);
   printf("- Total number of wavelets : %i\n", J);

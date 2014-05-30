@@ -40,7 +40,11 @@ void s2let_allocate_f_wav_lmn(
     int J_min,
     int N
 ) {
-    int J = s2let_j_max(L, B);
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
+    int J = s2let_j_max(&parameters);
     *f_wav_lmn = calloc((J-J_min+1) * (2*N-1) * L*L, sizeof **f_wav_lmn);
     *f_scal_lm = calloc(L*L, sizeof **f_scal_lm);
 }
@@ -72,7 +76,7 @@ void s2let_allocate_f_wav_lmn_multires(
     parameters.L = L;
     parameters.J_min = J_min;
 
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     int j, bandlimit, total = 0;
     for (j = J_min; j <= J; ++j)
     {
@@ -113,8 +117,12 @@ void s2let_wav_analysis_harmonic(
     int N,
     int spin
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
     int j, el, m ,n;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
 
     complex double psi;
     double phi;
@@ -178,8 +186,12 @@ void s2let_wav_synthesis_harmonic(
     int N,
     int spin
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
     int j, el, m ,n;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
 
     complex double psi;
     double phi;
@@ -249,7 +261,7 @@ void s2let_wav_analysis_harmonic_multires(
     parameters.J_min = J_min;
 
     int j, el, m ,n;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     int bandlimit;
 
     complex double psi;
@@ -323,7 +335,7 @@ void s2let_wav_synthesis_harmonic_multires(
     parameters.J_min = J_min;
 
     int j, el, m ,n;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     int bandlimit;
 
     complex double psi;

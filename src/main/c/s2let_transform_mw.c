@@ -31,12 +31,11 @@ void s2let_allocate_mw_f_wav(
     complex double **f_scal,
     const s2let_parameters_t *parameters
 ) {
-    int B = parameters->B;
     int L = parameters->L;
     int J_min = parameters->J_min;
     int N = parameters->N;
 
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(parameters);
     // We actually only need N samples of the orientational angle.
     *f_wav = calloc((J-J_min+1) * (2*N-1) * L * (2*L-1), sizeof **f_wav);
     *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
@@ -61,12 +60,11 @@ void s2let_allocate_mw_f_wav_multires(
     complex double **f_scal,
     const s2let_parameters_t *parameters
 ) {
-    int B = parameters->B;
     int L = parameters->L;
     int J_min = parameters->J_min;
     int N = parameters->N;
 
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(parameters);
     int j, bandlimit, total = 0;
 
     for (j = J_min; j <= J; ++j)
@@ -100,12 +98,11 @@ void s2let_allocate_mw_f_wav_real(
     double **f_scal,
     const s2let_parameters_t *parameters
 ) {
-    int B = parameters->B;
     int L = parameters->L;
     int J_min = parameters->J_min;
     int N = parameters->N;
 
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(parameters);
     // We actually only need N samples of the orientational angle.
     *f_wav = calloc((J-J_min+1) * (2*N-1) * L * (2*L-1), sizeof **f_wav);
     *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
@@ -130,12 +127,11 @@ void s2let_allocate_mw_f_wav_multires_real(
     double **f_scal,
     const s2let_parameters_t *parameters
 ) {
-    int B = parameters->B;
     int L = parameters->L;
     int J_min = parameters->J_min;
     int N = parameters->N;
 
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(parameters);
     int j, bandlimit, total = 0;
 
     for (j = J_min; j <= J; ++j)
@@ -184,6 +180,10 @@ void s2let_wav_analysis_mw(
     s2let_wav_norm_t normalization,
     int original_spin
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
     so3_parameters_t so3_parameters = {};
@@ -196,7 +196,7 @@ void s2let_wav_analysis_mw(
     so3_parameters.dl_method = dl_method;
 
     int j, offset, offset_lmn;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
     complex double *wav_lm;
@@ -268,6 +268,10 @@ void s2let_wav_synthesis_mw(
     s2let_wav_norm_t normalization,
     int original_spin
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
     so3_parameters_t so3_parameters = {};
@@ -280,7 +284,7 @@ void s2let_wav_synthesis_mw(
     so3_parameters.dl_method = dl_method;
 
     int j, offset, offset_lmn;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
     complex double *wav_lm;
@@ -349,6 +353,10 @@ void s2let_wav_analysis_mw_real(
     int J_min,
     int N
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
     so3_parameters_t so3_parameters = {};
@@ -362,7 +370,7 @@ void s2let_wav_analysis_mw_real(
     so3_parameters.reality = 1;
 
     int j, offset, offset_lmn;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
     int spin = 0;
@@ -432,6 +440,10 @@ void s2let_wav_synthesis_mw_real(
     int J_min,
     int N
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
     so3_parameters_t so3_parameters = {};
@@ -445,7 +457,7 @@ void s2let_wav_synthesis_mw_real(
     so3_parameters.reality = 1;
 
     int j, offset, offset_lmn;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
     int spin = 0;
@@ -554,7 +566,7 @@ void s2let_wav_analysis_mw_multires(
     so3_parameters.dl_method = dl_method;
 
     int j, offset, offset_lmn;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
     complex double *wav_lm;
@@ -646,7 +658,7 @@ void s2let_wav_synthesis_mw_multires(
     so3_parameters.dl_method = dl_method;
 
     int j, offset, offset_lmn;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
     complex double *wav_lm;
@@ -737,7 +749,7 @@ void s2let_wav_analysis_mw_multires_real(
     so3_parameters.dl_method = dl_method;
 
     int j, offset, offset_lmn;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
     int spin = 0;
@@ -828,7 +840,7 @@ void s2let_wav_synthesis_mw_multires_real(
     so3_parameters.dl_method = dl_method;
 
     int j, offset, offset_lmn;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
     int spin = 0;

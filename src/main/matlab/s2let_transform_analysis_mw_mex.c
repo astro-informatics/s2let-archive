@@ -133,8 +133,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_analysis_mw_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
 
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   // Compute ultimate scale J_max
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
 
   if( J_min > J+1 ) {
     mexErrMsgIdAndTxt("s2let_transform_analysis_mw_mex:InvalidInput:Jmin",
@@ -165,9 +169,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_analysis_mw_mex:InvalidInput:realspin",
                       "Real signals must have spin zero.");
 
-  parameters.B = B;
-  parameters.L = L;
-  parameters.J_min = J_min;
   parameters.N = N;
   parameters.spin = spin;
   parameters.normalization = normalization;

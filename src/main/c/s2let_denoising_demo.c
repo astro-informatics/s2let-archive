@@ -43,7 +43,7 @@ double needletpower(double *wav_lm, int L){
  */
 int main(int argc, char *argv[])
 {
-
+  s2let_parameters_t parameters = {};
 
   const int seed = (int)(10000.0*(double)clock()/(double)CLOCKS_PER_SEC);
   // PARAMETERS
@@ -57,6 +57,9 @@ int main(int argc, char *argv[])
   double *f, *noise, *g, *g_wav, *g_scal, *wav_lm, *scal_lm, *f_denois, *remaining_noise;
   complex double *noise_lm;
 
+  parameters.B = B;
+  parameters.J_min = J_min;
+
   printf("--------------------------------------------------\n");
   printf(" S2LET library : denoising example\n");
   printf(" Earth tomography signal, MW sampling\n");
@@ -65,8 +68,9 @@ int main(int argc, char *argv[])
   char file[100] = "data/earth_tomo_mw_128.fits";
   printf(" Reading file %s\n",file);
   const int L = s2let_fits_mw_read_bandlimit(file);
+  parameters.L = L;
   printf(" - Detected bandlimit L = %i\n",L);
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
   printf(" Parameters for wavelet denoising :\n");
   s2let_switch_wavtype(1);
   printf(" - Input SNR : %f\n",SNR_in);

@@ -20,6 +20,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
   int i, j, B, L, J_min, f_m, f_n, reality, downsample;
+  s2let_parameters_t parameters = {};
   double *f_wav_real, *f_scal_real, *f_real, *f_wav_imag, *f_scal_imag, *f_imag;
   complex double *f_wav = NULL, *f_scal = NULL, *f = NULL;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
@@ -122,8 +123,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
 
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   // Compute ultimate scale J_max
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
 
   if( J_min > J+1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:Jmin",

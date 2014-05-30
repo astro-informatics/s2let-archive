@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
@@ -10,7 +10,7 @@
  * This function for internal use only.
  * Compute maximum wavelet scale.
  *
- * Usage: 
+ * Usage:
  *   bl = s2let_jmax(L, B);
  *
  */
@@ -19,6 +19,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 {
 
   int B, L;
+  s2let_parameters_t parameters = {};
   int iin = 0, iout = 0;
 
   // Check number of arguments
@@ -33,8 +34,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse harmonic band-limit L
   iin = 0;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_axisym_tiling_mex:InvalidInput:LbandLimit",
 		      "Harmonic band-limit L must be integer.");
@@ -47,8 +48,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse wavelet parameter B
   iin = 1;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_axisym_tiling_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be integer.");
@@ -62,9 +63,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_axisym_tiling_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be smaller than L!");
   }
- 
+
+  parameters.B = B;
+  parameters.L = L;
+
   // Compute ultimate scale J_max
-  int Jmax = s2let_j_max(L, B);
+  int Jmax = s2let_j_max(&parameters);
   double *out;
 
   iout = 0;

@@ -120,7 +120,7 @@ int main(int argc, char **argv)
             min_duration_inverse = 0.0;
             min_duration_forward = 0.0;
             avg_error = 0.0;
-            int J = s2let_j_max(L, B);
+            int J = s2let_j_max(&parameters);
 
             for (i = 0; i < NREPEAT; ++i)
             {

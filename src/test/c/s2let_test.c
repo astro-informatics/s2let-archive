@@ -941,7 +941,7 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
 
     int spin = parameters.spin = 0;
     int N = parameters.N = 1;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     int verbosity = parameters.verbosity = 0;
     ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
 
@@ -1001,7 +1001,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
 
     int spin = parameters.spin = 0;
     int N = parameters.N = 1;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     int verbosity = parameters.verbosity = 0;
     ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
 

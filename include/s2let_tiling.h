@@ -13,7 +13,7 @@ int s2let_bandlimit(int j, const s2let_parameters_t *parameters);
 
 int s2let_el_min(const s2let_parameters_t *parameters);
 
-int s2let_j_max(int L, int B);
+int s2let_j_max(const s2let_parameters_t *parameters);
 
 void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, int B, int L);
 

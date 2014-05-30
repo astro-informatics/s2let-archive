@@ -26,7 +26,11 @@ static inline int lm2ind(int el, int m)
  */
 void s2let_transform_axisym_lm_allocate_f_wav(complex double **f_wav_lm, complex double **f_scal_lm, int B, int L, int J_min)
 {
-    int J = s2let_j_max(L, B);
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
+    int J = s2let_j_max(&parameters);
     *f_wav_lm = calloc((J+1-J_min) * L * L, sizeof **f_wav_lm);
     *f_scal_lm = calloc(L * L, sizeof **f_scal_lm);
 }
@@ -48,7 +52,7 @@ void s2let_transform_axisym_lm_allocate_f_wav_multires(complex double **f_wav_lm
     parameters.L = L;
     parameters.J_min = J_min;
 
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     int j, bandlimit, total = 0;
     for (j = J_min; j <= J; ++j)
     {
@@ -71,7 +75,11 @@ void s2let_transform_axisym_lm_allocate_f_wav_multires(complex double **f_wav_lm
  */
 void s2let_transform_axisym_lm_allocate_wav(double **wav_lm, double **scal_lm, int B, int L)
 {
-    int J = s2let_j_max(L, B);
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
+    int J = s2let_j_max(&parameters);
     *wav_lm = (double*)calloc((J+1) * L, sizeof(double));
     *scal_lm = (double*)calloc(L, sizeof(double));
 }
@@ -88,8 +96,12 @@ void s2let_transform_axisym_lm_allocate_wav(double **wav_lm, double **scal_lm, i
  */
 void s2let_transform_axisym_lm_wav(double *wav_lm, double *scal_lm, int B, int L, int J_min)
 {
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
     int j, l;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
 //int J_min = 0;
 //int l_min = s2let_transform_axisym_el_min(B, J_min);
     double k0;
@@ -136,8 +148,12 @@ void s2let_transform_axisym_lm_wav_analysis(
     int L,
     int J_min
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
     int offset, j, l, m;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     double wav0, scal0;
     //int l_min = s2let_transform_axisym_el_min(B, J_min);
 
@@ -183,8 +199,12 @@ void s2let_transform_axisym_lm_wav_synthesis(
     int L,
     int J_min
 ) {
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.B = B;
+
     int offset, j, l, m;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     double wav0, scal0;
     //int l_min = s2let_transform_axisym_el_min(B, J_min);
 
@@ -228,7 +248,7 @@ void s2let_transform_axisym_lm_wav_analysis_multires(complex double *f_wav_lm, c
     parameters.J_min = J_min;
 
     int bandlimit, offset, j, l, m;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     double wav0, scal0;
 
     offset = 0;
@@ -273,7 +293,7 @@ void s2let_transform_axisym_lm_wav_synthesis_multires(complex double *flm, const
     parameters.J_min = J_min;
 
     int bandlimit, offset, j, l, m;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(&parameters);
     double wav0, scal0;
     //int l_min = s2let_transform_axisym_el_min(B, J_min);
 
