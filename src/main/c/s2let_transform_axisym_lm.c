@@ -106,7 +106,7 @@ void s2let_transform_axisym_lm_wav(double *wav_lm, double *scal_lm, int B, int L
 //int l_min = s2let_transform_axisym_el_min(B, J_min);
     double k0;
     double *kappa, *kappa0;
-    s2let_tiling_axisym_allocate(&kappa, &kappa0, B, L);
+    s2let_tiling_axisym_allocate(&kappa, &kappa0, &parameters);
     s2let_tiling_axisym(kappa, kappa0, B, L, J_min);
 
     for (j = J_min; j <= J; j++){

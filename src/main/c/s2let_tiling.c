@@ -119,13 +119,11 @@ int s2let_j_max(const s2let_parameters_t *parameters)
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, int B, int L)
+void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, const s2let_parameters_t *parameters)
 {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
 
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     *kappa = calloc((J+1) * L, sizeof **kappa);
     *kappa0 = calloc(L, sizeof **kappa0);
 }
@@ -415,7 +413,7 @@ void s2let_tiling_wavelet(
     // TODO: Allocate kappa0 directly inside phi. For this, we should probably
     //       separate the allocation functions to do only one allocation per
     //       function.
-    s2let_tiling_axisym_allocate(&kappa, &kappa0, B, L);
+    s2let_tiling_axisym_allocate(&kappa, &kappa0, &parameters);
     s2let_tiling_axisym(kappa, kappa0, B, L, J_min);
     s2let_tiling_direction_allocate(&s_elm, L, N);
     s2let_tiling_direction(s_elm, L, N);

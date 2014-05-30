@@ -20,10 +20,15 @@
  */
 void s2let_tiling_axisym_test(int B, int L, int J_min)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   double *kappa, *kappa0;
 
   // Allocate the kernels corresponding to the parameters B, L
-  s2let_tiling_axisym_allocate(&kappa, &kappa0, B, L);
+  s2let_tiling_axisym_allocate(&kappa, &kappa0, &parameters);
 
   // Construct the tiling of harmonic space
   s2let_tiling_axisym(kappa, kappa0, B, L, J_min);
