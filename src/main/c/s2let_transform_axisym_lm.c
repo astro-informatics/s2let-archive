@@ -144,16 +144,13 @@ void s2let_transform_axisym_lm_wav_analysis(
     const complex double *flm,
     const double *wav_lm,
     const double *scal_lm,
-    int B,
-    int L,
-    int J_min
+    const s2let_parameters_t *parameters
 ) {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
     int offset, j, l, m;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     double wav0, scal0;
     //int l_min = s2let_transform_axisym_el_min(B, J_min);
 
@@ -195,16 +192,13 @@ void s2let_transform_axisym_lm_wav_synthesis(
     const complex double *f_scal_lm,
     const double *wav_lm,
     const double *scal_lm,
-    int B,
-    int L,
-    int J_min
+    const s2let_parameters_t *parameters
 ) {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
     int offset, j, l, m;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     double wav0, scal0;
     //int l_min = s2let_transform_axisym_el_min(B, J_min);
 

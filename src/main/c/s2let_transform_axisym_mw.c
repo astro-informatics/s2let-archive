@@ -145,7 +145,7 @@ void s2let_transform_axisym_wav_analysis_mw(complex double *f_wav, complex doubl
 
     ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
 
-    s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+    s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
 
     ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, L, spin, dl_method, verbosity);
     offset = 0;
@@ -206,7 +206,7 @@ void s2let_transform_axisym_wav_synthesis_mw(complex double *f, const complex do
         offset += L * (2 * L - 1);
     }
 
-    s2let_transform_axisym_lm_wav_synthesis(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+    s2let_transform_axisym_lm_wav_synthesis(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
 
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
@@ -253,7 +253,7 @@ void s2let_transform_axisym_wav_analysis_mw_real(double *f_wav, double *f_scal, 
 
     ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
 
-    s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+    s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
 
     ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, L, dl_method, verbosity);
     offset = 0;
@@ -314,7 +314,7 @@ void s2let_transform_axisym_wav_synthesis_mw_real(double *f, const double *f_wav
         offset += L * (2 * L - 1);
     }
 
-    s2let_transform_axisym_lm_wav_synthesis(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+    s2let_transform_axisym_lm_wav_synthesis(flm, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
 
     ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
 

@@ -29,7 +29,7 @@ void s2let_transform_axisym_lm_wav_analysis(
     const complex double *flm,
     const double *wav_lm,
     const double *scal_lm,
-    int B, int L, int J_min
+    const s2let_parameters_t *parameters
 );
 void s2let_transform_axisym_lm_wav_synthesis(
     complex double *flm,
@@ -37,7 +37,7 @@ void s2let_transform_axisym_lm_wav_synthesis(
     const complex double *f_scal_lm,
     const double *wav_lm,
     const double *scal_lm,
-    int B, int L, int J_min
+    const s2let_parameters_t *parameters
 );
 
 void s2let_transform_axisym_lm_wav_analysis_multires(

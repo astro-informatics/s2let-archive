@@ -199,14 +199,14 @@ void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
-  s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial harmonic coefficients from those of the wavelets
   time_start = clock();
-  s2let_transform_axisym_lm_wav_synthesis(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav_synthesis(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1270,7 +1270,7 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
       s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, &parameters);
 
       time_start = clock();
-      s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+      s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
       time_end = clock();
       tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
       //printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1278,7 +1278,7 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
       s2let_lm_allocate(&flm_rec, L);
 
       time_start = clock();
-      s2let_transform_axisym_lm_wav_synthesis(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+      s2let_transform_axisym_lm_wav_synthesis(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
       time_end = clock();
       tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
 
