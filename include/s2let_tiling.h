@@ -23,7 +23,7 @@ void s2let_tiling_direction_allocate(complex double **s_elm, const s2let_paramet
 
 void s2let_tiling_direction(complex double *s_elm, int L, int N);
 
-void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, int L, int N);
+void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, const s2let_parameters_t *parameters);
 
 void s2let_tiling_wavelet(
     complex double *psi,

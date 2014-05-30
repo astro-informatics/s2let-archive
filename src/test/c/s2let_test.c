@@ -86,12 +86,18 @@ void s2let_tiling_direction_test(int L, int N)
  */
 void s2let_tiling_wavelet_test(int B, int L, int J_min, int N, int spin)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+  parameters.N = N;
+
   complex double *phi;
   double *psi;
   double error;
 
   // Allocate space for the harmonic coefficients
-  s2let_tiling_wavelet_allocate(&phi, &psi, B, L, N);
+  s2let_tiling_wavelet_allocate(&phi, &psi, &parameters);
 
   // Construct the harmonic coefficients
   s2let_tiling_wavelet(phi, psi, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
@@ -283,12 +289,18 @@ void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int se
  */
 void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+  parameters.N = N;
+
   clock_t time_start, time_end;
   complex double *psi;
   double *phi;
 
   // Allocate the wavelet kernels
-  s2let_tiling_wavelet_allocate(&psi, &phi, B, L, N);
+  s2let_tiling_wavelet_allocate(&psi, &phi, &parameters);
 
   // Compute the wavelet kernels
   time_start = clock();
@@ -347,12 +359,18 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
  */
 void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, int spin, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+  parameters.N = N;
+
   clock_t time_start, time_end;
   complex double *psi;
   double *phi;
 
   // Allocate the wavelet kernels
-  s2let_tiling_wavelet_allocate(&psi, &phi, B, L, N);
+  s2let_tiling_wavelet_allocate(&psi, &phi, &parameters);
 
   // Compute the wavelet kernels
   time_start = clock();

@@ -328,14 +328,12 @@ void s2let_tiling_direction(complex double *s_elm, int L, int N)
  * \param[in]  N Azimuthal band-limit.
  * \retval none
  */
-void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, int L, int N)
+void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, const s2let_parameters_t *parameters)
 {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
 
     // TODO: This could be reduced by not storing psi_j_elm with |m| >= N
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     *psi = calloc((J+1) * L*L, sizeof **psi);
     *phi = calloc(L, sizeof **phi);
 }
