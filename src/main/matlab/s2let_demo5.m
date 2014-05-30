@@ -12,12 +12,13 @@ L = 512;
 Spin = 0;
 N = 15;
 J = s2let_jmax(L, B);
+plot_caxis_scale = 2
 type = 'colour';
 lighting = true;
 
 ns = ceil(sqrt(2+J-J_min+1)) ;
-ny = 2;
-nx = 4;
+ny = 4;
+nx = 3;
 
 maxfigs = nx*ny;
 pltroot = '../../../figs'
@@ -41,7 +42,7 @@ set(locate,'pos',pos);
 zoom(1.2)
 v = caxis;
 temp = max(abs(v));
-caxis([-temp temp])
+caxis([-temp temp]*plot_caxis_scale)
 
 
 %colormap(jet)
@@ -70,7 +71,7 @@ for j = J_min:J
            set(locate,'pos',pos);
            v = caxis;
            temp = max(abs(v));
-           caxis([-temp temp])
+           caxis([-temp temp]*plot_caxis_scale)
            zoom(zoomfactor)
        end
    end
@@ -88,7 +89,7 @@ for j = J_min:J
            set(locate,'pos',pos);
            v = caxis;
            temp = max(abs(v));
-           caxis([-temp temp])
+           caxis([-temp temp]*plot_caxis_scale)
            zoom(zoomfactor)
        end
        ind = ind + 1;
@@ -103,9 +104,26 @@ for j = J_min:J
            set(locate,'pos',pos);
            v = caxis;
            temp = max(abs(v));
-           caxis([-temp temp])
+           caxis([-temp temp]*plot_caxis_scale)
            zoom(zoomfactor)
        end
+       
+       ind = ind + 1;
+       if ind <= maxfigs
+           h = subplot(ny, nx, ind);
+           ssht_plot_sphere(abs(f), L, 'Type', type, 'Lighting', lighting);
+           title(h, ['Wavelet j = ',int2str(j-J_min+1), ', abs part'])
+           locate = get(h,'title');
+           pos = get(locate,'position'); 
+           pos(1,2) = pos(1,2)+0.7;
+           pos(1,1) = pos(1,1)-0.7;
+           set(locate,'pos',pos);
+           v = caxis;
+           temp = max(abs(v));
+           caxis([-temp temp]*plot_caxis_scale)
+           zoom(zoomfactor)
+       end
+       
    end
 end
 
