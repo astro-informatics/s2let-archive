@@ -12,19 +12,13 @@
 void s2let_allocate_mw_f_wav(
     complex double **f_wav,
     complex double **f_scal,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 void s2let_allocate_mw_f_wav_multires(
     complex double **f_wav,
     complex double **f_scal,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 void s2let_allocate_mw_f_wav_real(

@@ -648,8 +648,16 @@ void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int 
 void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
-    int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+    parameters.N = N;
+    parameters.spin = spin;
+
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
     //int J = s2let_j_max(L, B);
 
     complex double *f, *f_rec, *flm, *flm_rec;
@@ -666,7 +674,7 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav(&f_wav, &f_scal, B, L, J_min, N);
+    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -776,8 +784,16 @@ void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
 void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
-    int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+    parameters.N = N;
+    parameters.spin = spin;
+
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
     //int J = s2let_j_max(L, B);
 
     complex double *f, *f_rec, *flm, *flm_rec;
@@ -794,7 +810,7 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_multires(&f_wav, &f_scal, B, L, J_min, N);
+    s2let_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -902,12 +918,18 @@ void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, i
  */
 void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
 {
-    int spin = 0;
-    int N = 1;
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+
+    int spin = parameters.spin = 0;
+    int N = parameters.N = 1;
     int J = s2let_j_max(L, B);
-    int verbosity = 0;
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
+
     int i;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
     double wav_error, scal_error;
 
@@ -925,7 +947,7 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
     // from both transforms.
     complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
     s2let_transform_axisym_allocate_mw_f_wav(&f_wav_axisym, &f_scal_axisym, B, L, J_min);
-    s2let_allocate_mw_f_wav(&f_wav_dir, &f_scal_dir, B, L, J_min, N);
+    s2let_allocate_mw_f_wav(&f_wav_dir, &f_scal_dir, &parameters);
 
     // Do both transforms
     s2let_transform_axisym_wav_analysis_mw(f_wav_axisym, f_scal_axisym, f, B, L, J_min);
@@ -956,12 +978,18 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
  */
 void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
 {
-    int spin = 0;
-    int N = 1;
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+
+    int spin = parameters.spin = 0;
+    int N = parameters.N = 1;
     int J = s2let_j_max(L, B);
-    int verbosity = 0;
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
+
     int samples, bandlimit, i, j;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
     double wav_error, scal_error;
 
@@ -979,7 +1007,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     // from both transforms.
     complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
     s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav_axisym, &f_scal_axisym, B, L, J_min);
-    s2let_allocate_mw_f_wav_multires(&f_wav_dir, &f_scal_dir, B, L, J_min, N);
+    s2let_allocate_mw_f_wav_multires(&f_wav_dir, &f_scal_dir, &parameters);
 
     // Do both transforms
     s2let_transform_axisym_wav_analysis_mw_multires(f_wav_axisym, f_scal_axisym, f, B, L, J_min);

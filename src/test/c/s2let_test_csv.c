@@ -51,40 +51,41 @@ double ran2_dp(int idum);
 
 int main(int argc, char **argv)
 {
-  int verbosity = 0;
-  int Lmax, L, useLasN, N, L0, B, J, J_min, spin;
+    s2let_parameters_t parameters = {};
+    int verbosity = parameters.verbosity = 0;
+    int Lmax, L, useLasN, N, L0, B, J_min, spin;
     complex *flm, *flm_rec, *f, *f_rec;;
     complex *f_wav, *f_scal;
     int seed;
     clock_t time_start, time_end;
     int i, multires;
 
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
-  
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
+
     double min_duration_inverse;
     double min_duration_forward;
     double avg_error;
 
     // Parse command line arguments
-    N = Lmax = 64;
+    parameters.N = N = Lmax = 64;
     useLasN = 1; // true
     L0 = 0;
-    spin = 0;
-    J_min = 0;
+    parameters.spin = spin = 0;
+    parameters.J_min = J_min = 0;
     seed = 1;
-    B = 2;
+    parameters.B = B = 2;
     if (argc > 1)
         Lmax = atoi(argv[1]);
     if (argc > 2)
-        spin = atoi(argv[2]);
+        parameters.spin = spin = atoi(argv[2]);
     if (argc > 3)
-        B = atoi(argv[3]);
+        parameters.B = B = atoi(argv[3]);
     if (argc > 4)
     {
         useLasN = 0; // false
-        N = atoi(argv[4]);
+        parameters.N = N = atoi(argv[4]);
     }
-    
+
 
     // Output header row
     printf("multires;spin;L;N;B;J_min;J;min_duration_inverse;min_duration_forward;avg_error\n");
@@ -105,20 +106,21 @@ int main(int argc, char **argv)
 
             if (useLasN)
             {
-                N = L;
+                parameters.N = N = L;
             }
 
+            parameters.L = L;
 
-	    s2let_lm_allocate(&flm, L);
-	    s2let_lm_allocate(&flm_rec, L);
-	    s2let_mw_allocate(&f, L);
-	    s2let_mw_allocate(&f_rec, L);
-	    s2let_allocate_mw_f_wav(&f_wav, &f_scal, B, L, J_min, N);
+            s2let_lm_allocate(&flm, L);
+            s2let_lm_allocate(&flm_rec, L);
+            s2let_mw_allocate(&f, L);
+            s2let_mw_allocate(&f_rec, L);
+            s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
             min_duration_inverse = 0.0;
             min_duration_forward = 0.0;
             avg_error = 0.0;
-	    int J = s2let_j_max(L, B);
+            int J = s2let_j_max(L, B);
 
             for (i = 0; i < NREPEAT; ++i)
             {
@@ -129,8 +131,8 @@ int main(int argc, char **argv)
                 for (j = 0; j < L*L; ++j)
                     flm_rec[j] = 0.0;
 
-		s2let_lm_random_flm(flm, L, spin, seed);
-		ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
+        s2let_lm_random_flm(flm, L, spin, seed);
+        ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
                 time_start = clock();
                 if (multires) s2let_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
@@ -146,7 +148,7 @@ int main(int argc, char **argv)
                 else     s2let_wav_synthesis_mw(f_rec, f_wav, f_scal, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
                 time_end = clock();
 
-		ssht_core_mw_forward_sov_conv_sym(flm_rec, f_rec, L, spin, dl_method, verbosity);
+        ssht_core_mw_forward_sov_conv_sym(flm_rec, f_rec, L, spin, dl_method, verbosity);
 
                 duration = (time_end - time_start) / (double)CLOCKS_PER_SEC;
                 if (!i || duration < min_duration_forward)
@@ -157,10 +159,10 @@ int main(int argc, char **argv)
 
             printf("%d;%d;%d;%d;%d;%d;%d;%f;%f;%e\n",
                    multires,
-		   spin, 
+           spin,
                    L,
-		   N,
-		   B,
+           N,
+           B,
                    J_min,
                    J,
                    min_duration_inverse,
@@ -169,16 +171,16 @@ int main(int argc, char **argv)
 
             L *= 2;
 
-	    free(f);
-	    free(f_rec);
-	    free(flm);
-	    free(flm_rec);
-	    free(f_wav);
-	    free(f_scal);
+        free(f);
+        free(f_rec);
+        free(flm);
+        free(flm_rec);
+        free(f_wav);
+        free(f_scal);
         }
 
     }
-    
+
 
     return 0;
 }

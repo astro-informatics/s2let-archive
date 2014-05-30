@@ -1,10 +1,10 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
 #include <assert.h>
-#include <complex.h> 
+#include <complex.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,15 +21,15 @@
  * - multires : multiresolution flag (1: activated, 0: off)
  * OUTPUT : fits files containing the wavelet MW maps
  */
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-  printf("--------------------------------------------------\n");	
+  printf("--------------------------------------------------\n");
   printf("S2LET library : axisymmetric wavelet transform\n");
   printf("Real signal, MW sampling\n");
   printf("--------------------------------------------------\n");
 
   char file[100];
-  if (sscanf(argv[1], "%s", &file) != 1)
+  if (sscanf(argv[1], "%s", file) != 1)
     exit(-2);
   printf("Input MW map : %s\n",file);
   const int L = s2let_fits_mw_read_bandlimit(file);
@@ -57,11 +57,11 @@ int main(int argc, char *argv[])
   printf("Performing wavelet decomposition...");fflush(NULL);
   double *f_wav, *f_scal;
   if(multires){
-    s2let_axisym_mw_allocate_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min);
-    s2let_axisym_mw_wav_analysis_multires_real(f_wav, f_scal, f, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min);
+    s2let_transform_axisym_wav_analysis_mw_multires_real(f_wav, f_scal, f, B, L, J_min);
   }else{
-    s2let_axisym_mw_allocate_f_wav_real(&f_wav, &f_scal, B, L, J_min);
-    s2let_axisym_mw_wav_analysis_real(f_wav, f_scal, f, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav, &f_scal, B, L, J_min);
+    s2let_transform_axisym_wav_analysis_mw_real(f_wav, f_scal, f, B, L, J_min);
   }
   printf("done\n");
 
@@ -96,9 +96,9 @@ int main(int argc, char *argv[])
     bl = L;
   s2let_fits_mw_write_map(outfile, f_scal, bl); // Now write the map to fits file
 
-  printf("--------------------------------------------------\n");	
+  printf("--------------------------------------------------\n");
 
-  return 0;		
+  return 0;
 }
 
 

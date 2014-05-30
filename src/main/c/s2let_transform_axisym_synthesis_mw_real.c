@@ -1,10 +1,10 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
 #include <assert.h>
-#include <complex.h> 
+#include <complex.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,15 +21,15 @@
  * - L : band-limit of the output map / of the finest wavelet map
  * OUTPUT : fits file containing the reconstructed MW map
  */
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-  printf("--------------------------------------------------\n");	
+  printf("--------------------------------------------------\n");
   printf("S2LET library : axisymmetric wavelet transform\n");
   printf("Real signal, MW sampling\n");
   printf("--------------------------------------------------\n");
 
   char fileroot[100];
-  if (sscanf(argv[1], "%s", &fileroot) != 1)
+  if (sscanf(argv[1], "%s", fileroot) != 1)
     exit(-2);
   int multires, B, J_min, L;
   if (sscanf(argv[2], "%i", &B) != 1)
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
   char file[100];
   char params[100];
   sprintf(params, "%d%s%d%s%d", L, "_", B, "_", J_min);
-  int j, bl, offset = 0; 
+  int j, bl, offset = 0;
   printf("File root = %s\n",fileroot);
 
   // Read band-limits and see if multiresolution was activated
@@ -94,9 +94,9 @@ int main(int argc, char *argv[])
   // Allocating memory for the wavelets
   double *f_wav, *f_scal;
   if(multires){
-    s2let_axisym_mw_allocate_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min);
   }else{
-    s2let_axisym_mw_allocate_f_wav_real(&f_wav, &f_scal, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav, &f_scal, B, L, J_min);
   }
 
   // Read the wavelets
@@ -122,9 +122,9 @@ int main(int argc, char *argv[])
   printf("Performing wavelet decomposition...");fflush(NULL);
   double *f = (double*)calloc(L * (2 * L - 1), sizeof(double));
   if(multires){
-    s2let_axisym_mw_wav_synthesis_multires_real(f, f_wav, f_scal, B, L, J_min);
+    s2let_transform_axisym_wav_synthesis_mw_multires_real(f, f_wav, f_scal, B, L, J_min);
   }else{
-    s2let_axisym_mw_wav_synthesis_real(f, f_wav, f_scal, B, L, J_min);
+    s2let_transform_axisym_wav_synthesis_mw_real(f, f_wav, f_scal, B, L, J_min);
   }
   printf("done\n");
 
@@ -136,9 +136,9 @@ int main(int argc, char *argv[])
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, f, L); // Now write the map to fits file
 
-  printf("--------------------------------------------------\n");	
+  printf("--------------------------------------------------\n");
 
-  return 0;		
+  return 0;
 }
 
 

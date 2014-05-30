@@ -29,11 +29,13 @@ static inline int lmn2ind(int el, int m, int n, int L, int N)
 void s2let_allocate_mw_f_wav(
     complex double **f_wav,
     complex double **f_scal,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 ) {
+    int B = parameters->B;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int N = parameters->N;
+
     int J = s2let_j_max(L, B);
     // We actually only need N samples of the orientational angle.
     *f_wav = calloc((J-J_min+1) * (2*N-1) * L * (2*L-1), sizeof **f_wav);
@@ -57,11 +59,13 @@ void s2let_allocate_mw_f_wav(
 void s2let_allocate_mw_f_wav_multires(
     complex double **f_wav,
     complex double **f_scal,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 ) {
+    int B = parameters->B;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int N = parameters->N;
+
     int J = s2let_j_max(L, B);
     int j, bandlimit, total = 0;
 
