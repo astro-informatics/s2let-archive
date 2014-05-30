@@ -511,6 +511,11 @@ void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
  */
 void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   int verbosity = 0;
   ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -531,7 +536,7 @@ void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
 
   // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
   double *f_wav, *f_scal;
-  s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav, &f_scal, B, L, J_min);
+  s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
   time_start = clock();
@@ -638,6 +643,11 @@ void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
  */
 void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   int verbosity = 0;
   ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -658,7 +668,7 @@ void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int 
 
   // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
   double *f_wav, *f_scal;
-  s2let_transform_axisym_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min);
+  s2let_transform_axisym_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, &parameters);
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
   time_start = clock();

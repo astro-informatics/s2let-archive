@@ -100,9 +100,9 @@ int main(int argc, char *argv[])
   // Allocating memory for the wavelets
   double *f_wav, *f_scal;
   if(multires){
-    s2let_transform_axisym_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, &parameters);
   }else{
-    s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav, &f_scal, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
   }
 
   // Read the wavelets

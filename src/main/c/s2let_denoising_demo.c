@@ -105,10 +105,10 @@ int main(int argc, char *argv[])
   printf(" Performing wavelet decomposition...");fflush(NULL);
   // Perform wavelet analysis from scratch with all signals given as MW maps
   if(multires){
-    s2let_transform_axisym_allocate_mw_f_wav_multires_real(&g_wav, &g_scal, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_multires_real(&g_wav, &g_scal, &parameters);
     s2let_transform_axisym_wav_analysis_mw_multires_real(g_wav, g_scal, g, B, L, J_min);
   }else{
-    s2let_transform_axisym_allocate_mw_f_wav_real(&g_wav, &g_scal, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_real(&g_wav, &g_scal, &parameters);
     s2let_transform_axisym_wav_analysis_mw_real(g_wav, g_scal, g, B, L, J_min);
   }
   printf(" done\n");
