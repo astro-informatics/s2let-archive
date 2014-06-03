@@ -116,7 +116,7 @@ void s2let_wav_analysis_harmonic(
 
     int offset = 0;
 
-    for (j = J_min; j <= J; j++)
+    for (j = J_min; j <= J; ++j)
     {
         for (n = -N+1; n < N; ++n)
         {

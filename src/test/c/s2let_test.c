@@ -698,6 +698,70 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
 }
 
 /*!
+ * Test the exactness of the full resolution directional wavelet transform
+ * in pixel space for real functions.
+ *
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  N Azimuthal band-limit.
+ * \param[in]  seed Random seed.
+ * \retval none
+ */
+void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
+{
+    clock_t time_start, time_end;
+    int verbosity = 0;
+    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+    //int J = s2let_j_max(L, B);
+
+    double *f, *f_rec;
+    complex double *flm, *flm_rec;
+    s2let_lm_allocate(&flm, L);
+    s2let_lm_allocate(&flm_rec, L);
+    s2let_mw_allocate_real(&f, L);
+    s2let_mw_allocate_real(&f_rec, L);
+
+    // Generate random harmonic coefficients for a complex signal
+    s2let_lm_random_flm_real(flm, L, seed);
+
+    // Construct the corresponding signal on the sphere (MW sampling)
+    ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
+
+    // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
+    double *f_wav, *f_scal;
+    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, B, L, J_min, N);
+
+    // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
+    time_start = clock();
+    s2let_wav_analysis_mw_real(f_wav, f_scal, f, B, L, J_min, N);
+    time_end = clock();
+    printf("  - Wavelet analysis   : %4.4f seconds\n",
+           (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+    // Reconstruct the initial signal from the wavelet maps from scratch
+    time_start = clock();
+    s2let_wav_synthesis_mw_real(f_rec, f_wav, f_scal, B, L, J_min, N);
+    time_end = clock();
+    printf("  - Wavelet synthesis  : %4.4f seconds\n",
+           (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+    // Convert back to harmonic coefficients
+    ssht_core_mw_forward_sov_conv_sym_real(flm_rec, f_rec, L, dl_method, verbosity);
+
+    // Compute the maximum absolute error on the harmonic coefficients
+    printf("  - Maximum abs error  : %6.5e\n",
+           maxerr_cplx(flm, flm_rec, L*L));fflush(NULL);
+
+    free(f);
+    free(f_rec);
+    free(flm);
+    free(flm_rec);
+    free(f_wav);
+    free(f_scal);
+}
+
+/*!
  * Test the exactness of the multi-resolution directional wavelet transform
  * in pixel space for complex functions.
  *
@@ -748,6 +812,71 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
 
     // Convert back to harmonic coefficients
     ssht_core_mw_forward_sov_conv_sym(flm_rec, f_rec, L, spin, dl_method, verbosity);
+
+    // Compute the maximum absolute error on the harmonic coefficients
+    printf("  - Maximum abs error  : %6.5e\n",
+           maxerr_cplx(flm, flm_rec, L*L));fflush(NULL);
+
+    free(f);
+    free(f_rec);
+    free(flm);
+    free(flm_rec);
+    free(f_wav);
+    free(f_scal);
+}
+
+/*!
+ * Test the exactness of the multi-resolution directional wavelet transform
+ * in pixel space for real functions.
+ *
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
+ * \param[in]  seed Random seed.
+ * \retval none
+ */
+void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, int seed)
+{
+    clock_t time_start, time_end;
+    int verbosity = 0;
+    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+    //int J = s2let_j_max(L, B);
+
+    double *f, *f_rec;
+    complex double *flm, *flm_rec;
+    s2let_lm_allocate(&flm, L);
+    s2let_lm_allocate(&flm_rec, L);
+    s2let_mw_allocate_real(&f, L);
+    s2let_mw_allocate_real(&f_rec, L);
+
+    // Generate random harmonic coefficients for a complex signal
+    s2let_lm_random_flm_real(flm, L, seed);
+
+    // Construct the corresponding signal on the sphere (MW sampling)
+    ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
+
+    // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
+    double *f_wav, *f_scal;
+    s2let_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min, N);
+
+    // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
+    time_start = clock();
+    s2let_wav_analysis_mw_multires_real(f_wav, f_scal, f, B, L, J_min, N);
+    time_end = clock();
+    printf("  - Wavelet analysis   : %4.4f seconds\n",
+           (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+    // Reconstruct the initial signal from the wavelet maps from scratch
+    time_start = clock();
+    s2let_wav_synthesis_mw_multires_real(f_rec, f_wav, f_scal, B, L, J_min, N);
+    time_end = clock();
+    printf("  - Wavelet synthesis  : %4.4f seconds\n",
+           (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+    // Convert back to harmonic coefficients
+    ssht_core_mw_forward_sov_conv_sym_real(flm_rec, f_rec, L, dl_method, verbosity);
 
     // Compute the maximum absolute error on the harmonic coefficients
     printf("  - Maximum abs error  : %6.5e\n",
@@ -1155,10 +1284,10 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
 int main(int argc, char *argv[])
 {
-  const int L = 256;
-  const int N = 32;
+  const int L = 64;
+  const int N = 16;
   const int B = 3;
-  const int J_min = 2;
+  const int J_min = 0;
   const int spin = 2;
 
   // This is too often zero, so we add 1 (zero will result in all random
@@ -1223,6 +1352,12 @@ int main(int argc, char *argv[])
   printf("---------------------------------------------------------------------\n");
   printf("> Testing axisymmetric multiresolution algorithm for real function...\n");
   s2let_transform_axisym_wav_multires_real_test(B, L, J_min, seed);
+  printf("---------------------------------------------------------------------\n");
+  printf("> Testing directional wavelets in pixel space for real function...\n");
+  s2let_wav_transform_mw_real_test(B, L, J_min, N, seed);
+  printf("---------------------------------------------------------------------\n");
+  printf("> Testing directional multiresolution algorithm for real function...\n");
+  s2let_wav_transform_mw_multires_real_test(B, L, J_min, N, seed);
 
     /*
   const int NREPEAT = 50;
