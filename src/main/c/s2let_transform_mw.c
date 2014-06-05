@@ -172,22 +172,12 @@ void s2let_wav_analysis_mw(
     complex double *f_wav,
     complex double *f_scal,
     const complex double *f,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin,
-    s2let_wav_norm_t normalization,
-    int original_spin
+    const s2let_parameters_t *parameters
 ) {
-    s2let_parameters_t parameters = {};
-    parameters.B = B;
-    parameters.L = L;
-    parameters.J_min = J_min;
-    parameters.N = N;
-    parameters.spin = spin;
-    parameters.normalization = normalization;
-    parameters.original_spin = original_spin;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int N = parameters->N;
+    int spin = parameters->spin;
 
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -201,21 +191,21 @@ void s2let_wav_analysis_mw(
     so3_parameters.dl_method = dl_method;
 
     int j, offset, offset_lmn;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
     complex double *wav_lm;
     double *scal_l;
-    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
+    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, parameters);
+    s2let_tiling_wavelet(wav_lm, scal_l, parameters);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
 
     s2let_lm_allocate(&flm, L);
     ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
 
-    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &parameters);
-    s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &parameters);
+    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
+    s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
 
     // Note, this is a spin-0 transform!
     ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, L, 0, dl_method, verbosity);
@@ -265,22 +255,12 @@ void s2let_wav_synthesis_mw(
     complex double *f,
     const complex double *f_wav,
     const complex double *f_scal,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin,
-    s2let_wav_norm_t normalization,
-    int original_spin
+    const s2let_parameters_t *parameters
 ) {
-    s2let_parameters_t parameters = {};
-    parameters.B = B;
-    parameters.L = L;
-    parameters.J_min = J_min;
-    parameters.N = N;
-    parameters.spin = spin;
-    parameters.normalization = normalization;
-    parameters.original_spin = original_spin;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int N = parameters->N;
+    int spin = parameters->spin;
 
     int verbosity = 0;
     ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -294,16 +274,16 @@ void s2let_wav_synthesis_mw(
     so3_parameters.dl_method = dl_method;
 
     int j, offset, offset_lmn;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
     complex double *wav_lm;
     double *scal_l;
-    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
+    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, parameters);
+    s2let_tiling_wavelet(wav_lm, scal_l, parameters);
 
     complex double *flm, *f_wav_lmn, *f_scal_lm;
-    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &parameters);
+    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
 
     // Note, this is a spin-0 transform!
     ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, L, 0, dl_method, verbosity);
@@ -321,7 +301,7 @@ void s2let_wav_synthesis_mw(
     }
 
     s2let_lm_allocate(&flm, L);
-    s2let_wav_synthesis_harmonic(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, &parameters);
+    s2let_wav_synthesis_harmonic(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, parameters);
 
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 

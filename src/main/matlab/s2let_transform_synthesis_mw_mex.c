@@ -175,6 +175,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }
   spin = (int)mxGetScalar(prhs[iin]);
 
+  parameters.N = N;
+  parameters.spin = spin;
+  parameters.normalization = normalization;
+  parameters.original_spin = original_spin;
+  parameters.reality = reality;
+
   // Perform wavelet transform in harmonic space and then reconstruction.
   if(downsample){
     // Multiresolution algorithm
@@ -192,7 +198,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
       s2let_wav_synthesis_mw_real(f_r, f_wav_r, f_scal_r, B, L, J_min, N);
     }else{
       s2let_mw_allocate(&f, L);
-      s2let_wav_synthesis_mw(f, f_wav, f_scal, B, L, J_min, N, spin, normalization, original_spin);
+      s2let_wav_synthesis_mw(f, f_wav, f_scal, &parameters);
     }
   }
 

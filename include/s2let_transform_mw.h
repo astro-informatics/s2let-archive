@@ -39,26 +39,14 @@ void s2let_wav_analysis_mw(
     complex double *f_wav,
     complex double *f_scal,
     const complex double *f,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin,
-    s2let_wav_norm_t normalization,
-    int original_spin
+    const s2let_parameters_t *parameters
 );
 
 void s2let_wav_synthesis_mw(
     complex double *f,
     const complex double *f_wav,
     const complex double *f_scal,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin,
-    s2let_wav_norm_t normalization,
-    int original_spin
+    const s2let_parameters_t *parameters
 );
 
 void s2let_wav_analysis_mw_real(

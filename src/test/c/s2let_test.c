@@ -721,6 +721,8 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
     parameters.J_min = J_min;
     parameters.N = N;
     parameters.spin = spin;
+    parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+    parameters.original_spin = 0;
 
     int verbosity = parameters.verbosity = 0;
     ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
@@ -744,14 +746,14 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+    s2let_wav_analysis_mw(f_wav, f_scal, f, &parameters);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_wav_synthesis_mw(f_rec, f_wav, f_scal, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+    s2let_wav_synthesis_mw(f_rec, f_wav, f_scal, &parameters);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1004,12 +1006,15 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
+    parameters.N = 1;
 
     int spin = parameters.spin = 0;
-    int N = parameters.N = 1;
     int J = s2let_j_max(&parameters);
     int verbosity = parameters.verbosity = 0;
     ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
+
+    parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+    parameters.original_spin = 0;
 
     int i;
 
@@ -1033,7 +1038,7 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
 
     // Do both transforms
     s2let_transform_axisym_wav_analysis_mw(f_wav_axisym, f_scal_axisym, f, &parameters);
-    s2let_wav_analysis_mw(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+    s2let_wav_analysis_mw(f_wav_dir, f_scal_dir, f, &parameters);
 
     // Account for the different wavelet normalisations
     for (i = 0; i < (J-J_min+1)*L*(2*L-1); ++i)
