@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
@@ -13,7 +13,7 @@
  * Compute axisymmetric wavelet transform (analysis)
  * with output in pixel space. Format : HEALPIX maps.
  *
- * Usage: 
+ * Usage:
  *   [f_wav, f_scal] = ...
  *        s2let_transform_axisym_analysis_hpx_mex(f, nside, B, L, J_min);
  *
@@ -22,6 +22,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
   int i, nside, B, L, J_min, f_m, f_n;
+  s2let_parameters_t parameters = {};
   double *f_wav_real, *f_scal_real, *f_real;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
   int iin = 0, iout = 0;
@@ -46,8 +47,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse HEALPIX parameter nside
   iin = 1;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_hpx_mex:InvalidInput:healpixParameter",
           "HEALPIX parameter nside must be integer.");
@@ -57,14 +58,14 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_hpx_mex:InvalidInput:healpixParameter",
           "Healpix parameter nside must be positive integer greater than 2");
 
-  if( f_m*f_n != 12*nside*nside ) 
+  if( f_m*f_n != 12*nside*nside )
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_hpx_mex:InvalidInput:LbandLimit",
           "nside must correspond to the sampling scheme, i.e. f = 12*nside*nside samples.");
 
   // Parse wavelet parameter B
   iin = 2;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_hpx_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be integer.");
@@ -76,8 +77,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse harmonic band-limit L
   iin = 3;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_hpx_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
@@ -89,8 +90,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse first scale J_min
   iin = 4;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_hpx_mex:InvalidInput:Jmin",
           "First scale J_min must be integer.");
@@ -100,18 +101,21 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_hpx_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
 
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   // Compute ultimate scale J_max
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
 
   if( J_min > J+1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_hpx_mex:InvalidInput:Jmin",
           "First scale J_min must be larger than that!");
   }
 
-
   // Perform wavelet transform in harmonic space and then reconstruction.
-  s2let_transform_axisym_allocate_hpx_f_wav_real(&f_wav_r, &f_scal_r, nside, B, L, J_min);
-  s2let_transform_axisym_wav_analysis_hpx_real(f_wav_r, f_scal_r, f_r, nside, B, L, J_min);
+  s2let_transform_axisym_allocate_hpx_f_wav_real(&f_wav_r, &f_scal_r, nside, &parameters);
+  s2let_transform_axisym_wav_analysis_hpx_real(f_wav_r, f_scal_r, f_r, nside, &parameters);
 
   // Compute size of wavelet array
   int wavsize, scalsize;
@@ -136,6 +140,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
   free(f_r);
   free(f_wav_r);
   free(f_scal_r);
-  
+
 
 }
