@@ -44,7 +44,7 @@
 #include <ssht.h>
 #include <s2let.h>
 
-#define NREPEAT 10
+#define NREPEAT 20
 
 double get_max_error(complex double *expected, complex double *actual, int n);
 double ran2_dp(int idum);
@@ -63,6 +63,8 @@ int main(int argc, char **argv)
   
     double min_duration_inverse;
     double min_duration_forward;
+    double avg_duration_inverse;
+    double avg_duration_forward;
     double avg_error;
 
     // Parse command line arguments
@@ -87,7 +89,7 @@ int main(int argc, char **argv)
     
 
     // Output header row
-    printf("multires;spin;L;N;B;J_min;J;min_duration_inverse;min_duration_forward;avg_error\n");
+    printf("multires;spin;L;N;B;J_min;J;min_duration_inverse;min_duration_forward;avg_duration_inverse;avg_duration_forward;avg_error\n");
 
     // multires == 0 --> full resolution transform
     // multires == 1 --> multiresolution transform
@@ -117,6 +119,8 @@ int main(int argc, char **argv)
 
             min_duration_inverse = 0.0;
             min_duration_forward = 0.0;
+            avg_duration_inverse = 0.0;
+            avg_duration_forward = 0.0;
             avg_error = 0.0;
 	    int J = s2let_j_max(L, B);
 
@@ -138,6 +142,7 @@ int main(int argc, char **argv)
                 time_end = clock();
 
                 duration = (time_end - time_start) / (double)CLOCKS_PER_SEC;
+		avg_duration_inverse += duration / NREPEAT;
                 if (!i || duration < min_duration_inverse)
                     min_duration_inverse = duration;
 
@@ -149,13 +154,14 @@ int main(int argc, char **argv)
 		ssht_core_mw_forward_sov_conv_sym(flm_rec, f_rec, L, spin, dl_method, verbosity);
 
                 duration = (time_end - time_start) / (double)CLOCKS_PER_SEC;
+		avg_duration_forward += duration / NREPEAT;
                 if (!i || duration < min_duration_forward)
                     min_duration_forward = duration;
 
                 avg_error += get_max_error(flm, flm_rec, L*L)/NREPEAT;
             }
 
-            printf("%d;%d;%d;%d;%d;%d;%d;%f;%f;%e\n",
+            printf("%d;%d;%d;%d;%d;%d;%d;%f;%f;%f;%f;%e\n",
                    multires,
 		   spin, 
                    L,
@@ -165,6 +171,8 @@ int main(int argc, char **argv)
                    J,
                    min_duration_inverse,
                    min_duration_forward,
+                   avg_duration_inverse,
+                   avg_duration_forward,
                    avg_error);
 
             L *= 2;
