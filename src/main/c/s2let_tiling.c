@@ -47,8 +47,12 @@ void s2let_switch_wavtype(int typenum)
  * \param[in]  L Total band-limit.
  * \retval band-limit
  */
-int s2let_bandlimit(int j, int J_min, int B, int L)
+int s2let_bandlimit(int j, const s2let_parameters_t *parameters)
 {
+    int B = parameters->B;
+    int L = parameters->L;
+    // int J_min = parameters->J_min;
+
     int Jmax;
     switch (s2let_kernel)
     {
@@ -56,7 +60,7 @@ int s2let_bandlimit(int j, int J_min, int B, int L)
     case NEEDLET:
         return ceil(pow(B, j+1));
     case SPLINE:
-        Jmax = s2let_j_max(L, B);
+        Jmax = s2let_j_max(parameters);
         if (j == Jmax) return L;
         //if (j < J_min) return ceil(L / (double) pow(B, Jmax-J_min-1));
         return ceil(L / (double) pow(B, Jmax-j-2));
@@ -73,8 +77,11 @@ int s2let_bandlimit(int j, int J_min, int B, int L)
  * \param[in]  J_min First wavelet scale to be used.
  * \retval el_min
  */
-int s2let_el_min(int B, int J_min)
+int s2let_el_min(const s2let_parameters_t *parameters)
 {
+    int B = parameters->B;
+    int J_min = parameters->J_min;
+
     switch (s2let_kernel)
     {
     case S2DW:
@@ -95,8 +102,11 @@ int s2let_el_min(int B, int J_min)
  * \param[in]  B Wavelet parameter.
  * \retval j_max
  */
-int s2let_j_max(int L, int B)
+int s2let_j_max(const s2let_parameters_t *parameters)
 {
+  int B = parameters->B;
+  int L = parameters->L;
+
   return ceil(log(L) / log(B));
 }
 
@@ -109,73 +119,84 @@ int s2let_j_max(int L, int B)
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, int B, int L)
+void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, const s2let_parameters_t *parameters)
 {
-  int J = s2let_j_max(L, B);
-  *kappa = calloc((J+1) * L, sizeof **kappa);
-  *kappa0 = calloc(L, sizeof **kappa0);
+    int L = parameters->L;
+
+    int J = s2let_j_max(parameters);
+    *kappa = calloc((J+1) * L, sizeof **kappa);
+    *kappa0 = calloc(L, sizeof **kappa0);
 }
 
-void s2let_tiling_phi2_s2dw(double *phi2, int B, int L, int J_min)
+void s2let_tiling_phi2_s2dw(double *phi2, const s2let_parameters_t *parameters)
 {
-  int j, l;
-  int J = s2let_j_max(L, B);
-  int n = 300;
+    int L = parameters->L;
+    int B = parameters->B;
 
-  double kappanorm = s2let_math_kappa0_quadtrap_s2dw(1.0 / (double)B, 1.0, n, B);
-  for (j = 0; j <= J+1; j++){
-    for (l = 0; l < L; l++){
-      if (l < pow(B,j-1)) {
-        phi2[l+j*L] = 1;
-      } else if (l > pow(B,j)) {
-        phi2[l+j*L] = 0;
-      } else {
-	      phi2[l+j*L] = s2let_math_kappa0_quadtrap_s2dw((double)l / pow(B, j), 1.0, n, B) / kappanorm;
-      }
+    int j, l;
+    int J = s2let_j_max(parameters);
+    int n = 300;
+
+    double kappanorm = s2let_math_kappa0_quadtrap_s2dw(1.0 / (double)B, 1.0, n, B);
+    for (j = 0; j <= J+1; j++){
+        for (l = 0; l < L; l++){
+            if (l < pow(B,j-1)) {
+                phi2[l+j*L] = 1;
+            } else if (l > pow(B,j)) {
+                phi2[l+j*L] = 0;
+            } else {
+                phi2[l+j*L] = s2let_math_kappa0_quadtrap_s2dw((double)l / pow(B, j), 1.0, n, B) / kappanorm;
+            }
+        }
     }
-  }
 }
 
-void s2let_tiling_phi2_needlet(double *phi2, int B, int L, int J_min)
+void s2let_tiling_phi2_needlet(double *phi2, const s2let_parameters_t *parameters)
 {
-  int j, l;
-  int J = s2let_j_max(L, B);
-  int n = 300;
-  double u;
+    int L = parameters->L;
+    int B = parameters->B;
 
-  double kappanorm = s2let_math_kappa0_quadtrap_needlet(-1.0, 1.0, n);
-  for (j = 0; j <= J+1; j++){
-    for (l = 0; l < L; l++){
-      if (l < pow(B,j-1)) {
-	       phi2[l+j*L] = 1;
-      } else if (l > pow(B,j)) {
-	       phi2[l+j*L] = 0;
-      } else {
-	       u = 1.0 - 2.0 * B / (B - 1.0) * ( l * pow(B, -j) - 1.0 / B );
-	       phi2[l+j*L] = s2let_math_kappa0_quadtrap_needlet(-1.0, u, n) / kappanorm;
-      }
+    int j, l;
+    int J = s2let_j_max(parameters);
+    int n = 300;
+    double u;
+
+    double kappanorm = s2let_math_kappa0_quadtrap_needlet(-1.0, 1.0, n);
+    for (j = 0; j <= J+1; j++){
+        for (l = 0; l < L; l++){
+            if (l < pow(B,j-1)) {
+                phi2[l+j*L] = 1;
+            } else if (l > pow(B,j)) {
+                phi2[l+j*L] = 0;
+            } else {
+                u = 1.0 - 2.0 * B / (B - 1.0) * ( l * pow(B, -j) - 1.0 / B );
+                phi2[l+j*L] = s2let_math_kappa0_quadtrap_needlet(-1.0, u, n) / kappanorm;
+            }
+        }
     }
-  }
 }
 
-void s2let_tiling_phi2_spline(double *phi2, int B, int L, int J_min)
+void s2let_tiling_phi2_spline(double *phi2, const s2let_parameters_t *parameters)
 {
-  int j = 0, l;
-  int J = s2let_j_max(L, B);
-  phi2[(J+1-j)*L] = 1.0;
-  for (l = 1; l < L; l++){
-      phi2[l+(J+1-j)*L] = 1.0;
-    }
-  for (j = 1; j <= J+1; j++){
-    double bl = (double) L / (double) pow(B, j-2);
+    int L = parameters->L;
+    int B = parameters->B;
+
+    int j = 0, l;
+    int J = s2let_j_max(parameters);
     phi2[(J+1-j)*L] = 1.0;
     for (l = 1; l < L; l++){
-        if (l > bl)
-          phi2[l+(J+1-j)*L] = 0.0;
-        else
-          phi2[l+(J+1-j)*L] = s2let_math_spline_scalingfct((double) l, bl);
-      }
-  }
+        phi2[l+(J+1-j)*L] = 1.0;
+    }
+    for (j = 1; j <= J+1; j++){
+        double bl = (double) L / (double) pow(B, j-2);
+        phi2[(J+1-j)*L] = 1.0;
+        for (l = 1; l < L; l++){
+            if (l > bl)
+                phi2[l+(J+1-j)*L] = 0.0;
+            else
+                phi2[l+(J+1-j)*L] = s2let_math_spline_scalingfct((double) l, bl);
+        }
+    }
 }
 
 /*!
@@ -188,38 +209,41 @@ void s2let_tiling_phi2_spline(double *phi2, int B, int L, int J_min)
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_tiling_axisym(double *kappa, double *kappa0, int B, int L, int J_min)
+void s2let_tiling_axisym(double *kappa, double *kappa0, const s2let_parameters_t *parameters)
 {
-  int j, l;
-  int J = s2let_j_max(L, B);
+    int L = parameters->L;
+    int J_min = parameters->J_min;
 
-  double previoustemp = 0.0, temp;
-  double *phi2 = (double*)calloc((J+2) * L, sizeof(double));
+    int j, l;
+    int J = s2let_j_max(parameters);
 
-  if(s2let_kernel == SPLINE)
-    s2let_tiling_phi2_spline(phi2, B, L, J_min); // SPLINE tiling
-  if(s2let_kernel == S2DW)
-    s2let_tiling_phi2_s2dw(phi2, B, L, J_min); // S2DW tiling
-  if(s2let_kernel == NEEDLET)
-    s2let_tiling_phi2_needlet(phi2, B, L, J_min); // Needlet tiling
+    double previoustemp = 0.0, temp;
+    double *phi2 = (double*)calloc((J+2) * L, sizeof(double));
 
-  for (l = 0; l < L; l++)
-      kappa0[l] = sqrt(phi2[l+J_min*L]);
+    if(s2let_kernel == SPLINE)
+        s2let_tiling_phi2_spline(phi2, parameters); // SPLINE tiling
+    if(s2let_kernel == S2DW)
+        s2let_tiling_phi2_s2dw(phi2, parameters); // S2DW tiling
+    if(s2let_kernel == NEEDLET)
+        s2let_tiling_phi2_needlet(phi2, parameters); // Needlet tiling
 
-  for (j = J_min; j <= J; j++){
-    for (l = 0; l < L; l++){
-      temp = sqrt(phi2[l+(j+1)*L] - phi2[l+j*L]);
-      if( isnan(temp) || isinf(temp) )
-        kappa[l+j*L] = previoustemp;
-      else
-        kappa[l+j*L] = temp;
-      previoustemp = temp;
-    }
     for (l = 0; l < L; l++)
-      if( !finite(kappa[l+j*L]) )
-        kappa[l+j*L] = kappa[l+j*L-1];
-  }
-  free(phi2);
+        kappa0[l] = sqrt(phi2[l+J_min*L]);
+
+    for (j = J_min; j <= J; j++){
+        for (l = 0; l < L; l++){
+            temp = sqrt(phi2[l+(j+1)*L] - phi2[l+j*L]);
+            if( isnan(temp) || isinf(temp) )
+                kappa[l+j*L] = previoustemp;
+            else
+                kappa[l+j*L] = temp;
+            previoustemp = temp;
+        }
+        for (l = 0; l < L; l++)
+            if( !finite(kappa[l+j*L]) )
+                kappa[l+j*L] = kappa[l+j*L-1];
+    }
+    free(phi2);
 }
 
 /*!
@@ -232,8 +256,9 @@ void s2let_tiling_axisym(double *kappa, double *kappa0, int B, int L, int J_min)
  * \param[in]  N Azimuthal band-limit.
  * \retval none
  */
-void s2let_tiling_direction_allocate(complex double **s_elm, int L, int N)
+void s2let_tiling_direction_allocate(complex double **s_elm, const s2let_parameters_t *parameters)
 {
+  int L = parameters->L;
   // TODO: This could be reduced by not storing s_elm with |m| >= N
   *s_elm = calloc(L*L, sizeof **s_elm);
 }
@@ -250,8 +275,11 @@ void s2let_tiling_direction_allocate(complex double **s_elm, int L, int N)
  * \param[in]  N Azimuthal band-limit.
  *
  */
-void s2let_tiling_direction(complex double *s_elm, int L, int N)
+void s2let_tiling_direction(complex double *s_elm, const s2let_parameters_t *parameters)
 {
+    int L = parameters->L;
+    int N = parameters->N;
+
     // TODO: Add spin parameter to avoid computation of el < |s|
     complex double nu;
     int el, m, ind;
@@ -299,12 +327,14 @@ void s2let_tiling_direction(complex double *s_elm, int L, int N)
  * \param[in]  N Azimuthal band-limit.
  * \retval none
  */
-void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, int B, int L, int N)
+void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, const s2let_parameters_t *parameters)
 {
-  // TODO: This could be reduced by not storing psi_j_elm with |m| >= N
-  int J = s2let_j_max(L, B);
-  *psi = calloc((J+1) * L*L, sizeof **psi);
-  *phi = calloc(L, sizeof **phi);
+    int L = parameters->L;
+
+    // TODO: This could be reduced by not storing psi_j_elm with |m| >= N
+    int J = s2let_j_max(parameters);
+    *psi = calloc((J+1) * L*L, sizeof **psi);
+    *phi = calloc(L, sizeof **phi);
 }
 
 /*!
@@ -350,24 +380,21 @@ static double s2let_spin_lowered_normalization(int el, int spin)
  *                           were lowered from. Otherwise, it is ignored.
  *
  */
-void s2let_tiling_wavelet(
-    complex double *psi,
-    double *phi,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin,
-    s2let_wav_norm_t normalization,
-    int original_spin
-) {
+void s2let_tiling_wavelet(complex double *psi, double *phi, const s2let_parameters_t *parameters) {
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int spin = parameters->spin;
+    s2let_wav_norm_t normalization = parameters->normalization;
+    int original_spin = parameters->original_spin;
+
+
     // TODO: Add spin parameter to avoid computation of el < |s|
     // TODO: Correctly compute spin scaling functions
     double *kappa;
     double *kappa0;
     complex double *s_elm;
     int j, el, m, el_min;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(parameters);
 
     // Effectively ignore original_spin if we don't use spin-lowered
     // wavelets.
@@ -377,10 +404,10 @@ void s2let_tiling_wavelet(
     // TODO: Allocate kappa0 directly inside phi. For this, we should probably
     //       separate the allocation functions to do only one allocation per
     //       function.
-    s2let_tiling_axisym_allocate(&kappa, &kappa0, B, L);
-    s2let_tiling_axisym(kappa, kappa0, B, L, J_min);
-    s2let_tiling_direction_allocate(&s_elm, L, N);
-    s2let_tiling_direction(s_elm, L, N);
+    s2let_tiling_axisym_allocate(&kappa, &kappa0, parameters);
+    s2let_tiling_axisym(kappa, kappa0, parameters);
+    s2let_tiling_direction_allocate(&s_elm, parameters);
+    s2let_tiling_direction(s_elm, parameters);
 
     el_min = MAX(ABS(spin), ABS(original_spin));
 
@@ -422,10 +449,12 @@ void s2let_tiling_wavelet(
  * \param[in]  J_min First wavelet scale to be used.
  * \retval Achieved accuracy (should be lower than e-14).
  */
-double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, int B, int L, int J_min)
+double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, const s2let_parameters_t *parameters)
 {
+    int L = parameters->L;
+
     int l, j;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(parameters);
     //int l_min = s2let_el_min(B, J_min);
     double error = 0;
 
@@ -457,8 +486,10 @@ double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, int B, 
  * \param[in]  N Azimuthal band-limit.
  * \retval Achieved accuracy (should be lower than e-14).
  */
-double s2let_tiling_direction_check_identity(complex double *s_elm, int L, int N)
+double s2let_tiling_direction_check_identity(complex double *s_elm, const s2let_parameters_t *parameters)
 {
+    int L = parameters->L;
+
     int el, m, ind;
     double error = 0.0; // maximum error for all el
 
@@ -493,10 +524,13 @@ double s2let_tiling_direction_check_identity(complex double *s_elm, int L, int N
  * \param[in]  spin Spin number.
  * \retval Achieved accuracy (should be lower than e-14).
  */
-double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, int B, int L, int J_min, int N, int spin)
+double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, const s2let_parameters_t *parameters)
 {
+    int L = parameters->L;
+    int spin = parameters->spin;
+
     int j, el, m, ind;
-    int J = s2let_j_max(L, B);
+    int J = s2let_j_max(parameters);
     double error = 0.0; // maximum error for all el
 
     double *ident;

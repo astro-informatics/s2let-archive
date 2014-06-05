@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #ifndef S2LET_AXISYM_HPX
@@ -16,7 +16,7 @@
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_allocate_hpx_f_wav_real(double **f_wav, double **f_scal, int nside, int B, int L, int J_min);
+void s2let_transform_axisym_allocate_hpx_f_wav_real(double **f_wav, double **f_scal, int nside, const s2let_parameters_t *parameters);
 
 /*!
  * Perform wavelet transform in real space (from scratch, gives wavelet maps).
@@ -34,7 +34,7 @@ void s2let_transform_axisym_allocate_hpx_f_wav_real(double **f_wav, double **f_s
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_wav_analysis_hpx_real(double *f_wav, double *f_scal, const double *f, int nside, int B, int L, int J_min);
+void s2let_transform_axisym_wav_analysis_hpx_real(double *f_wav, double *f_scal, const double *f, int nside, const s2let_parameters_t *parameters);
 
 /*!
  * Perform wavelet transform in real space (from scratch, gives wavelet maps).
@@ -52,6 +52,6 @@ void s2let_transform_axisym_wav_analysis_hpx_real(double *f_wav, double *f_scal,
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_transform_axisym_wav_synthesis_hpx_real(double *f, const double *f_wav, const double *f_scal, int nside, int B, int L, int J_min);
+void s2let_transform_axisym_wav_synthesis_hpx_real(double *f, const double *f_wav, const double *f_scal, int nside, const s2let_parameters_t *parameters);
 
 #endif

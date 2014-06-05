@@ -12,19 +12,13 @@
 void s2let_allocate_f_wav_lmn(
     complex double **f_wav_lmn,
     complex double **f_scal_lm,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 void s2let_allocate_f_wav_lmn_multires(
     complex double **f_wav_lmn,
     complex double **f_scal_lm,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 /** Harmonic-space wavelet transform **/
@@ -35,11 +29,7 @@ void s2let_wav_analysis_harmonic(
     const complex double *flm,
     const complex double *wav_lm,
     const double *scal_l,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin
+    const s2let_parameters_t *parameters
 );
 
 void s2let_wav_synthesis_harmonic(
@@ -48,11 +38,7 @@ void s2let_wav_synthesis_harmonic(
     const complex double *f_scal_lm,
     const complex double *wav_lm,
     const double *scal_l,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin
+    const s2let_parameters_t *parameters
 );
 
 /** Multi-resolution harmonic-space wavelet transform **/
@@ -63,11 +49,7 @@ void s2let_wav_analysis_harmonic_multires(
     const complex double *flm,
     const complex double *wav_lm,
     const double *scal_l,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin
+    const s2let_parameters_t *parameters
 );
 
 void s2let_wav_synthesis_harmonic_multires(
@@ -76,11 +58,7 @@ void s2let_wav_synthesis_harmonic_multires(
     const complex double *f_scal_lm,
     const complex double *wav_lm,
     const double *scal_l,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin
+    const s2let_parameters_t *parameters
 );
 
 #endif

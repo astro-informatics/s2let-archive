@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
@@ -11,7 +11,7 @@
  * Compute axisymmetric wavelet transform (synthesis_hpx)
  * with output in pixel space. Format : HEALPIX maps.
  *
- * Usage: 
+ * Usage:
  *   f = ...
  *        s2let_transform_axisym_synthesis_hpx_mex(f_wav, f_scal, nside, B, L, J_min);
  *
@@ -20,6 +20,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
   int n, i, j, nside, B, L, J_min, f_m, f_n;
+  s2let_parameters_t parameters = {};
   double *f_wav_real, *f_scal_real, *f_real;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
   int iin = 0, iout = 0;
@@ -43,7 +44,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   f_wav_r = (double*)malloc( f_m*f_n * sizeof(double));
   for(j=0; j<f_m*f_n; j++)
     f_wav_r[ j ] = f_wav_real[ j ];
- 
+
   // Parse input scaling function f_scal
   iin = 1;
   f_m = mxGetM(prhs[iin]);
@@ -55,8 +56,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse HEALPIX parameter nside
   iin = 2;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_axisym_analysis_mex:InvalidInput:healpixParameter",
           "HEALPIX parameter nside must be integer.");
@@ -68,8 +69,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse wavelet parameter B
   iin = 3;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_hpx_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be integer.");
@@ -81,8 +82,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse harmonic band-limit L
   iin = 4;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_hpx_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
@@ -91,11 +92,11 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if (mxGetScalar(prhs[iin]) > (double)L || L <= 0)
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_hpx_mex:InvalidInput:bandLimitNonInt",
           "Harmonic band-limit L must be positive integer.");
- 
+
   // Parse first scale J_min
   iin = 5;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_hpx_mex:InvalidInput:Jmin",
           "First scale J_min must be integer.");
@@ -105,8 +106,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_hpx_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
 
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   // Compute ultimate scale J_max
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
 
   if( J_min > J+1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_hpx_mex:InvalidInput:Jmin",
@@ -116,8 +121,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Perform wavelet transform in harmonic space and then reconstruction.
   s2let_hpx_allocate_real(&f_r, nside);
-  s2let_transform_axisym_wav_synthesis_hpx_real(f_r, f_wav_r, f_scal_r, nside, B, L, J_min);
-   
+  s2let_transform_axisym_wav_synthesis_hpx_real(f_r, f_wav_r, f_scal_r, nside, &parameters);
+
 
   // Output function f
   iout = 0;

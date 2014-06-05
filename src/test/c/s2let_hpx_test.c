@@ -1,16 +1,16 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
 #include <assert.h>
-#include <complex.h> 
+#include <complex.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include <fftw3.h> 
+#include <fftw3.h>
 #include <ssht.h>
 
 void s2let_hpx_spinalm_test(int nside, int spin, int L, int seed)
@@ -40,7 +40,7 @@ void s2let_hpx_spinalm_test(int nside, int spin, int L, int seed)
 
   // Construct the corresponding real signal on a healpix map
   s2let_hpx_alm2map_spin_real(fQ, fU, flmE, flmU, nside, L, spin);
-  
+
   s2let_hpx_map2alm_spin_real(flmE_rec, flmU_rec, fQ, fU, nside, L, spin);
 
   s2let_hpx_alm2map_spin_real(fQ_rec, fU_rec, flmE_rec, flmU_rec, nside, L, spin);
@@ -60,17 +60,17 @@ void s2let_hpx_spinalm_test(int nside, int spin, int L, int seed)
     */
 
   // Compute the maximum absolute error on the harmonic coefficients
-  printf("  - Maximum abs error on Q alm : %6.5e\n", 
+  printf("  - Maximum abs error on Q alm : %6.5e\n",
    maxerr_cplx(flmE, flmE_rec, L*L));
-  printf("  - Maximum abs error on U alm : %6.5e\n", 
+  printf("  - Maximum abs error on U alm : %6.5e\n",
    maxerr_cplx(flmU, flmU_rec, L*L));
   /*
-  printf("  - Maximum abs error on Q map  : %6.5e\n", 
+  printf("  - Maximum abs error on Q map  : %6.5e\n",
    maxerr(fQ, fQ_rec, 12*nside*nside));
-  printf("  - Maximum abs error on U map : %6.5e\n", 
+  printf("  - Maximum abs error on U map : %6.5e\n",
    maxerr(fU, fU_rec, 12*nside*nside));
    */
-  
+
   free(fQ);
   free(fU);
   free(fQ_rec);
@@ -123,7 +123,7 @@ void s2let_transform_axisym_hpx_test(double *accuracy, double *timing, int nside
 
   // Compute the maximum absolute error on the harmonic coefficients
   //printf("  - Maximum abs error  : %6.5e\n", accuracy);
-	
+
   free(f);
   free(f_rec);
   free(flm);
@@ -142,6 +142,11 @@ void s2let_transform_axisym_hpx_test(double *accuracy, double *timing, int nside
  */
 void s2let_transform_axisym_hpx_wav_test(double *accuracy, double *timing, int nside, int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
 
   double *f, *f_rec;
@@ -159,13 +164,13 @@ void s2let_transform_axisym_hpx_wav_test(double *accuracy, double *timing, int n
 
   // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
   double *f_wav, *f_scal;
-  s2let_transform_axisym_allocate_hpx_f_wav_real(&f_wav, &f_scal, nside, B, L, J_min);
+  s2let_transform_axisym_allocate_hpx_f_wav_real(&f_wav, &f_scal, nside, &parameters);
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (Healpix sampling)
   fflush(NULL);time_start = clock();
   s2let_transform_axisym_wav_analysis_hpx_real(f_wav, f_scal, f, nside, B, L, J_min);
   time_end = clock();fflush(NULL);
-  //printf("  - Wavelet analysis   : %4.4f seconds\n", 
+  //printf("  - Wavelet analysis   : %4.4f seconds\n",
 	// (time_end - time_start) / (double)CLOCKS_PER_SEC);
   *timing = (time_end - time_start) / 2 / (double)CLOCKS_PER_SEC ;
 
@@ -173,7 +178,7 @@ void s2let_transform_axisym_hpx_wav_test(double *accuracy, double *timing, int n
   time_start = clock();
   s2let_transform_axisym_wav_synthesis_hpx_real(f_rec, f_wav, f_scal, nside, B, L, J_min);
   time_end = clock();
-  //printf("  - Wavelet synthesis  : %4.4f seconds\n", 
+  //printf("  - Wavelet synthesis  : %4.4f seconds\n",
 	// (time_end - time_start) / (double)CLOCKS_PER_SEC);
   *timing += (time_end - time_start) / 2 / (double)CLOCKS_PER_SEC ;
 
@@ -181,11 +186,11 @@ void s2let_transform_axisym_hpx_wav_test(double *accuracy, double *timing, int n
   s2let_hpx_map2alm_real(flm_rec, f_rec, nside, L);
 
   // Compute the maximum absolute error on the harmonic coefficients
-  // printf("  - Maximum abs error  : %6.5e\n", 
+  // printf("  - Maximum abs error  : %6.5e\n",
 	// maxerr_cplx(flm, flm_rec, L*L));
 
   *accuracy = maxerr_cplx(flm, flm_rec, L*L);
-	
+
   free(f);
   free(f_rec);
   free(f_wav);
@@ -229,13 +234,13 @@ void s2let_hpx_io_test(int nside, int L, int seed)
   // Clean
   remove(file);
 
-  // Get the harmonic coefficients back 
+  // Get the harmonic coefficients back
   s2let_hpx_map2alm_real(flm_rec, f, nside, L);
 
   // Compute the maximum absolute error on the harmonic coefficients
-  printf("  - Maximum abs error  : %6.5e\n", 
+  printf("  - Maximum abs error  : %6.5e\n",
 	 maxerr_cplx(flm, flm_rec, L*L));
-	
+
   free(f);
   free(f_rec);
   free(flm);
@@ -264,7 +269,7 @@ void s2let_mw_io_test(int L, int seed)
   // Generate random harmonic coefficients
   s2let_lm_random_flm_real(flm, L, seed);
 
-  // Construct the corresponding real signal, on MW sampling 
+  // Construct the corresponding real signal, on MW sampling
   ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
 
   char file[100] = "temp.fits";
@@ -284,13 +289,13 @@ void s2let_mw_io_test(int L, int seed)
   // Clean
   remove(file);
 
-  // Get the harmonic coefficients back 
+  // Get the harmonic coefficients back
   ssht_core_mw_forward_sov_conv_sym_real(flm_rec, f_rec, L, dl_method, verbosity);
 
   // Compute the maximum absolute error on the harmonic coefficients
-  printf("  - Maximum abs error  : %6.5e\n", 
+  printf("  - Maximum abs error  : %6.5e\n",
 	 maxerr_cplx(flm, flm_rec, L*L));
-	
+
   free(f);
   free(f_rec);
   free(flm);
@@ -321,9 +326,9 @@ void s2let_mw_io_spin_test(int L, int seed)
   // Generate random harmonic coefficients
   s2let_lm_random_flm_real(flmQ, L, seed);
   s2let_lm_random_flm_real(flmU, L, seed);
-  // Construct the corresponding real signal, on MW sampling 
+  // Construct the corresponding real signal, on MW sampling
   ssht_core_mw_inverse_sov_sym_real(fQ, flmQ, L, dl_method, verbosity);
-  // Construct the corresponding real signal, on MW sampling 
+  // Construct the corresponding real signal, on MW sampling
   ssht_core_mw_inverse_sov_sym_real(fU, flmU, L, dl_method, verbosity);
 
   char file[100] = "temp.fits";
@@ -345,11 +350,11 @@ void s2let_mw_io_spin_test(int L, int seed)
   ssht_core_mw_forward_sov_conv_sym_real(flm_recU, fU_rec, L, dl_method, verbosity);
 
   // Compute the maximum absolute error on the harmonic coefficients
-  printf("  - Maximum abs error  : %6.5e\n", 
+  printf("  - Maximum abs error  : %6.5e\n",
    maxerr_cplx(flmQ, flm_recQ, L*L));
-  printf("  - Maximum abs error  : %6.5e\n", 
+  printf("  - Maximum abs error  : %6.5e\n",
    maxerr_cplx(flmU, flm_recU, L*L));
-  
+
   free(flmQ);
   free(flmU);
   free(flm_recQ);
@@ -360,9 +365,9 @@ void s2let_mw_io_spin_test(int L, int seed)
   free(fU_rec);
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-	
+
   int L = 64, spin = 2;
   const int B = 2;
   const int J_min = 0;
@@ -403,10 +408,10 @@ int main(int argc, char *argv[])
          printf("I couldn't open s2let_hpx.txt for writing.\n");
          exit(0);
       }
-  
+
 
   for (n=i_nmin; n<=i_nmax; n++){
-  for (l=-1; l<=2; l++){  
+  for (l=-1; l<=2; l++){
     nside = pow(2, n);
     L = pow(2,n+l);
     if (l == 2) L = 3*nside;
@@ -423,7 +428,7 @@ int main(int argc, char *argv[])
       //fprintf(file1, " %i %i %6.3e %6.3e \n", nside, L, accuracy_tot,timing_tot);
 
     }
-  } 
+  }
   //close(file1);
 
   printf("==========================================================\n");
@@ -446,14 +451,14 @@ int main(int argc, char *argv[])
       }
 
   printf("> Testing real axisymmetric wavelets in pixel space...\n");
-  
+
    printf("NbrScale = %i\n",J);
   for (n=i_nmin; n<=i_nmax; n++){
 
     if (n > 9) NREPEAT = 4;
     nside = pow(2, n);
     i_lmin = n-2;
-    i_lmax = n+1; 
+    i_lmax = n+1;
     for (l=i_lmin; l<=i_lmax; l++){
       L = pow(2,l);
 
@@ -482,7 +487,7 @@ int main(int argc, char *argv[])
       fprintf(file2, " %i %i %6.3e %6.3e \n", nside, L, accuracy_tot,timing_tot);
 
     }
-  } 
+  }
 
   close(file1);
   close(file2);
@@ -491,5 +496,5 @@ int main(int argc, char *argv[])
 
 
   printf("==========================================================\n");
-  return 0;		
+  return 0;
 }

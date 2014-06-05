@@ -19,6 +19,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 {
 
   int B, L, J_min, spin, N, normalization, original_spin;
+  s2let_parameters_t parameters = {};
   int iin = 0, iout = 0;
 
   // Check number of arguments
@@ -118,8 +119,16 @@ void mexFunction( int nlhs, mxArray *plhs[],
   original_spin = (int)mxGetScalar(prhs[iin]);
 
 
+  parameters.L = L;
+  parameters.B = B;
+  parameters.J_min = J_min;
+  parameters.N = N;
+  parameters.spin = spin;
+  parameters.normalization = normalization;
+  parameters.original_spin = original_spin;
+
   // Compute ultimate scale J_max
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
 
   if( J_min > J+1 ) {
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:Jmin",
@@ -129,10 +138,10 @@ void mexFunction( int nlhs, mxArray *plhs[],
   // Allocate arrays
   complex double *psi_lm;
   double *phi_l;
-  s2let_tiling_wavelet_allocate(&psi_lm, &phi_l, B, L, N);
+  s2let_tiling_wavelet_allocate(&psi_lm, &phi_l, &parameters);
 
   // Run S2LET function
-  s2let_tiling_wavelet(psi_lm, phi_l, B, L, J_min, N, spin, normalization, original_spin);
+  s2let_tiling_wavelet(psi_lm, phi_l, &parameters);
 
   // Output psi_lm and phi_l
   double *psi_lm_out_real, *psi_lm_out_imag, *phi_l_out;

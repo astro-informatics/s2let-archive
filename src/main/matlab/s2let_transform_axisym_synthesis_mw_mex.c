@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
@@ -11,7 +11,7 @@
  * Compute axisymmetric wavelet transform (synthesis)
  * with output in pixel space.
  *
- * Usage: 
+ * Usage:
  *   f = ...
  *        s2let_transform_axisym_synthesis_mw_mex(f_wav, f_scal, B, L, J_min, reality, downsample);
  *
@@ -19,7 +19,8 @@
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
-  int n, i, j, B, L, J_min, f_m, f_n, reality, downsample;
+  int i, j, B, L, J_min, f_m, f_n, reality, downsample;
+  s2let_parameters_t parameters = {};
   double *f_wav_real, *f_scal_real, *f_real, *f_wav_imag, *f_scal_imag, *f_imag;
   complex double *f_wav = NULL, *f_scal = NULL, *f = NULL;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
@@ -62,7 +63,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     f_wav_imag = mxGetPi(prhs[iin]);
     f_wav = (complex double*)malloc( f_m*f_n * sizeof(complex double));
     for(j=0; j<f_n*f_m; j++)
-      f_wav[ j ] = f_wav_real[ j ] 
+      f_wav[ j ] = f_wav_real[ j ]
           + I * f_wav_imag[ j ] ;
   }
 
@@ -79,13 +80,13 @@ void mexFunction( int nlhs, mxArray *plhs[],
     f_scal_imag = mxGetPi(prhs[iin]);
     f_scal = (complex double*)malloc( f_m*f_n * sizeof(complex double));
     for (i=0; i<f_m*f_n; i++)
-      f_scal[i] = f_scal_real[i] + I * f_scal_imag[i]; 
+      f_scal[i] = f_scal_real[i] + I * f_scal_imag[i];
   }
 
   // Parse wavelet parameter B
   iin = 2;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be integer.");
@@ -97,8 +98,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse harmonic band-limit L
   iin = 3;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
@@ -108,11 +109,11 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if (mxGetScalar(prhs[iin]) > (double)L || L <= 0)
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:bandLimitNonInt",
           "Harmonic band-limit L must be positive integer.");
- 
+
   // Parse first scale J_min
   iin = 4;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:Jmin",
           "First scale J_min must be integer.");
@@ -122,8 +123,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
 
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   // Compute ultimate scale J_max
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
 
   if( J_min > J+1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:Jmin",
@@ -135,22 +140,22 @@ void mexFunction( int nlhs, mxArray *plhs[],
     // Multiresolution algorithm
     if(reality){
       s2let_mw_allocate_real(&f_r, L);
-      s2let_transform_axisym_wav_synthesis_mw_multires_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
+      s2let_transform_axisym_wav_synthesis_mw_multires_real(f_r, f_wav_r, f_scal_r, &parameters);
     }else{
       s2let_mw_allocate(&f, L);
-      s2let_transform_axisym_wav_synthesis_mw_multires(f, f_wav, f_scal, B, L, J_min); 
+      s2let_transform_axisym_wav_synthesis_mw_multires(f, f_wav, f_scal, &parameters);
     }
   }else{
     // Full resolution algorithm
     if(reality){
       s2let_mw_allocate_real(&f_r, L);
-      s2let_transform_axisym_wav_synthesis_mw_real(f_r, f_wav_r, f_scal_r, B, L, J_min);
+      s2let_transform_axisym_wav_synthesis_mw_real(f_r, f_wav_r, f_scal_r, &parameters);
     }else{
       s2let_mw_allocate(&f, L);
-      s2let_transform_axisym_wav_synthesis_mw(f, f_wav, f_scal, B, L, J_min); 
+      s2let_transform_axisym_wav_synthesis_mw(f, f_wav, f_scal, &parameters);
     }
   }
-  
+
 
   // Output function f
   if(reality){

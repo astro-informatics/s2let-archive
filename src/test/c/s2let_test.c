@@ -20,17 +20,22 @@
  */
 void s2let_tiling_axisym_test(int B, int L, int J_min)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   double *kappa, *kappa0;
 
   // Allocate the kernels corresponding to the parameters B, L
-  s2let_tiling_axisym_allocate(&kappa, &kappa0, B, L);
+  s2let_tiling_axisym_allocate(&kappa, &kappa0, &parameters);
 
   // Construct the tiling of harmonic space
-  s2let_tiling_axisym(kappa, kappa0, B, L, J_min);
+  s2let_tiling_axisym(kappa, kappa0, &parameters);
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
-  double res = s2let_tiling_axisym_check_identity(kappa, kappa0, B, L, J_min);
+  double res = s2let_tiling_axisym_check_identity(kappa, kappa0, &parameters);
   printf("  - Maximum error : %6.5e\n", res);
 
   free(kappa);
@@ -47,18 +52,22 @@ void s2let_tiling_axisym_test(int B, int L, int J_min)
  */
 void s2let_tiling_direction_test(int L, int N)
 {
+  s2let_parameters_t parameters = {};
+  parameters.L = L;
+  parameters.N = N;
+
   complex double *s_elm;
   double error;
 
   // Allocate space for the harmonic coefficients
-  s2let_tiling_direction_allocate(&s_elm, L, N);
+  s2let_tiling_direction_allocate(&s_elm, &parameters);
 
   // Construct the harmonic coefficients
-  s2let_tiling_direction(s_elm, L, N);
+  s2let_tiling_direction(s_elm, &parameters);
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
-  error = s2let_tiling_direction_check_identity(s_elm, L, N);
+  error = s2let_tiling_direction_check_identity(s_elm, &parameters);
   printf("  - Maximum error : %6.5e\n", error);
 
   free(s_elm);
@@ -77,19 +86,28 @@ void s2let_tiling_direction_test(int L, int N)
  */
 void s2let_tiling_wavelet_test(int B, int L, int J_min, int N, int spin)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+  parameters.N = N;
+  parameters.spin = spin;
+  parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+  parameters.original_spin = 0;
+
   complex double *phi;
   double *psi;
   double error;
 
   // Allocate space for the harmonic coefficients
-  s2let_tiling_wavelet_allocate(&phi, &psi, B, L, N);
+  s2let_tiling_wavelet_allocate(&phi, &psi, &parameters);
 
   // Construct the harmonic coefficients
-  s2let_tiling_wavelet(phi, psi, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+  s2let_tiling_wavelet(phi, psi, &parameters);
 
   // Check that they recover the identity relation,
   // ensuring exactness of the wavelet transform.
-  error = s2let_tiling_wavelet_check_identity(phi, psi, B, L, J_min, N, spin);
+  error = s2let_tiling_wavelet_check_identity(phi, psi, &parameters);
   printf("  - Maximum error : %6.5e\n", error);
 
   free(phi);
@@ -151,15 +169,20 @@ void s2let_binomial_coefficient_test(int n_max)
  */
 void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   double *wav_lm, *scal_lm;
 
   // Allocate the wavelet kernels
-  s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
+  s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -172,18 +195,18 @@ void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
   s2let_lm_random_flm(flm, L, 0, seed);
 
   // Allocate space for the wavelet scales (their harmonic coefficients)
-  s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
-  s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial harmonic coefficients from those of the wavelets
   time_start = clock();
-  s2let_transform_axisym_lm_wav_synthesis(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav_synthesis(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -211,15 +234,20 @@ void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
  */
 void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   double *wav_lm, *scal_lm;
 
   // Allocate the wavelet kernels
-  s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
+  s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -232,18 +260,18 @@ void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int se
   s2let_lm_random_flm(flm, L, 0, seed);
 
   // Allocate space for the wavelet scales (their harmonic coefficients)
-  s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
-  s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial harmonic coefficients from those of the wavelets
   time_start = clock();
-  s2let_transform_axisym_lm_wav_synthesis_multires(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_wav_synthesis_multires(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -274,16 +302,25 @@ void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int se
  */
 void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+  parameters.N = N;
+  parameters.spin = spin;
+  parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+  parameters.original_spin = 0;
+
   clock_t time_start, time_end;
   complex double *psi;
   double *phi;
 
   // Allocate the wavelet kernels
-  s2let_tiling_wavelet_allocate(&psi, &phi, B, L, N);
+  s2let_tiling_wavelet_allocate(&psi, &phi, &parameters);
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_tiling_wavelet(psi, phi, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+  s2let_tiling_wavelet(psi, phi, &parameters);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -296,18 +333,18 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
   s2let_lm_random_flm(flm, L, spin, seed);
 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
-  s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
+  s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
-  s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, psi, phi, B, L, J_min, N, spin);
+  s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, psi, phi, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial harmonic coefficients from those of the wavelets
   time_start = clock();
-  s2let_wav_synthesis_harmonic(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, B, L, J_min, N, spin);
+  s2let_wav_synthesis_harmonic(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -338,16 +375,25 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
  */
 void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, int spin, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+  parameters.N = N;
+  parameters.spin = spin;
+  parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+  parameters.original_spin = 0;
+
   clock_t time_start, time_end;
   complex double *psi;
   double *phi;
 
   // Allocate the wavelet kernels
-  s2let_tiling_wavelet_allocate(&psi, &phi, B, L, N);
+  s2let_tiling_wavelet_allocate(&psi, &phi, &parameters);
 
   // Compute the wavelet kernels
   time_start = clock();
-  s2let_tiling_wavelet(psi, phi, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+  s2let_tiling_wavelet(psi, phi, &parameters);
   time_end = clock();
   printf("  - Generate wavelets  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -360,18 +406,18 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
   s2let_lm_random_flm(flm, L, spin, seed);
 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
-  s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
+  s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
-  s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, psi, phi, B, L, J_min, N, spin);
+  s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, psi, phi, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial harmonic coefficients from those of the wavelets
   time_start = clock();
-  s2let_wav_synthesis_harmonic_multires(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, B, L, J_min, N, spin);
+  s2let_wav_synthesis_harmonic_multires(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -400,6 +446,11 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
  */
 void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   int spin = 0;
   int verbosity = 0;
@@ -420,18 +471,18 @@ void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
 
   // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
   complex double *f_wav, *f_scal;
-  s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, B, L, J_min);
+  s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
   time_start = clock();
-  s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min);
+  s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial signal from the wavelet maps from scratch
   time_start = clock();
-  s2let_transform_axisym_wav_synthesis_mw(f_rec, f_wav, f_scal, B, L, J_min);
+  s2let_transform_axisym_wav_synthesis_mw(f_rec, f_wav, f_scal, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -460,6 +511,11 @@ void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
  */
 void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   int verbosity = 0;
   ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -480,18 +536,18 @@ void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
 
   // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
   double *f_wav, *f_scal;
-  s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav, &f_scal, B, L, J_min);
+  s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
   time_start = clock();
-  s2let_transform_axisym_wav_analysis_mw_real(f_wav, f_scal, f, B, L, J_min);
+  s2let_transform_axisym_wav_analysis_mw_real(f_wav, f_scal, f, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial signal from the wavelet maps from scratch
   time_start = clock();
-  s2let_transform_axisym_wav_synthesis_mw_real(f_rec, f_wav, f_scal, B, L, J_min);
+  s2let_transform_axisym_wav_synthesis_mw_real(f_rec, f_wav, f_scal, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -521,6 +577,11 @@ void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
  */
 void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   int spin = 0;
   int verbosity = 0;
@@ -541,18 +602,18 @@ void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
 
   // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
   complex double *f_wav, *f_scal;
-  s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, B, L, J_min);
+  s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
   time_start = clock();
-  s2let_transform_axisym_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min);
+  s2let_transform_axisym_wav_analysis_mw_multires(f_wav, f_scal, f, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial signal from the wavelet maps from scratch
   time_start = clock();
-  s2let_transform_axisym_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, B, L, J_min);
+  s2let_transform_axisym_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -582,6 +643,11 @@ void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
  */
 void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   clock_t time_start, time_end;
   int verbosity = 0;
   ssht_dl_method_t dl_method = SSHT_DL_RISBO;
@@ -602,18 +668,18 @@ void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int 
 
   // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
   double *f_wav, *f_scal;
-  s2let_transform_axisym_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, B, L, J_min);
+  s2let_transform_axisym_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, &parameters);
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
   time_start = clock();
-  s2let_transform_axisym_wav_analysis_mw_multires_real(f_wav, f_scal, f, B, L, J_min);
+  s2let_transform_axisym_wav_analysis_mw_multires_real(f_wav, f_scal, f, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial signal from the wavelet maps from scratch
   time_start = clock();
-  s2let_transform_axisym_wav_synthesis_mw_multires_real(f_rec, f_wav, f_scal, B, L, J_min);
+  s2let_transform_axisym_wav_synthesis_mw_multires_real(f_rec, f_wav, f_scal, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -648,8 +714,18 @@ void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int 
 void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
-    int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+    parameters.N = N;
+    parameters.spin = spin;
+    parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+    parameters.original_spin = 0;
+
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
     //int J = s2let_j_max(L, B);
 
     complex double *f, *f_rec, *flm, *flm_rec;
@@ -666,24 +742,96 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav(&f_wav, &f_scal, B, L, J_min, N);
+    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+    s2let_wav_analysis_mw(f_wav, f_scal, f, &parameters);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_wav_synthesis_mw(f_rec, f_wav, f_scal, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+    s2let_wav_synthesis_mw(f_rec, f_wav, f_scal, &parameters);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Convert back to harmonic coefficients
     ssht_core_mw_forward_sov_conv_sym(flm_rec, f_rec, L, spin, dl_method, verbosity);
+
+    // Compute the maximum absolute error on the harmonic coefficients
+    printf("  - Maximum abs error  : %6.5e\n",
+           maxerr_cplx(flm, flm_rec, L*L));fflush(NULL);
+
+    free(f);
+    free(f_rec);
+    free(flm);
+    free(flm_rec);
+    free(f_wav);
+    free(f_scal);
+}
+
+/*!
+ * Test the exactness of the full resolution directional wavelet transform
+ * in pixel space for real functions.
+ *
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  N Azimuthal band-limit.
+ * \param[in]  seed Random seed.
+ * \retval none
+ */
+void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
+{
+    clock_t time_start, time_end;
+
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+    parameters.N = N;
+    parameters.spin = 0;
+
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
+    //int J = s2let_j_max(L, B);
+
+    double *f, *f_rec;
+    complex double *flm, *flm_rec;
+    s2let_lm_allocate(&flm, L);
+    s2let_lm_allocate(&flm_rec, L);
+    s2let_mw_allocate_real(&f, L);
+    s2let_mw_allocate_real(&f_rec, L);
+
+    // Generate random harmonic coefficients for a complex signal
+    s2let_lm_random_flm_real(flm, L, seed);
+
+    // Construct the corresponding signal on the sphere (MW sampling)
+    ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
+
+    // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
+    double *f_wav, *f_scal;
+    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
+
+    // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
+    time_start = clock();
+    s2let_wav_analysis_mw_real(f_wav, f_scal, f, &parameters);
+    time_end = clock();
+    printf("  - Wavelet analysis   : %4.4f seconds\n",
+           (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+    // Reconstruct the initial signal from the wavelet maps from scratch
+    time_start = clock();
+    s2let_wav_synthesis_mw_real(f_rec, f_wav, f_scal, &parameters);
+    time_end = clock();
+    printf("  - Wavelet synthesis  : %4.4f seconds\n",
+           (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+    // Convert back to harmonic coefficients
+    ssht_core_mw_forward_sov_conv_sym_real(flm_rec, f_rec, L, dl_method, verbosity);
 
     // Compute the maximum absolute error on the harmonic coefficients
     printf("  - Maximum abs error  : %6.5e\n",
@@ -712,8 +860,18 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
 void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
-    int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+    parameters.N = N;
+    parameters.spin = spin;
+    parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+    parameters.original_spin = 0;
+
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
     //int J = s2let_j_max(L, B);
 
     complex double *f, *f_rec, *flm, *flm_rec;
@@ -730,24 +888,97 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_multires(&f_wav, &f_scal, B, L, J_min, N);
+    s2let_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+    s2let_wav_analysis_mw_multires(f_wav, f_scal, f, &parameters);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+    s2let_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, &parameters);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Convert back to harmonic coefficients
     ssht_core_mw_forward_sov_conv_sym(flm_rec, f_rec, L, spin, dl_method, verbosity);
+
+    // Compute the maximum absolute error on the harmonic coefficients
+    printf("  - Maximum abs error  : %6.5e\n",
+           maxerr_cplx(flm, flm_rec, L*L));fflush(NULL);
+
+    free(f);
+    free(f_rec);
+    free(flm);
+    free(flm_rec);
+    free(f_wav);
+    free(f_scal);
+}
+
+/*!
+ * Test the exactness of the multi-resolution directional wavelet transform
+ * in pixel space for real functions.
+ *
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
+ * \param[in]  seed Random seed.
+ * \retval none
+ */
+void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, int seed)
+{
+    clock_t time_start, time_end;
+
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+    parameters.N = N;
+    parameters.spin = 0;
+
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
+    //int J = s2let_j_max(L, B);
+
+    double *f, *f_rec;
+    complex double *flm, *flm_rec;
+    s2let_lm_allocate(&flm, L);
+    s2let_lm_allocate(&flm_rec, L);
+    s2let_mw_allocate_real(&f, L);
+    s2let_mw_allocate_real(&f_rec, L);
+
+    // Generate random harmonic coefficients for a complex signal
+    s2let_lm_random_flm_real(flm, L, seed);
+
+    // Construct the corresponding signal on the sphere (MW sampling)
+    ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
+
+    // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
+    double *f_wav, *f_scal;
+    s2let_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, &parameters);
+
+    // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
+    time_start = clock();
+    s2let_wav_analysis_mw_multires_real(f_wav, f_scal, f, &parameters);
+    time_end = clock();
+    printf("  - Wavelet analysis   : %4.4f seconds\n",
+           (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+    // Reconstruct the initial signal from the wavelet maps from scratch
+    time_start = clock();
+    s2let_wav_synthesis_mw_multires_real(f_rec, f_wav, f_scal, &parameters);
+    time_end = clock();
+    printf("  - Wavelet synthesis  : %4.4f seconds\n",
+           (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+    // Convert back to harmonic coefficients
+    ssht_core_mw_forward_sov_conv_sym_real(flm_rec, f_rec, L, dl_method, verbosity);
 
     // Compute the maximum absolute error on the harmonic coefficients
     printf("  - Maximum abs error  : %6.5e\n",
@@ -773,12 +1004,21 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
  */
 void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
 {
-    int spin = 0;
-    int N = 1;
-    int J = s2let_j_max(L, B);
-    int verbosity = 0;
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+    parameters.N = 1;
+
+    int spin = parameters.spin = 0;
+    int J = s2let_j_max(&parameters);
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
+
+    parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+    parameters.original_spin = 0;
+
     int i;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
     double wav_error, scal_error;
 
@@ -795,12 +1035,12 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     // from both transforms.
     complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
-    s2let_transform_axisym_allocate_mw_f_wav(&f_wav_axisym, &f_scal_axisym, B, L, J_min);
-    s2let_allocate_mw_f_wav(&f_wav_dir, &f_scal_dir, B, L, J_min, N);
+    s2let_transform_axisym_allocate_mw_f_wav(&f_wav_axisym, &f_scal_axisym, &parameters);
+    s2let_allocate_mw_f_wav(&f_wav_dir, &f_scal_dir, &parameters);
 
     // Do both transforms
-    s2let_transform_axisym_wav_analysis_mw(f_wav_axisym, f_scal_axisym, f, B, L, J_min);
-    s2let_wav_analysis_mw(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+    s2let_transform_axisym_wav_analysis_mw(f_wav_axisym, f_scal_axisym, f, &parameters);
+    s2let_wav_analysis_mw(f_wav_dir, f_scal_dir, f, &parameters);
 
     // Account for the different wavelet normalisations
     for (i = 0; i < (J-J_min+1)*L*(2*L-1); ++i)
@@ -827,12 +1067,22 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
  */
 void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
 {
-    int spin = 0;
-    int N = 1;
-    int J = s2let_j_max(L, B);
-    int verbosity = 0;
+    s2let_parameters_t parameters = {};
+    parameters.B = B;
+    parameters.L = L;
+    parameters.J_min = J_min;
+    parameters.N = 1;
+
+    int spin = parameters.spin = 0;
+
+    int J = s2let_j_max(&parameters);
+    int verbosity = parameters.verbosity = 0;
+    ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
+
+    parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+    parameters.original_spin = 0;
+
     int samples, bandlimit, i, j;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
 
     double wav_error, scal_error;
 
@@ -849,17 +1099,17 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     // from both transforms.
     complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
-    s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav_axisym, &f_scal_axisym, B, L, J_min);
-    s2let_allocate_mw_f_wav_multires(&f_wav_dir, &f_scal_dir, B, L, J_min, N);
+    s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav_axisym, &f_scal_axisym, &parameters);
+    s2let_allocate_mw_f_wav_multires(&f_wav_dir, &f_scal_dir, &parameters);
 
     // Do both transforms
-    s2let_transform_axisym_wav_analysis_mw_multires(f_wav_axisym, f_scal_axisym, f, B, L, J_min);
-    s2let_wav_analysis_mw_multires(f_wav_dir, f_scal_dir, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+    s2let_transform_axisym_wav_analysis_mw_multires(f_wav_axisym, f_scal_axisym, f, &parameters);
+    s2let_wav_analysis_mw_multires(f_wav_dir, f_scal_dir, f, &parameters);
 
     samples = 0;
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         samples += bandlimit * (2 * bandlimit - 1);
     }
 
@@ -868,8 +1118,8 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
         f_wav_dir[i] *= sqrt(2*PI);
 
     // Compute the maximum absolute error in the computed wavelet transform
-    wav_error = maxerr_cplx(f_wav_axisym, f_wav_dir, (J-J_min+1)*L*(2*L-1));
-    bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+    wav_error = maxerr_cplx(f_wav_axisym, f_wav_dir, samples);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     scal_error = maxerr_cplx(f_scal_axisym, f_scal_dir, bandlimit*(2*bandlimit-1));
 
     printf("  - Maximum abs error in wavelets :         %6.5e\n", wav_error);
@@ -879,6 +1129,10 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
 
 void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.J_min = J_min;
+
   complex double *f, *flm, *flm_rec, *f_rec, *f_wav, *f_scal;
   clock_t time_start, time_end;
   int sc, repeat;
@@ -891,6 +1145,8 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
 
     L *= 2;
 
+    parameters.L = L;
+
     s2let_lm_allocate(&flm, L);
 
     printf(" > L =  %i \n", L);
@@ -901,10 +1157,10 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
       s2let_lm_random_flm(flm, L, 0, seed);
       s2let_mw_allocate(&f, L);
       s2let_mw_alm2map(f, flm, L);
-      s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, B, L, J_min);
+      s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
       time_start = clock();
-      s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min);
+      s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, &parameters);
       time_end = clock();
       tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
       //printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -912,7 +1168,7 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
       s2let_mw_allocate(&f_rec, L);
 
       time_start = clock();
-      s2let_transform_axisym_wav_synthesis_mw(f_rec, f_wav, f_scal, B, L, J_min);
+      s2let_transform_axisym_wav_synthesis_mw(f_rec, f_wav, f_scal, &parameters);
       time_end = clock();
       tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
 
@@ -948,6 +1204,10 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
 
 void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.J_min = J_min;
+
   complex double *f, *flm, *flm_rec, *f_rec, *f_wav, *f_scal;
   clock_t time_start, time_end;
   int sc, repeat;
@@ -960,6 +1220,8 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
 
     L *= 2;
 
+    parameters.L = L;
+
     s2let_lm_allocate(&flm, L);
 
     printf(" > L =  %i \n", L);
@@ -970,10 +1232,10 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
       s2let_lm_random_flm(flm, L, 0, seed);
       s2let_mw_allocate(&f, L);
       s2let_mw_alm2map(f, flm, L);
-      s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, B, L, J_min);
+      s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
 
       time_start = clock();
-      s2let_transform_axisym_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min);
+      s2let_transform_axisym_wav_analysis_mw_multires(f_wav, f_scal, f, &parameters);
       time_end = clock();
       tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
       //printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -981,7 +1243,7 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
       s2let_mw_allocate(&f_rec, L);
 
       time_start = clock();
-      s2let_transform_axisym_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, B, L, J_min);
+      s2let_transform_axisym_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, &parameters);
       time_end = clock();
       tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
 
@@ -1018,6 +1280,10 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
 
 void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.J_min = J_min;
+
   complex double *flm, *flm_rec, *f_wav_lm, *f_scal_lm;
   clock_t time_start, time_end;
   int sc, repeat;
@@ -1031,8 +1297,10 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
 
     L *= 2;
 
-    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
-    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+    parameters.L = L;
+
+    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
+    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
     s2let_lm_allocate(&flm, L);
 
     printf(" > L =  %i \n", L);
@@ -1042,10 +1310,10 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
 
       s2let_lm_random_flm(flm, L, 0, seed);
 
-      s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, B, L, J_min);
+      s2let_transform_axisym_lm_allocate_f_wav(&f_wav_lm, &f_scal_lm, &parameters);
 
       time_start = clock();
-      s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+      s2let_transform_axisym_lm_wav_analysis(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
       time_end = clock();
       tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
       //printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1053,7 +1321,7 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
       s2let_lm_allocate(&flm_rec, L);
 
       time_start = clock();
-      s2let_transform_axisym_lm_wav_synthesis(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+      s2let_transform_axisym_lm_wav_synthesis(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
       time_end = clock();
       tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
 
@@ -1087,6 +1355,10 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
 
 void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.J_min = J_min;
+
   complex double *flm, *flm_rec, *f_wav_lm, *f_scal_lm;
   clock_t time_start, time_end;
   int sc, repeat;
@@ -1100,8 +1372,10 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
     L *= 2;
 
-    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
-    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+    parameters.L = L;
+
+    s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
+    s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
     s2let_lm_allocate(&flm, L);
 
     printf(" > L =  %i \n", L);
@@ -1111,10 +1385,10 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
       s2let_lm_random_flm(flm, L, 0, seed);
 
-      s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, B, L, J_min);
+      s2let_transform_axisym_lm_allocate_f_wav_multires(&f_wav_lm, &f_scal_lm, &parameters);
 
       time_start = clock();
-      s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, B, L, J_min);
+      s2let_transform_axisym_lm_wav_analysis_multires(f_wav_lm, f_scal_lm, flm, wav_lm, scal_lm, &parameters);
       time_end = clock();
       tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
       //printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1122,7 +1396,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
       s2let_lm_allocate(&flm_rec, L);
 
       time_start = clock();
-      s2let_transform_axisym_lm_wav_synthesis_multires(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);
+      s2let_transform_axisym_lm_wav_synthesis_multires(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
       time_end = clock();
       tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
 
@@ -1155,16 +1429,24 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
 int main(int argc, char *argv[])
 {
-  const int L = 256;
-  const int N = 32;
+  const int L = 32;
+  const int N = 16;
   const int B = 3;
-  const int J_min = 2;
+  const int J_min = 0;
   const int spin = 2;
+
+  s2let_parameters_t parameters = {};
+
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+  parameters.N = N;
+  parameters.spin = spin;
 
   // This is too often zero, so we add 1 (zero will result in all random
   // numbers being the same).
   const int seed = (int)((double)clock()/(double)CLOCKS_PER_SEC) + 1;
-  int l_min = s2let_el_min(B, J_min);
+  int l_min = s2let_el_min(&parameters);
 
   printf("=====================================================================\n");
   printf("Testing S2LET facilities with the MW sampling\n");
@@ -1223,6 +1505,12 @@ int main(int argc, char *argv[])
   printf("---------------------------------------------------------------------\n");
   printf("> Testing axisymmetric multiresolution algorithm for real function...\n");
   s2let_transform_axisym_wav_multires_real_test(B, L, J_min, seed);
+  printf("---------------------------------------------------------------------\n");
+  printf("> Testing directional wavelets in pixel space for real function...\n");
+  s2let_wav_transform_mw_real_test(B, L, J_min, N, seed);
+  printf("---------------------------------------------------------------------\n");
+  printf("> Testing directional multiresolution algorithm for real function...\n");
+  s2let_wav_transform_mw_multires_real_test(B, L, J_min, N, seed);
 
     /*
   const int NREPEAT = 50;

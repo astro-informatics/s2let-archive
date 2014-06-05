@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
@@ -13,7 +13,7 @@
  * Compute axisymmetric wavelet transform (analysis)
  * with output in pixel space.
  *
- * Usage: 
+ * Usage:
  *   [f_wav, f_scal] = ...
  *        s2let_transform_axisym_analysis_mw_mex(f, B, L, J_min, reality, downsample);
  *
@@ -22,6 +22,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
   int i, j, B, L, J_min, f_m, f_n, reality, downsample;
+  s2let_parameters_t parameters = {};
   double *f_wav_real, *f_scal_real, *f_real, *f_wav_imag, *f_scal_imag, *f_imag;
   complex double *f_wav = NULL, *f_scal = NULL, *f = NULL;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
@@ -64,13 +65,13 @@ void mexFunction( int nlhs, mxArray *plhs[],
     f_imag = mxGetPi(prhs[iin]);
     f = (complex double*)malloc(f_m * f_n * sizeof(complex double));
     for (i=0; i<f_m*f_n; i++)
-      f[i] = f_real[i] + I * f_imag[i]; 
+      f[i] = f_real[i] + I * f_imag[i];
   }
 
   // Parse wavelet parameter B
   iin = 1;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_mw_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be integer.");
@@ -82,8 +83,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse harmonic band-limit L
   iin = 2;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_mw_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
@@ -98,11 +99,11 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_mw_mex:InvalidInput:LbandLimit",
           "L must correspond to the sampling scheme, i.e. f = L*(2*L-1) samples.");
   }
- 
+
   // Parse first scale J_min
   iin = 3;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_mw_mex:InvalidInput:Jmin",
           "First scale J_min must be integer.");
@@ -112,32 +113,37 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_mw_mex:InvalidInput:Jmin",
           "First scale J_min must be positive integer.");
 
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   // Compute ultimate scale J_max
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
 
   if( J_min > J+1 ) {
     mexErrMsgIdAndTxt("s2let_transform_axisym_analysis_mw_mex:InvalidInput:Jmin",
           "First scale J_min must be larger than that!");
   }
 
+
   // Perform wavelet transform in harmonic space and then reconstruction.
   if(downsample){
     // Multiresolution algorithm
     if(reality){
-      s2let_transform_axisym_allocate_mw_f_wav_multires_real(&f_wav_r, &f_scal_r, B, L, J_min);
-      s2let_transform_axisym_wav_analysis_mw_multires_real(f_wav_r, f_scal_r, f_r, B, L, J_min);
+      s2let_transform_axisym_allocate_mw_f_wav_multires_real(&f_wav_r, &f_scal_r, &parameters);
+      s2let_transform_axisym_wav_analysis_mw_multires_real(f_wav_r, f_scal_r, f_r, &parameters);
     }else{
-      s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, B, L, J_min);
-      s2let_transform_axisym_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min); 
+      s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
+      s2let_transform_axisym_wav_analysis_mw_multires(f_wav, f_scal, f, &parameters);
     }
   }else{
     // Full resolution algorithm
     if(reality){
-      s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav_r, &f_scal_r, B, L, J_min);
-      s2let_transform_axisym_wav_analysis_mw_real(f_wav_r, f_scal_r, f_r, B, L, J_min);
+      s2let_transform_axisym_allocate_mw_f_wav_real(&f_wav_r, &f_scal_r, &parameters);
+      s2let_transform_axisym_wav_analysis_mw_real(f_wav_r, f_scal_r, f_r, &parameters);
     }else{
-      s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, B, L, J_min);
-      s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, B, L, J_min); 
+      s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
+      s2let_transform_axisym_wav_analysis_mw(f_wav, f_scal, f, &parameters);
     }
   }
 
@@ -145,10 +151,10 @@ void mexFunction( int nlhs, mxArray *plhs[],
   int bandlimit, wavsize = 0, scalsize = 0;
   if(downsample){
     for (j = J_min; j <= J; j++){
-        bandlimit = MIN(s2let_bandlimit(j, J_min, B, L), L);
+        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         wavsize += bandlimit * (2 * bandlimit - 1);
      }
-     bandlimit = MIN(s2let_bandlimit(J_min-1, J_min, B, L), L);
+     bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
      scalsize = bandlimit * (2 * bandlimit - 1);
   }else{
     wavsize = (J+1-J_min) * L * ( 2 * L - 1 );

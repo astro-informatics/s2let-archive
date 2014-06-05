@@ -43,7 +43,7 @@ double needletpower(double *wav_lm, int L){
  */
 int main(int argc, char *argv[])
 {
-
+  s2let_parameters_t parameters = {};
 
   const int seed = (int)(10000.0*(double)clock()/(double)CLOCKS_PER_SEC);
   // PARAMETERS
@@ -57,6 +57,9 @@ int main(int argc, char *argv[])
   double *f, *noise, *g, *g_wav, *g_scal, *wav_lm, *scal_lm, *f_denois, *remaining_noise;
   complex double *noise_lm;
 
+  parameters.B = B;
+  parameters.J_min = J_min;
+
   printf("--------------------------------------------------\n");
   printf(" S2LET library : denoising example\n");
   printf(" Earth tomography signal, MW sampling\n");
@@ -65,8 +68,9 @@ int main(int argc, char *argv[])
   char file[100] = "data/earth_tomo_mw_128.fits";
   printf(" Reading file %s\n",file);
   const int L = s2let_fits_mw_read_bandlimit(file);
+  parameters.L = L;
   printf(" - Detected bandlimit L = %i\n",L);
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
   printf(" Parameters for wavelet denoising :\n");
   s2let_switch_wavtype(1);
   printf(" - Input SNR : %f\n",SNR_in);
@@ -101,18 +105,18 @@ int main(int argc, char *argv[])
   printf(" Performing wavelet decomposition...");fflush(NULL);
   // Perform wavelet analysis from scratch with all signals given as MW maps
   if(multires){
-    s2let_transform_axisym_allocate_mw_f_wav_multires_real(&g_wav, &g_scal, B, L, J_min);
-    s2let_transform_axisym_wav_analysis_mw_multires_real(g_wav, g_scal, g, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_multires_real(&g_wav, &g_scal, &parameters);
+    s2let_transform_axisym_wav_analysis_mw_multires_real(g_wav, g_scal, g, &parameters);
   }else{
-    s2let_transform_axisym_allocate_mw_f_wav_real(&g_wav, &g_scal, B, L, J_min);
-    s2let_transform_axisym_wav_analysis_mw_real(g_wav, g_scal, g, B, L, J_min);
+    s2let_transform_axisym_allocate_mw_f_wav_real(&g_wav, &g_scal, &parameters);
+    s2let_transform_axisym_wav_analysis_mw_real(g_wav, g_scal, g, &parameters);
   }
   printf(" done\n");
 
   // Compute simple threshold for needlet coefficients based on noise model
   printf(" Construct the threshold rule for the Gaussian noise\n");
-  s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, B, L);
-  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, B, L, J_min);
+  s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
+  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
   double *treshold = (double*)calloc((J-J_min+1), sizeof(double));
   for(j = J_min; j <= J; j++)
     treshold[j-J_min] = sigmanoise * nsigma * sqrt(needletpower(wav_lm + j * L, L));
@@ -120,11 +124,11 @@ int main(int argc, char *argv[])
   printf(" Hard thresholding the wavelets...");fflush(NULL);
   s2let_mw_allocate_real(&f_denois, L);
   if(multires){
-    s2let_transform_axisym_wav_hardthreshold_multires_real(g_wav, treshold, B, L, J_min);
-    s2let_transform_axisym_wav_synthesis_mw_multires_real(f_denois, g_wav, g_scal, B, L, J_min);
+    s2let_transform_axisym_wav_hardthreshold_multires_real(g_wav, treshold, &parameters);
+    s2let_transform_axisym_wav_synthesis_mw_multires_real(f_denois, g_wav, g_scal, &parameters);
   }else{
-    s2let_transform_axisym_wav_hardthreshold_real(g_wav, treshold, B, L, J_min);
-    s2let_transform_axisym_wav_synthesis_mw_real(f_denois, g_wav, g_scal, B, L, J_min);
+    s2let_transform_axisym_wav_hardthreshold_real(g_wav, treshold, &parameters);
+    s2let_transform_axisym_wav_synthesis_mw_real(f_denois, g_wav, g_scal, &parameters);
   }
   printf(" done\n");
 
