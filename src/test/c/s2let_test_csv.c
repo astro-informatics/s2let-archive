@@ -137,7 +137,7 @@ int main(int argc, char **argv)
         ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
                 time_start = clock();
-                if (multires) s2let_wav_analysis_mw_multires(f_wav, f_scal, f, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+                if (multires) s2let_wav_analysis_mw_multires(f_wav, f_scal, f, &parameters);
                 else      s2let_wav_analysis_mw(f_wav, f_scal, f, &parameters);
                 time_end = clock();
 
@@ -146,7 +146,7 @@ int main(int argc, char **argv)
                     min_duration_inverse = duration;
 
                 time_start = clock();
-                if (multires) s2let_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, B, L, J_min, N, spin, S2LET_WAV_NORM_DEFAULT, 0);
+                if (multires) s2let_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, &parameters);
                 else     s2let_wav_synthesis_mw(f_rec, f_wav, f_scal, &parameters);
                 time_end = clock();
 

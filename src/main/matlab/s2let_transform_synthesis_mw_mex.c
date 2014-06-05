@@ -189,7 +189,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
       s2let_wav_synthesis_mw_multires_real(f_r, f_wav_r, f_scal_r, B, L, J_min, N);
     }else{
       s2let_mw_allocate(&f, L);
-      s2let_wav_synthesis_mw_multires(f, f_wav, f_scal, B, L, J_min, N, spin, normalization, original_spin);
+      s2let_wav_synthesis_mw_multires(f, f_wav, f_scal, &parameters);
     }
   }else{
     // Full resolution algorithm
