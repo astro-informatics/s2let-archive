@@ -35,16 +35,13 @@ static inline int lmn2ind(int el, int m, int n, int L, int N)
 void s2let_allocate_f_wav_lmn(
     complex double **f_wav_lmn,
     complex double **f_scal_lm,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 ) {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int N = parameters->N;
 
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     *f_wav_lmn = calloc((J-J_min+1) * (2*N-1) * L*L, sizeof **f_wav_lmn);
     *f_scal_lm = calloc(L*L, sizeof **f_scal_lm);
 }
@@ -66,25 +63,21 @@ void s2let_allocate_f_wav_lmn(
 void s2let_allocate_f_wav_lmn_multires(
     complex double **f_wav_lmn,
     complex double **f_scal_lm,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 ) {
-    s2let_parameters_t parameters = {};
-    parameters.B = B;
-    parameters.L = L;
-    parameters.J_min = J_min;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int N = parameters->N;
 
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     int j, bandlimit, total = 0;
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
+        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         total += (2*N-1) * bandlimit * bandlimit;
     }
     *f_wav_lmn = calloc(total, sizeof **f_wav_lmn);
-    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     *f_scal_lm = calloc(bandlimit * bandlimit, sizeof **f_scal_lm);
 }
 

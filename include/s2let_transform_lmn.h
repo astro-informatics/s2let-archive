@@ -12,19 +12,13 @@
 void s2let_allocate_f_wav_lmn(
     complex double **f_wav_lmn,
     complex double **f_scal_lm,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 void s2let_allocate_f_wav_lmn_multires(
     complex double **f_wav_lmn,
     complex double **f_scal_lm,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 /** Harmonic-space wavelet transform **/

@@ -333,7 +333,7 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
   s2let_lm_random_flm(flm, L, spin, seed);
 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
-  s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
+  s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
@@ -406,7 +406,7 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
   s2let_lm_random_flm(flm, L, spin, seed);
 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
-  s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, B, L, J_min, N);
+  s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
