@@ -1118,7 +1118,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
         f_wav_dir[i] *= sqrt(2*PI);
 
     // Compute the maximum absolute error in the computed wavelet transform
-    wav_error = maxerr_cplx(f_wav_axisym, f_wav_dir, (J-J_min+1)*L*(2*L-1));
+    wav_error = maxerr_cplx(f_wav_axisym, f_wav_dir, samples);
     bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     scal_error = maxerr_cplx(f_scal_axisym, f_scal_dir, bandlimit*(2*bandlimit-1));
 
