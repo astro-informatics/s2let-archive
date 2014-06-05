@@ -53,20 +53,14 @@ void s2let_wav_analysis_mw_real(
     double *f_wav,
     double *f_scal,
     const double *f,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 void s2let_wav_synthesis_mw_real(
     double *f,
     const double *f_wav,
     const double *f_scal,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 /** Multi-resolution harmonic-space wavelet transform **/

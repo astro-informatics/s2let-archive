@@ -818,14 +818,14 @@ void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_wav_analysis_mw_real(f_wav, f_scal, f, B, L, J_min, N);
+    s2let_wav_analysis_mw_real(f_wav, f_scal, f, &parameters);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_wav_synthesis_mw_real(f_rec, f_wav, f_scal, B, L, J_min, N);
+    s2let_wav_synthesis_mw_real(f_rec, f_wav, f_scal, &parameters);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
