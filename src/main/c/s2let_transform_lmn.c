@@ -104,18 +104,15 @@ void s2let_wav_analysis_harmonic(
     const complex double *flm,
     const complex double *wav_lm,
     const double *scal_l,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin
+    const s2let_parameters_t *parameters
 ) {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int N = parameters->N;
+    int spin = parameters->spin;
 
     int j, el, m ,n;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
 
     complex double psi;
     double phi;
@@ -173,18 +170,15 @@ void s2let_wav_synthesis_harmonic(
     const complex double *f_scal_lm,
     const complex double *wav_lm,
     const double *scal_l,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin
+    const s2let_parameters_t *parameters
 ) {
-    s2let_parameters_t parameters = {};
-    parameters.L = L;
-    parameters.B = B;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int N = parameters->N;
+    int spin = parameters->spin;
 
     int j, el, m ,n;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
 
     complex double psi;
     double phi;
