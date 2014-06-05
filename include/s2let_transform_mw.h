@@ -83,20 +83,14 @@ void s2let_wav_analysis_mw_multires_real(
     double *f_wav,
     double *f_scal,
     const double *f,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 void s2let_wav_synthesis_mw_multires_real(
     double *f,
     const double *f_wav,
     const double *f_scal,
-    int B,
-    int L,
-    int J_min,
-    int N
+    const s2let_parameters_t *parameters
 );
 
 // void s2let_axisym_mw_wav_hardthreshold_multires_real(double *g_wav, const double *treshold, int B, int L, int J_min);
