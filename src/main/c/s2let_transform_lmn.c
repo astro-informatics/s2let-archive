@@ -236,19 +236,15 @@ void s2let_wav_analysis_harmonic_multires(
     const complex double *flm,
     const complex double *wav_lm,
     const double *scal_l,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin
+    const s2let_parameters_t *parameters
 ) {
-    s2let_parameters_t parameters = {};
-    parameters.B = B;
-    parameters.L = L;
-    parameters.J_min = J_min;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int N = parameters->N;
+    int spin = parameters->spin;
 
     int j, el, m ,n;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     int bandlimit;
 
     complex double psi;
@@ -258,7 +254,7 @@ void s2let_wav_analysis_harmonic_multires(
 
     for (j = J_min; j <= J; j++)
     {
-        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
+        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         for (n = -N+1; n < N; ++n)
         {
             for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
@@ -274,7 +270,7 @@ void s2let_wav_analysis_harmonic_multires(
         offset += (2*N-1) * bandlimit*bandlimit;
     }
 
-    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     for (el = ABS(spin); el < bandlimit; ++el)
     {
         phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
@@ -310,19 +306,15 @@ void s2let_wav_synthesis_harmonic_multires(
     const complex double *f_scal_lm,
     const complex double *wav_lm,
     const double *scal_l,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin
+    const s2let_parameters_t *parameters
 ) {
-    s2let_parameters_t parameters = {};
-    parameters.B = B;
-    parameters.L = L;
-    parameters.J_min = J_min;
+    int L = parameters->L;
+    int J_min = parameters->J_min;
+    int N = parameters->N;
+    int spin = parameters->spin;
 
     int j, el, m ,n;
-    int J = s2let_j_max(&parameters);
+    int J = s2let_j_max(parameters);
     int bandlimit;
 
     complex double psi;
@@ -333,7 +325,7 @@ void s2let_wav_synthesis_harmonic_multires(
 
     for (j = J_min; j <= J; ++j)
     {
-        bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
+        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         for (n = -N+1; n < N; ++n)
         {
             for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
@@ -350,7 +342,7 @@ void s2let_wav_synthesis_harmonic_multires(
         offset += (2*N-1) * bandlimit*bandlimit;
     }
 
-    bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
+    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     for (el = ABS(spin); el < bandlimit; ++el)
     {
         phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];

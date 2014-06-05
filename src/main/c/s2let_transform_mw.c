@@ -600,7 +600,7 @@ void s2let_wav_analysis_mw_multires(
     ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
 
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, &parameters);
-    s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, B, L, J_min, N, spin);
+    s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &parameters);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     // Note, this is a spin-0 transform!
@@ -713,7 +713,7 @@ void s2let_wav_synthesis_mw_multires(
     }
 
     s2let_lm_allocate(&flm, L);
-    s2let_wav_synthesis_harmonic_multires(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, B, L, J_min, N, spin);
+    s2let_wav_synthesis_harmonic_multires(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, &parameters);
 
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
@@ -780,8 +780,6 @@ void s2let_wav_analysis_mw_multires_real(
     int J = s2let_j_max(&parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
-    int spin = 0;
-
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
@@ -793,7 +791,7 @@ void s2let_wav_analysis_mw_multires_real(
     ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
 
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, &parameters);
-    s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, B, L, J_min, N, spin);
+    s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &parameters);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
     // Note, this is a spin-0 transform!
@@ -875,8 +873,6 @@ void s2let_wav_synthesis_mw_multires_real(
     int J = s2let_j_max(&parameters);
     //int l_min = s2let_axisym_el_min(B, J_min);
 
-    int spin = 0;
-
     complex double *wav_lm;
     double *scal_l;
     s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
@@ -923,7 +919,7 @@ void s2let_wav_synthesis_mw_multires_real(
     }
 
     s2let_lm_allocate(&flm, L);
-    s2let_wav_synthesis_harmonic_multires(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, B, L, J_min, N, spin);
+    s2let_wav_synthesis_harmonic_multires(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, &parameters);
 
     ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
 

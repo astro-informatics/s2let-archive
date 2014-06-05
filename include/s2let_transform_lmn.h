@@ -49,11 +49,7 @@ void s2let_wav_analysis_harmonic_multires(
     const complex double *flm,
     const complex double *wav_lm,
     const double *scal_l,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin
+    const s2let_parameters_t *parameters
 );
 
 void s2let_wav_synthesis_harmonic_multires(
@@ -62,11 +58,7 @@ void s2let_wav_synthesis_harmonic_multires(
     const complex double *f_scal_lm,
     const complex double *wav_lm,
     const double *scal_l,
-    int B,
-    int L,
-    int J_min,
-    int N,
-    int spin
+    const s2let_parameters_t *parameters
 );
 
 #endif
