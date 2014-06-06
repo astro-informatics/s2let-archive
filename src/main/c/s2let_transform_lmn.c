@@ -3,19 +3,19 @@
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
+#include <so3.h>
+#include <ssht.h>
 #include <complex.h>
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-static inline int lm2ind(int el, int m)
+static inline void fill_so3_parameters(so3_parameters_t *parameters, int L, int N)
 {
-    return el*el + el + m;
-}
-
-static inline int lmn2ind(int el, int m, int n, int L, int N)
-{
-    return (N-1+n) * L*L + el*el + el + m;
+    parameters->L = L;
+    parameters->N = N;
+    parameters->n_order = SO3_N_ORDER_NEGATIVE_FIRST;
+    parameters->storage = SO3_STORAGE_PADDED;
 }
 
 /*!
@@ -114,6 +114,10 @@ void s2let_wav_analysis_harmonic(
     int j, el, m ,n;
     int J = s2let_j_max(parameters);
 
+    int lm_ind, lmn_ind;
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, L, N);
+
     complex double psi;
     double phi;
 
@@ -128,8 +132,9 @@ void s2let_wav_analysis_harmonic(
                 psi = 8*PI*PI/(2*el+1) * conj(wav_lm[j*L*L + el*el + el + n]);
                 for (m = -el; m <= el; ++m)
                 {
-                    f_wav_lmn[offset + lmn2ind(el,m,n,L,N)] =
-                        flm[lm2ind(el,m)] * psi;
+                    ssht_sampling_elm2ind(&lm_ind, el, m);
+                    so3_sampling_elmn2ind(&lmn_ind, el, m, n, &so3_parameters);
+                    f_wav_lmn[offset + lmn_ind] = flm[lm_ind] * psi;
                 }
             }
         }
@@ -141,7 +146,8 @@ void s2let_wav_analysis_harmonic(
         phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
         {
-            f_scal_lm[lm2ind(el,m)] = flm[lm2ind(el,m)] * phi;
+            ssht_sampling_elm2ind(&lm_ind, el, m);
+            f_scal_lm[lm_ind] = flm[lm_ind] * phi;
         }
     }
 }
@@ -180,6 +186,10 @@ void s2let_wav_synthesis_harmonic(
     int j, el, m ,n;
     int J = s2let_j_max(parameters);
 
+    int lm_ind, lmn_ind;
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, L, N);
+
     complex double psi;
     double phi;
 
@@ -195,8 +205,9 @@ void s2let_wav_synthesis_harmonic(
                 psi = wav_lm[j*L*L + el*el + el + n];
                 for (m = -el; m <= el; ++m)
                 {
-                    flm[lm2ind(el,m)] +=
-                        f_wav_lmn[offset + lmn2ind(el,m,n,L,N)] * psi;
+                    ssht_sampling_elm2ind(&lm_ind, el, m);
+                    so3_sampling_elmn2ind(&lmn_ind, el, m, n, &so3_parameters);
+                    flm[lm_ind] += f_wav_lmn[offset + lmn_ind] * psi;
                 }
             }
         }
@@ -208,7 +219,8 @@ void s2let_wav_synthesis_harmonic(
         phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
         {
-            flm[lm2ind(el,m)] += f_scal_lm[lm2ind(el,m)] * phi;
+            ssht_sampling_elm2ind(&lm_ind, el, m);
+            flm[lm_ind] += f_scal_lm[lm_ind] * phi;
         }
     }
 }
@@ -247,6 +259,10 @@ void s2let_wav_analysis_harmonic_multires(
     int J = s2let_j_max(parameters);
     int bandlimit;
 
+    int lm_ind, lmn_ind;
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, L, N);
+
     complex double psi;
     double phi;
 
@@ -255,6 +271,8 @@ void s2let_wav_analysis_harmonic_multires(
     for (j = J_min; j <= J; j++)
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
+        so3_parameters.L = bandlimit;
+
         for (n = -N+1; n < N; ++n)
         {
             for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
@@ -262,8 +280,9 @@ void s2let_wav_analysis_harmonic_multires(
                 psi = 8*PI*PI/(2*el+1) * conj(wav_lm[j*L*L + el*el + el + n]);
                 for (m = -el; m <= el; ++m)
                 {
-                    f_wav_lmn[offset + lmn2ind(el,m,n,bandlimit,N)] =
-                        flm[lm2ind(el,m)] * psi;
+                    ssht_sampling_elm2ind(&lm_ind, el, m);
+                    so3_sampling_elmn2ind(&lmn_ind, el, m, n, &so3_parameters);
+                    f_wav_lmn[offset + lmn_ind] = flm[lm_ind] * psi;
                 }
             }
         }
@@ -276,8 +295,8 @@ void s2let_wav_analysis_harmonic_multires(
         phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
         {
-            f_scal_lm[lm2ind(el,m)] =
-                flm[lm2ind(el,m)] * phi;
+            ssht_sampling_elm2ind(&lm_ind, el, m);
+            f_scal_lm[lm_ind] = flm[lm_ind] * phi;
         }
     }
 }
@@ -317,15 +336,20 @@ void s2let_wav_synthesis_harmonic_multires(
     int J = s2let_j_max(parameters);
     int bandlimit;
 
+    int lm_ind, lmn_ind;
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, L, N);
+
     complex double psi;
     double phi;
 
     int offset = 0;
 
-
     for (j = J_min; j <= J; ++j)
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
+        so3_parameters.L = bandlimit;
+
         for (n = -N+1; n < N; ++n)
         {
             for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
@@ -333,9 +357,9 @@ void s2let_wav_synthesis_harmonic_multires(
                 psi = wav_lm[j*L*L + el*el + el + n];
                 for (m = -el; m <= el; ++m)
                 {
-                    flm[lm2ind(el,m)] +=
-
-                        f_wav_lmn[offset + lmn2ind(el,m,n,bandlimit,N)] * psi;
+                    ssht_sampling_elm2ind(&lm_ind, el, m);
+                    so3_sampling_elmn2ind(&lmn_ind, el, m, n, &so3_parameters);
+                    flm[lm_ind] += f_wav_lmn[offset + lmn_ind] * psi;
                 }
             }
         }
@@ -348,8 +372,8 @@ void s2let_wav_synthesis_harmonic_multires(
         phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
         for (m = -el; m <= el; ++m)
         {
-            flm[lm2ind(el,m)] +=
-                f_scal_lm[lm2ind(el,m)] * phi;
+            ssht_sampling_elm2ind(&lm_ind, el, m);
+            flm[lm_ind] += f_scal_lm[lm_ind] * phi;
         }
     }
 }

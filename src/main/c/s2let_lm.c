@@ -5,6 +5,7 @@
 #include "s2let.h"
 #include <complex.h>
 #include <ssht.h>
+#include <so3.h>
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
@@ -42,9 +43,16 @@ void s2let_lm_allocate(complex double **flm, int L)
  * \param[in]  N Azimuthal harmonic band-limit.
  * \retval none
  */
-void s2let_lmn_allocate(complex double **flmn, int L, int N)
+void s2let_lmn_allocate(complex double **flmn, const so3_parameters_t *parameters)
 {
-    *flmn = calloc((2*N-1) * L * L, sizeof **flmn);
+    // Create a copy of the parameters where reality is set to false, in order to
+    // always allocate the full lmn block.
+    // TODO: Make sure that lmn and mw transforms can actually deal will the
+    // reduced storage for real signals, and then get rid of this copy here.
+    so3_parameters_t complex_parameters = *parameters;
+    complex_parameters.reality = 0;
+
+    *flmn = calloc(so3_sampling_flmn_size(&complex_parameters), sizeof **flmn);
 }
 
 /*!

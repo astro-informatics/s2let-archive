@@ -8,11 +8,6 @@
 #include <so3.h>
 #include <stdlib.h>
 
-static inline int lmn2ind(int el, int m, int n, int L, int N)
-{
-    return (N-1+n) * L*L + el*el + el + m;
-}
-
 /*!
  * Allocates arrays for wavelet transform in pixel space (MW sampling).
  *
@@ -471,8 +466,9 @@ void s2let_wav_synthesis_mw_real(
             {
                 for (m = -el; m <= el; ++m)
                 {
-                    int ind = lmn2ind(el, m, n, L, N);
-                    int nind = lmn2ind(el, -m, -n, L, N);
+                    int ind, nind;
+                    so3_sampling_elmn2ind(&ind, el, m, n, &so3_parameters);
+                    so3_sampling_elmn2ind(&nind, el, -m, -n, &so3_parameters);
                     int sign = (m+n)%2 ? -1 : 1;
                     f_wav_lmn[offset_lmn + nind] = sign * conj(f_wav_lmn[offset_lmn + ind]);
                 }
@@ -834,8 +830,9 @@ void s2let_wav_synthesis_mw_multires_real(
             {
                 for (m = -el; m <= el; ++m)
                 {
-                    int ind = lmn2ind(el, m, n, bandlimit, N);
-                    int nind = lmn2ind(el, -m, -n, bandlimit, N);
+                    int ind, nind;
+                    so3_sampling_elmn2ind(&ind, el, m, n, &so3_parameters);
+                    so3_sampling_elmn2ind(&nind, el, -m, -n, &so3_parameters);
                     int sign = (m+n)%2 ? -1 : 1;
                     f_wav_lmn[offset_lmn + nind] = sign * conj(f_wav_lmn[offset_lmn + ind]);
                 }
