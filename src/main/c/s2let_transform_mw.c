@@ -471,7 +471,7 @@ void s2let_wav_synthesis_mw_real(
         // computes non-negative n
         for (n = 0; n < N; ++n)
         {
-            for (el = 0; el < L; ++el)
+            for (el = ABS(n); el < L; ++el)
             {
                 for (m = -el; m <= el; ++m)
                 {
@@ -530,6 +530,7 @@ void s2let_wav_analysis_mw_multires(
 ) {
     int L = parameters->L;
     int J_min = parameters->J_min;
+    int N = parameters->N;
     int spin = parameters->spin;
     ssht_dl_method_t dl_method = parameters->dl_method;
 
@@ -565,6 +566,7 @@ void s2let_wav_analysis_mw_multires(
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
+        so3_parameters.N = MIN(N,bandlimit);
         so3_core_inverse_via_ssht(
             f_wav + offset,
             f_wav_lmn + offset_lmn,
@@ -611,6 +613,7 @@ void s2let_wav_synthesis_mw_multires(
 ) {
     int L = parameters->L;
     int J_min = parameters->J_min;
+    int N = parameters->N;
     int spin = parameters->spin;
     ssht_dl_method_t dl_method = parameters->dl_method;
 
@@ -641,6 +644,7 @@ void s2let_wav_synthesis_mw_multires(
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
+        so3_parameters.N = MIN(N,bandlimit);
         so3_core_forward_via_ssht(
             f_wav_lmn + offset_lmn,
             f_wav + offset,
@@ -694,6 +698,7 @@ void s2let_wav_analysis_mw_multires_real(
 ) {
     int L = parameters->L;
     int J_min = parameters->J_min;
+    int N = parameters->N;
     ssht_dl_method_t dl_method = parameters->dl_method;
 
     int bandlimit;
@@ -728,6 +733,7 @@ void s2let_wav_analysis_mw_multires_real(
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
+        so3_parameters.N = MIN(N,bandlimit);
 
         int zero_ind;
         so3_sampling_elmn2ind(&zero_ind, 0, 0, 0, &so3_parameters);
@@ -811,6 +817,7 @@ void s2let_wav_synthesis_mw_multires_real(
 
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
+        so3_parameters.N = MIN(N,bandlimit);
 
         int zero_ind;
         so3_sampling_elmn2ind(&zero_ind, 0, 0, 0, &so3_parameters);
@@ -825,7 +832,7 @@ void s2let_wav_synthesis_mw_multires_real(
         // computes non-negative n
         for (n = 0; n < N; ++n)
         {
-            for (el = 0; el < bandlimit; ++el)
+            for (el = ABS(n); el < bandlimit; ++el)
             {
                 for (m = -el; m <= el; ++m)
                 {

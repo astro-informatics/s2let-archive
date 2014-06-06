@@ -83,8 +83,10 @@ void s2let_allocate_f_wav_lmn_multires(
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
+        so3_parameters.N = MIN(N,bandlimit);
         total += so3_sampling_flmn_size(&so3_parameters);
     }
+
     *f_wav_lmn = calloc(total, sizeof **f_wav_lmn);
     bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     *f_scal_lm = calloc(bandlimit * bandlimit, sizeof **f_scal_lm);
@@ -283,8 +285,9 @@ void s2let_wav_analysis_harmonic_multires(
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
+        int Nj = so3_parameters.N = MIN(N,bandlimit);
 
-        for (n = -N+1; n < N; ++n)
+        for (n = -Nj+1; n < Nj; ++n)
         {
             for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
             {
@@ -361,8 +364,9 @@ void s2let_wav_synthesis_harmonic_multires(
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
+        int Nj = so3_parameters.N = MIN(N,bandlimit);
 
-        for (n = -N+1; n < N; ++n)
+        for (n = -Nj+1; n < Nj; ++n)
         {
             for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
             {
