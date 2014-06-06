@@ -35,27 +35,6 @@ void s2let_lm_allocate(complex double **flm, int L)
 }
 
 /*!
- * Allocate Wigner coefficients for given bandlimits L and N.
- *
- * \param[out]  flmn Pointer to allocated space for Wigner
- *                   coefficients.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  N Azimuthal harmonic band-limit.
- * \retval none
- */
-void s2let_lmn_allocate(complex double **flmn, const so3_parameters_t *parameters)
-{
-    // Create a copy of the parameters where reality is set to false, in order to
-    // always allocate the full lmn block.
-    // TODO: Make sure that lmn and mw transforms can actually deal will the
-    // reduced storage for real signals, and then get rid of this copy here.
-    so3_parameters_t complex_parameters = *parameters;
-    complex_parameters.reality = 0;
-
-    *flmn = calloc(so3_sampling_flmn_size(&complex_parameters), sizeof **flmn);
-}
-
-/*!
  * Generate random harmonic coefficients for a complex map.
  *
  * \param[out]  flm Harmonic coefficients.
