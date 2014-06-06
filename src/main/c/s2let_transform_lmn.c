@@ -14,8 +14,8 @@ static inline void fill_so3_parameters(so3_parameters_t *parameters, int L, int 
 {
     parameters->L = L;
     parameters->N = N;
-    parameters->n_order = SO3_N_ORDER_NEGATIVE_FIRST;
-    parameters->storage = SO3_STORAGE_PADDED;
+    parameters->n_order = S2LET_SO3_N_ORDER;
+    parameters->storage = S2LET_SO3_STORAGE;
 }
 
 /*!
