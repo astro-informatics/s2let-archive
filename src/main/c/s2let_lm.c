@@ -5,6 +5,7 @@
 #include "s2let.h"
 #include <complex.h>
 #include <ssht.h>
+#include <so3.h>
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
@@ -31,20 +32,6 @@ double s2let_lm_power(complex double *flm, int L){
 void s2let_lm_allocate(complex double **flm, int L)
 {
     *flm = calloc(L * L, sizeof **flm);
-}
-
-/*!
- * Allocate Wigner coefficients for given bandlimits L and N.
- *
- * \param[out]  flmn Pointer to allocated space for Wigner
- *                   coefficients.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  N Azimuthal harmonic band-limit.
- * \retval none
- */
-void s2let_lmn_allocate(complex double **flmn, int L, int N)
-{
-    *flmn = calloc((2*N-1) * L * L, sizeof **flmn);
 }
 
 /*!

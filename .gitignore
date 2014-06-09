@@ -5,3 +5,6 @@
 *.mexa64
 *.mexmaci64
 *~
+
+core
+vgcore.*

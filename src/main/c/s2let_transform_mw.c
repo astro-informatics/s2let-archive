@@ -8,10 +8,18 @@
 #include <so3.h>
 #include <stdlib.h>
 
-static inline int lmn2ind(int el, int m, int n, int L, int N)
+static inline void fill_so3_parameters(so3_parameters_t *so3_parameters, const s2let_parameters_t *parameters)
 {
-    return (N-1+n) * L*L + el*el + el + m;
+    so3_parameters->verbosity = parameters->verbosity;
+    so3_parameters->L = parameters->L;
+    so3_parameters->N = parameters->N;
+    so3_parameters->sampling_scheme = parameters->sampling_scheme;
+    so3_parameters->n_order = S2LET_SO3_N_ORDER;
+    so3_parameters->storage = S2LET_SO3_STORAGE;
+    so3_parameters->dl_method = parameters->dl_method;
+    so3_parameters->reality = parameters->reality;
 }
+
 
 /*!
  * Allocates arrays for wavelet transform in pixel space (MW sampling).
@@ -33,11 +41,15 @@ void s2let_allocate_mw_f_wav(
 ) {
     int L = parameters->L;
     int J_min = parameters->J_min;
-    int N = parameters->N;
+
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, parameters);
+
+    int f_block_size = so3_sampling_f_size(&so3_parameters);
 
     int J = s2let_j_max(parameters);
     // We actually only need N samples of the orientational angle.
-    *f_wav = calloc((J-J_min+1) * (2*N-1) * L * (2*L-1), sizeof **f_wav);
+    *f_wav = calloc((J-J_min+1) * f_block_size, sizeof **f_wav);
     *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
 }
 
@@ -62,7 +74,9 @@ void s2let_allocate_mw_f_wav_multires(
 ) {
     int L = parameters->L;
     int J_min = parameters->J_min;
-    int N = parameters->N;
+
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, parameters);
 
     int J = s2let_j_max(parameters);
     int j, bandlimit, total = 0;
@@ -70,8 +84,9 @@ void s2let_allocate_mw_f_wav_multires(
     for (j = J_min; j <= J; ++j)
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
+        so3_parameters.L = bandlimit;
         // We actually only need N samples of the orientational angle.
-        total += (2*N-1) * bandlimit * (2 * bandlimit - 1);
+        total += so3_sampling_f_size(&so3_parameters);
     }
 
     *f_wav = calloc(total, sizeof **f_wav);
@@ -100,11 +115,15 @@ void s2let_allocate_mw_f_wav_real(
 ) {
     int L = parameters->L;
     int J_min = parameters->J_min;
-    int N = parameters->N;
+
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, parameters);
+
+    int f_block_size = so3_sampling_f_size(&so3_parameters);
 
     int J = s2let_j_max(parameters);
     // We actually only need N samples of the orientational angle.
-    *f_wav = calloc((J-J_min+1) * (2*N-1) * L * (2*L-1), sizeof **f_wav);
+    *f_wav = calloc((J-J_min+1) * f_block_size, sizeof **f_wav);
     *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
 }
 
@@ -129,7 +148,9 @@ void s2let_allocate_mw_f_wav_multires_real(
 ) {
     int L = parameters->L;
     int J_min = parameters->J_min;
-    int N = parameters->N;
+
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, parameters);
 
     int J = s2let_j_max(parameters);
     int j, bandlimit, total = 0;
@@ -137,8 +158,9 @@ void s2let_allocate_mw_f_wav_multires_real(
     for (j = J_min; j <= J; ++j)
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
+        so3_parameters.L = bandlimit;
         // We actually only need N samples of the orientational angle.
-        total += (2*N-1) * bandlimit * (2 * bandlimit - 1);
+        total += so3_sampling_f_size(&so3_parameters);
     }
 
     *f_wav = calloc(total, sizeof **f_wav);
@@ -175,58 +197,18 @@ void s2let_wav_analysis_mw(
     const s2let_parameters_t *parameters
 ) {
     int L = parameters->L;
-    int J_min = parameters->J_min;
-    int N = parameters->N;
     int spin = parameters->spin;
+    ssht_dl_method_t dl_method = parameters->dl_method;
+    int verbosity = parameters->verbosity;
 
-    int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
-    so3_parameters_t so3_parameters = {};
-    so3_parameters.verbosity = verbosity;
-    so3_parameters.L = L;
-    so3_parameters.N = N;
-    so3_parameters.n_order = SO3_N_ORDER_NEGATIVE_FIRST;
-    so3_parameters.storage = SO3_STORAGE_PADDED;
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
-    so3_parameters.dl_method = dl_method;
-
-    int j, offset, offset_lmn;
-    int J = s2let_j_max(parameters);
-    //int l_min = s2let_axisym_el_min(B, J_min);
-
-    complex double *wav_lm;
-    double *scal_l;
-    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, parameters);
-
-    complex double *flm, *f_wav_lmn, *f_scal_lm;
-
+    complex double *flm;
     s2let_lm_allocate(&flm, L);
+
     ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
 
-    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
-    s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
-
-    // Note, this is a spin-0 transform!
-    ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, L, 0, dl_method, verbosity);
-    offset = 0;
-    offset_lmn = 0;
-    for (j = J_min; j <= J; ++j)
-    {
-        so3_core_inverse_via_ssht(
-            f_wav + offset,
-            f_wav_lmn + offset_lmn,
-            &so3_parameters
-        );
-        offset_lmn += (2*N-1) * L*L;
-        offset += (2*N-1) * L * (2*L-1);
-    }
+    s2let_wav_analysis_lm2wav(f_wav, f_scal, flm, parameters);
 
     free(flm);
-    free(wav_lm);
-    free(scal_l);
-    free(f_scal_lm);
-    free(f_wav_lmn);
 }
 
 /*!
@@ -258,58 +240,18 @@ void s2let_wav_synthesis_mw(
     const s2let_parameters_t *parameters
 ) {
     int L = parameters->L;
-    int J_min = parameters->J_min;
-    int N = parameters->N;
     int spin = parameters->spin;
-
+    ssht_dl_method_t dl_method = parameters->dl_method;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
-    so3_parameters_t so3_parameters = {};
-    so3_parameters.verbosity = verbosity;
-    so3_parameters.L = L;
-    so3_parameters.N = N;
-    so3_parameters.n_order = SO3_N_ORDER_NEGATIVE_FIRST;
-    so3_parameters.storage = SO3_STORAGE_PADDED;
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
-    so3_parameters.dl_method = dl_method;
 
-    int j, offset, offset_lmn;
-    int J = s2let_j_max(parameters);
-    //int l_min = s2let_axisym_el_min(B, J_min);
-
-    complex double *wav_lm;
-    double *scal_l;
-    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, parameters);
-
-    complex double *flm, *f_wav_lmn, *f_scal_lm;
-    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
-
-    // Note, this is a spin-0 transform!
-    ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, L, 0, dl_method, verbosity);
-    offset = 0;
-    offset_lmn = 0;
-    for (j = J_min; j <= J; ++j)
-    {
-        so3_core_forward_via_ssht(
-            f_wav_lmn + offset_lmn,
-            f_wav + offset,
-            &so3_parameters
-        );
-        offset_lmn += (2*N-1) * L*L;
-        offset += (2*N-1) * L * (2*L-1);
-    }
-
+    complex double *flm;
     s2let_lm_allocate(&flm, L);
-    s2let_wav_synthesis_harmonic(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, parameters);
+
+    s2let_wav_synthesis_lm2wav(flm, f_wav, f_scal, parameters);
 
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
     free(flm);
-    free(wav_lm);
-    free(scal_l);
-    free(f_scal_lm);
-    free(f_wav_lmn);
 }
 
 /*!
@@ -341,57 +283,17 @@ void s2let_wav_analysis_mw_real(
     const s2let_parameters_t *parameters
 ) {
     int L = parameters->L;
-    int J_min = parameters->J_min;
-    int N = parameters->N;
-
+    ssht_dl_method_t dl_method = parameters->dl_method;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
-    so3_parameters_t so3_parameters = {};
-    so3_parameters.verbosity = verbosity;
-    so3_parameters.L = L;
-    so3_parameters.N = N;
-    so3_parameters.n_order = SO3_N_ORDER_NEGATIVE_FIRST;
-    so3_parameters.storage = SO3_STORAGE_PADDED;
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
-    so3_parameters.dl_method = dl_method;
-    so3_parameters.reality = 1;
 
-    int j, offset, offset_lmn;
-    int J = s2let_j_max(parameters);
-    //int l_min = s2let_axisym_el_min(B, J_min);
-
-    complex double *wav_lm;
-    double *scal_l;
-    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, parameters);
-
-    complex double *flm, *f_wav_lmn, *f_scal_lm;
-
+    complex double *flm;
     s2let_lm_allocate(&flm, L);
+
     ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
 
-    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
-    s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
-
-    ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, L, dl_method, verbosity);
-    offset = 0;
-    offset_lmn = 0;
-    for (j = J_min; j <= J; ++j)
-    {
-        so3_core_inverse_via_ssht_real(
-            f_wav + offset,
-            f_wav_lmn + offset_lmn + (N-1) * L*L,
-            &so3_parameters
-        );
-        offset_lmn += (2*N-1) * L*L;
-        offset += (2*N-1) * L * (2*L-1);
-    }
+    s2let_wav_analysis_lm2wav_real(f_wav, f_scal, flm, parameters);
 
     free(flm);
-    free(wav_lm);
-    free(scal_l);
-    free(f_scal_lm);
-    free(f_wav_lmn);
 }
 
 /*!
@@ -423,76 +325,17 @@ void s2let_wav_synthesis_mw_real(
     const s2let_parameters_t *parameters
 ) {
     int L = parameters->L;
-    int J_min = parameters->J_min;
-    int N = parameters->N;
-
+    ssht_dl_method_t dl_method = parameters->dl_method;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
-    so3_parameters_t so3_parameters = {};
-    so3_parameters.verbosity = verbosity;
-    so3_parameters.L = L;
-    so3_parameters.N = N;
-    so3_parameters.n_order = SO3_N_ORDER_NEGATIVE_FIRST;
-    so3_parameters.storage = SO3_STORAGE_PADDED;
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
-    so3_parameters.dl_method = dl_method;
-    so3_parameters.reality = 1;
 
-    int j, offset, offset_lmn;
-    int J = s2let_j_max(parameters);
-    //int l_min = s2let_axisym_el_min(B, J_min);
-
-    complex double *wav_lm;
-    double *scal_l;
-    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, parameters);
-
-    complex double *flm, *f_wav_lmn, *f_scal_lm;
-    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
-
-    ssht_core_mw_forward_sov_conv_sym_real(f_scal_lm, f_scal, L, dl_method, verbosity);
-    offset = 0;
-    offset_lmn = 0;
-    for (j = J_min; j <= J; ++j)
-    {
-        int n, el, m;
-
-        so3_core_forward_via_ssht_real(
-            f_wav_lmn + offset_lmn + (N-1) * L*L,
-            f_wav + offset,
-            &so3_parameters
-        );
-
-        // Expand lmn to negative n, because SO3 only
-        // computes non-negative n
-        for (n = 0; n < N; ++n)
-        {
-            for (el = 0; el < L; ++el)
-            {
-                for (m = -el; m <= el; ++m)
-                {
-                    int ind = lmn2ind(el, m, n, L, N);
-                    int nind = lmn2ind(el, -m, -n, L, N);
-                    int sign = (m+n)%2 ? -1 : 1;
-                    f_wav_lmn[offset_lmn + nind] = sign * conj(f_wav_lmn[offset_lmn + ind]);
-                }
-            }
-        }
-
-        offset_lmn += (2*N-1) * L*L;
-        offset += (2*N-1) * L * (2*L-1);
-    }
-
+    complex double *flm;
     s2let_lm_allocate(&flm, L);
-    s2let_wav_synthesis_harmonic(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, parameters);
+
+    s2let_wav_synthesis_lm2wav_real(flm, f_wav, f_scal, parameters);
 
     ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
 
     free(flm);
-    free(wav_lm);
-    free(scal_l);
-    free(f_scal_lm);
-    free(f_wav_lmn);
 }
 
 /*!
@@ -524,61 +367,18 @@ void s2let_wav_analysis_mw_multires(
     const s2let_parameters_t *parameters
 ) {
     int L = parameters->L;
-    int J_min = parameters->J_min;
-    int N = parameters->N;
     int spin = parameters->spin;
-
-    int bandlimit;
+    ssht_dl_method_t dl_method = parameters->dl_method;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
-    so3_parameters_t so3_parameters = {};
-    so3_parameters.verbosity = verbosity;
-    so3_parameters.N = N;
-    so3_parameters.n_order = SO3_N_ORDER_NEGATIVE_FIRST;
-    so3_parameters.storage = SO3_STORAGE_PADDED;
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
-    so3_parameters.dl_method = dl_method;
 
-    int j, offset, offset_lmn;
-    int J = s2let_j_max(parameters);
-    //int l_min = s2let_axisym_el_min(B, J_min);
-
-    complex double *wav_lm;
-    double *scal_l;
-    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, parameters);
-
-    complex double *flm, *f_wav_lmn, *f_scal_lm;
-
+    complex double *flm;
     s2let_lm_allocate(&flm, L);
+
     ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
 
-    s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, parameters);
-    s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
-
-    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
-    // Note, this is a spin-0 transform!
-    ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, bandlimit, 0, dl_method, verbosity);
-    offset = 0;
-    offset_lmn = 0;
-    for (j = J_min; j <= J; ++j)
-    {
-        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
-        so3_parameters.L = bandlimit;
-        so3_core_inverse_via_ssht(
-            f_wav + offset,
-            f_wav_lmn + offset_lmn,
-            &so3_parameters
-        );
-        offset_lmn += (2*N-1) * bandlimit*bandlimit;
-        offset += (2*N-1) * bandlimit * (2*bandlimit-1);
-    }
+    s2let_wav_analysis_lm2wav_multires(f_wav, f_scal, flm, parameters);
 
     free(flm);
-    free(wav_lm);
-    free(scal_l);
-    free(f_scal_lm);
-    free(f_wav_lmn);
 }
 
 /*!
@@ -610,62 +410,18 @@ void s2let_wav_synthesis_mw_multires(
     const s2let_parameters_t *parameters
 ) {
     int L = parameters->L;
-    int J_min = parameters->J_min;
-    int N = parameters->N;
     int spin = parameters->spin;
-
-    int bandlimit;
+    ssht_dl_method_t dl_method = parameters->dl_method;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
-    so3_parameters_t so3_parameters = {};
-    so3_parameters.verbosity = verbosity;
-    so3_parameters.N = N;
-    so3_parameters.n_order = SO3_N_ORDER_NEGATIVE_FIRST;
-    so3_parameters.storage = SO3_STORAGE_PADDED;
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
-    so3_parameters.dl_method = dl_method;
 
-    int j, offset, offset_lmn;
-    int J = s2let_j_max(parameters);
-    //int l_min = s2let_axisym_el_min(B, J_min);
-
-    complex double *wav_lm;
-    double *scal_l;
-    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, parameters);
-
-    complex double *flm, *f_wav_lmn, *f_scal_lm;
-    s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, parameters);
-
-    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
-    // Note, this is a spin-0 transform!
-    ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, bandlimit, 0, dl_method, verbosity);
-    offset = 0;
-    offset_lmn = 0;
-    for (j = J_min; j <= J; ++j)
-    {
-        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
-        so3_parameters.L = bandlimit;
-        so3_core_forward_via_ssht(
-            f_wav_lmn + offset_lmn,
-            f_wav + offset,
-            &so3_parameters
-        );
-
-        offset_lmn += (2*N-1) * bandlimit*bandlimit;
-        offset += (2*N-1) * bandlimit * (2*bandlimit-1);
-    }
-
+    complex double *flm;
     s2let_lm_allocate(&flm, L);
-    s2let_wav_synthesis_harmonic_multires(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, parameters);
+
+    s2let_wav_synthesis_lm2wav_multires(flm, f_wav, f_scal, parameters);
 
     ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
     free(flm);
-    free(wav_lm);
-    free(scal_l);
-    free(f_scal_lm);
-    free(f_wav_lmn);
 }
 
 
@@ -698,60 +454,17 @@ void s2let_wav_analysis_mw_multires_real(
     const s2let_parameters_t *parameters
 ) {
     int L = parameters->L;
-    int J_min = parameters->J_min;
-    int N = parameters->N;
-
-    int bandlimit;
+    ssht_dl_method_t dl_method = parameters->dl_method;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
-    so3_parameters_t so3_parameters = {};
-    so3_parameters.verbosity = verbosity;
-    so3_parameters.N = N;
-    so3_parameters.n_order = SO3_N_ORDER_NEGATIVE_FIRST;
-    so3_parameters.storage = SO3_STORAGE_PADDED;
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
-    so3_parameters.dl_method = dl_method;
 
-    int j, offset, offset_lmn;
-    int J = s2let_j_max(parameters);
-    //int l_min = s2let_axisym_el_min(B, J_min);
-
-    complex double *wav_lm;
-    double *scal_l;
-    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, parameters);
-
-    complex double *flm, *f_wav_lmn, *f_scal_lm;
-
+    complex double *flm;
     s2let_lm_allocate(&flm, L);
+
     ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
 
-    s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, parameters);
-    s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
-
-    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
-    // Note, this is a spin-0 transform!
-    ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, bandlimit, dl_method, verbosity);
-    offset = 0;
-    offset_lmn = 0;
-    for (j = J_min; j <= J; ++j)
-    {
-        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
-        so3_parameters.L = bandlimit;
-        so3_core_inverse_via_ssht_real(
-            f_wav + offset,
-            f_wav_lmn + offset_lmn + (N-1) * bandlimit*bandlimit,
-            &so3_parameters
-        );
-        offset_lmn += (2*N-1) * bandlimit*bandlimit;
-        offset += (2*N-1) * bandlimit * (2*bandlimit-1);
-    }
+    s2let_wav_analysis_lm2wav_multires_real(f_wav, f_scal, flm, parameters);
 
     free(flm);
-    free(wav_lm);
-    free(scal_l);
-    free(f_scal_lm);
-    free(f_wav_lmn);
 }
 
 /*!
@@ -783,77 +496,15 @@ void s2let_wav_synthesis_mw_multires_real(
     const s2let_parameters_t *parameters
 ) {
     int L = parameters->L;
-    int J_min = parameters->J_min;
-    int N = parameters->N;
-
-    int bandlimit;
+    ssht_dl_method_t dl_method = parameters->dl_method;
     int verbosity = 0;
-    ssht_dl_method_t dl_method = SSHT_DL_RISBO;
-    so3_parameters_t so3_parameters = {};
-    so3_parameters.verbosity = verbosity;
-    so3_parameters.N = N;
-    so3_parameters.n_order = SO3_N_ORDER_NEGATIVE_FIRST;
-    so3_parameters.storage = SO3_STORAGE_PADDED;
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
-    so3_parameters.dl_method = dl_method;
 
-    int j, offset, offset_lmn;
-    int J = s2let_j_max(parameters);
-    //int l_min = s2let_axisym_el_min(B, J_min);
-
-    complex double *wav_lm;
-    double *scal_l;
-    s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, parameters);
-    s2let_tiling_wavelet(wav_lm, scal_l, parameters);
-
-    complex double *flm, *f_wav_lmn, *f_scal_lm;
-    s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, parameters);
-
-    bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
-    // Note, this is a spin-0 transform!
-    ssht_core_mw_forward_sov_conv_sym_real(f_scal_lm, f_scal, bandlimit, dl_method, verbosity);
-    offset = 0;
-    offset_lmn = 0;
-    for (j = J_min; j <= J; ++j)
-    {
-        int n, el, m;
-
-        bandlimit = MIN(s2let_bandlimit(j, parameters), L);
-        so3_parameters.L = bandlimit;
-        so3_core_forward_via_ssht_real(
-            f_wav_lmn + offset_lmn + (N-1) * bandlimit*bandlimit,
-            f_wav + offset,
-            &so3_parameters
-        );
-
-        // Expand lmn to negative n, because SO3 only
-        // computes non-negative n
-        for (n = 0; n < N; ++n)
-        {
-            for (el = 0; el < bandlimit; ++el)
-            {
-                for (m = -el; m <= el; ++m)
-                {
-                    int ind = lmn2ind(el, m, n, bandlimit, N);
-                    int nind = lmn2ind(el, -m, -n, bandlimit, N);
-                    int sign = (m+n)%2 ? -1 : 1;
-                    f_wav_lmn[offset_lmn + nind] = sign * conj(f_wav_lmn[offset_lmn + ind]);
-                }
-            }
-        }
-
-        offset_lmn += (2*N-1) * bandlimit*bandlimit;
-        offset += (2*N-1) * bandlimit * (2*bandlimit-1);
-    }
-
+    complex double *flm;
     s2let_lm_allocate(&flm, L);
-    s2let_wav_synthesis_harmonic_multires(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, parameters);
+
+    s2let_wav_synthesis_lm2wav_multires_real(flm, f_wav, f_scal, parameters);
 
     ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
 
     free(flm);
-    free(wav_lm);
-    free(scal_l);
-    free(f_scal_lm);
-    free(f_wav_lmn);
 }
