@@ -138,6 +138,8 @@ S2LETOBJSMAT = $(S2LETOBJMAT)/s2let_transform_axisym_tiling_mex.o	\
 	  $(S2LETOBJMAT)/s2let_wavelet_tiling_mex.o		\
 	  $(S2LETOBJMAT)/s2let_transform_axisym_analysis_mw_mex.o		\
 	  $(S2LETOBJMAT)/s2let_transform_axisym_synthesis_mw_mex.o		\
+	  $(S2LETOBJMAT)/s2let_transform_analysis_lm2wav_mex.o		\
+	  $(S2LETOBJMAT)/s2let_transform_synthesis_lm2wav_mex.o		\
 	  $(S2LETOBJMAT)/s2let_transform_analysis_mw_mex.o		\
 	  $(S2LETOBJMAT)/s2let_transform_synthesis_mw_mex.o		\
 	  $(S2LETOBJMAT)/s2let_jmax_mex.o	\
@@ -147,6 +149,8 @@ S2LETOBJSMEX = $(S2LETOBJMEX)/s2let_transform_axisym_tiling_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_wavelet_tiling_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_transform_axisym_analysis_mw_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_transform_axisym_synthesis_mw_mex.$(MEXEXT)	\
+	  $(S2LETOBJMEX)/s2let_transform_analysis_lm2wav_mex.$(MEXEXT)	\
+	  $(S2LETOBJMEX)/s2let_transform_synthesis_lm2wav_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_transform_analysis_mw_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_transform_synthesis_mw_mex.$(MEXEXT)	\
 	  $(S2LETOBJMEX)/s2let_jmax_mex.$(MEXEXT)	\
