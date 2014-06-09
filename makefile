@@ -127,6 +127,7 @@ S2LETOBJS= $(S2LETOBJ)/s2let_transform_axisym_lm.o 	\
 	  $(S2LETOBJ)/s2let_transform_axisym_mw.o 	\
 	  $(S2LETOBJ)/s2let_transform_lmn.o 	\
 	  $(S2LETOBJ)/s2let_transform_mw.o 	\
+	  $(S2LETOBJ)/s2let_transform_lm2wav.o 	\
 	  $(S2LETOBJ)/s2let_idl_mw.o 	\
 	  $(S2LETOBJ)/s2let_lm.o	\
 	  $(S2LETOBJ)/s2let_math.o 	\

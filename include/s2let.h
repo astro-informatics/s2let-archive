@@ -4,6 +4,7 @@
 #include "s2let_types.h"
 #include "s2let_so3.h"
 #include "s2let_transform_lmn.h"
+#include "s2let_transform_lm2wav.h"
 #include "s2let_transform_mw.h"
 #include "s2let_transform_axisym_hpx.h"
 #include "s2let_transform_axisym_lm.h"
