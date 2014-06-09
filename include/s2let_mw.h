@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #ifndef S2LET_MW
@@ -67,6 +67,25 @@ void s2let_mw_allocate(complex double **f, int L);
  * \retval none
  */
 void s2let_mw_allocate_real(double **f, int L);
+
+
+/*!
+ * Allocate MWSS map for a given bandlimit L
+ *
+ * \param[inout]  f MW map to be allocated.
+ * \param[in]  L Angular harmonic band-limit.
+ * \retval none
+ */
+void s2let_mwss_allocate(complex double **f, int L);
+
+/*!
+ * Allocate real MWSS map for a given bandlimit L
+ *
+ * \param[inout]  f Real MW map to be allocated.
+ * \param[in]  L Angular harmonic band-limit.
+ * \retval none
+ */
+void s2let_mwss_allocate_real(double **f, int L);
 
 /*!
  * Computes power of a MW signal

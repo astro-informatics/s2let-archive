@@ -1,6 +1,7 @@
 #ifndef S2LET
 #define S2LET
 
+#include "s2let_error.h"
 #include "s2let_types.h"
 #include "s2let_so3.h"
 #include "s2let_transform_lmn.h"
