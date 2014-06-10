@@ -18,6 +18,11 @@ static inline void fill_so3_parameters(so3_parameters_t *so3_parameters, const s
     so3_parameters->storage = S2LET_SO3_STORAGE;
     so3_parameters->dl_method = parameters->dl_method;
     so3_parameters->reality = parameters->reality;
+
+    if (parameters->N % 2)
+        so3_parameters->n_mode = SO3_N_MODE_EVEN;
+    else
+        so3_parameters->n_mode = SO3_N_MODE_ODD;
 }
 
 /*!
@@ -55,7 +60,6 @@ void s2let_wav_analysis_lm2wav(
     int verbosity = 0;
     so3_parameters_t so3_parameters = {};
     fill_so3_parameters(&so3_parameters, parameters);
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
 
     int j, offset, offset_lmn;
     int J = s2let_j_max(parameters);
@@ -138,7 +142,6 @@ void s2let_wav_synthesis_lm2wav(
     int verbosity = 0;
     so3_parameters_t so3_parameters = {};
     fill_so3_parameters(&so3_parameters, parameters);
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
 
     int j, offset, offset_lmn;
     int J = s2let_j_max(parameters);
@@ -224,7 +227,6 @@ void s2let_wav_analysis_lm2wav_real(
     int verbosity = 0;
     so3_parameters_t so3_parameters = {};
     fill_so3_parameters(&so3_parameters, &real_parameters);
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
 
     int j, offset, offset_lmn;
     int J = s2let_j_max(&real_parameters);
@@ -309,7 +311,6 @@ void s2let_wav_synthesis_lm2wav_real(
     int verbosity = 0;
     so3_parameters_t so3_parameters = {};
     fill_so3_parameters(&so3_parameters, &real_parameters);
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
 
     int j, offset, offset_lmn;
     int J = s2let_j_max(&real_parameters);
@@ -395,7 +396,6 @@ void s2let_wav_analysis_lm2wav_multires(
     int verbosity = 0;
     so3_parameters_t so3_parameters = {};
     fill_so3_parameters(&so3_parameters, parameters);
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
 
     int j, offset, offset_lmn;
     int J = s2let_j_max(parameters);
@@ -485,7 +485,6 @@ void s2let_wav_synthesis_lm2wav_multires(
     int verbosity = 0;
     so3_parameters_t so3_parameters = {};
     fill_so3_parameters(&so3_parameters, parameters);
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
 
     int j, offset, offset_lmn;
     int J = s2let_j_max(parameters);
@@ -580,7 +579,6 @@ void s2let_wav_analysis_lm2wav_multires_real(
     int verbosity = 0;
     so3_parameters_t so3_parameters = {};
     fill_so3_parameters(&so3_parameters, &real_parameters);
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
 
     int j, offset, offset_lmn;
     int J = s2let_j_max(&real_parameters);
@@ -675,7 +673,6 @@ void s2let_wav_synthesis_lm2wav_multires_real(
     int verbosity = 0;
     so3_parameters_t so3_parameters = {};
     fill_so3_parameters(&so3_parameters, &real_parameters);
-    so3_parameters.n_mode = SO3_N_MODE_ALL;
 
     int j, offset, offset_lmn;
     int J = s2let_j_max(&real_parameters);
