@@ -138,7 +138,7 @@ void s2let_wav_analysis_harmonic(
 
     for (j = J_min; j <= J; ++j)
     {
-        for (n = -N+1; n < N; ++n)
+        for (n = -N+1; n < N; n+=2)
         {
             for (el = MAX(ABS(spin), ABS(n)); el < L; ++el)
             {
@@ -212,7 +212,7 @@ void s2let_wav_synthesis_harmonic(
 
     for (j = J_min; j <= J; ++j)
     {
-        for (n = -N+1; n < N; ++n)
+        for (n = -N+1; n < N; n+=2)
         {
             for (el = MAX(ABS(spin), ABS(n)); el < L; ++el)
             {
@@ -283,7 +283,7 @@ void s2let_wav_analysis_harmonic_real(
 
     for (j = J_min; j <= J; ++j)
     {
-        for (n = 0; n < N; ++n)
+        for (n = 1-N%2; n < N; n+=2)
         {
             for (el = n; el < L; ++el)
             {
@@ -356,7 +356,7 @@ void s2let_wav_synthesis_harmonic_real(
 
     for (j = J_min; j <= J; ++j)
     {
-        for (n = 0; n < N; ++n)
+        for (n = 1-N%2; n < N; n+=2)
         {
             for (el = n; el < L; ++el)
             {
@@ -443,9 +443,11 @@ void s2let_wav_analysis_harmonic_multires(
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
-        int Nj = so3_parameters.N = MIN(N,bandlimit);
+        int Nj = MIN(N,bandlimit);
+        Nj += (Nj+N)%2; // ensure N and Nj are both even or both odd
+        so3_parameters.N = Nj;
 
-        for (n = -Nj+1; n < Nj; ++n)
+        for (n = -Nj+1; n < Nj; n+=2)
         {
             for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
             {
@@ -522,9 +524,11 @@ void s2let_wav_synthesis_harmonic_multires(
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
-        int Nj = so3_parameters.N = MIN(N,bandlimit);
+        int Nj = MIN(N,bandlimit);
+        Nj += (Nj+N)%2; // ensure N and Nj are both even or both odd
+        so3_parameters.N = Nj;
 
-        for (n = -Nj+1; n < Nj; ++n)
+        for (n = -Nj+1; n < Nj; n+=2)
         {
             for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
             {
@@ -599,9 +603,11 @@ void s2let_wav_analysis_harmonic_multires_real(
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
-        int Nj = so3_parameters.N = MIN(N,bandlimit);
+        int Nj = MIN(N,bandlimit);
+        Nj += (Nj+N)%2; // ensure N and Nj are both even or both odd
+        so3_parameters.N = Nj;
 
-        for (n = 0; n < Nj; ++n)
+        for (n = 1-Nj%2; n < Nj; n+=2)
         {
             for (el = n; el < bandlimit; ++el)
             {
@@ -677,9 +683,11 @@ void s2let_wav_synthesis_harmonic_multires_real(
     {
         bandlimit = MIN(s2let_bandlimit(j, parameters), L);
         so3_parameters.L = bandlimit;
-        int Nj = so3_parameters.N = MIN(N,bandlimit);
+        int Nj = MIN(N,bandlimit);
+        Nj += (Nj+N)%2; // ensure N and Nj are both even or both odd
+        so3_parameters.N = Nj;
 
-        for (n = 0; n < Nj; ++n)
+        for (n = 1-Nj%2; n < Nj; n+=2)
         {
             for (el = n; el < bandlimit; ++el)
             {
