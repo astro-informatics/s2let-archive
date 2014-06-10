@@ -230,9 +230,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   int block_size;
   if (sampling_scheme == S2LET_SAMPLING_MW_SS)
-    block_size = L*(2*L-1);
-  else
     block_size = (L+1)*2*L;
+  else
+    block_size = L*(2*L-1);
 
   // Output function f
   if (reality)
