@@ -35,20 +35,20 @@ f = ssht_inverse(flm, L, 'Method', 'MW');
 disp('Construct the corresponding spin signal on the sphere')
 f_s = ssht_inverse(flm, L, 'Method', 'MW', 'Spin', Spin);
 
-disp('Perform scalar directional harmonic-to-wavelet transform with default parameters')
-[f_wav, f_scal] = s2let_transform_analysis_lm2wav(flm, 'N', N, 'downsample', false);
-flm_rec = s2let_transform_synthesis_lm2wav(f_wav, f_scal, 'N', N, 'downsample', false);
-default = max(abs(flm-flm_rec))
+% disp('Perform scalar directional harmonic-to-wavelet transform with default parameters')
+% [f_wav, f_scal] = s2let_transform_analysis_lm2wav(flm, 'N', N, 'downsample', false);
+% flm_rec = s2let_transform_synthesis_lm2wav(f_wav, f_scal, 'N', N, 'downsample', false);
+% default = max(abs(flm-flm_rec))
 
-disp('Perform spin directional harmonic-to-wavelet transform with default parameters')
-[f_wav, f_scal] = s2let_transform_analysis_lm2wav(flm, 'N', N, 'Spin', Spin, 'downsample', false);
-flm_rec = s2let_transform_synthesis_lm2wav(f_wav, f_scal, 'N', N, 'Spin', Spin, 'downsample', false);
-default = max(abs(flm-flm_rec))
+% disp('Perform spin directional harmonic-to-wavelet transform with default parameters')
+% [f_wav, f_scal] = s2let_transform_analysis_lm2wav(flm, 'N', N, 'Spin', Spin, 'downsample', false);
+% flm_rec = s2let_transform_synthesis_lm2wav(f_wav, f_scal, 'N', N, 'Spin', Spin, 'downsample', false);
+% default = max(abs(flm-flm_rec))
 
-disp('Perform spin directional harmonic-to-wavelet transform with custom parameters')
-[f_wav, f_scal] = s2let_transform_analysis_lm2wav(flm,  'B', B, 'L', L, 'J_min', J_min, 'N', N, 'Spin', Spin, 'downsample', true);
-flm_rec = s2let_transform_synthesis_lm2wav(f_wav, f_scal,  'B', B, 'L', L, 'J_min', J_min, 'N', N, 'Spin', Spin, 'downsample', true);
-default = max(abs(flm-flm_rec))
+% disp('Perform spin directional harmonic-to-wavelet transform with custom parameters')
+% [f_wav, f_scal] = s2let_transform_analysis_lm2wav(flm,  'B', B, 'L', L, 'J_min', J_min, 'N', N, 'Spin', Spin, 'downsample', true);
+% flm_rec = s2let_transform_synthesis_lm2wav(f_wav, f_scal,  'B', B, 'L', L, 'J_min', J_min, 'N', N, 'Spin', Spin, 'downsample', true);
+% default = max(abs(flm-flm_rec))
 
 disp('Perform scalar directional wavelet transform with default parameters')
 [f_wav, f_scal] = s2let_transform_analysis_mw(f, 'N', N, 'downsample', false);

@@ -41,7 +41,11 @@ function flm = s2let_transform_synthesis_lm2wav(f_wav, f_scal, varargin)
 len = size(f_wav);
 temp = f_wav{len};
 sz = size(temp);
-Lguessed = min([sz(1) sz(2)]);
+if sz(1) == 2*sz(2)-1 || sz(2) == 2*sz(1)-1
+    Lguessed = min([sz(1) sz(2)]);
+else
+    Lguessed = min([sz(1) sz(2)])-1;
+end
 
 p = inputParser;
 p.addRequired('f_wav');
