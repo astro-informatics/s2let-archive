@@ -72,7 +72,18 @@ void s2let_wav_analysis_lm2wav(
     s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
 
     // Note, this is a spin-0 transform!
-    ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, L, 0, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, L, 0, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_inverse_sov_sym_ss(f_scal, f_scal_lm, L, 0, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
+
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
@@ -142,7 +153,18 @@ void s2let_wav_synthesis_lm2wav(
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
 
     // Note, this is a spin-0 transform!
-    ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, L, 0, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, L, 0, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_forward_sov_conv_sym_ss(f_scal_lm, f_scal, L, 0, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
+
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
@@ -218,7 +240,17 @@ void s2let_wav_analysis_lm2wav_real(
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &real_parameters);
     s2let_wav_analysis_harmonic_real(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &real_parameters);
 
-    ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, L, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, L, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_inverse_sov_sym_ss_real(f_scal, f_scal_lm, L, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
 
     offset = 0;
     offset_lmn = 0;
@@ -291,7 +323,18 @@ void s2let_wav_synthesis_lm2wav_real(
     complex double *f_wav_lmn, *f_scal_lm;
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &real_parameters);
 
-    ssht_core_mw_forward_sov_conv_sym_real(f_scal_lm, f_scal, L, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_forward_sov_conv_sym_real(f_scal_lm, f_scal, L, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_forward_sov_conv_sym_ss_real(f_scal_lm, f_scal, L, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
+
 
     offset = 0;
     offset_lmn = 0;
@@ -369,8 +412,20 @@ void s2let_wav_analysis_lm2wav_multires(
     s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
+
     // Note, this is a spin-0 transform!
-    ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, bandlimit, 0, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_inverse_sov_sym(f_scal, f_scal_lm, bandlimit, 0, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_inverse_sov_sym_ss(f_scal, f_scal_lm, bandlimit, 0, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
+
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
@@ -445,8 +500,20 @@ void s2let_wav_synthesis_lm2wav_multires(
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, parameters);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
+
     // Note, this is a spin-0 transform!
-    ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, bandlimit, 0, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, bandlimit, 0, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_forward_sov_conv_sym_ss(f_scal_lm, f_scal, bandlimit, 0, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
+
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
@@ -530,8 +597,20 @@ void s2let_wav_analysis_lm2wav_multires_real(
     s2let_wav_analysis_harmonic_multires_real(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &real_parameters);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, &real_parameters), L);
+
     // Note, this is a spin-0 transform!
-    ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, bandlimit, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_inverse_sov_sym_real(f_scal, f_scal_lm, bandlimit, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_inverse_sov_sym_ss_real(f_scal, f_scal_lm, bandlimit, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
+
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
@@ -611,8 +690,20 @@ void s2let_wav_synthesis_lm2wav_multires_real(
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, &real_parameters);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, &real_parameters), L);
+
     // Note, this is a spin-0 transform!
-    ssht_core_mw_forward_sov_conv_sym_real(f_scal_lm, f_scal, bandlimit, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_forward_sov_conv_sym_real(f_scal_lm, f_scal, bandlimit, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_forward_sov_conv_sym_ss_real(f_scal_lm, f_scal, bandlimit, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
+
     offset = 0;
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)

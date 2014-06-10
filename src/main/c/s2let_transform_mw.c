@@ -50,7 +50,7 @@ void s2let_allocate_mw_f_wav(
     int J = s2let_j_max(parameters);
     // We actually only need N samples of the orientational angle.
     *f_wav = calloc((J-J_min+1) * f_block_size, sizeof **f_wav);
-    *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
+    *f_scal = calloc(f_block_size, sizeof **f_scal);
 }
 
 /*!
@@ -91,7 +91,9 @@ void s2let_allocate_mw_f_wav_multires(
 
     *f_wav = calloc(total, sizeof **f_wav);
     bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
-    *f_scal = calloc(bandlimit * (2*bandlimit-1), sizeof **f_scal);
+    so3_parameters.L = bandlimit;
+    total = so3_sampling_f_size(&so3_parameters);
+    *f_scal = calloc(total, sizeof **f_scal);
 }
 
 /*!
@@ -124,7 +126,7 @@ void s2let_allocate_mw_f_wav_real(
     int J = s2let_j_max(parameters);
     // We actually only need N samples of the orientational angle.
     *f_wav = calloc((J-J_min+1) * f_block_size, sizeof **f_wav);
-    *f_scal = calloc(L * (2*L-1), sizeof **f_scal);
+    *f_scal = calloc(f_block_size, sizeof **f_scal);
 }
 
 /*!
@@ -165,7 +167,9 @@ void s2let_allocate_mw_f_wav_multires_real(
 
     *f_wav = calloc(total, sizeof **f_wav);
     bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
-    *f_scal = calloc(bandlimit * (2*bandlimit-1), sizeof **f_scal);
+    so3_parameters.L = bandlimit;
+    total = so3_sampling_f_size(&so3_parameters);
+    *f_scal = calloc(total, sizeof **f_scal);
 }
 
 /*!
@@ -204,7 +208,17 @@ void s2let_wav_analysis_mw(
     complex double *flm;
     s2let_lm_allocate(&flm, L);
 
-    ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_forward_sov_conv_sym_ss(flm, f, L, spin, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
 
     s2let_wav_analysis_lm2wav(f_wav, f_scal, flm, parameters);
 
@@ -249,7 +263,17 @@ void s2let_wav_synthesis_mw(
 
     s2let_wav_synthesis_lm2wav(flm, f_wav, f_scal, parameters);
 
-    ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_inverse_sov_sym_ss(f, flm, L, spin, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
 
     free(flm);
 }
@@ -289,7 +313,17 @@ void s2let_wav_analysis_mw_real(
     complex double *flm;
     s2let_lm_allocate(&flm, L);
 
-    ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_forward_sov_conv_sym_ss_real(flm, f, L, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
 
     s2let_wav_analysis_lm2wav_real(f_wav, f_scal, flm, parameters);
 
@@ -333,7 +367,17 @@ void s2let_wav_synthesis_mw_real(
 
     s2let_wav_synthesis_lm2wav_real(flm, f_wav, f_scal, parameters);
 
-    ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_inverse_sov_sym_ss_real(f, flm, L, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
 
     free(flm);
 }
@@ -374,7 +418,17 @@ void s2let_wav_analysis_mw_multires(
     complex double *flm;
     s2let_lm_allocate(&flm, L);
 
-    ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_forward_sov_conv_sym(flm, f, L, spin, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_forward_sov_conv_sym_ss(flm, f, L, spin, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
 
     s2let_wav_analysis_lm2wav_multires(f_wav, f_scal, flm, parameters);
 
@@ -419,7 +473,17 @@ void s2let_wav_synthesis_mw_multires(
 
     s2let_wav_synthesis_lm2wav_multires(flm, f_wav, f_scal, parameters);
 
-    ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_inverse_sov_sym_ss(f, flm, L, spin, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
 
     free(flm);
 }
@@ -460,7 +524,17 @@ void s2let_wav_analysis_mw_multires_real(
     complex double *flm;
     s2let_lm_allocate(&flm, L);
 
-    ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_forward_sov_conv_sym_real(flm, f, L, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_forward_sov_conv_sym_ss_real(flm, f, L, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
 
     s2let_wav_analysis_lm2wav_multires_real(f_wav, f_scal, flm, parameters);
 
@@ -504,7 +578,17 @@ void s2let_wav_synthesis_mw_multires_real(
 
     s2let_wav_synthesis_lm2wav_multires_real(flm, f_wav, f_scal, parameters);
 
-    ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
+    switch (parameters->sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_inverse_sov_sym_real(f, flm, L, dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_inverse_sov_sym_ss_real(f, flm, L, dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
 
     free(flm);
 }

@@ -44,6 +44,16 @@ void s2let_mw_allocate_real(double **f, int L)
   *f = calloc(L * (2*L-1), sizeof **f);
 }
 
+void s2let_mwss_allocate(complex double **f, int L)
+{
+  *f = calloc((2*L)*(L+1), sizeof **f);
+}
+
+void s2let_mwss_allocate_real(double **f, int L)
+{
+  *f = calloc((2*L)*(L+1), sizeof **f);
+}
+
 double s2let_mw_power(complex double *f, int L){
   complex double *flm;
   s2let_lm_allocate(&flm, L);
