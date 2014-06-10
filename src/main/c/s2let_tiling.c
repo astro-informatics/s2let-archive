@@ -240,7 +240,7 @@ void s2let_tiling_axisym(double *kappa, double *kappa0, const s2let_parameters_t
             previoustemp = temp;
         }
         for (l = 0; l < L; l++)
-            if( !finite(kappa[l+j*L]) )
+            if( !isfinite(kappa[l+j*L]) )
                 kappa[l+j*L] = kappa[l+j*L-1];
     }
     free(phi2);

@@ -3,6 +3,8 @@
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
+#include <s2let_mex.h>
+#include <string.h>
 #include "mex.h"
 
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
@@ -15,7 +17,8 @@
  *
  * Usage:
  *   [f_wav, f_scal] = ...
- *        s2let_transform_analysis_lm2wav_mex(flm, B, L, J_min, N, spin, reality, downsample, spin_lowered, original_spin);
+ *        s2let_transform_analysis_lm2wav_mex(flm, B, L, J_min, N, spin, reality, downsample,
+ *                                            spin_lowered, original_spin, sampling_scheme);
  *
  */
 void mexFunction( int nlhs, mxArray *plhs[],
@@ -23,6 +26,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 {
 
   int i, j, B, L, J_min, N, spin, flm_m, flm_n, flm_size, reality, downsample, normalization, original_spin;
+  char sampling_str[S2LET_STRING_LEN];
+  s2let_sampling_t sampling_scheme;
   s2let_parameters_t parameters = {};
   double *f_wav_real, *f_scal_real, *flm_real;
   double *f_wav_imag, *f_scal_imag, *flm_imag;
@@ -30,9 +35,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
   double *f_wav_r = NULL, *f_scal_r = NULL;
   int iin = 0, iout = 0;
   // Check number of arguments
-  if(nrhs!=10) {
+  if(nrhs!=11) {
     mexErrMsgIdAndTxt("s2let_transform_analysis_lm2wav_mex:InvalidInput:nrhs",
-          "Require ten inputs.");
+          "Require eleven inputs.");
   }
   if(nlhs!=2) {
     mexErrMsgIdAndTxt("s2let_transform_analysis_lm2wav_mex:InvalidOutput:nlhs",
@@ -52,6 +57,26 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_analysis_lm2wav_mex:InvalidInput:downsample",
           "Multiresolution flag must be logical.");
   downsample = mxIsLogicalScalarTrue(prhs[iin]);
+
+  /* Parse sampling scheme method. */
+  iin = 10;
+  if( !mxIsChar(prhs[iin]) ) {
+      mexErrMsgIdAndTxt("s2let_transform_analysis_lm2wav_mex:InvalidInput:samplingSchemeChar",
+                        "Sampling scheme must be string.");
+  }
+  int len = (mxGetM(prhs[iin]) * mxGetN(prhs[iin])) + 1;
+  if (len >= S2LET_STRING_LEN)
+      mexErrMsgIdAndTxt("s2let_transform_analysis_lm2wav_mex:InvalidInput:samplingSchemeTooLong",
+                        "Sampling scheme exceeds string length.");
+  mxGetString(prhs[iin], sampling_str, len);
+
+  if (strcmp(sampling_str, S2LET_SAMPLING_MW_STR) == 0)
+      sampling_scheme = S2LET_SAMPLING_MW;
+  else if (strcmp(sampling_str, S2LET_SAMPLING_MW_SS_STR) == 0)
+      sampling_scheme = S2LET_SAMPLING_MW_SS;
+  else
+      mexErrMsgIdAndTxt("s2let_transform_analysis_lm2wav_mex:InvalidInput:samplingScheme",
+                        "Invalid sampling scheme.");
 
   // Parse normalization flag
   iin = 8;
@@ -171,6 +196,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   parameters.normalization = normalization;
   parameters.original_spin = original_spin;
   parameters.reality = reality;
+  parameters.sampling_scheme = sampling_scheme;
 
   // Perform wavelet transform in harmonic space and then reconstruction.
   if(downsample){
@@ -195,16 +221,27 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Compute size of wavelet array
   int bandlimit, wavsize = 0, scalsize = 0;
+  so3_parameters_t so3_parameters = {};
+  so3_parameters.N = N;
+  so3_parameters.sampling_scheme = sampling_scheme;
   if(downsample){
     for (j = J_min; j <= J; j++){
         bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
-        wavsize += (2*N-1) * bandlimit * (2 * bandlimit - 1);
+        so3_parameters.L = bandlimit;
+        wavsize += so3_sampling_f_size(&so3_parameters);
      }
      bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
-     scalsize = bandlimit * (2 * bandlimit - 1);
+    if (sampling_scheme == S2LET_SAMPLING_MW_SS)
+        scalsize = (bandlimit+1) * 2 * bandlimit;
+    else
+        scalsize = bandlimit * (2 * bandlimit - 1);
   }else{
-    wavsize = (J+1-J_min) * (2*N-1) * L * ( 2 * L - 1 );
-    scalsize = L * ( 2 * L - 1 );
+    so3_parameters.L = L;
+    wavsize = (J+1-J_min) * so3_sampling_f_size(&so3_parameters);
+    if (sampling_scheme == S2LET_SAMPLING_MW_SS)
+        scalsize = (L+1) * 2*L;
+    else
+        scalsize = L * (2*L - 1);
   }
 
   // Output wavelets

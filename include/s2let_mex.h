@@ -1,0 +1,10 @@
+#ifndef S2LET_MEX
+#define S2LET_MEX
+
+#define S2LET_SAMPLING_MW_STR "MW"
+#define S2LET_SAMPLING_MW_SS_STR "MWSS"
+
+#define S2LET_STRING_LEN 128
+
+
+#endif
