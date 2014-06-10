@@ -3,6 +3,8 @@
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
+#include <s2let_mex.h>
+#include <string.h>
 #include "mex.h"
 
 /**
@@ -13,13 +15,16 @@
  *
  * Usage:
  *   flm = ...
- *        s2let_transform_synthesis_lm2wav_mex(f_wav, f_scal, B, L, J_min, N, spin, reality, downsample, spin_lowered, original_spin);
+ *        s2let_transform_synthesis_lm2wav_mex(f_wav, f_scal, B, L, J_min, N, spin, reality, downsample,
+ *                                             spin_lowered, original_spin, sampling_scheme);
  *
  */
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
   int i, j, B, L, J_min, N, spin, f_m, f_n, reality, downsample, normalization, original_spin;
+  char sampling_str[S2LET_STRING_LEN];
+  s2let_sampling_t sampling_scheme;
   s2let_parameters_t parameters = {};
   double *f_wav_real, *f_scal_real, *flm_real;
   double *f_wav_imag, *f_scal_imag, *flm_imag;
@@ -28,9 +33,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
   int iin = 0, iout = 0;
 
   // Check number of arguments
-  if(nrhs!=11) {
+  if(nrhs!=12) {
     mexErrMsgIdAndTxt("s2let_transform_synthesis_lm2wav_mex:InvalidInput:nrhs",
-          "Require eleven inputs.");
+          "Require twelve inputs.");
   }
   if(nlhs!=1) {
     mexErrMsgIdAndTxt("s2let_transform_synthesis_lm2wav_mex:InvalidOutput:nlhs",
@@ -50,6 +55,26 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_transform_synthesis_lm2wav_mex:InvalidInput:downsample",
           "Multiresolution flag must be logical.");
   downsample = mxIsLogicalScalarTrue(prhs[iin]);
+
+  /* Parse sampling scheme method. */
+  iin = 11;
+  if( !mxIsChar(prhs[iin]) ) {
+      mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:samplingSchemeChar",
+                        "Sampling scheme must be string.");
+  }
+  int len = (mxGetM(prhs[iin]) * mxGetN(prhs[iin])) + 1;
+  if (len >= S2LET_STRING_LEN)
+      mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:samplingSchemeTooLong",
+                        "Sampling scheme exceeds string length.");
+  mxGetString(prhs[iin], sampling_str, len);
+
+  if (strcmp(sampling_str, S2LET_SAMPLING_MW_STR) == 0)
+      sampling_scheme = S2LET_SAMPLING_MW;
+  else if (strcmp(sampling_str, S2LET_SAMPLING_MW_SS_STR) == 0)
+      sampling_scheme = S2LET_SAMPLING_MW_SS;
+  else
+      mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:samplingScheme",
+                        "Invalid sampling scheme.");
 
   // Parse normalization flag
   iin = 9;
@@ -181,6 +206,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   parameters.normalization = normalization;
   parameters.original_spin = original_spin;
   parameters.reality = reality;
+  parameters.sampling_scheme = sampling_scheme;
 
   // Perform wavelet transform in harmonic space and then reconstruction.
   s2let_lm_allocate(&flm, L);

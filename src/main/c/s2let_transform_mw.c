@@ -39,7 +39,6 @@ void s2let_allocate_mw_f_wav(
     complex double **f_scal,
     const s2let_parameters_t *parameters
 ) {
-    int L = parameters->L;
     int J_min = parameters->J_min;
 
     so3_parameters_t so3_parameters = {};
@@ -115,7 +114,6 @@ void s2let_allocate_mw_f_wav_real(
     double **f_scal,
     const s2let_parameters_t *parameters
 ) {
-    int L = parameters->L;
     int J_min = parameters->J_min;
 
     so3_parameters_t so3_parameters = {};
