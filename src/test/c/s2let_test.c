@@ -1560,8 +1560,6 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
     parameters.normalization = S2LET_WAV_NORM_DEFAULT;
     parameters.original_spin = 0;
 
-    int i;
-
     double wav_error, scal_error;
 
     complex double *f, *flm;
@@ -1583,10 +1581,6 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
     // Do both transforms
     s2let_transform_axisym_wav_analysis_mw(f_wav_axisym, f_scal_axisym, f, &parameters);
     s2let_analysis_px2wav(f_wav_dir, f_scal_dir, f, &parameters);
-
-    // Account for the different wavelet normalisations
-    for (i = 0; i < (J-J_min+1)*L*(2*L-1); ++i)
-        f_wav_dir[i] *= sqrt(2*PI);
 
     // Compute the maximum absolute error in the computed wavelet transform
     wav_error = maxerr_cplx(f_wav_axisym, f_wav_dir, (J-J_min+1)*L*(2*L-1));
@@ -1624,7 +1618,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     parameters.normalization = S2LET_WAV_NORM_DEFAULT;
     parameters.original_spin = 0;
 
-    int samples, bandlimit, i, j;
+    int samples, bandlimit, j;
 
     double wav_error, scal_error;
 
@@ -1654,10 +1648,6 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
         bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         samples += bandlimit * (2 * bandlimit - 1);
     }
-
-    // Account for the different wavelet normalisations
-    for (i = 0; i < samples; ++i)
-        f_wav_dir[i] *= sqrt(2*PI);
 
     // Compute the maximum absolute error in the computed wavelet transform
     wav_error = maxerr_cplx(f_wav_axisym, f_wav_dir, samples);
