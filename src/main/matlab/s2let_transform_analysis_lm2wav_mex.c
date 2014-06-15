@@ -203,19 +203,19 @@ void mexFunction( int nlhs, mxArray *plhs[],
     // Multiresolution algorithm
     if(reality){
       s2let_allocate_mw_f_wav_multires_real(&f_wav_r, &f_scal_r, &parameters);
-      s2let_wav_analysis_lm2wav_multires_real(f_wav_r, f_scal_r, flm, &parameters);
+      s2let_analysis_lm2wav_multires_real(f_wav_r, f_scal_r, flm, &parameters);
     }else{
       s2let_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
-      s2let_wav_analysis_lm2wav_multires(f_wav, f_scal, flm, &parameters);
+      s2let_analysis_lm2wav_multires(f_wav, f_scal, flm, &parameters);
     }
   }else{
     // Full resolution algorithm
     if(reality){
       s2let_allocate_mw_f_wav_real(&f_wav_r, &f_scal_r, &parameters);
-      s2let_wav_analysis_lm2wav_real(f_wav_r, f_scal_r, flm, &parameters);
+      s2let_analysis_lm2wav_real(f_wav_r, f_scal_r, flm, &parameters);
     }else{
       s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
-      s2let_wav_analysis_lm2wav(f_wav, f_scal, flm, &parameters);
+      s2let_analysis_lm2wav(f_wav, f_scal, flm, &parameters);
     }
   }
 

@@ -44,7 +44,7 @@ static inline void fill_so3_parameters(so3_parameters_t *so3_parameters, const s
  * \param[in]  spin Spin number.
  * \retval none
  */
-void s2let_wav_synthesis_harmonic(
+void s2let_synthesis_lmn2lm(
     complex double *flm,
     const complex double *f_wav_lmn,
     const complex double *f_scal_lm,
@@ -117,7 +117,7 @@ void s2let_wav_synthesis_harmonic(
  * \param[in]  spin Spin number.
  * \retval none
  */
-void s2let_wav_synthesis_harmonic_real(
+void s2let_synthesis_lmn2lm_real(
     complex double *flm,
     const complex double *f_wav_lmn,
     const complex double *f_scal_lm,
@@ -201,7 +201,7 @@ void s2let_wav_synthesis_harmonic_real(
  * \param[in]  spin Spin number.
  * \retval none
  */
-void s2let_wav_synthesis_harmonic_multires(
+void s2let_synthesis_lmn2lm_multires(
     complex double *flm,
     const complex double *f_wav_lmn,
     const complex double *f_scal_lm,
@@ -281,7 +281,7 @@ void s2let_wav_synthesis_harmonic_multires(
  * \param[in]  spin Spin number.
  * \retval none
  */
-void s2let_wav_synthesis_harmonic_multires_real(
+void s2let_synthesis_lmn2lm_multires_real(
     complex double *flm,
     const complex double *f_wav_lmn,
     const complex double *f_scal_lm,
@@ -379,7 +379,7 @@ void s2let_wav_synthesis_harmonic_multires_real(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_synthesis_lm2wav(
+void s2let_synthesis_wav2lm(
     complex double *flm,
     const complex double *f_wav,
     const complex double *f_scal,
@@ -431,7 +431,7 @@ void s2let_wav_synthesis_lm2wav(
         offset += so3_sampling_f_size(&so3_parameters);
     }
 
-    s2let_wav_synthesis_harmonic(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, parameters);
+    s2let_synthesis_lmn2lm(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, parameters);
 
     free(wav_lm);
     free(scal_l);
@@ -461,7 +461,7 @@ void s2let_wav_synthesis_lm2wav(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_synthesis_lm2wav_real(
+void s2let_synthesis_wav2lm_real(
     complex double *flm,
     const double *f_wav,
     const double *f_scal,
@@ -517,7 +517,7 @@ void s2let_wav_synthesis_lm2wav_real(
         offset += so3_sampling_f_size(&so3_parameters);
     }
 
-    s2let_wav_synthesis_harmonic_real(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, &real_parameters);
+    s2let_synthesis_lmn2lm_real(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, &real_parameters);
 
     free(wav_lm);
     free(scal_l);
@@ -547,7 +547,7 @@ void s2let_wav_synthesis_lm2wav_real(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_synthesis_lm2wav_multires(
+void s2let_synthesis_wav2lm_multires(
     complex double *flm,
     const complex double *f_wav,
     const complex double *f_scal,
@@ -607,7 +607,7 @@ void s2let_wav_synthesis_lm2wav_multires(
         offset += so3_sampling_f_size(&so3_parameters);
     }
 
-    s2let_wav_synthesis_harmonic_multires(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, parameters);
+    s2let_synthesis_lmn2lm_multires(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, parameters);
 
     free(wav_lm);
     free(scal_l);
@@ -637,7 +637,7 @@ void s2let_wav_synthesis_lm2wav_multires(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_synthesis_lm2wav_multires_real(
+void s2let_synthesis_wav2lm_multires_real(
     complex double *flm,
     const double *f_wav,
     const double *f_scal,
@@ -701,7 +701,7 @@ void s2let_wav_synthesis_lm2wav_multires_real(
         offset += so3_sampling_f_size(&so3_parameters);
     }
 
-    s2let_wav_synthesis_harmonic_multires_real(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, &real_parameters);
+    s2let_synthesis_lmn2lm_multires_real(flm, f_wav_lmn, f_scal_lm, wav_lm, scal_l, &real_parameters);
 
     free(wav_lm);
     free(scal_l);
@@ -731,7 +731,7 @@ void s2let_wav_synthesis_lm2wav_multires_real(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_synthesis_mw(
+void s2let_synthesis_wav2px(
     complex double *f,
     const complex double *f_wav,
     const complex double *f_scal,
@@ -745,7 +745,7 @@ void s2let_wav_synthesis_mw(
     complex double *flm;
     s2let_lm_allocate(&flm, L);
 
-    s2let_wav_synthesis_lm2wav(flm, f_wav, f_scal, parameters);
+    s2let_synthesis_wav2lm(flm, f_wav, f_scal, parameters);
 
     switch (parameters->sampling_scheme)
     {
@@ -784,7 +784,7 @@ void s2let_wav_synthesis_mw(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_synthesis_mw_real(
+void s2let_synthesis_wav2px_real(
     double *f,
     const double *f_wav,
     const double *f_scal,
@@ -797,7 +797,7 @@ void s2let_wav_synthesis_mw_real(
     complex double *flm;
     s2let_lm_allocate(&flm, L);
 
-    s2let_wav_synthesis_lm2wav_real(flm, f_wav, f_scal, parameters);
+    s2let_synthesis_wav2lm_real(flm, f_wav, f_scal, parameters);
 
     switch (parameters->sampling_scheme)
     {
@@ -836,7 +836,7 @@ void s2let_wav_synthesis_mw_real(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_synthesis_mw_multires(
+void s2let_synthesis_wav2px_multires(
     complex double *f,
     const complex double *f_wav,
     const complex double *f_scal,
@@ -850,7 +850,7 @@ void s2let_wav_synthesis_mw_multires(
     complex double *flm;
     s2let_lm_allocate(&flm, L);
 
-    s2let_wav_synthesis_lm2wav_multires(flm, f_wav, f_scal, parameters);
+    s2let_synthesis_wav2lm_multires(flm, f_wav, f_scal, parameters);
 
     switch (parameters->sampling_scheme)
     {
@@ -889,7 +889,7 @@ void s2let_wav_synthesis_mw_multires(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_synthesis_mw_multires_real(
+void s2let_synthesis_wav2px_multires_real(
     double *f,
     const double *f_wav,
     const double *f_scal,
@@ -902,7 +902,7 @@ void s2let_wav_synthesis_mw_multires_real(
     complex double *flm;
     s2let_lm_allocate(&flm, L);
 
-    s2let_wav_synthesis_lm2wav_multires_real(flm, f_wav, f_scal, parameters);
+    s2let_synthesis_wav2lm_multires_real(flm, f_wav, f_scal, parameters);
 
     switch (parameters->sampling_scheme)
     {

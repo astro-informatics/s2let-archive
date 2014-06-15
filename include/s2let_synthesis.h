@@ -9,7 +9,7 @@
 
 /** Harmonic-space wavelet transform **/
 
-void s2let_wav_synthesis_harmonic(
+void s2let_synthesis_lmn2lm(
     complex double *flm,
     const complex double *f_wav_lmn,
     const complex double *f_scal_lm,
@@ -20,7 +20,7 @@ void s2let_wav_synthesis_harmonic(
 
 /** Harmonic-space wavelet transform for real signals **/
 
-void s2let_wav_synthesis_harmonic_real(
+void s2let_synthesis_lmn2lm_real(
     complex double *flm,
     const complex double *f_wav_lmn,
     const complex double *f_scal_lm,
@@ -31,7 +31,7 @@ void s2let_wav_synthesis_harmonic_real(
 
 /** Multi-resolution harmonic-space wavelet transform **/
 
-void s2let_wav_synthesis_harmonic_multires(
+void s2let_synthesis_lmn2lm_multires(
     complex double *flm,
     const complex double *f_wav_lmn,
     const complex double *f_scal_lm,
@@ -42,7 +42,7 @@ void s2let_wav_synthesis_harmonic_multires(
 
 /** Multi-resolution harmonic-space wavelet transform for real signals **/
 
-void s2let_wav_synthesis_harmonic_multires_real(
+void s2let_synthesis_lmn2lm_multires_real(
     complex double *flm,
     const complex double *f_wav_lmn,
     const complex double *f_scal_lm,
@@ -53,7 +53,7 @@ void s2let_wav_synthesis_harmonic_multires_real(
 
 /** Harmonic-space wavelet transform **/
 
-void s2let_wav_synthesis_lm2wav(
+void s2let_synthesis_wav2lm(
     complex double *flm,
     const complex double *f_wav,
     const complex double *f_scal,
@@ -62,7 +62,7 @@ void s2let_wav_synthesis_lm2wav(
 
 /** Harmonic-space wavelet transform for real signals **/
 
-void s2let_wav_synthesis_lm2wav_real(
+void s2let_synthesis_wav2lm_real(
     complex double *flm,
     const double *f_wav,
     const double *f_scal,
@@ -71,7 +71,7 @@ void s2let_wav_synthesis_lm2wav_real(
 
 /** Multi-resolution harmonic-space wavelet transform **/
 
-void s2let_wav_synthesis_lm2wav_multires(
+void s2let_synthesis_wav2lm_multires(
     complex double *flm,
     const complex double *f_wav,
     const complex double *f_scal,
@@ -80,7 +80,7 @@ void s2let_wav_synthesis_lm2wav_multires(
 
 /** Multi-resolution harmonic-space wavelet transform for real signals **/
 
-void s2let_wav_synthesis_lm2wav_multires_real(
+void s2let_synthesis_wav2lm_multires_real(
     complex double *flm,
     const double *f_wav,
     const double *f_scal,
@@ -89,14 +89,14 @@ void s2let_wav_synthesis_lm2wav_multires_real(
 
 /** Pixel-space wavelet transform **/
 
-void s2let_wav_synthesis_mw(
+void s2let_synthesis_wav2px(
     complex double *f,
     const complex double *f_wav,
     const complex double *f_scal,
     const s2let_parameters_t *parameters
 );
 
-void s2let_wav_synthesis_mw_real(
+void s2let_synthesis_wav2px_real(
     double *f,
     const double *f_wav,
     const double *f_scal,
@@ -105,14 +105,14 @@ void s2let_wav_synthesis_mw_real(
 
 /** Multi-resolution harmonic-space wavelet transform **/
 
-void s2let_wav_synthesis_mw_multires(
+void s2let_synthesis_wav2px_multires(
     complex double *f,
     const complex double *f_wav,
     const complex double *f_scal,
     const s2let_parameters_t *parameters
 );
 
-void s2let_wav_synthesis_mw_multires_real(
+void s2let_synthesis_wav2px_multires_real(
     double *f,
     const double *f_wav,
     const double *f_scal,

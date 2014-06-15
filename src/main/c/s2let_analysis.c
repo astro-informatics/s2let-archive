@@ -44,7 +44,7 @@ static inline void fill_so3_parameters(so3_parameters_t *so3_parameters, const s
  * \param[in]  spin Spin number.
  * \retval none
  */
-void s2let_wav_analysis_harmonic(
+void s2let_analysis_lm2lmn(
     complex double *f_wav_lmn,
     complex double *f_scal_lm,
     const complex double *flm,
@@ -116,7 +116,7 @@ void s2let_wav_analysis_harmonic(
  * \param[in]  spin Spin number.
  * \retval none
  */
-void s2let_wav_analysis_harmonic_real(
+void s2let_analysis_lm2lmn_real(
     complex double *f_wav_lmn,
     complex double *f_scal_lm,
     const complex double *flm,
@@ -188,7 +188,7 @@ void s2let_wav_analysis_harmonic_real(
  * \param[in]  spin Spin number.
  * \retval none
  */
-void s2let_wav_analysis_harmonic_multires(
+void s2let_analysis_lm2lmn_multires(
     complex double *f_wav_lmn,
     complex double *f_scal_lm,
     const complex double *flm,
@@ -270,7 +270,7 @@ void s2let_wav_analysis_harmonic_multires(
  * \param[in]  spin Spin number.
  * \retval none
  */
-void s2let_wav_analysis_harmonic_multires_real(
+void s2let_analysis_lm2lmn_multires_real(
     complex double *f_wav_lmn,
     complex double *f_scal_lm,
     const complex double *flm,
@@ -354,7 +354,7 @@ void s2let_wav_analysis_harmonic_multires_real(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_analysis_lm2wav(
+void s2let_analysis_lm2wav(
     complex double *f_wav,
     complex double *f_scal,
     const complex double *flm,
@@ -380,7 +380,7 @@ void s2let_wav_analysis_lm2wav(
     complex double *f_wav_lmn, *f_scal_lm;
 
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
-    s2let_wav_analysis_harmonic(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
+    s2let_analysis_lm2lmn(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
 
     // Note, this is a spin-0 transform!
     switch (parameters->sampling_scheme)
@@ -436,7 +436,7 @@ void s2let_wav_analysis_lm2wav(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_analysis_lm2wav_real(
+void s2let_analysis_lm2wav_real(
     double *f_wav,
     double *f_scal,
     const complex double *flm,
@@ -465,7 +465,7 @@ void s2let_wav_analysis_lm2wav_real(
     complex double *f_wav_lmn, *f_scal_lm;
 
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &real_parameters);
-    s2let_wav_analysis_harmonic_real(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &real_parameters);
+    s2let_analysis_lm2lmn_real(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &real_parameters);
 
     switch (parameters->sampling_scheme)
     {
@@ -520,7 +520,7 @@ void s2let_wav_analysis_lm2wav_real(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_analysis_lm2wav_multires(
+void s2let_analysis_lm2wav_multires(
     complex double *f_wav,
     complex double *f_scal,
     const complex double *flm,
@@ -548,7 +548,7 @@ void s2let_wav_analysis_lm2wav_multires(
     complex double *f_wav_lmn, *f_scal_lm;
 
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, parameters);
-    s2let_wav_analysis_harmonic_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
+    s2let_analysis_lm2lmn_multires(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
 
@@ -610,7 +610,7 @@ void s2let_wav_analysis_lm2wav_multires(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_analysis_lm2wav_multires_real(
+void s2let_analysis_lm2wav_multires_real(
     double *f_wav,
     double *f_scal,
     const complex double *flm,
@@ -641,7 +641,7 @@ void s2let_wav_analysis_lm2wav_multires_real(
     complex double *f_wav_lmn, *f_scal_lm;
 
     s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, &real_parameters);
-    s2let_wav_analysis_harmonic_multires_real(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &real_parameters);
+    s2let_analysis_lm2lmn_multires_real(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &real_parameters);
 
     bandlimit = MIN(s2let_bandlimit(J_min-1, &real_parameters), L);
 
@@ -704,7 +704,7 @@ void s2let_wav_analysis_lm2wav_multires_real(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_analysis_mw(
+void s2let_analysis_px2wav(
     complex double *f_wav,
     complex double *f_scal,
     const complex double *f,
@@ -730,7 +730,7 @@ void s2let_wav_analysis_mw(
         S2LET_ERROR_GENERIC("Sampling scheme not supported.");
     }
 
-    s2let_wav_analysis_lm2wav(f_wav, f_scal, flm, parameters);
+    s2let_analysis_lm2wav(f_wav, f_scal, flm, parameters);
 
     free(flm);
 }
@@ -757,7 +757,7 @@ void s2let_wav_analysis_mw(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_analysis_mw_real(
+void s2let_analysis_px2wav_real(
     double *f_wav,
     double *f_scal,
     const double *f,
@@ -782,7 +782,7 @@ void s2let_wav_analysis_mw_real(
         S2LET_ERROR_GENERIC("Sampling scheme not supported.");
     }
 
-    s2let_wav_analysis_lm2wav_real(f_wav, f_scal, flm, parameters);
+    s2let_analysis_lm2wav_real(f_wav, f_scal, flm, parameters);
 
     free(flm);
 }
@@ -809,7 +809,7 @@ void s2let_wav_analysis_mw_real(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_analysis_mw_multires(
+void s2let_analysis_px2wav_multires(
     complex double *f_wav,
     complex double *f_scal,
     const complex double *f,
@@ -835,7 +835,7 @@ void s2let_wav_analysis_mw_multires(
         S2LET_ERROR_GENERIC("Sampling scheme not supported.");
     }
 
-    s2let_wav_analysis_lm2wav_multires(f_wav, f_scal, flm, parameters);
+    s2let_analysis_lm2wav_multires(f_wav, f_scal, flm, parameters);
 
     free(flm);
 }
@@ -863,7 +863,7 @@ void s2let_wav_analysis_mw_multires(
  *                           were lowered from. Otherwise, it is ignored.
  * \retval none
  */
-void s2let_wav_analysis_mw_multires_real(
+void s2let_analysis_px2wav_multires_real(
     double *f_wav,
     double *f_scal,
     const double *f,
@@ -888,7 +888,7 @@ void s2let_wav_analysis_mw_multires_real(
         S2LET_ERROR_GENERIC("Sampling scheme not supported.");
     }
 
-    s2let_wav_analysis_lm2wav_multires_real(f_wav, f_scal, flm, parameters);
+    s2let_analysis_lm2wav_multires_real(f_wav, f_scal, flm, parameters);
 
     free(flm);
 }
