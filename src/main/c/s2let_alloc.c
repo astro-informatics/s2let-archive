@@ -58,7 +58,7 @@ void s2let_allocate_f_wav_lmn(
     int j, total = 0;
     for (j = J_min; j <= J; ++j)
     {
-        if (parameters->downsample)
+        if (!parameters->upsample)
         {
             bandlimit = MIN(s2let_bandlimit(j, parameters), L);
             so3_parameters.L = bandlimit;
@@ -68,7 +68,7 @@ void s2let_allocate_f_wav_lmn(
     }
 
     *f_wav_lmn = calloc(total, sizeof **f_wav_lmn);
-    if (parameters->downsample)
+    if (!parameters->upsample)
         bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
     *f_scal_lm = calloc(bandlimit * bandlimit, sizeof **f_scal_lm);
 }
@@ -103,7 +103,7 @@ void s2let_allocate_mw_f_wav(
 
     for (j = J_min; j <= J; ++j)
     {
-        if (parameters->downsample)
+        if (!parameters->upsample)
         {
             bandlimit = MIN(s2let_bandlimit(j, parameters), L);
             so3_parameters.L = bandlimit;
@@ -115,7 +115,7 @@ void s2let_allocate_mw_f_wav(
 
     *f_wav = calloc(total, sizeof **f_wav);
 
-    if (parameters->downsample)
+    if (!parameters->upsample)
     {
         bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
         so3_parameters.L = bandlimit;
@@ -156,7 +156,7 @@ void s2let_allocate_mw_f_wav_real(
 
     for (j = J_min; j <= J; ++j)
     {
-        if (parameters->downsample)
+        if (!parameters->upsample)
         {
             bandlimit = MIN(s2let_bandlimit(j, parameters), L);
             so3_parameters.L = bandlimit;
@@ -166,7 +166,7 @@ void s2let_allocate_mw_f_wav_real(
     }
 
     *f_wav = calloc(total, sizeof **f_wav);
-    if (parameters->downsample)
+    if (!parameters->upsample)
     {
         bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
         so3_parameters.L = bandlimit;

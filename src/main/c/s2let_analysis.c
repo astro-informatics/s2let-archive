@@ -74,7 +74,7 @@ void s2let_analysis_lm2lmn(
     for (j = J_min; j <= J; ++j)
     {
 
-        if (parameters->downsample)
+        if (!parameters->upsample)
         {
             bandlimit = MIN(s2let_bandlimit(j, parameters), L);
             so3_parameters.L = bandlimit;
@@ -101,7 +101,7 @@ void s2let_analysis_lm2lmn(
         offset += so3_sampling_flmn_size(&so3_parameters);
     }
 
-    if (parameters->downsample)
+    if (!parameters->upsample)
         bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
 
     for (el = ABS(spin); el < bandlimit; ++el)
@@ -160,7 +160,7 @@ void s2let_analysis_lm2lmn_real(
 
     for (j = J_min; j <= J; ++j)
     {
-        if (parameters->downsample)
+        if (!parameters->upsample)
         {
             bandlimit = MIN(s2let_bandlimit(j, parameters), L);
             so3_parameters.L = bandlimit;
@@ -187,7 +187,7 @@ void s2let_analysis_lm2lmn_real(
         offset += so3_sampling_flmn_size(&so3_parameters);
     }
 
-    if (parameters->downsample)
+    if (!parameters->upsample)
         bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
 
     for (el = 0; el < bandlimit; ++el)
@@ -252,7 +252,7 @@ void s2let_analysis_lm2wav(
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
     s2let_analysis_lm2lmn(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
 
-    if (parameters->downsample)
+    if (!parameters->upsample)
         bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
 
     // Note, this is a spin-0 transform!
@@ -272,7 +272,7 @@ void s2let_analysis_lm2wav(
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
     {
-        if (parameters->downsample)
+        if (!parameters->upsample)
         {
             bandlimit = MIN(s2let_bandlimit(j, parameters), L);
             so3_parameters.L = bandlimit;
@@ -350,7 +350,7 @@ void s2let_analysis_lm2wav_real(
     s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &real_parameters);
     s2let_analysis_lm2lmn_real(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &real_parameters);
 
-    if (parameters->downsample)
+    if (!parameters->upsample)
         bandlimit = MIN(s2let_bandlimit(J_min-1, &real_parameters), L);
 
     switch (parameters->sampling_scheme)
@@ -369,7 +369,7 @@ void s2let_analysis_lm2wav_real(
     offset_lmn = 0;
     for (j = J_min; j <= J; ++j)
     {
-        if (parameters->downsample)
+        if (!parameters->upsample)
         {
             bandlimit = MIN(s2let_bandlimit(j, &real_parameters), L);
             so3_parameters.L = bandlimit;

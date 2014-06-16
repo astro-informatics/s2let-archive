@@ -96,7 +96,7 @@ int main(int argc, char **argv)
     // multires == 1 --> multiresolution transform
     for (multires = 0; multires < 2; ++multires)
     {
-        parameters.downsample = multires;
+        parameters.upsample = 1-multires;
         L = 1;
         while(L <= Lmax)
         {

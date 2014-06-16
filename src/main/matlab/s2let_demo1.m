@@ -24,7 +24,7 @@ ny = ns - 1 + rem(2+J-J_min+1 , ns) ;
 nx = ns;
 
 % Perform decomposition
-[f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, 'B', B, 'J_min', J_min, 'Reality', true, 'downsample', false);
+[f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, 'B', B, 'J_min', J_min, 'Reality', true, 'Upsample', true);
 % FULL RESOLUTION PLOT
 figure('Position',[100 100 1300 1000])
 subplot(nx, ny, 1);
@@ -81,4 +81,4 @@ v = caxis;
 temp = max(abs(v));
 caxis([-temp temp])
    %title(['Wavelet scale : ',int2str(j)-J_min+1])
-end 
+end

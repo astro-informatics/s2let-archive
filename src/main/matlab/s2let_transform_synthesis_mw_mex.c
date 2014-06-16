@@ -15,14 +15,14 @@
  *
  * Usage:
  *   f = ...
- *        s2let_transform_synthesis_mw_mex(f_wav, f_scal, B, L, J_min, N, spin, reality, downsample,
+ *        s2let_transform_synthesis_mw_mex(f_wav, f_scal, B, L, J_min, N, spin, reality, upsample,
  *                                         spin_lowered, original_spin, sampling_scheme);
  *
  */
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[] )
 {
-  int i, j, B, L, J_min, N, spin, f_m, f_n, reality, downsample, normalization, original_spin;
+  int i, j, B, L, J_min, N, spin, f_m, f_n, reality, upsample, normalization, original_spin;
   char sampling_str[S2LET_STRING_LEN];
   s2let_sampling_t sampling_scheme;
   s2let_parameters_t parameters = {};
@@ -51,9 +51,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
   // Parse multiresolution flag
   iin = 8;
   if( !mxIsLogicalScalar(prhs[iin]) )
-    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:downsample",
+    mexErrMsgIdAndTxt("s2let_transform_synthesis_mw_mex:InvalidInput:upsample",
           "Multiresolution flag must be logical.");
-  downsample = mxIsLogicalScalarTrue(prhs[iin]);
+  upsample = mxIsLogicalScalarTrue(prhs[iin]);
 
   /* Parse sampling scheme method. */
   iin = 11;
@@ -202,7 +202,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   parameters.N = N;
   parameters.spin = spin;
-  parameters.downsample = downsample;
+  parameters.upsample = upsample;
   parameters.normalization = normalization;
   parameters.original_spin = original_spin;
   parameters.reality = reality;

@@ -17,7 +17,7 @@
  *
  * Usage:
  *   [f_wav, f_scal] = ...
- *        s2let_transform_analysis_lm2wav_mex(flm, B, L, J_min, N, spin, reality, downsample,
+ *        s2let_transform_analysis_lm2wav_mex(flm, B, L, J_min, N, spin, reality, upsample,
  *                                            spin_lowered, original_spin, sampling_scheme);
  *
  */
@@ -25,7 +25,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
 
-  int i, j, B, L, J_min, N, spin, flm_m, flm_n, flm_size, reality, downsample, normalization, original_spin;
+  int i, j, B, L, J_min, N, spin, flm_m, flm_n, flm_size, reality, upsample, normalization, original_spin;
   char sampling_str[S2LET_STRING_LEN];
   s2let_sampling_t sampling_scheme;
   s2let_parameters_t parameters = {};
@@ -54,9 +54,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
   // Parse multiresolution flag
   iin = 7;
   if( !mxIsLogicalScalar(prhs[iin]) )
-    mexErrMsgIdAndTxt("s2let_transform_analysis_lm2wav_mex:InvalidInput:downsample",
+    mexErrMsgIdAndTxt("s2let_transform_analysis_lm2wav_mex:InvalidInput:upsample",
           "Multiresolution flag must be logical.");
-  downsample = mxIsLogicalScalarTrue(prhs[iin]);
+  upsample = mxIsLogicalScalarTrue(prhs[iin]);
 
   /* Parse sampling scheme method. */
   iin = 10;
@@ -193,7 +193,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   parameters.N = N;
   parameters.spin = spin;
-  parameters.downsample = downsample;
+  parameters.upsample = upsample;
   parameters.normalization = normalization;
   parameters.original_spin = original_spin;
   parameters.reality = reality;
@@ -213,7 +213,14 @@ void mexFunction( int nlhs, mxArray *plhs[],
   so3_parameters_t so3_parameters = {};
   so3_parameters.N = N;
   so3_parameters.sampling_scheme = sampling_scheme;
-  if(downsample){
+  if(upsample){
+    so3_parameters.L = L;
+    wavsize = (J+1-J_min) * so3_sampling_f_size(&so3_parameters);
+    if (sampling_scheme == S2LET_SAMPLING_MW_SS)
+        scalsize = (L+1) * 2*L;
+    else
+        scalsize = L * (2*L - 1);
+  }else{
     for (j = J_min; j <= J; j++){
         bandlimit = MIN(s2let_bandlimit(j, &parameters), L);
         so3_parameters.L = bandlimit;
@@ -224,13 +231,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
         scalsize = (bandlimit+1) * 2 * bandlimit;
     else
         scalsize = bandlimit * (2 * bandlimit - 1);
-  }else{
-    so3_parameters.L = L;
-    wavsize = (J+1-J_min) * so3_sampling_f_size(&so3_parameters);
-    if (sampling_scheme == S2LET_SAMPLING_MW_SS)
-        scalsize = (L+1) * 2*L;
-    else
-        scalsize = L * (2*L - 1);
   }
 
   // Output wavelets

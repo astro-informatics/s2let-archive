@@ -23,8 +23,8 @@ function s2let_plot_sphere(wav, scal, B, L, N, J_min, varargin)
 % Options consist of parameter type and value pairs.
 % Valid options include:
 %
-%  'Downsample'      = { true   [multiresolution algorithm (default)],
-%                        false  [full resolution wavelets] },
+%  'Upsample'      = { false   [multiresolution algorithm (default)],
+%                      true  [full resolution wavelets] },
 %  'Function'        = { 'real' [plot the real part of the input functions (default)],
 %                        'imag' [plot the imaginary part of the input functions],
 %                        'abs'  [plot the absolute value of the input functions] }
@@ -40,7 +40,7 @@ p.addRequired('B', @isnumeric);
 p.addRequired('L', @isnumeric);
 p.addRequired('N', @isnumeric);
 p.addRequired('J_min', @isnumeric);
-p.addParamValue('Downsample', true, @islogical);
+p.addParamValue('Upsample', false, @islogical);
 p.addParamValue('Function', 'real', @ischar)
 
 p.parse(wav, scal, B, L, N, J_min, varargin{:});
@@ -58,10 +58,10 @@ end
 
 figure(1);
 
-if args.Downsample
-    bl = min([s2let_bandlimit(J_min-1, J_min, B, L), L]);
-else
+if args.Upsample
     bl = L;
+else
+    bl = min([s2let_bandlimit(J_min-1, J_min, B, L), L]);
 end
 ssht_plot_sphere(f(scal), bl)
 
@@ -71,10 +71,10 @@ iplot = 1;
 for j = J_min:J
     for n = 1:2*N-1
         subplot(J-J_min+1,2*N-1,iplot);
-        if args.Downsample
-            bl = min([s2let_bandlimit(j, J_min, B, L), L]);
-        else
+        if args.Upsample
             bl = L;
+        else
+            bl = min([s2let_bandlimit(j, J_min, B, L), L]);
         end
         ssht_plot_sphere(f(wav{j-J_min+1,n}), bl)
         iplot = iplot + 1;

@@ -88,11 +88,11 @@ for i = 1:runs
 
     [f_wav, f_scal] = s2let_transform_analysis_mw(complex(real(f), imag(f)), 'B', B, 'L', L, 'N', N,    ...
                                                   'Spin', Spin, 'J_min', J_min, ...
-                                                  'Downsample', false);
+                                                  'Upsample', true);
 
     if J_min == 0
         f_scals(i) = f_scal(1);
-    else                                              
+    else
         covar_W_phi_data(i) = var(f_scal(:));
     end
 

@@ -19,8 +19,8 @@ function flm = s2let_transform_synthesis_lm2wav(f_wav, f_scal, varargin)
 %  'L'               = { Harmonic band-limit; L > 1 (default=guessed from input) }
 %  'N'               = { Azimuthal/directional band-limit; N > 1 (default=L) }
 %  'Spin'               = { Spin; (default=0) }
-%  'Downsample'      = { true        [multiresolution algorithm (default)],
-%                        false       [full resolution wavelets] }
+%  'Upsample'      = { false        [multiresolution algorithm (default)],
+%                      true       [full resolution wavelets] }
 %  'Sampling'        = { 'MW'           [McEwen & Wiaux sampling (default)],
 %                        'MWSS'         [McEwen & Wiaux symmetric sampling] }
 %  'J_min'           = { Minimum wavelet scale to consider;
@@ -55,7 +55,7 @@ p.addParamValue('L', Lguessed, @isnumeric);
 p.addParamValue('J_min', 0, @isnumeric);
 p.addParamValue('N', Lguessed, @isnumeric);
 p.addParamValue('Spin', 0, @isnumeric);
-p.addParamValue('Downsample', true, @islogical);
+p.addParamValue('Upsample', false, @islogical);
 p.addParamValue('Sampling', 'MW', @ischar);
 p.addParamValue('Reality', false, @islogical);
 p.addParamValue('SpinLowered', false, @islogical);
@@ -79,10 +79,10 @@ offset = 0;
 if  strcmp(args.Sampling, 'MWSS')
     for j = args.J_min:J
       for en = 1:2*args.N-1
-        if args.Downsample == true
-            band_limit = min([ s2let_bandlimit(j,args.J_min,args.B,args.L) args.L ]);
-        else
+        if args.Upsample
             band_limit = args.L;
+        else
+            band_limit = min([ s2let_bandlimit(j,args.J_min,args.B,args.L) args.L ]);
         end
         temp = f_wav{j+1-args.J_min, en};
         for t = 1:band_limit+1
@@ -97,10 +97,10 @@ if  strcmp(args.Sampling, 'MWSS')
 else
     for j = args.J_min:J
       for en = 1:2*args.N-1
-        if args.Downsample == true
-            band_limit = min([ s2let_bandlimit(j,args.J_min,args.B,args.L) args.L ]);
-          else
+        if args.Upsample
             band_limit = args.L;
+          else
+            band_limit = min([ s2let_bandlimit(j,args.J_min,args.B,args.L) args.L ]);
           end
           temp = f_wav{j+1-args.J_min, en};
           for t = 1:band_limit
@@ -120,7 +120,7 @@ if(all(isreal(f_wav_vec)))
 end
 
 flm = s2let_transform_synthesis_lm2wav_mex(f_wav_vec, f_scal_vec, args.B, args.L, args.J_min, ...
-                                           args.N, args.Spin, args.Reality, args.Downsample, ...
+                                           args.N, args.Spin, args.Reality, args.Upsample, ...
                                            args.SpinLowered, args.SpinLoweredFrom, ...
                                            args.Sampling);
 
