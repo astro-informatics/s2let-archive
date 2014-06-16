@@ -381,6 +381,7 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
   parameters.J_min = J_min;
   parameters.N = N;
   parameters.spin = spin;
+  parameters.downsample = 1;
   parameters.normalization = S2LET_WAV_NORM_DEFAULT;
   parameters.original_spin = 0;
 
@@ -406,18 +407,18 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
   s2let_lm_random_flm(flm, L, spin, seed);
 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
-  s2let_allocate_f_wav_lmn_multires(&f_wav_lmn, &f_scal_lm, &parameters);
+  s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
-  s2let_analysis_lm2lmn_multires(f_wav_lmn, f_scal_lm, flm, psi, phi, &parameters);
+  s2let_analysis_lm2lmn(f_wav_lmn, f_scal_lm, flm, psi, phi, &parameters);
   time_end = clock();
   printf("  - Wavelet analysis   : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   // Reconstruct the initial harmonic coefficients from those of the wavelets
   time_start = clock();
-  s2let_synthesis_lmn2lm_multires(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, &parameters);
+  s2let_synthesis_lmn2lm(flm_rec, f_wav_lmn, f_scal_lm, psi, phi, &parameters);
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -865,6 +866,7 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
     parameters.J_min = J_min;
     parameters.N = N;
     parameters.spin = spin;
+    parameters.downsample = 1;
     parameters.normalization = S2LET_WAV_NORM_DEFAULT;
     parameters.original_spin = 0;
 
@@ -886,18 +888,18 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
+    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_analysis_px2wav_multires(f_wav, f_scal, f, &parameters);
+    s2let_analysis_px2wav(f_wav, f_scal, f, &parameters);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_synthesis_wav2px_multires(f_rec, f_wav, f_scal, &parameters);
+    s2let_synthesis_wav2px(f_rec, f_wav, f_scal, &parameters);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -939,6 +941,7 @@ void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, i
     parameters.J_min = J_min;
     parameters.N = N;
     parameters.spin = 0;
+    parameters.downsample = 1;
     int verbosity = parameters.verbosity = 0;
     ssht_dl_method_t dl_method = parameters.dl_method = SSHT_DL_RISBO;
     //int J = s2let_j_max(L, B);
@@ -958,18 +961,18 @@ void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, i
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, &parameters);
+    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_analysis_px2wav_multires_real(f_wav, f_scal, f, &parameters);
+    s2let_analysis_px2wav_real(f_wav, f_scal, f, &parameters);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_synthesis_wav2px_multires_real(f_rec, f_wav, f_scal, &parameters);
+    s2let_synthesis_wav2px_real(f_rec, f_wav, f_scal, &parameters);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1159,6 +1162,7 @@ void s2let_wav_transform_mwss_multires_test(int B, int L, int J_min, int N, int 
     parameters.J_min = J_min;
     parameters.N = N;
     parameters.spin = spin;
+    parameters.downsample = 1;
     parameters.normalization = S2LET_WAV_NORM_DEFAULT;
     parameters.original_spin = 0;
     parameters.sampling_scheme = S2LET_SAMPLING_MW_SS;
@@ -1181,18 +1185,18 @@ void s2let_wav_transform_mwss_multires_test(int B, int L, int J_min, int N, int 
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
+    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_analysis_px2wav_multires(f_wav, f_scal, f, &parameters);
+    s2let_analysis_px2wav(f_wav, f_scal, f, &parameters);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_synthesis_wav2px_multires(f_rec, f_wav, f_scal, &parameters);
+    s2let_synthesis_wav2px(f_rec, f_wav, f_scal, &parameters);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1234,6 +1238,7 @@ void s2let_wav_transform_mwss_multires_real_test(int B, int L, int J_min, int N,
     parameters.J_min = J_min;
     parameters.N = N;
     parameters.spin = 0;
+    parameters.downsample = 1;
     parameters.sampling_scheme = S2LET_SAMPLING_MW_SS;
 
     int verbosity = parameters.verbosity = 0;
@@ -1255,18 +1260,18 @@ void s2let_wav_transform_mwss_multires_real_test(int B, int L, int J_min, int N,
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, &parameters);
+    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_analysis_px2wav_multires_real(f_wav, f_scal, f, &parameters);
+    s2let_analysis_px2wav_real(f_wav, f_scal, f, &parameters);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_synthesis_wav2px_multires_real(f_rec, f_wav, f_scal, &parameters);
+    s2let_synthesis_wav2px_real(f_rec, f_wav, f_scal, &parameters);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1432,6 +1437,7 @@ void s2let_wav_transform_lm2wav_multires_test(int B, int L, int J_min, int N, in
     parameters.J_min = J_min;
     parameters.N = N;
     parameters.spin = spin;
+    parameters.downsample = 1;
     parameters.normalization = S2LET_WAV_NORM_DEFAULT;
     parameters.original_spin = 0;
     parameters.verbosity = 0;
@@ -1447,18 +1453,18 @@ void s2let_wav_transform_lm2wav_multires_test(int B, int L, int J_min, int N, in
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
+    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_analysis_lm2wav_multires(f_wav, f_scal, flm, &parameters);
+    s2let_analysis_lm2wav(f_wav, f_scal, flm, &parameters);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_synthesis_wav2lm_multires(flm_rec, f_wav, f_scal, &parameters);
+    s2let_synthesis_wav2lm(flm_rec, f_wav, f_scal, &parameters);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1495,6 +1501,7 @@ void s2let_wav_transform_lm2wav_multires_real_test(int B, int L, int J_min, int 
     parameters.J_min = J_min;
     parameters.N = N;
     parameters.spin = 0;
+    parameters.downsample = 1;
     parameters.verbosity = 0;
     parameters.dl_method = SSHT_DL_RISBO;
     //int J = s2let_j_max(L, B);
@@ -1508,18 +1515,18 @@ void s2let_wav_transform_lm2wav_multires_real_test(int B, int L, int J_min, int 
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_multires_real(&f_wav, &f_scal, &parameters);
+    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
-    s2let_analysis_lm2wav_multires_real(f_wav, f_scal, flm, &parameters);
+    s2let_analysis_lm2wav_real(f_wav, f_scal, flm, &parameters);
     time_end = clock();
     printf("  - Wavelet analysis   : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
     // Reconstruct the initial signal from the wavelet maps from scratch
     time_start = clock();
-    s2let_synthesis_wav2lm_multires_real(flm_rec, f_wav, f_scal, &parameters);
+    s2let_synthesis_wav2lm_real(flm_rec, f_wav, f_scal, &parameters);
     time_end = clock();
     printf("  - Wavelet synthesis  : %4.4f seconds\n",
            (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1608,6 +1615,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     parameters.L = L;
     parameters.J_min = J_min;
     parameters.N = 1;
+    parameters.downsample = 1;
 
     int spin = parameters.spin = 0;
 
@@ -1636,11 +1644,11 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     // from both transforms.
     complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
     s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav_axisym, &f_scal_axisym, &parameters);
-    s2let_allocate_mw_f_wav_multires(&f_wav_dir, &f_scal_dir, &parameters);
+    s2let_allocate_mw_f_wav(&f_wav_dir, &f_scal_dir, &parameters);
 
     // Do both transforms
     s2let_transform_axisym_wav_analysis_mw_multires(f_wav_axisym, f_scal_axisym, f, &parameters);
-    s2let_analysis_px2wav_multires(f_wav_dir, f_scal_dir, f, &parameters);
+    s2let_analysis_px2wav(f_wav_dir, f_scal_dir, f, &parameters);
 
     samples = 0;
     for (j = J_min; j <= J; ++j)

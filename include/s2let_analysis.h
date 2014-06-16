@@ -29,28 +29,6 @@ void s2let_analysis_lm2lmn_real(
     const s2let_parameters_t *parameters
 );
 
-/** Multi-resolution harmonic-space wavelet transform **/
-
-void s2let_analysis_lm2lmn_multires(
-    complex double *f_wav_lmn,
-    complex double *f_scal_lm,
-    const complex double *flm,
-    const complex double *wav_lm,
-    const double *scal_l,
-    const s2let_parameters_t *parameters
-);
-
-/** Multi-resolution harmonic-space wavelet transform for real signals **/
-
-void s2let_analysis_lm2lmn_multires_real(
-    complex double *f_wav_lmn,
-    complex double *f_scal_lm,
-    const complex double *flm,
-    const complex double *wav_lm,
-    const double *scal_l,
-    const s2let_parameters_t *parameters
-);
-
 /** Harmonic-space wavelet transform **/
 
 void s2let_analysis_lm2wav(
@@ -69,24 +47,6 @@ void s2let_analysis_lm2wav_real(
     const s2let_parameters_t *parameters
 );
 
-/** Multi-resolution harmonic-space wavelet transform **/
-
-void s2let_analysis_lm2wav_multires(
-    complex double *f_wav,
-    complex double *f_scal,
-    const complex double *flm,
-    const s2let_parameters_t *parameters
-);
-
-/** Multi-resolution harmonic-space wavelet transform for real signals **/
-
-void s2let_analysis_lm2wav_multires_real(
-    double *f_wav,
-    double *f_scal,
-    const complex double *flm,
-    const s2let_parameters_t *parameters
-);
-
 /** Pixel-space wavelet transform **/
 
 void s2let_analysis_px2wav(
@@ -96,23 +56,9 @@ void s2let_analysis_px2wav(
     const s2let_parameters_t *parameters
 );
 
+/** Pixel-space wavelet transform for real signals**/
+
 void s2let_analysis_px2wav_real(
-    double *f_wav,
-    double *f_scal,
-    const double *f,
-    const s2let_parameters_t *parameters
-);
-
-/** Multi-resolution harmonic-space wavelet transform **/
-
-void s2let_analysis_px2wav_multires(
-    complex double *f_wav,
-    complex double *f_scal,
-    const complex double *f,
-    const s2let_parameters_t *parameters
-);
-
-void s2let_analysis_px2wav_multires_real(
     double *f_wav,
     double *f_scal,
     const double *f,

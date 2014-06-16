@@ -197,30 +197,19 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   parameters.N = N;
   parameters.spin = spin;
+  parameters.downsample = downsample;
   parameters.normalization = normalization;
   parameters.original_spin = original_spin;
   parameters.reality = reality;
   parameters.sampling_scheme = sampling_scheme;
 
   // Perform wavelet transform in harmonic space and then reconstruction.
-  if(downsample){
-    // Multiresolution algorithm
-    if(reality){
-      s2let_allocate_mw_f_wav_multires_real(&f_wav_r, &f_scal_r, &parameters);
-      s2let_analysis_px2wav_multires_real(f_wav_r, f_scal_r, f_r, &parameters);
-    }else{
-      s2let_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
-      s2let_analysis_px2wav_multires(f_wav, f_scal, f, &parameters);
-    }
-  }else{
-    // Full resolution algorithm
-    if(reality){
+  if(reality){
       s2let_allocate_mw_f_wav_real(&f_wav_r, &f_scal_r, &parameters);
       s2let_analysis_px2wav_real(f_wav_r, f_scal_r, f_r, &parameters);
-    }else{
+  }else{
       s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
       s2let_analysis_px2wav(f_wav, f_scal, f, &parameters);
-    }
   }
 
   // Compute size of wavelet array

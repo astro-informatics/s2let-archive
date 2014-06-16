@@ -75,6 +75,16 @@ typedef struct {
     int reality;
 
     /*!
+     * A non-zero value indicates that signal is stored in a
+     * multi-resolution format, where each wavelet scale is
+     * downsample to use only as many pixels as necessary for
+     * the scale's upper harmonic bandlimit. This can lead to
+     * significant storage and time savings.
+     * \var int downsample
+     */
+    int downsample;
+
+    /*!
      * Wavelet parameter which determines the scale factor between
      * consecutive wavelet scales.
      * \var int B
