@@ -1986,7 +1986,7 @@ int main(int argc, char *argv[])
   // This is too often zero, so we add 1 (zero will result in all random
   // numbers being the same).
   const int seed = (int)((double)clock()/(double)CLOCKS_PER_SEC) + 1;
-  int l_min = s2let_el_min(&parameters);
+  int l_min = s2let_L0(J_min, &parameters);
 
   printf("===========================================================================\n");
   printf("Testing S2LET facilities with the MW sampling\n");

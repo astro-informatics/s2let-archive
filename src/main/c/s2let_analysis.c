@@ -241,7 +241,6 @@ void s2let_analysis_lm2wav(
 
     int j, offset, offset_lmn;
     int J = s2let_j_max(parameters);
-    //int l_min = s2let_axisym_el_min(B, J_min);
 
     complex double *wav_lm;
     double *scal_l;
@@ -279,6 +278,8 @@ void s2let_analysis_lm2wav(
             so3_parameters.L = bandlimit;
             so3_parameters.N = MIN(N,bandlimit);
         }
+
+        so3_parameters.L0 = s2let_L0(j, parameters);
 
         so3_core_inverse_via_ssht(
             f_wav + offset,
@@ -338,7 +339,6 @@ void s2let_analysis_lm2wav_real(
 
     int j, offset, offset_lmn;
     int J = s2let_j_max(&real_parameters);
-    //int l_min = s2let_axisym_el_min(B, J_min);
 
     complex double *wav_lm;
     double *scal_l;
@@ -375,6 +375,8 @@ void s2let_analysis_lm2wav_real(
             so3_parameters.L = bandlimit;
             so3_parameters.N = MIN(N,bandlimit);
         }
+
+        so3_parameters.L0 = s2let_L0(j, parameters);
 
         so3_core_inverse_via_ssht_real(
             f_wav + offset,

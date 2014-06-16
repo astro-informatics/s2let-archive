@@ -77,16 +77,15 @@ int s2let_bandlimit(int j, const s2let_parameters_t *parameters)
  * \param[in]  J_min First wavelet scale to be used.
  * \retval el_min
  */
-int s2let_el_min(const s2let_parameters_t *parameters)
+int s2let_L0(int j, const s2let_parameters_t *parameters)
 {
     int B = parameters->B;
-    int J_min = parameters->J_min;
 
     switch (s2let_kernel)
     {
     case S2DW:
     case NEEDLET:
-        return ceil(pow(B, J_min));
+        return ceil(pow(B, j-1));
     case SPLINE:
         return 0;
     default:
