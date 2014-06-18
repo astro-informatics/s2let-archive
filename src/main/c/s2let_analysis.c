@@ -28,20 +28,17 @@ static inline void fill_so3_parameters(so3_parameters_t *so3_parameters, const s
 }
 
 /*!
- * Spherical wavelets: full resolution analysis in harmonic space.
- * Perform directional wavelet transform from precomputed kernels
- * to give Wigner coefficients.
+ * Wavelet analysis from harmonic space to Wigner space for complex signals.
  *
  * \param[out]  f_wav_lmn Wavelet transform (Wigner coefficients of wavelet contribution).
- * \param[out]  f_scal_lm Wavelet transform (spherical harmonic coefficients of scaling contribution).
- * \param[in]  flm Spherical harmonic decomposition of input function.
- * \param[in]  wav_lm Wavelet kernels.
- * \param[in]  scal_l Scaling function kernels.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \param[in]  N Azimuthal band-limit.
- * \param[in]  spin Spin number.
+ * \param[out]  f_scal_lm Wavelet transform (Spherical harmonic coefficients of scaling contribution).
+ * \param[in]  flm Spherical harmonic coefficients of input function.
+ * \param[in]  wav_lm Wavelet kernels in harmonic space.
+ * \param[in]  scal_l Scaling function kernels in harmonic space.
+ * \param[in]  parameters A fully populated parameters object. The \link
+ *                        s2let_parameters_t::reality reality\endlink flag
+ *                        is ignored. Use \link s2let_analysis_lm2lmn_real
+ *                        \endlink instead for real signals.
  * \retval none
  */
 void s2let_analysis_lm2lmn(
@@ -116,20 +113,17 @@ void s2let_analysis_lm2lmn(
 }
 
 /*!
- * Spherical wavelets: full resolution analysis in harmonic space.
- * Perform directional wavelet transform from precomputed kernels
- * to give Wigner coefficients.
+ * Wavelet analysis from harmonic space to Wigner space for real signals.
  *
  * \param[out]  f_wav_lmn Wavelet transform (Wigner coefficients of wavelet contribution).
  * \param[out]  f_scal_lm Wavelet transform (spherical harmonic coefficients of scaling contribution).
- * \param[in]  flm Spherical harmonic decomposition of input function.
+ * \param[in]  flm Spherical harmonic coefficients of input function.
  * \param[in]  wav_lm Wavelet kernels.
  * \param[in]  scal_l Scaling function kernels.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \param[in]  N Azimuthal band-limit.
- * \param[in]  spin Spin number.
+ * \param[in]  parameters A fully populated parameters object. The \link
+ *                        s2let_parameters_t::reality reality\endlink flag
+ *                        is ignored. Use \link s2let_analysis_lm2lmn
+ *                        \endlink instead for complex signals.
  * \retval none
  */
 void s2let_analysis_lm2lmn_real(
@@ -202,25 +196,15 @@ void s2let_analysis_lm2lmn_real(
 }
 
 /*!
- * Spherical wavelets : full resolution analysis in real space, MW sampling.
- * Perform directional wavelet transform in real space (from scratch,
- * gives wavelet maps).
- * Sampling scheme : MW sampling.
+ * Wavelet analysis from harmonic space to wavelet space for complex signals.
  *
- * \param[out]  f_wav Array of wavelet maps, MW sampling.
- * \param[out]  f_scal Scaling function map, MW sampling.
- * \param[in]  f Input function (MW sampling)
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \param[in]  N Azimuthal band-limit.
- * \param[in]  spin Spin number.
- * \param[in]  normalization Indicates how to normalise the wavelets
- *                           and scaling function.
- * \param[in]  original_spin If normalization has value
- *                           S2LET_WAV_NORM_SPIN_LOWERED, this parameter
- *                           indicates which spin number the wavelets
- *                           were lowered from. Otherwise, it is ignored.
+ * \param[out]  f_wav Array of wavelet maps
+ * \param[out]  f_scal Scaling function map
+ * \param[in]  flm Spherical harmonic coefficients of the signal
+ * \param[in]  parameters A fully populated parameters object. The \link
+ *                        s2let_parameters_t::reality reality\endlink flag
+ *                        is ignored. Use \link s2let_analysis_lm2wav_real
+ *                        \endlink instead for real signals.
  * \retval none
  */
 void s2let_analysis_lm2wav(
@@ -276,7 +260,9 @@ void s2let_analysis_lm2wav(
         {
             bandlimit = MIN(s2let_bandlimit(j, parameters), L);
             so3_parameters.L = bandlimit;
-            so3_parameters.N = MIN(N,bandlimit);
+            int Nj = MIN(N,bandlimit);
+            Nj += (Nj+N)%2; // ensure N and Nj are both even or both odd
+            so3_parameters.N = Nj;
         }
 
         so3_parameters.L0 = s2let_L0(j, parameters);
@@ -297,25 +283,15 @@ void s2let_analysis_lm2wav(
 }
 
 /*!
- * Spherical wavelets : full resolution analysis in real space, MW sampling.
- * Perform directional wavelet transform in real space (from scratch,
- * gives wavelet maps).
- * Sampling scheme : MW sampling.
+ * Wavelet analysis from harmonic space to wavlet space for real signals.
  *
- * \param[out]  f_wav Array of wavelet maps, MW sampling.
- * \param[out]  f_scal Scaling function map, MW sampling.
- * \param[in]  f Input function (MW sampling)
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \param[in]  N Azimuthal band-limit.
- * \param[in]  spin Spin number.
- * \param[in]  normalization Indicates how to normalise the wavelets
- *                           and scaling function.
- * \param[in]  original_spin If normalization has value
- *                           S2LET_WAV_NORM_SPIN_LOWERED, this parameter
- *                           indicates which spin number the wavelets
- *                           were lowered from. Otherwise, it is ignored.
+ * \param[out]  f_wav Array of wavelet maps
+ * \param[out]  f_scal Scaling function map
+ * \param[in]  flm Spherical harmonic coefficients of the signal
+ * \param[in]  parameters A fully populated parameters object. The \link
+ *                        s2let_parameters_t::reality reality\endlink flag
+ *                        is ignored. Use \link s2let_analysis_lm2wav
+ *                        \endlink instead for complex signals.
  * \retval none
  */
 void s2let_analysis_lm2wav_real(
@@ -373,7 +349,9 @@ void s2let_analysis_lm2wav_real(
         {
             bandlimit = MIN(s2let_bandlimit(j, &real_parameters), L);
             so3_parameters.L = bandlimit;
-            so3_parameters.N = MIN(N,bandlimit);
+            int Nj = MIN(N,bandlimit);
+            Nj += (Nj+N)%2; // ensure N and Nj are both even or both odd
+            so3_parameters.N = Nj;
         }
 
         so3_parameters.L0 = s2let_L0(j, parameters);
@@ -394,25 +372,15 @@ void s2let_analysis_lm2wav_real(
 }
 
 /*!
- * Spherical wavelets : full resolution analysis in real space, MW sampling.
- * Perform directional wavelet transform in real space (from scratch,
- * gives wavelet maps).
- * Sampling scheme : MW sampling.
+ * Wavelet analysis from pixel space to wavelet space for complex signals.
  *
- * \param[out]  f_wav Array of wavelet maps, MW sampling.
- * \param[out]  f_scal Scaling function map, MW sampling.
- * \param[in]  f Input function (MW sampling)
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \param[in]  N Azimuthal band-limit.
- * \param[in]  spin Spin number.
- * \param[in]  normalization Indicates how to normalise the wavelets
- *                           and scaling function.
- * \param[in]  original_spin If normalization has value
- *                           S2LET_WAV_NORM_SPIN_LOWERED, this parameter
- *                           indicates which spin number the wavelets
- *                           were lowered from. Otherwise, it is ignored.
+ * \param[out]  f_wav Array of wavelet maps
+ * \param[out]  f_scal Scaling function map
+ * \param[in]  f Signal on the sphere
+ * \param[in]  parameters A fully populated parameters object. The \link
+ *                        s2let_parameters_t::reality reality\endlink flag
+ *                        is ignored. Use \link s2let_analysis_px2wav_real
+ *                        \endlink instead for real signals.
  * \retval none
  */
 void s2let_analysis_px2wav(
@@ -447,25 +415,15 @@ void s2let_analysis_px2wav(
 }
 
 /*!
- * Spherical wavelets : full resolution analysis in real space, MW sampling.
- * Perform directional wavelet transform in real space (from scratch,
- * gives wavelet maps).
- * Sampling scheme : MW sampling.
+ * Wavelet analysis from pixel space to wavelet space for real signals.
  *
- * \param[out]  f_wav Array of wavelet maps, MW sampling.
- * \param[out]  f_scal Scaling function map, MW sampling.
- * \param[in]  f Input function (MW sampling)
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \param[in]  N Azimuthal band-limit.
- * \param[in]  spin Spin number.
- * \param[in]  normalization Indicates how to normalise the wavelets
- *                           and scaling function.
- * \param[in]  original_spin If normalization has value
- *                           S2LET_WAV_NORM_SPIN_LOWERED, this parameter
- *                           indicates which spin number the wavelets
- *                           were lowered from. Otherwise, it is ignored.
+ * \param[out]  f_wav Array of wavelet maps
+ * \param[out]  f_scal Scaling function map
+ * \param[in]  f Signal on the sphere
+ * \param[in]  parameters A fully populated parameters object. The \link
+ *                        s2let_parameters_t::reality reality\endlink flag
+ *                        is ignored. Use \link s2let_analysis_px2wav
+ *                        \endlink instead for complex signals.
  * \retval none
  */
 void s2let_analysis_px2wav_real(

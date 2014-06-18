@@ -21,20 +21,6 @@ double s2let_lm_power(complex double *flm, int L){
 }
 
 /*!
- * Allocate spherical harmonic coefficients for a given
- * bandlimit L.
- *
- * \param[out]  flm Pointer to allocated space for spherical
- *                  harmonic coefficients.
- * \param[in]  L Angular harmonic band-limit.
- * \retval none
- */
-void s2let_lm_allocate(complex double **flm, int L)
-{
-    *flm = calloc(L * L, sizeof **flm);
-}
-
-/*!
  * Generate random harmonic coefficients for a complex map.
  *
  * \param[out]  flm Harmonic coefficients.
