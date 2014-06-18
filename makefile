@@ -25,7 +25,7 @@ UNAME 	:= $(shell uname)
 
 # Compilers and options for C
 CC	= gcc
-OPT	= -Wall -g -DS2LET_VERSION=\"1.1b1\" -DS2LET_BUILD=\"`git rev-parse HEAD`\"
+OPT	= -Wall -g -fopenmp -DS2LET_VERSION=\"1.1b1\" -DS2LET_BUILD=\"`git rev-parse HEAD`\"
 
 # Compilers and options for Fortran
 FCC	= gfortran
@@ -88,9 +88,10 @@ SSHTINC	= $(SSHTDIR)/include/c
 SSHTLIBNM = ssht
 
 # === FFTW ===
-FFTWINC	    = $(FFTWDIR)/include
-FFTWLIB     = $(FFTWDIR)/lib
-FFTWLIBNM   = fftw3
+FFTWINC	     = $(FFTWDIR)/include
+FFTWLIB      = $(FFTWDIR)/lib
+FFTWLIBNM    = fftw3
+FFTWOMPLIBNM = fftw3_threads
 
 # === CFITSIO ===
 ifneq ($(strip $(CFITSIODIR)),)
@@ -117,9 +118,9 @@ vpath %.c $(S2LETTESTSRC)
 vpath %.h $(S2LETINC)
 vpath %_mex.c $(S2LETSRCMAT)
 
-LDFLAGS = -L$(S2LETLIB) -l$(S2LETLIBNM) -lc -L$(SO3LIB) -l$(SO3LIBNM) -L$(SSHTLIB) -l$(SSHTLIBNM) -L$(FFTWLIB) -l$(FFTWLIBNM) -lm
+LDFLAGS = -L$(S2LETLIB) -l$(S2LETLIBNM) -lc -L$(SO3LIB) -l$(SO3LIBNM) -L$(SSHTLIB) -l$(SSHTLIBNM) -L$(FFTWLIB) -l$(FFTWOMPLIBNM) -l$(FFTWLIBNM) -lm
 
-LDFLAGSMEX = -L$(S2LETLIB) -l$(S2LETLIBNM) -lc -L$(SO3LIB) -l$(SO3LIBNM) -L$(SSHTLIB) -l$(SSHTLIBNM) -L$(FFTWLIB) $(FFTWLIB)/lib$(FFTWLIBNM).a -lm
+LDFLAGSMEX = -L$(S2LETLIB) -l$(S2LETLIBNM) -lc -L$(SO3LIB) -l$(SO3LIBNM) -L$(SSHTLIB) -l$(SSHTLIBNM) -L$(FFTWLIB) -l$(FFTWOMPLIBNM) -l$(FFTWLIBNM) -lm
 
 FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(SO3INC) -I$(S2LETINC)
 
