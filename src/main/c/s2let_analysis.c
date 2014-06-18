@@ -10,23 +10,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static inline void fill_so3_parameters(so3_parameters_t *so3_parameters, const s2let_parameters_t *parameters)
-{
-    so3_parameters->verbosity = parameters->verbosity;
-    so3_parameters->L = parameters->L;
-    so3_parameters->N = parameters->N;
-    so3_parameters->sampling_scheme = parameters->sampling_scheme;
-    so3_parameters->n_order = S2LET_SO3_N_ORDER;
-    so3_parameters->storage = S2LET_SO3_STORAGE;
-    so3_parameters->dl_method = parameters->dl_method;
-    so3_parameters->reality = parameters->reality;
-
-    if (parameters->N % 2)
-        so3_parameters->n_mode = SO3_N_MODE_EVEN;
-    else
-        so3_parameters->n_mode = SO3_N_MODE_ODD;
-}
-
 /*!
  * Wavelet analysis from harmonic space to Wigner space for complex signals.
  *

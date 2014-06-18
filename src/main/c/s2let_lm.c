@@ -10,7 +10,9 @@
 #include <math.h>
 #include <time.h>
 
-
+/*!
+ * Compute power for a signal in harmonic space.
+ */
 double s2let_lm_power(complex double *flm, int L){
     int i;
     double totalpower = 0.0;
