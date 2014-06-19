@@ -77,7 +77,7 @@ f_wav_vec = [];
 
 offset = 0;
 for j = args.J_min:J
-  for en = 1:2*args.N-1
+  for en = 1:args.N
     if args.Upsample
         band_limit = args.L;
     else

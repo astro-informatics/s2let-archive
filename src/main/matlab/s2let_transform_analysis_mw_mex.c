@@ -217,6 +217,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   so3_parameters_t so3_parameters = {};
   so3_parameters.N = N;
   so3_parameters.sampling_scheme = sampling_scheme;
+  so3_parameters.steerable = 1;
   if(upsample){
     so3_parameters.L = L;
     wavsize = (J+1-J_min) * so3_sampling_f_size(&so3_parameters);

@@ -75,7 +75,7 @@ if strcmp(args.Sampling, 'MWSS')
     f_wav = cell(J+1-args.J_min, 2*args.N-1);
     offset = 0;
     for j = args.J_min:J
-      for en = 1:2*args.N-1
+      for en = 1:args.N
         if args.Upsample
           band_limit = args.L;
         else
@@ -99,7 +99,7 @@ else
     f_wav = cell(J+1-args.J_min, 2*args.N-1);
     offset = 0;
     for j = args.J_min:J
-      for en = 1:2*args.N-1
+      for en = 1:args.N
         if args.Upsample
           band_limit = args.L;
         else

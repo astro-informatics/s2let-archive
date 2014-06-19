@@ -11,7 +11,7 @@ clear all;
 close all;
 
 % Main parameters
-L = 128;
+L = 32;
 B = 4;
 N = 4;
 Spin = 0;
