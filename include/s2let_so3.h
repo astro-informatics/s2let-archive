@@ -26,7 +26,7 @@ static inline void fill_so3_parameters(so3_parameters_t *so3_parameters, const s
     so3_parameters->storage = S2LET_SO3_STORAGE;
     so3_parameters->dl_method = parameters->dl_method;
     so3_parameters->reality = parameters->reality;
-    //so3_parameters->steerable = 1;
+    so3_parameters->steerable = 1;
 
     if (parameters->N % 2)
         so3_parameters->n_mode = SO3_N_MODE_EVEN;
