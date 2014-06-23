@@ -10,7 +10,9 @@
 #include <math.h>
 #include <time.h>
 
-
+/*!
+ * Compute power for a signal in harmonic space.
+ */
 double s2let_lm_power(complex double *flm, int L){
     int i;
     double totalpower = 0.0;
@@ -18,20 +20,6 @@ double s2let_lm_power(complex double *flm, int L){
         totalpower += pow(cabs(flm[i]), 2.0);
     totalpower = totalpower / (L * L);
     return totalpower;
-}
-
-/*!
- * Allocate spherical harmonic coefficients for a given
- * bandlimit L.
- *
- * \param[out]  flm Pointer to allocated space for spherical
- *                  harmonic coefficients.
- * \param[in]  L Angular harmonic band-limit.
- * \retval none
- */
-void s2let_lm_allocate(complex double **flm, int L)
-{
-    *flm = calloc(L * L, sizeof **flm);
 }
 
 /*!

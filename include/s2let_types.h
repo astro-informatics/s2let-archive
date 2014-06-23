@@ -75,6 +75,18 @@ typedef struct {
     int reality;
 
     /*!
+     * A non-zero value indicates that the signal is stored in a
+     * full-resolution format, where each wavelet scale is
+     * upsampled to use the same amount of pixels.
+     * A zero-value indicates that the signal uses only as many
+     * pixels as necessary for each wavelet scale's upper harmonic
+     * bandlimit. This can lead to significant storage and time
+     * savings and is the default behaviour.
+     * \var int upsample
+     */
+    int upsample;
+
+    /*!
      * Wavelet parameter which determines the scale factor between
      * consecutive wavelet scales.
      * \var int B

@@ -18,8 +18,8 @@ function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)
 %  'Spin'               = { Spin; (default=0) }
 %  'J_min'           = { Minimum wavelet scale to consider;
 %                        0 <= J_min < log_B(L) (default=0) }
-%  'Downsample'      = { true        [multiresolution algorithm (default)],
-%                        false       [full resolution wavelets] }
+%  'Upsample'      = { false        [multiresolution algorithm (default)],
+%                      true       [full resolution wavelets] }
 %  'Sampling'        = { 'MW'           [McEwen & Wiaux sampling (default)],
 %                        'MWSS'         [McEwen & Wiaux symmetric sampling] }
 %  'Reality'         = { false        [do not assume f real (default)],
@@ -51,7 +51,7 @@ p.addParamValue('L', Lguessed, @isnumeric);
 p.addParamValue('J_min', 0, @isnumeric);
 p.addParamValue('N', Lguessed, @isnumeric);
 p.addParamValue('Spin', 0, @isnumeric);
-p.addParamValue('Downsample', true, @islogical);
+p.addParamValue('Upsample', false, @islogical);
 p.addParamValue('Sampling', 'MW', @ischar);
 p.addParamValue('Reality', false, @islogical);
 p.addParamValue('SpinLowered', false, @islogical);
@@ -71,7 +71,7 @@ end
 
 [f_wav_vec, f_scal_vec] = s2let_transform_analysis_mw_mex(f_vec, args.B, args.L, args.J_min, ...
                                                           args.N, args.Spin, ...
-                                                          args.Reality, args.Downsample, ...
+                                                          args.Reality, args.Upsample, ...
                                                           args.SpinLowered, args.SpinLoweredFrom, ...
                                                           args.Sampling);
 
@@ -82,11 +82,11 @@ if strcmp(args.Sampling, 'MWSS')
     f_wav = cell(J+1-args.J_min, 2*args.N-1);
     offset = 0;
     for j = args.J_min:J
-      for en = 1:2*args.N-1
-        if args.Downsample == true
-          band_limit = min([ s2let_bandlimit(j,args.J_min,args.B,args.L) args.L ]);
-        else
+      for en = 1:args.N
+        if args.Upsample
           band_limit = args.L;
+        else
+          band_limit = min([ s2let_bandlimit(j,args.J_min,args.B,args.L) args.L ]);
         end
         temp = zeros(band_limit+1, 2*band_limit);
         for t = 1:band_limit+1
@@ -106,11 +106,11 @@ else
     f_wav = cell(J+1-args.J_min, 2*args.N-1);
     offset = 0;
     for j = args.J_min:J
-      for en = 1:2*args.N-1
-        if args.Downsample == true
-          band_limit = min([ s2let_bandlimit(j,args.J_min,args.B,args.L) args.L ]);
-        else
+      for en = 1:args.N
+        if args.Upsample
           band_limit = args.L;
+        else
+          band_limit = min([ s2let_bandlimit(j,args.J_min,args.B,args.L) args.L ]);
         end
         temp = zeros(band_limit, 2*band_limit-1);
         for t = 1:band_limit

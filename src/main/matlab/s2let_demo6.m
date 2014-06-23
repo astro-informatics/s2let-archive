@@ -34,7 +34,7 @@ maskQU(maskQU > threshold) = 1;
 maskQU(maskQU <= threshold) = 0;
 maskQU_lm = ssht_forward(maskQU, L);
 
-[maskQU, mask_wav, mask_scal] = ebsep_sample_mask(maskQU_lm, B, L, J_min, 'threshold', threshold, 'Downsample', downsampling);
+[maskQU, mask_wav, mask_scal] = ebsep_sample_mask(maskQU_lm, B, L, J_min, 'threshold', threshold, 'Upsample', ~downsampling);
 %
 f = QpU .* maskQU;
 %f = QpU;
@@ -50,7 +50,7 @@ maxfigs = nx*ny;
 pltroot = '../../../figs'
 configstr = ['Spin',int2str(Spin),'_N',int2str(N),'_L',int2str(L),'_B',int2str(B),'_Jmin',int2str(J_min)]
 
-[f_wav, f_scal] = s2let_transform_analysis_mw(f, 'B', B, 'J_min', J_min, 'N', N, 'downsample', downsampling);
+[f_wav, f_scal] = s2let_transform_analysis_mw(f, 'B', B, 'J_min', J_min, 'N', N, 'Upsample', ~downsampling);
 
 bl = L;
 figure('Position',[100 100 1300 1000])

@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     // multires == 1 --> multiresolution transform
     for (multires = 0; multires < 2; ++multires)
     {
-
+        parameters.upsample = 1-multires;
         L = 1;
         while(L <= Lmax)
         {
@@ -141,8 +141,7 @@ int main(int argc, char **argv)
         ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
                 time_start = clock();
-                if (multires) s2let_wav_analysis_mw_multires(f_wav, f_scal, f, &parameters);
-                else      s2let_wav_analysis_mw(f_wav, f_scal, f, &parameters);
+                s2let_analysis_px2wav(f_wav, f_scal, f, &parameters);
                 time_end = clock();
 
                 duration = (time_end - time_start) / (double)CLOCKS_PER_SEC;
@@ -151,8 +150,7 @@ int main(int argc, char **argv)
                     min_duration_inverse = duration;
 
                 time_start = clock();
-                if (multires) s2let_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, &parameters);
-                else     s2let_wav_synthesis_mw(f_rec, f_wav, f_scal, &parameters);
+                s2let_synthesis_wav2px(f_rec, f_wav, f_scal, &parameters);
                 time_end = clock();
 
         ssht_core_mw_forward_sov_conv_sym(flm_rec, f_rec, L, spin, dl_method, verbosity);

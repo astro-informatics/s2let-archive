@@ -13,7 +13,7 @@
  *
  * Usage:
  *   f = ...
- *        s2let_transform_axisym_synthesis_mw_mex(f_wav, f_scal, B, L, J_min, reality, downsample);
+ *        s2let_transform_axisym_synthesis_mw_mex(f_wav, f_scal, B, L, J_min, reality, upsample);
  *
  */
 void mexFunction( int nlhs, mxArray *plhs[],
@@ -48,7 +48,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if( !mxIsLogicalScalar(prhs[iin]) )
     mexErrMsgIdAndTxt("s2let_transform_axisym_synthesis_mw_mex:InvalidInput:downsample",
           "Multiresolution flag must be logical.");
-  downsample = mxIsLogicalScalarTrue(prhs[iin]);
+  downsample = !mxIsLogicalScalarTrue(prhs[iin]);
 
   // Parse input wavelets f_wav
   iin = 0;

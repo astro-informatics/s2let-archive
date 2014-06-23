@@ -42,9 +42,10 @@ void s2let_switch_wavtype(int typenum)
  * Computes band-limit of a specific wavelet scale.
  *
  * \param[in]  j Wavelet scale.
- * \param[in]  J_min Minimum wavelet scale.
- * \param[in]  j Wavelet scale.
- * \param[in]  L Total band-limit.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::B B\endlink,
+ *                        \link s2let_parameters_t::L L\endlink,
+ *                        \link s2let_parameters_t::J_min J_min\endlink
  * \retval band-limit
  */
 int s2let_bandlimit(int j, const s2let_parameters_t *parameters)
@@ -71,22 +72,23 @@ int s2let_bandlimit(int j, const s2let_parameters_t *parameters)
 }
 
 /*!
- * Computes minimum harmonic index supported by needlets.
+ * Computes the minimum harmonic index supported by the given
+ * wavelet scale.
  *
- * \param[in]  B Wavelet parameter.
- * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  j Wavelet scale.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::B B\endlink
  * \retval el_min
  */
-int s2let_el_min(const s2let_parameters_t *parameters)
+int s2let_L0(int j, const s2let_parameters_t *parameters)
 {
     int B = parameters->B;
-    int J_min = parameters->J_min;
 
     switch (s2let_kernel)
     {
     case S2DW:
     case NEEDLET:
-        return ceil(pow(B, J_min));
+        return ceil(pow(B, j-1));
     case SPLINE:
         return 0;
     default:
@@ -98,8 +100,9 @@ int s2let_el_min(const s2let_parameters_t *parameters)
 /*!
  * Computes needlet maximum level required to ensure exact reconstruction.
  *
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  B Wavelet parameter.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::B B\endlink,
+ *                        \link s2let_parameters_t::L L\endlink
  * \retval j_max
  */
 int s2let_j_max(const s2let_parameters_t *parameters)
@@ -115,8 +118,9 @@ int s2let_j_max(const s2let_parameters_t *parameters)
  *
  * \param[out]  kappa Kernel functions for the wavelets.
  * \param[out]  kappa0 Kernel for the scaling function.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::B B\endlink,
+ *                        \link s2let_parameters_t::L L\endlink
  * \retval none
  */
 void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, const s2let_parameters_t *parameters)
@@ -204,9 +208,10 @@ void s2let_tiling_phi2_spline(double *phi2, const s2let_parameters_t *parameters
  *
  * \param[out]  kappa Kernel functions for the wavelets.
  * \param[out]  kappa0 Kernel for the scaling function.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::B B\endlink,
+ *                        \link s2let_parameters_t::L L\endlink,
+ *                        \link s2let_parameters_t::J_min J_min\endlink
  * \retval none
  */
 void s2let_tiling_axisym(double *kappa, double *kappa0, const s2let_parameters_t *parameters)
@@ -252,8 +257,9 @@ void s2let_tiling_axisym(double *kappa, double *kappa0, const s2let_parameters_t
  *
  * \param[out]  s_elm Pointer to allocated space for harmonic
  *                    coefficients of directionality components.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  N Azimuthal band-limit.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::L L\endlink,
+ *                        \link s2let_parameters_t::N N\endlink
  * \retval none
  */
 void s2let_tiling_direction_allocate(complex double **s_elm, const s2let_parameters_t *parameters)
@@ -271,8 +277,10 @@ void s2let_tiling_direction_allocate(complex double **s_elm, const s2let_paramet
  *
  * \param[out]  s_elm Harmonic coefficienets of directionality
  *                    components.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  N Azimuthal band-limit.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::L L\endlink,
+ *                        \link s2let_parameters_t::N N\endlink
+ *                        \link s2let_parameters_t::spin spin\endlink
  *
  */
 void s2let_tiling_direction(complex double *s_elm, const s2let_parameters_t *parameters)
@@ -322,9 +330,10 @@ void s2let_tiling_direction(complex double *s_elm, const s2let_parameters_t *par
  *                  coefficients of directional wavelets.
  * \param[out]  phi Pointer to allocated space for harmonic
  *                  coefficients of scaling function.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  N Azimuthal band-limit.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::B B\endlink
+ *                        \link s2let_parameters_t::L L\endlink,
+ *                        \link s2let_parameters_t::N N\endlink
  * \retval none
  */
 void s2let_tiling_wavelet_allocate(complex double **psi, double **phi, const s2let_parameters_t *parameters)
@@ -367,17 +376,14 @@ static double s2let_spin_lowered_normalization(int el, int spin)
  *
  * \param[out]  psi Harmonic coefficienets of directional wavelets.
  * \param[out]  phi Harmonic coefficienets of scaling function.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \param[in]  N Azimuthal band-limit.
- * \param[in]  spin Spin number.
- * \param[in]  normalization Indicates how to normalise the wavelets
- *                           and scaling function.
- * \param[in]  original_spin If normalization has value
- *                           S2LET_WAV_NORM_SPIN_LOWERED, this parameter
- *                           indicates which spin number the wavelets
- *                           were lowered from. Otherwise, it is ignored.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::B B\endlink,
+ *                        \link s2let_parameters_t::L L\endlink,
+ *                        \link s2let_parameters_t::J_min J_min\endlink
+ *                        \link s2let_parameters_t::N N\endlink
+ *                        \link s2let_parameters_t::spin spin\endlink
+ *                        \link s2let_parameters_t::normalization normalization\endlink
+ *                        \link s2let_parameters_t::original_spin original_spin\endlink
  *
  */
 void s2let_tiling_wavelet(complex double *psi, double *phi, const s2let_parameters_t *parameters) {
@@ -386,7 +392,6 @@ void s2let_tiling_wavelet(complex double *psi, double *phi, const s2let_paramete
     int spin = parameters->spin;
     s2let_wav_norm_t normalization = parameters->normalization;
     int original_spin = parameters->original_spin;
-
 
     // TODO: Add spin parameter to avoid computation of el < |s|
     // TODO: Correctly compute spin scaling functions
@@ -444,9 +449,11 @@ void s2let_tiling_wavelet(complex double *psi, double *phi, const s2let_paramete
  *
  * \param[in]  kappa Kernel functions for the wavelets.
  * \param[in]  kappa0 Kernel for the scaling function.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::B B\endlink,
+ *                        \link s2let_parameters_t::L L\endlink,
+ *                        \link s2let_parameters_t::J_min J_min\endlink
+ *
  * \retval Achieved accuracy (should be lower than e-14).
  */
 double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, const s2let_parameters_t *parameters)
@@ -482,8 +489,9 @@ double s2let_tiling_axisym_check_identity(double *kappa, double *kappa0, const s
  *
  * \param[in]  s_elm Harmonic coefficients of directionality
  *                   components.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  N Azimuthal band-limit.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::L L\endlink,
+ *                        \link s2let_parameters_t::N N\endlink
  * \retval Achieved accuracy (should be lower than e-14).
  */
 double s2let_tiling_direction_check_identity(complex double *s_elm, const s2let_parameters_t *parameters)
@@ -517,11 +525,12 @@ double s2let_tiling_direction_check_identity(complex double *s_elm, const s2let_
  *
  * \param[in]  psi Harmonic coefficients of directional wavelets.
  * \param[in]  phi Harmonic coefficients of scaling function.
- * \param[in]  B Wavelet parameter.
- * \param[in]  L Angular harmonic band-limit.
- * \param[in]  J_min First wavelet scale to be used.
- * \param[in]  N Azimuthal band-limit.
- * \param[in]  spin Spin number.
+ * \param[in]  parameters A parameters object with (at least) the following fields:
+ *                        \link s2let_parameters_t::B B\endlink,
+ *                        \link s2let_parameters_t::L L\endlink,
+ *                        \link s2let_parameters_t::J_min J_min\endlink
+ *                        \link s2let_parameters_t::N N\endlink
+ *                        \link s2let_parameters_t::spin spin\endlink
  * \retval Achieved accuracy (should be lower than e-14).
  */
 double s2let_tiling_wavelet_check_identity(complex double *psi, double *phi, const s2let_parameters_t *parameters)
