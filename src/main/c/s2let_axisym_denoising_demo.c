@@ -28,33 +28,12 @@ void s2let_lm_random_flm_real_sigma(complex double *flm, int L, int seed, double
   }
 }
 
-double waveletpower(complex double *wav_lm, int L){
+double needletpower(double *wav_lm, int L){
   int i;
   double totalpower = 0;
-  for(i = 0; i < L*L; i++)
-    totalpower += wav_lm[i] * conj(wav_lm[i]);
+  for(i = 0; i < L; i++)
+    totalpower += pow(wav_lm[i], 2.0);
   return totalpower;
-}
-
-void hard_threshold_real(
-    double *g_wav,
-    const double *threshold,
-    const s2let_parameters_t *parameters
-) {
-    int L = parameters->L;
-    int J_min = parameters->J_min;
-    int N = parameters->N;
-
-    int J = s2let_j_max(parameters);
-    int i, j, offset = 0;
-    for(j = J_min; j <= J; j++){
-        int bl = parameters->upsample ? L : MIN(s2let_bandlimit(j, parameters), L);
-        for(i = 0; i < N*bl*(2*bl-1); i++){
-            if( cabs(g_wav[offset + i]) < threshold[j-J_min] )
-                g_wav[offset + i] = 0;
-        }
-        offset += N*bl*(2*bl-1);
-    }
 }
 
 /*!
@@ -72,18 +51,14 @@ int main(int argc, char *argv[])
   const int nsigma = 3;   // Number of sigmas for hard thresholding
   const int multires = 1; // Multiresolution flag
   const int B = 2;        // Wavelet parameters
-  const int N = 4;        // Azimuthal band-limit
   const int J_min = 0;    // First wavelet scale to use
 
   char outfile[100];
-  double *f, *noise, *g, *g_wav, *g_scal, *scal_l, *f_denoised, *remaining_noise;
-  complex double *noise_lm, *wav_lm;
+  double *f, *noise, *g, *g_wav, *g_scal, *wav_lm, *scal_lm, *f_denois, *remaining_noise;
+  complex double *noise_lm;
 
   parameters.B = B;
   parameters.J_min = J_min;
-  parameters.N = N;
-  parameters.upsample = !multires;
-  parameters.reality = 1;
 
   printf("--------------------------------------------------\n");
   printf(" S2LET library : denoising example\n");
@@ -129,28 +104,38 @@ int main(int argc, char *argv[])
 
   printf(" Performing wavelet decomposition...");fflush(NULL);
   // Perform wavelet analysis from scratch with all signals given as MW maps
-  s2let_allocate_mw_f_wav_real(&g_wav, &g_scal, &parameters);
-  s2let_analysis_px2wav_real(g_wav, g_scal, g, &parameters);
+  if(multires){
+    s2let_transform_axisym_allocate_mw_f_wav_multires_real(&g_wav, &g_scal, &parameters);
+    s2let_transform_axisym_wav_analysis_mw_multires_real(g_wav, g_scal, g, &parameters);
+  }else{
+    s2let_transform_axisym_allocate_mw_f_wav_real(&g_wav, &g_scal, &parameters);
+    s2let_transform_axisym_wav_analysis_mw_real(g_wav, g_scal, g, &parameters);
+  }
   printf(" done\n");
 
   // Compute simple threshold for needlet coefficients based on noise model
   printf(" Construct the threshold rule for the Gaussian noise\n");
-  s2let_tiling_wavelet_allocate(&wav_lm, &scal_l, &parameters);
-  s2let_tiling_wavelet(wav_lm, scal_l, &parameters);
-  double *threshold = (double*)calloc((J-J_min+1), sizeof(double));
+  s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
+  s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
+  double *treshold = (double*)calloc((J-J_min+1), sizeof(double));
   for(j = J_min; j <= J; j++)
-    threshold[j-J_min] = sigmanoise * nsigma * sqrt(waveletpower(wav_lm + j * L*L, L));
+    treshold[j-J_min] = sigmanoise * nsigma * sqrt(needletpower(wav_lm + j * L, L));
 
   printf(" Hard thresholding the wavelets...");fflush(NULL);
-  s2let_mw_allocate_real(&f_denoised, L);
-  hard_threshold_real(g_wav, threshold, &parameters);
-  s2let_synthesis_wav2px_real(f_denoised, g_wav, g_scal, &parameters);
+  s2let_mw_allocate_real(&f_denois, L);
+  if(multires){
+    s2let_transform_axisym_wav_hardthreshold_multires_real(g_wav, treshold, &parameters);
+    s2let_transform_axisym_wav_synthesis_mw_multires_real(f_denois, g_wav, g_scal, &parameters);
+  }else{
+    s2let_transform_axisym_wav_hardthreshold_real(g_wav, treshold, &parameters);
+    s2let_transform_axisym_wav_synthesis_mw_real(f_denois, g_wav, g_scal, &parameters);
+  }
   printf(" done\n");
 
   // Remaining noise
   s2let_mw_allocate_real(&remaining_noise, L);
   for(i = 0; i < L*(2*L-1); i++)
-    remaining_noise[i] = f_denoised[i] - f[i];
+    remaining_noise[i] = f_denois[i] - f[i];
 
   // SNR after denoising
   double SNR_denoised = 10.0 * log10( s2let_mw_power_real(f, L) / s2let_mw_power_real(remaining_noise, L));
@@ -168,15 +153,15 @@ int main(int argc, char *argv[])
   sprintf(outfile, "%s%s%s", "data/earth_tomo_mw_128", "_denoised", ".fits");
   printf(" Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
-  s2let_fits_mw_write_map(outfile, f_denoised, L); // Now write the map to fits file
+  s2let_fits_mw_write_map(outfile, f_denois, L); // Now write the map to fits file
 
   free(f);
   free(noise);
   free(g);
   free(g_wav);
   free(g_scal);
-  free(scal_l);
-  free(f_denoised);
+  free(scal_lm);
+  free(f_denois);
   free(remaining_noise);
   free(noise_lm);
 

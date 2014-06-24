@@ -1,10 +1,10 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
 #include <stdlib.h>
-#include <complex.h> 
+#include <complex.h>
 
 // Fortran interfaces to Healpix F90 library ; see s2let_hpx.f90
 extern void healpix_inverse_real_();
@@ -47,5 +47,5 @@ void s2let_hpx_write_map(char* file, const double* f, int nside)
 
 void s2let_hpx_allocate_real(double **f, int nside)
 {
-  *f = (double*)calloc(12*nside*nside, sizeof(double));
+  *f = calloc(12*nside*nside, sizeof **f);
 }
