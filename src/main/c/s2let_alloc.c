@@ -15,7 +15,7 @@
  * \param[out]  f Allocated map
  * \param[in]   L Harmonic band-limit
  */
-void s2let_mw_allocate(complex double **f, int L)
+void s2let_allocate_mw(complex double **f, int L)
 {
   *f = calloc(L * (2*L-1), sizeof **f);
 }
@@ -25,7 +25,7 @@ void s2let_mw_allocate(complex double **f, int L)
  * \param[out]  f Allocated map
  * \param[in]   L Harmonic band-limit
  */
-void s2let_mw_allocate_real(double **f, int L)
+void s2let_allocate_mw_real(double **f, int L)
 {
   *f = calloc(L * (2*L-1), sizeof **f);
 }
@@ -35,7 +35,7 @@ void s2let_mw_allocate_real(double **f, int L)
  * \param[out]  f Allocated map
  * \param[in]   L Harmonic band-limit
  */
-void s2let_mwss_allocate(complex double **f, int L)
+void s2let_allocate_mwss(complex double **f, int L)
 {
   *f = calloc((2*L)*(L+1), sizeof **f);
 }
@@ -45,7 +45,7 @@ void s2let_mwss_allocate(complex double **f, int L)
  * \param[out]  f Allocated map
  * \param[in]   L Harmonic band-limit
  */
-void s2let_mwss_allocate_real(double **f, int L)
+void s2let_allocate_mwss_real(double **f, int L)
 {
   *f = calloc((2*L)*(L+1), sizeof **f);
 }
@@ -59,7 +59,7 @@ void s2let_mwss_allocate_real(double **f, int L)
  * \param[in]  L Angular harmonic band-limit.
  * \retval none
  */
-void s2let_lm_allocate(complex double **flm, int L)
+void s2let_allocate_lm(complex double **flm, int L)
 {
     *flm = calloc(L * L, sizeof **flm);
 }
@@ -79,7 +79,7 @@ void s2let_lm_allocate(complex double **flm, int L)
  *                        \link s2let_parameters_t::N N\endlink
  * \retval none
  */
-void s2let_allocate_f_wav_lmn(
+void s2let_allocate_lmn_f_wav(
     complex double **f_wav_lmn,
     complex double **f_scal_lm,
     const s2let_parameters_t *parameters

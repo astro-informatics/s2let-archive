@@ -211,15 +211,15 @@ void mexFunction( int nlhs, mxArray *plhs[],
   // Perform wavelet transform in harmonic space and then reconstruction.
   if(reality){
       if (sampling_scheme == S2LET_SAMPLING_MW_SS)
-          s2let_mwss_allocate_real(&f_r, L);
+          s2let_allocate_mwss_real(&f_r, L);
       else
-          s2let_mw_allocate_real(&f_r, L);
+          s2let_allocate_mw_real(&f_r, L);
       s2let_synthesis_wav2px_real(f_r, f_wav_r, f_scal_r, &parameters);
   }else{
       if (sampling_scheme == S2LET_SAMPLING_MW_SS)
-          s2let_mwss_allocate(&f, L);
+          s2let_allocate_mwss(&f, L);
       else
-          s2let_mw_allocate(&f, L);
+          s2let_allocate_mw(&f, L);
       s2let_synthesis_wav2px(f, f_wav, f_scal, &parameters);
   }
 

@@ -17,10 +17,10 @@ void s2let_hpx_spinalm_test(int nside, int spin, int L, int seed)
 {
   double *fQ, *fU, *fQ_rec, *fU_rec;
   complex double *flmE, *flmE_rec, *flmU, *flmU_rec;
-  s2let_lm_allocate(&flmE, L);
-  s2let_lm_allocate(&flmU, L);
-  s2let_lm_allocate(&flmE_rec, L);
-  s2let_lm_allocate(&flmU_rec, L);
+  s2let_allocate_lm(&flmE, L);
+  s2let_allocate_lm(&flmU, L);
+  s2let_allocate_lm(&flmE_rec, L);
+  s2let_allocate_lm(&flmU_rec, L);
   s2let_hpx_allocate_real(&fQ, nside);
   s2let_hpx_allocate_real(&fU, nside);
   s2let_hpx_allocate_real(&fQ_rec, nside);
@@ -96,8 +96,8 @@ void s2let_transform_axisym_hpx_test(double *accuracy, double *timing, int nside
   clock_t time_start, time_end;
   double *f, *f_rec;
   complex double *flm, *flm_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
   s2let_hpx_allocate_real(&f, nside);
   s2let_hpx_allocate_real(&f_rec, nside);
 
@@ -151,8 +151,8 @@ void s2let_transform_axisym_hpx_wav_test(double *accuracy, double *timing, int n
 
   double *f, *f_rec;
   complex double *flm, *flm_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
   s2let_hpx_allocate_real(&f, nside);
   s2let_hpx_allocate_real(&f_rec, nside);
 
@@ -209,8 +209,8 @@ void s2let_hpx_io_test(int nside, int L, int seed)
 {
   double *f, *f_rec;
   complex double *flm, *flm_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
   s2let_hpx_allocate_real(&f, nside);
   s2let_hpx_allocate_real(&f_rec, nside);
 
@@ -261,10 +261,10 @@ void s2let_mw_io_test(int L, int seed)
 
   double *f, *f_rec;
   complex double *flm, *flm_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
-  s2let_mw_allocate_real(&f, L);
-  s2let_mw_allocate_real(&f_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
+  s2let_allocate_mw_real(&f, L);
+  s2let_allocate_mw_real(&f_rec, L);
 
   // Generate random harmonic coefficients
   s2let_lm_random_flm_real(flm, L, seed);
@@ -315,14 +315,14 @@ void s2let_mw_io_spin_test(int L, int seed)
 
   complex double *flmQ, *flmU, *flm_recQ, *flm_recU;
   double *fQ, *fU, *fQ_rec, *fU_rec;
-  s2let_lm_allocate(&flmQ, L);
-  s2let_lm_allocate(&flmU, L);
-  s2let_lm_allocate(&flm_recQ, L);
-  s2let_lm_allocate(&flm_recU, L);
-  s2let_mw_allocate_real(&fQ, L);
-  s2let_mw_allocate_real(&fU, L);
-  s2let_mw_allocate_real(&fQ_rec, L);
-  s2let_mw_allocate_real(&fU_rec, L);
+  s2let_allocate_lm(&flmQ, L);
+  s2let_allocate_lm(&flmU, L);
+  s2let_allocate_lm(&flm_recQ, L);
+  s2let_allocate_lm(&flm_recU, L);
+  s2let_allocate_mw_real(&fQ, L);
+  s2let_allocate_mw_real(&fU, L);
+  s2let_allocate_mw_real(&fQ_rec, L);
+  s2let_allocate_mw_real(&fU_rec, L);
   // Generate random harmonic coefficients
   s2let_lm_random_flm_real(flmQ, L, seed);
   s2let_lm_random_flm_real(flmU, L, seed);

@@ -97,16 +97,16 @@ int main(int argc, char *argv[])
   printf(" - Total number of wavelets : %i\n", J);
   printf(" - First wavelet scale to be used : %i\n", J_min);
 
-  s2let_mw_allocate_real(&f_r, L);
+  s2let_allocate_mw_real(&f_r, L);
   s2let_fits_mw_read_map(f_r, file, L); // Read MW map from file
   printf(" File successfully read from file\n");
 
   // Force into spin signal
-  s2let_lm_allocate(&flm, L);
+  s2let_allocate_lm(&flm, L);
   s2let_mw_map2alm_real(flm, f_r, L);
   for (i = 0; i < spin*spin; ++i)
     flm[i] = 0;
-  s2let_mw_allocate(&f, L);
+  s2let_allocate_mw(&f, L);
   int verbosity = 0;
   ssht_dl_method_t dl_method = SSHT_DL_RISBO;
   ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
@@ -114,16 +114,16 @@ int main(int argc, char *argv[])
   // Compute noise standard deviation and generate noise
   double sigmanoise = sqrt(pow(10.0, -SNR_in/10.0) * s2let_mw_power(f, L));
   printf(" - Std dev of the noise (to match SNR) = %f\n", sigmanoise);
-  s2let_lm_allocate(&noise_lm, L);
+  s2let_allocate_lm(&noise_lm, L);
   s2let_lm_random_flm_sigma(noise_lm, L, seed, sigmanoise);
   double SNR_actual = 10.0 * log10( s2let_mw_power(f, L) / s2let_lm_power(noise_lm, L));
   printf(" - Actual (realised) SNR = %f\n", SNR_actual);
 
   // Add noise to the signal in real space
   printf(" Contaminating the signal with this noise...");fflush(NULL);
-  s2let_mw_allocate(&noise, L);
+  s2let_allocate_mw(&noise, L);
   s2let_mw_alm2map(noise, noise_lm, L);
-  s2let_mw_allocate(&g, L);
+  s2let_allocate_mw(&g, L);
   for (i = 0; i < L*(2*L-1); i++)
     g[i] = f[i] + noise[i];
   printf(" done\n");
@@ -143,13 +143,13 @@ int main(int argc, char *argv[])
     threshold[j-J_min] = sigmanoise * nsigma * sqrt(waveletpower(wav_lm + j * L*L, L));
 
   printf(" Hard thresholding the wavelets...");fflush(NULL);
-  s2let_mw_allocate(&f_denoised, L);
+  s2let_allocate_mw(&f_denoised, L);
   hard_threshold(g_wav, threshold, &parameters);
   s2let_synthesis_wav2px(f_denoised, g_wav, g_scal, &parameters);
   printf(" done\n");
 
   // Remaining noise
-  s2let_mw_allocate(&remaining_noise, L);
+  s2let_allocate_mw(&remaining_noise, L);
   for(i = 0; i < L*(2*L-1); i++)
     remaining_noise[i] = f_denoised[i] - f[i];
 
@@ -159,9 +159,9 @@ int main(int argc, char *argv[])
   printf(" -> SNR after denoising  = %f\n", SNR_denoised);
 
   // Finally write the denoised signal
-  s2let_mw_allocate_real(&f_i, L);
-  s2let_mw_allocate_real(&g_r, L);
-  s2let_mw_allocate_real(&g_i, L);
+  s2let_allocate_mw_real(&f_i, L);
+  s2let_allocate_mw_real(&g_r, L);
+  s2let_allocate_mw_real(&g_i, L);
   for (i = 0; i < L*(2*L-1); ++i)
   {
     g_r[i] = creal(g[i]);
