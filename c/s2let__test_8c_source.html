@@ -48,8 +48,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
                onmouseout="return searchBox.OnSearchSelectHide()"
                alt=""/>
           <input type="text" id="MSearchField" value="Search" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onfocus="searchBox.OnSearchFieldFocus(true)"
+               onblur="searchBox.OnSearchFieldFocus(false)"
                onkeyup="searchBox.OnSearchFieldChange(event)"/>
           </span><span class="right">
             <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
@@ -73,7 +73,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
+<iframe src="javascript:void(0)" frameborder="0"
         name="MSearchResults" id="MSearchResults">
 </iframe>
 </div>
@@ -135,8 +135,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;     (time_end - time_start) / (<span class="keywordtype">double</span>)CLOCKS_PER_SEC);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;     </div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  complex <span class="keywordtype">double</span> *f_wav_lm, *f_scal_lm, *flm, *flm_rec;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm, L);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm_rec, L);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm, L);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm_rec, L);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;  <span class="comment">// Generate a random spherical harmonic decomposition</span></div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <a class="code" href="s2let__lm_8c.html#a4ee9fa121c26f7546706ce8b05a1fc04">s2let_lm_random_flm</a>(flm, L, seed);</div>
@@ -186,8 +186,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;     (time_end - time_start) / (<span class="keywordtype">double</span>)CLOCKS_PER_SEC);</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;     </div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  complex <span class="keywordtype">double</span> *f_wav_lm, *f_scal_lm, *flm, *flm_rec;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm, L);</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm_rec, L);</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm, L);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm_rec, L);</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  <span class="comment">// Generate a random spherical harmonic decomposition</span></div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <a class="code" href="s2let__lm_8c.html#a4ee9fa121c26f7546706ce8b05a1fc04">s2let_lm_random_flm</a>(flm, L, seed);</div>
@@ -231,10 +231,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  <span class="comment">//int J = s2let_j_max(L, B);</span></div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;  complex <span class="keywordtype">double</span> *f, *f_rec, *flm, *flm_rec;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm, L);</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm_rec, L);</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;  <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_mw_allocate</a>(&amp;f, L);</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;  <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_mw_allocate</a>(&amp;f_rec, L);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm, L);</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm_rec, L);</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;  <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_allocate_mw</a>(&amp;f, L);</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;  <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_allocate_mw</a>(&amp;f_rec, L);</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;  <span class="comment">// Generate random harmonic coefficients for a complex signal</span></div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;  <a class="code" href="s2let__lm_8c.html#a4ee9fa121c26f7546706ce8b05a1fc04">s2let_lm_random_flm</a>(flm, L, seed);</div>
@@ -282,10 +282,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;  complex *flm, *flm_rec;</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;  <span class="keywordtype">double</span> *f, *f_rec;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm, L);</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm_rec, L);</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_mw_allocate_real</a>(&amp;f, L);</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_mw_allocate_real</a>(&amp;f_rec, L);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm, L);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm_rec, L);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_allocate_mw_real</a>(&amp;f, L);</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_allocate_mw_real</a>(&amp;f_rec, L);</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;  <span class="comment">// Generate random harmonic coefficients for a real signal</span></div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;  <a class="code" href="s2let__lm_8c.html#a976ccda30f8c30bfbcd238242deef100">s2let_lm_random_flm_real</a>(flm, L, seed);</div>
@@ -334,10 +334,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;  <span class="comment">//int J = s2let_j_max(L, B);</span></div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;  complex <span class="keywordtype">double</span> *f, *f_rec, *flm, *flm_rec;</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm, L);</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm_rec, L);</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;  <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_mw_allocate</a>(&amp;f, L);</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;  <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_mw_allocate</a>(&amp;f_rec, L);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm, L);</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm_rec, L);</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;  <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_allocate_mw</a>(&amp;f, L);</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;  <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_allocate_mw</a>(&amp;f_rec, L);</div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;  <span class="comment">// Generate random harmonic coefficients for a complex signal</span></div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;  <a class="code" href="s2let__lm_8c.html#a4ee9fa121c26f7546706ce8b05a1fc04">s2let_lm_random_flm</a>(flm, L, seed);</div>
@@ -386,10 +386,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;</div>
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;  complex *flm, *flm_rec;</div>
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;  <span class="keywordtype">double</span> *f, *f_rec;</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm, L);</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm_rec, L);</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_mw_allocate_real</a>(&amp;f, L);</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_mw_allocate_real</a>(&amp;f_rec, L);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm, L);</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm_rec, L);</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_allocate_mw_real</a>(&amp;f, L);</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_allocate_mw_real</a>(&amp;f_rec, L);</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;</div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;  <span class="comment">// Generate random harmonic coefficients for a real signal</span></div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;  <a class="code" href="s2let__lm_8c.html#a976ccda30f8c30bfbcd238242deef100">s2let_lm_random_flm_real</a>(flm, L, seed);</div>
@@ -443,7 +443,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        </div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    L *= 2;</div>
 <div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    </div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm, L);</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm, L);</div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;</div>
 <div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    printf(<span class="stringliteral">&quot; &gt; L =  %i \n&quot;</span>, L);</div>
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    <span class="keywordflow">for</span> (repeat=0; repeat&lt;NREPEAT; repeat++){</div>
@@ -451,7 +451,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;      printf(<span class="stringliteral">&quot;  -&gt; Iteration : %i on %i \n&quot;</span>,repeat+1,NREPEAT);</div>
 <div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;</div>
 <div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;      <a class="code" href="s2let__lm_8c.html#a4ee9fa121c26f7546706ce8b05a1fc04">s2let_lm_random_flm</a>(flm, L, seed);</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;      <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_mw_allocate</a>(&amp;f, L);</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;      <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_allocate_mw</a>(&amp;f, L);</div>
 <div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;      <a class="code" href="s2let__mw_8c.html#aacf7676360213f605276d80b20faad04">s2let_mw_alm2map</a>(f, flm, L);</div>
 <div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;      <a class="code" href="s2let__axisym__mw_8c.html#a774663aabe0ccf6393b5d68d40a958a6">s2let_axisym_mw_allocate_f_wav</a>(&amp;f_wav, &amp;f_scal, B, L, J_min);</div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;</div>
@@ -461,14 +461,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;      tottime_synthesis += (time_end - time_start) / (<span class="keywordtype">double</span>)CLOCKS_PER_SEC;</div>
 <div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;      <span class="comment">//printf(&quot;  - Duration for S2LET synthesis   : %4.4f seconds\n&quot;, (time_end - time_start) / (double)CLOCKS_PER_SEC);</span></div>
 <div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;            </div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;      <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_mw_allocate</a>(&amp;f_rec, L);</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;      <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_allocate_mw</a>(&amp;f_rec, L);</div>
 <div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;</div>
 <div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;      time_start = clock();</div>
 <div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;      <a class="code" href="s2let__axisym__mw_8c.html#a3dda7cfdf614c1f2faeee2fc42209933">s2let_axisym_mw_wav_synthesis</a>(f_rec, f_wav, f_scal, B, L, J_min);</div>
 <div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;      time_end = clock();</div>
 <div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;      tottime_analysis += (time_end - time_start) / (<span class="keywordtype">double</span>)CLOCKS_PER_SEC;</div>
 <div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;      <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm_rec, L);</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;      <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm_rec, L);</div>
 <div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;      <a class="code" href="s2let__mw_8c.html#ab96ce5b96449067376ef199dbbcbc8b7">s2let_mw_map2alm</a>(flm_rec, f_rec, L);</div>
 <div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;</div>
 <div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;      <span class="comment">//printf(&quot;  - Duration for S2LET analysis   : %4.4f seconds\n&quot;, (time_end - time_start) / (double)CLOCKS_PER_SEC);</span></div>
@@ -512,7 +512,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        </div>
 <div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;    L *= 2;</div>
 <div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;    </div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;    <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm, L);</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;    <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm, L);</div>
 <div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;</div>
 <div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;    printf(<span class="stringliteral">&quot; &gt; L =  %i \n&quot;</span>, L);</div>
 <div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;    <span class="keywordflow">for</span> (repeat=0; repeat&lt;NREPEAT; repeat++){</div>
@@ -520,7 +520,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;      printf(<span class="stringliteral">&quot;  -&gt; Iteration : %i on %i \n&quot;</span>,repeat+1,NREPEAT);</div>
 <div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;</div>
 <div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;      <a class="code" href="s2let__lm_8c.html#a4ee9fa121c26f7546706ce8b05a1fc04">s2let_lm_random_flm</a>(flm, L, seed);</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;      <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_mw_allocate</a>(&amp;f, L);</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;      <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_allocate_mw</a>(&amp;f, L);</div>
 <div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;      <a class="code" href="s2let__mw_8c.html#aacf7676360213f605276d80b20faad04">s2let_mw_alm2map</a>(f, flm, L);</div>
 <div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;      <a class="code" href="s2let__axisym__mw_8c.html#ad269c6b23ac5dc9fef5fa768a9906f46">s2let_axisym_mw_allocate_f_wav_multires</a>(&amp;f_wav, &amp;f_scal, B, L, J_min);</div>
 <div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;</div>
@@ -530,14 +530,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;      tottime_synthesis += (time_end - time_start) / (<span class="keywordtype">double</span>)CLOCKS_PER_SEC;</div>
 <div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;      <span class="comment">//printf(&quot;  - Duration for S2LET synthesis   : %4.4f seconds\n&quot;, (time_end - time_start) / (double)CLOCKS_PER_SEC);</span></div>
 <div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;            </div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;      <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_mw_allocate</a>(&amp;f_rec, L);</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;      <a class="code" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_allocate_mw</a>(&amp;f_rec, L);</div>
 <div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;</div>
 <div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;      time_start = clock();</div>
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;      <a class="code" href="s2let__axisym__mw_8c.html#a83ae6c574ac1c901e81ab80a1b6813c5">s2let_axisym_mw_wav_synthesis_multires</a>(f_rec, f_wav, f_scal, B, L, J_min);</div>
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;      time_end = clock();</div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;      tottime_analysis += (time_end - time_start) / (<span class="keywordtype">double</span>)CLOCKS_PER_SEC;</div>
 <div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;      <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm_rec, L);</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;      <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm_rec, L);</div>
 <div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;      <a class="code" href="s2let__mw_8c.html#ab96ce5b96449067376ef199dbbcbc8b7">s2let_mw_map2alm</a>(flm_rec, f_rec, L);</div>
 <div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;</div>
 <div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;      <span class="comment">//printf(&quot;  - Duration for S2LET analysis   : %4.4f seconds\n&quot;, (time_end - time_start) / (double)CLOCKS_PER_SEC);</span></div>
@@ -585,7 +585,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;  </div>
 <div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;    <a class="code" href="s2let__axisym__lm_8c.html#a5d9d710fcbd272b1a2dd6eed783fd730">s2let_axisym_lm_allocate_wav</a>(&amp;wav_lm, &amp;scal_lm, B, L);</div>
 <div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;    <a class="code" href="s2let__axisym__lm_8c.html#a73cf28cbedefd887eeb01e06a5e84c1c">s2let_axisym_lm_wav</a>(wav_lm, scal_lm, B, L, J_min);</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;    <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm, L);</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;    <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm, L);</div>
 <div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;</div>
 <div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;    printf(<span class="stringliteral">&quot; &gt; L =  %i \n&quot;</span>, L);</div>
 <div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;    <span class="keywordflow">for</span> (repeat=0; repeat&lt;NREPEAT; repeat++){</div>
@@ -602,7 +602,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;      tottime_synthesis += (time_end - time_start) / (<span class="keywordtype">double</span>)CLOCKS_PER_SEC;</div>
 <div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;      <span class="comment">//printf(&quot;  - Duration for S2LET synthesis   : %4.4f seconds\n&quot;, (time_end - time_start) / (double)CLOCKS_PER_SEC);</span></div>
 <div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;      </div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;      <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm_rec, L);</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;      <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm_rec, L);</div>
 <div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;</div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;      time_start = clock();</div>
 <div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;      <a class="code" href="s2let__axisym__lm_8c.html#a479e4beb91d19252e698dd2436f2da91">s2let_axisym_lm_wav_synthesis</a>(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);  </div>
@@ -654,7 +654,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;  </div>
 <div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;    <a class="code" href="s2let__axisym__lm_8c.html#a5d9d710fcbd272b1a2dd6eed783fd730">s2let_axisym_lm_allocate_wav</a>(&amp;wav_lm, &amp;scal_lm, B, L);</div>
 <div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;    <a class="code" href="s2let__axisym__lm_8c.html#a73cf28cbedefd887eeb01e06a5e84c1c">s2let_axisym_lm_wav</a>(wav_lm, scal_lm, B, L, J_min);  </div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;    <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm, L);</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;    <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm, L);</div>
 <div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;</div>
 <div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;    printf(<span class="stringliteral">&quot; &gt; L =  %i \n&quot;</span>, L);</div>
 <div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;    <span class="keywordflow">for</span> (repeat=0; repeat&lt;NREPEAT; repeat++){</div>
@@ -671,7 +671,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;      tottime_synthesis += (time_end - time_start) / (<span class="keywordtype">double</span>)CLOCKS_PER_SEC;</div>
 <div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;      <span class="comment">//printf(&quot;  - Duration for S2LET synthesis   : %4.4f seconds\n&quot;, (time_end - time_start) / (double)CLOCKS_PER_SEC);</span></div>
 <div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;      </div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;      <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;flm_rec, L);</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;      <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;flm_rec, L);</div>
 <div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;</div>
 <div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;      time_start = clock();</div>
 <div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;      <a class="code" href="s2let__axisym__lm_8c.html#ae76f7464b3af1a91c891878dbeb0eef6">s2let_axisym_lm_wav_synthesis_multires</a>(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, B, L, J_min);  </div>
