@@ -250,7 +250,7 @@ matlab: $(S2LETOBJSMEX)
 .PHONY: all
 all: lib matlab mw_bin tidy
 
-mw_bin: test denoising_demo axisym_denoising_demo transform_axisym_analysis_mw_real transform_axisym_synthesis_mw_real about
+mw_bin: test denoising_demo spin_denoising_demo axisym_denoising_demo transform_axisym_analysis_mw_real transform_axisym_synthesis_mw_real about
 
 hpx_bin: hpx_test hpx_demo transform_axisym_analysis_hpx_real transform_axisym_synthesis_hpx_real about
 
@@ -285,6 +285,8 @@ $(S2LETBIN)/s2let_hpx_test: $(S2LETTESTOBJ)/s2let_hpx_test.o $(S2LETLIB)/lib$(S2
 
 
 denoising_demo: $(S2LETBIN)/s2let_denoising_demo
+
+spin_denoising_demo: $(S2LETBIN)/s2let_spin_denoising_demo
 
 axisym_denoising_demo: $(S2LETBIN)/s2let_axisym_denoising_demo
 
