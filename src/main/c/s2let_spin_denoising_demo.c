@@ -107,7 +107,9 @@ int main(int argc, char *argv[])
   for (i = 0; i < spin*spin; ++i)
     flm[i] = 0;
   s2let_mw_allocate(&f, L);
-  s2let_mw_alm2map(f, flm, L);
+  int verbosity = 0;
+  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+  ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
   // Compute noise standard deviation and generate noise
   double sigmanoise = sqrt(pow(10.0, -SNR_in/10.0) * s2let_mw_power(f, L));
