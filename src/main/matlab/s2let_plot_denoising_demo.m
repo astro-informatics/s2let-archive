@@ -78,24 +78,6 @@ print('-r200', '-dpng', fname)
 [f_noisy, ~] = s2let_mw_read_real_map('../../../data/spin_signal_real_noisy.fits');
 [f_denoised, ~] = s2let_mw_read_real_map('../../../data/spin_signal_real_denoised.fits');
 
-% Precompute Wigner small-d functions
-sqrt_tbl = sqrt([0:2*(L-1)+1])';
-signs = ones(L+1,1);
-signs(2:2:end) = -1; 
-
-d = zeros(L, 2*L-1, 2*L-1);
-d(1,:,:) = ssht_dl(squeeze(d(1,:,:)), L, 0, 0, ...
-  'SqrtTable', sqrt_tbl, 'SignTable', signs);
-for el = 1:L-1
-  d(el+1,:,:) = ssht_dl(squeeze(d(el,:,:)), L, el, 0, ...
-     'SqrtTable', sqrt_tbl, 'SignTable', signs);
-end
-
-% Rotate maps by 180°
-f = ssht_inverse(ssht_rotate_flm(ssht_forward(f, L, 'Reality', true), d, pi, 0), L, 'Reality', true);
-f_noisy = ssht_inverse(ssht_rotate_flm(ssht_forward(f_noisy, L, 'Reality', true), d, pi, 0), L, 'Reality', true);
-f_denoised = ssht_inverse(ssht_rotate_flm(ssht_forward(f_denoised, L, 'Reality', true), d, pi, 0), L, 'Reality', true);
-
 f_error = log(abs(f_denoised./f - 1));
 
 figure
@@ -137,11 +119,6 @@ print('-r200', '-dpng', fname)
 [f, ~] = s2let_mw_read_real_map('../../../data/spin_signal_imag_input.fits');
 [f_noisy, ~] = s2let_mw_read_real_map('../../../data/spin_signal_imag_noisy.fits');
 [f_denoised, ~] = s2let_mw_read_real_map('../../../data/spin_signal_imag_denoised.fits');
-
-% Rotate maps by 180°
-f = ssht_inverse(ssht_rotate_flm(ssht_forward(f, L, 'Reality', true), d, pi, 0), L, 'Reality', true);
-f_noisy = ssht_inverse(ssht_rotate_flm(ssht_forward(f_noisy, L, 'Reality', true), d, pi, 0), L, 'Reality', true);
-f_denoised = ssht_inverse(ssht_rotate_flm(ssht_forward(f_denoised, L, 'Reality', true), d, pi, 0), L, 'Reality', true);
 
 f_error = log(abs(f_denoised./f - 1));
 
@@ -189,3 +166,4 @@ clear position plot_root plot_size
 clear f f_noisy f_denoised f_error
 clear L
 clear fname
+clear d el signs sqr_table

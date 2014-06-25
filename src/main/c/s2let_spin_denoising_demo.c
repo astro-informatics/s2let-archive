@@ -85,9 +85,9 @@ int main(int argc, char *argv[])
   // Commented out code uses a real map and converts it to
   // a spin map
 
-  //char file[100] = "data/earth_tomo_mw_128.fits";
-  char fileQ[100] = "data/wmap_mcmc_base_k_synch_stk_q_9yr_v5.fits";
-  char fileU[100] = "data/wmap_mcmc_base_k_synch_stk_u_9yr_v5.fits";
+  //char file[100] = "data/earth_tomo_mw_128_rot.fits";
+  char fileQ[100] = "data/wmap_mcmc_base_k_synch_stk_q_9yr_v5_rot.fits";
+  char fileU[100] = "data/wmap_mcmc_base_k_synch_stk_u_9yr_v5_rot.fits";
   //printf(" Reading file %s\n", file);
   printf(" Reading file %s\n", fileQ);
   printf(" Reading file %s\n", fileU);
