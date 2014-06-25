@@ -51,14 +51,14 @@ SUBROUTINE healpix_forward_real( alm, map, nside, L )
   complex(dpc), allocatable, dimension(:,:,:)  ::  alm_temp, alm_f
   real(dp), allocatable, dimension(:)  ::  map_temp
   real(dp), dimension(:,:), allocatable :: plm
-  real(dp), allocatable, dimension(:,:) :: dw8 
+  real(dp), allocatable, dimension(:,:) :: dw8
   real(dp), dimension(2) :: z
   character(len=FILENAMELEN) :: def_dir, def_file, final_file
   logical :: filefound
 
   nlmax = L - 1
   npix = nside2npix(nside)
-  n_plm =  (nlmax+1) * (nlmax+2) * nside  
+  n_plm =  (nlmax+1) * (nlmax+2) * nside
 
   allocate(dw8(1:2*nside, 1:1))
   allocate(alm_temp(1:1, 0:nlmax, 0:nlmax))
@@ -167,9 +167,10 @@ SUBROUTINE read_healpix_map(map, file, nside)
   call read_bintab(file, map, npix, 1, nullval, anynull, header)
   call get_card(header,'ORDERING',ordering,comment)
   if( trim(ordering) .ne. 'ring' .and. trim(ordering) .ne. 'RING' ) then
-     PRINT*, "Input Healpix map must be RING ordered"
-     PRINT*, "End of program..."
-     call exit(0)
+     call convert_nest2ring(nside, map)
+     !PRINT*, "Input Healpix map must be RING ordered"
+     !PRINT*, "End of program..."
+     !call exit(0)
   endif
 
 END SUBROUTINE read_healpix_map
@@ -214,7 +215,7 @@ SUBROUTINE healpix_forward_spin_real( almE, almB, mapQ, mapU, nside, L, spin )
   complex(dpc), allocatable, dimension(:,:,:)  ::  alm_temp, alm_f
   real(dp), allocatable, dimension(:,:)  ::  map_temp
   real(dp), dimension(:,:), allocatable :: plm
-  real(dp), allocatable, dimension(:,:) :: dw8 
+  real(dp), allocatable, dimension(:,:) :: dw8
   real(dp), dimension(2) :: z
   character(len=FILENAMELEN) :: def_dir, def_file, final_file
   logical :: filefound
@@ -263,11 +264,11 @@ SUBROUTINE healpix_forward_spin_real( almE, almB, mapQ, mapU, nside, L, spin )
     do el = abs(spin), nlmax
        do em = 0, el
 
-          almE( el * el + el + em ) = alm_f(1, el, em) 
+          almE( el * el + el + em ) = alm_f(1, el, em)
 
           if( em .gt. 0 ) almE( el * el + el - em ) = (-1.0)**real(-em) * CONJG( almE( el * el + el + em ) )
 
-          almB( el * el + el + em ) = alm_f(2, el, em) 
+          almB( el * el + el + em ) = alm_f(2, el, em)
 
           if( em .gt. 0 ) almB( el * el + el - em ) = (-1.0)**real(-em) * CONJG( almB( el * el + el + em ) )
 
