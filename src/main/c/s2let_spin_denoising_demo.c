@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
   char outfile[100];
   complex double *flm, *f, *noise, *g, *g_wav, *g_scal, *f_denoised, *remaining_noise;
-  double *f_r, *f_i, *g_r, *g_i, *scal_l;
+  double *f_hpx_i, *f_hpx_r, *f_r, *f_i, *g_r, *g_i, *scal_l;
   complex double *noise_lm, *wav_lm;
 
   parameters.B = B;
@@ -82,9 +82,18 @@ int main(int argc, char *argv[])
   printf(" Earth tomography signal, MW sampling\n");
   printf("--------------------------------------------------\n");
 
-  char file[100] = "data/earth_tomo_mw_128.fits";
-  printf(" Reading file %s\n", file);
-  const int L = s2let_fits_mw_read_bandlimit(file);
+  // Commented out code uses a real map and converts it to
+  // a spin map
+
+  //char file[100] = "data/earth_tomo_mw_128.fits";
+  char fileQ[100] = "data/wmap_Q.fits";
+  char fileU[100] = "data/wmap_U.fits";
+  //printf(" Reading file %s\n", file);
+  printf(" Reading file %s\n", fileQ);
+  printf(" Reading file %s\n", fileU);
+  //const int L = s2let_fits_mw_read_bandlimit(file);
+  const int nside = s2let_fits_hpx_read_nside(fileQ);
+  int L = MIN(192,3*nside);
   parameters.L = L;
   printf(" - Detected bandlimit L = %i\n",L);
   int J = s2let_j_max(&parameters);
@@ -97,19 +106,39 @@ int main(int argc, char *argv[])
   printf(" - Total number of wavelets : %i\n", J);
   printf(" - First wavelet scale to be used : %i\n", J_min);
 
-  s2let_allocate_mw_real(&f_r, L);
-  s2let_fits_mw_read_map(f_r, file, L); // Read MW map from file
-  printf(" File successfully read from file\n");
+  //s2let_allocate_mw_real(&f_r, L);
+  //s2let_fits_mw_read_map(f_r, file, L); // Read MW map from file
+  s2let_hpx_allocate_real(&f_hpx_r, nside);
+  s2let_hpx_allocate_real(&f_hpx_i, nside);
+  s2let_hpx_read_map(f_hpx_r, fileQ, nside);
+  s2let_hpx_read_map(f_hpx_i, fileU, nside);
+  printf(" Map successfully read from file\n");
 
   // Force into spin signal
+  // s2let_allocate_lm(&flm, L);
+  // s2let_mw_map2alm_real(flm, f_r, L);
+  // for (i = 0; i < spin*spin; ++i)
+  //   flm[i] = 0;
+  // s2let_allocate_mw(&f, L);
+  // int verbosity = 0;
+  // ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+  // ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
+
+  // Convert to MW sampling
+  s2let_allocate_mw_real(&f_r, L);
+  s2let_allocate_mw_real(&f_i, L);
   s2let_allocate_lm(&flm, L);
-  s2let_mw_map2alm_real(flm, f_r, L);
-  for (i = 0; i < spin*spin; ++i)
-    flm[i] = 0;
+  s2let_hpx_map2alm_real(flm, f_hpx_r, nside, L);
+  s2let_mw_alm2map_real(f_r, flm, L);
+  s2let_hpx_map2alm_real(flm, f_hpx_i, nside, L);
+  s2let_mw_alm2map_real(f_i, flm, L);
+
   s2let_allocate_mw(&f, L);
-  int verbosity = 0;
-  ssht_dl_method_t dl_method = SSHT_DL_RISBO;
-  ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
+  for (i = 0; i < L*(2*L-1); ++i)
+    f[i] = f_r[i] + I*f_i[i];
+  free(flm);
+  free(f_hpx_r);
+  free(f_hpx_i);
 
   // Compute noise standard deviation and generate noise
   double sigmanoise = sqrt(pow(10.0, -SNR_in/10.0) * s2let_mw_power(f, L));
