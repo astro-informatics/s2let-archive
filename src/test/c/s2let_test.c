@@ -188,8 +188,8 @@ void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   complex double *f_wav_lm, *f_scal_lm, *flm, *flm_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
 
   // Generate a random spherical harmonic decomposition
   s2let_lm_random_flm(flm, L, 0, seed);
@@ -253,8 +253,8 @@ void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int se
 	 (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   complex double *f_wav_lm, *f_scal_lm, *flm, *flm_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
 
   // Generate a random spherical harmonic decomposition
   s2let_lm_random_flm(flm, L, 0, seed);
@@ -327,14 +327,14 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   complex double *f_wav_lmn, *f_scal_lm, *flm, *flm_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
 
   // Generate a random spherical harmonic decomposition
   s2let_lm_random_flm(flm, L, spin, seed);
 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
-  s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &parameters);
+  s2let_allocate_lmn_f_wav(&f_wav_lmn, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
@@ -400,14 +400,14 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
   complex double *f_wav_lmn, *f_scal_lm, *flm, *flm_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
 
   // Generate a random spherical harmonic decomposition
   s2let_lm_random_flm(flm, L, spin, seed);
 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
-  s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &parameters);
+  s2let_allocate_lmn_f_wav(&f_wav_lmn, &f_scal_lm, &parameters);
 
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
@@ -459,10 +459,10 @@ void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
   //int J = s2let_j_max(L, B);
 
   complex double *f, *f_rec, *flm, *flm_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
-  s2let_mw_allocate(&f, L);
-  s2let_mw_allocate(&f_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
+  s2let_allocate_mw(&f, L);
+  s2let_allocate_mw(&f_rec, L);
 
   // Generate random harmonic coefficients for a complex signal
   s2let_lm_random_flm(flm, L, 0, seed);
@@ -524,10 +524,10 @@ void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
 
   complex *flm, *flm_rec;
   double *f, *f_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
-  s2let_mw_allocate_real(&f, L);
-  s2let_mw_allocate_real(&f_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
+  s2let_allocate_mw_real(&f, L);
+  s2let_allocate_mw_real(&f_rec, L);
 
   // Generate random harmonic coefficients for a real signal
   s2let_lm_random_flm_real(flm, L, seed);
@@ -590,10 +590,10 @@ void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
   //int J = s2let_j_max(L, B);
 
   complex double *f, *f_rec, *flm, *flm_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
-  s2let_mw_allocate(&f, L);
-  s2let_mw_allocate(&f_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
+  s2let_allocate_mw(&f, L);
+  s2let_allocate_mw(&f_rec, L);
 
   // Generate random harmonic coefficients for a complex signal
   s2let_lm_random_flm(flm, L, 0, seed);
@@ -656,10 +656,10 @@ void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int 
 
   complex *flm, *flm_rec;
   double *f, *f_rec;
-  s2let_lm_allocate(&flm, L);
-  s2let_lm_allocate(&flm_rec, L);
-  s2let_mw_allocate_real(&f, L);
-  s2let_mw_allocate_real(&f_rec, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
+  s2let_allocate_mw_real(&f, L);
+  s2let_allocate_mw_real(&f_rec, L);
 
   // Generate random harmonic coefficients for a real signal
   s2let_lm_random_flm_real(flm, L, seed);
@@ -729,10 +729,10 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
     //int J = s2let_j_max(L, B);
 
     complex double *f, *f_rec, *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
-    s2let_mw_allocate(&f, L);
-    s2let_mw_allocate(&f_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
+    s2let_allocate_mw(&f, L);
+    s2let_allocate_mw(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm(flm, L, spin, seed);
@@ -802,10 +802,10 @@ void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
 
     double *f, *f_rec;
     complex double *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
-    s2let_mw_allocate_real(&f, L);
-    s2let_mw_allocate_real(&f_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
+    s2let_allocate_mw_real(&f, L);
+    s2let_allocate_mw_real(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm_real(flm, L, seed);
@@ -876,10 +876,10 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
     //int J = s2let_j_max(L, B);
 
     complex double *f, *f_rec, *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
-    s2let_mw_allocate(&f, L);
-    s2let_mw_allocate(&f_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
+    s2let_allocate_mw(&f, L);
+    s2let_allocate_mw(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm(flm, L, spin, seed);
@@ -948,10 +948,10 @@ void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, i
 
     double *f, *f_rec;
     complex double *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
-    s2let_mw_allocate_real(&f, L);
-    s2let_mw_allocate_real(&f_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
+    s2let_allocate_mw_real(&f, L);
+    s2let_allocate_mw_real(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm_real(flm, L, seed);
@@ -1024,10 +1024,10 @@ void s2let_wav_transform_mwss_test(int B, int L, int J_min, int N, int spin, int
     //int J = s2let_j_max(L, B);
 
     complex double *f, *f_rec, *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
-    s2let_mwss_allocate(&f, L);
-    s2let_mwss_allocate(&f_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
+    s2let_allocate_mwss(&f, L);
+    s2let_allocate_mwss(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm(flm, L, spin, seed);
@@ -1098,10 +1098,10 @@ void s2let_wav_transform_mwss_real_test(int B, int L, int J_min, int N, int seed
 
     double *f, *f_rec;
     complex double *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
-    s2let_mwss_allocate_real(&f, L);
-    s2let_mwss_allocate_real(&f_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
+    s2let_allocate_mwss_real(&f, L);
+    s2let_allocate_mwss_real(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm_real(flm, L, seed);
@@ -1173,10 +1173,10 @@ void s2let_wav_transform_mwss_multires_test(int B, int L, int J_min, int N, int 
     //int J = s2let_j_max(L, B);
 
     complex double *f, *f_rec, *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
-    s2let_mwss_allocate(&f, L);
-    s2let_mwss_allocate(&f_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
+    s2let_allocate_mwss(&f, L);
+    s2let_allocate_mwss(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm(flm, L, spin, seed);
@@ -1247,10 +1247,10 @@ void s2let_wav_transform_mwss_multires_real_test(int B, int L, int J_min, int N,
 
     double *f, *f_rec;
     complex double *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
-    s2let_mwss_allocate_real(&f, L);
-    s2let_mwss_allocate_real(&f_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
+    s2let_allocate_mwss_real(&f, L);
+    s2let_allocate_mwss_real(&f_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm_real(flm, L, seed);
@@ -1321,8 +1321,8 @@ void s2let_wav_transform_lm2wav_test(int B, int L, int J_min, int N, int spin, i
     //int J = s2let_j_max(L, B);
 
     complex double *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm(flm, L, spin, seed);
@@ -1383,8 +1383,8 @@ void s2let_wav_transform_lm2wav_real_test(int B, int L, int J_min, int N, int se
     //int J = s2let_j_max(L, B);
 
     complex double *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm_real(flm, L, seed);
@@ -1446,8 +1446,8 @@ void s2let_wav_transform_lm2wav_multires_test(int B, int L, int J_min, int N, in
     //int J = s2let_j_max(L, B);
 
     complex double *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm(flm, L, spin, seed);
@@ -1507,8 +1507,8 @@ void s2let_wav_transform_lm2wav_multires_real_test(int B, int L, int J_min, int 
     //int J = s2let_j_max(L, B);
 
     complex double *flm, *flm_rec;
-    s2let_lm_allocate(&flm, L);
-    s2let_lm_allocate(&flm_rec, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_lm(&flm_rec, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm_real(flm, L, seed);
@@ -1571,8 +1571,8 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
     double wav_error, scal_error;
 
     complex double *f, *flm;
-    s2let_lm_allocate(&flm, L);
-    s2let_mw_allocate(&f, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_mw(&f, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm(flm, L, spin, seed);
@@ -1631,8 +1631,8 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     double wav_error, scal_error;
 
     complex double *f, *flm;
-    s2let_lm_allocate(&flm, L);
-    s2let_mw_allocate(&f, L);
+    s2let_allocate_lm(&flm, L);
+    s2let_allocate_mw(&f, L);
 
     // Generate random harmonic coefficients for a complex signal
     s2let_lm_random_flm(flm, L, spin, seed);
@@ -1687,7 +1687,7 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
 
     parameters.L = L;
 
-    s2let_lm_allocate(&flm, L);
+    s2let_allocate_lm(&flm, L);
 
     printf(" > L =  %i \n", L);
     for (repeat=0; repeat<NREPEAT; repeat++){
@@ -1695,7 +1695,7 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
       printf("  -> Iteration : %i on %i \n",repeat+1,NREPEAT);
 
       s2let_lm_random_flm(flm, L, 0, seed);
-      s2let_mw_allocate(&f, L);
+      s2let_allocate_mw(&f, L);
       s2let_mw_alm2map(f, flm, L);
       s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
@@ -1705,14 +1705,14 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
       tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
       //printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
-      s2let_mw_allocate(&f_rec, L);
+      s2let_allocate_mw(&f_rec, L);
 
       time_start = clock();
       s2let_transform_axisym_wav_synthesis_mw(f_rec, f_wav, f_scal, &parameters);
       time_end = clock();
       tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
 
-      s2let_lm_allocate(&flm_rec, L);
+      s2let_allocate_lm(&flm_rec, L);
       s2let_mw_map2alm(flm_rec, f_rec, L);
 
       //printf("  - Duration for S2LET analysis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1762,7 +1762,7 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
 
     parameters.L = L;
 
-    s2let_lm_allocate(&flm, L);
+    s2let_allocate_lm(&flm, L);
 
     printf(" > L =  %i \n", L);
     for (repeat=0; repeat<NREPEAT; repeat++){
@@ -1770,7 +1770,7 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
       printf("  -> Iteration : %i on %i \n",repeat+1,NREPEAT);
 
       s2let_lm_random_flm(flm, L, 0, seed);
-      s2let_mw_allocate(&f, L);
+      s2let_allocate_mw(&f, L);
       s2let_mw_alm2map(f, flm, L);
       s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
 
@@ -1780,14 +1780,14 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
       tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
       //printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
-      s2let_mw_allocate(&f_rec, L);
+      s2let_allocate_mw(&f_rec, L);
 
       time_start = clock();
       s2let_transform_axisym_wav_synthesis_mw_multires(f_rec, f_wav, f_scal, &parameters);
       time_end = clock();
       tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
 
-      s2let_lm_allocate(&flm_rec, L);
+      s2let_allocate_lm(&flm_rec, L);
       s2let_mw_map2alm(flm_rec, f_rec, L);
 
       //printf("  - Duration for S2LET analysis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -1841,7 +1841,7 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
 
     s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
     s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
-    s2let_lm_allocate(&flm, L);
+    s2let_allocate_lm(&flm, L);
 
     printf(" > L =  %i \n", L);
     for (repeat=0; repeat<NREPEAT; repeat++){
@@ -1858,7 +1858,7 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
       tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
       //printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
-      s2let_lm_allocate(&flm_rec, L);
+      s2let_allocate_lm(&flm_rec, L);
 
       time_start = clock();
       s2let_transform_axisym_lm_wav_synthesis(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
@@ -1916,7 +1916,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
     s2let_transform_axisym_lm_allocate_wav(&wav_lm, &scal_lm, &parameters);
     s2let_transform_axisym_lm_wav(wav_lm, scal_lm, &parameters);
-    s2let_lm_allocate(&flm, L);
+    s2let_allocate_lm(&flm, L);
 
     printf(" > L =  %i \n", L);
     for (repeat=0; repeat<NREPEAT; repeat++){
@@ -1933,7 +1933,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
       tottime_synthesis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
       //printf("  - Duration for S2LET synthesis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
 
-      s2let_lm_allocate(&flm_rec, L);
+      s2let_allocate_lm(&flm_rec, L);
 
       time_start = clock();
       s2let_transform_axisym_lm_wav_synthesis_multires(flm_rec, f_wav_lm, f_scal_lm, wav_lm, scal_lm, &parameters);
@@ -1969,7 +1969,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
 int main(int argc, char *argv[])
 {
-  const int L = 4;
+  const int L = 64;
   const int N = 4;
   const int B = 3;
   const int J_min = 0;

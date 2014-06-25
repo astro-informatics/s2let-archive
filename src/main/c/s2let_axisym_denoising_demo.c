@@ -80,23 +80,23 @@ int main(int argc, char *argv[])
   printf(" - Total number of wavelets : %i\n", J);
   printf(" - First wavelet scale to be used : %i\n", J_min);
 
-  s2let_mw_allocate_real(&f, L);
+  s2let_allocate_mw_real(&f, L);
   s2let_fits_mw_read_map(f, file, L); // Read MW map from file
   printf(" File successfully read from file\n");
 
   // Compute noise standard deviation and generate noise
   double sigmanoise = sqrt(pow(10.0, -SNR_in/10.0) * s2let_mw_power_real(f, L));
   printf(" - Std dev of the noise (to match SNR) = %f\n", sigmanoise);
-  s2let_lm_allocate(&noise_lm, L);
+  s2let_allocate_lm(&noise_lm, L);
   s2let_lm_random_flm_real_sigma(noise_lm, L, seed, sigmanoise);
   double SNR_actual = 10.0 * log10( s2let_mw_power_real(f, L) / s2let_lm_power(noise_lm, L));
   printf(" - Actual (realised) SNR = %f\n", SNR_actual);
 
   // Add noise to the signal in real space
   printf(" Contaminating the signal with this noise...");fflush(NULL);
-  s2let_mw_allocate_real(&noise, L);
+  s2let_allocate_mw_real(&noise, L);
   s2let_mw_alm2map_real(noise, noise_lm, L);
-  s2let_mw_allocate_real(&g, L);
+  s2let_allocate_mw_real(&g, L);
   int i, j;
   for(i = 0; i < L*(2*L-1); i++)
     g[i] = f[i] + noise[i];
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
     treshold[j-J_min] = sigmanoise * nsigma * sqrt(needletpower(wav_lm + j * L, L));
 
   printf(" Hard thresholding the wavelets...");fflush(NULL);
-  s2let_mw_allocate_real(&f_denois, L);
+  s2let_allocate_mw_real(&f_denois, L);
   if(multires){
     s2let_transform_axisym_wav_hardthreshold_multires_real(g_wav, treshold, &parameters);
     s2let_transform_axisym_wav_synthesis_mw_multires_real(f_denois, g_wav, g_scal, &parameters);
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
   printf(" done\n");
 
   // Remaining noise
-  s2let_mw_allocate_real(&remaining_noise, L);
+  s2let_allocate_mw_real(&remaining_noise, L);
   for(i = 0; i < L*(2*L-1); i++)
     remaining_noise[i] = f_denois[i] - f[i];
 

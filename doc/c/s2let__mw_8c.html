@@ -48,8 +48,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
                onmouseout="return searchBox.OnSearchSelectHide()"
                alt=""/>
           <input type="text" id="MSearchField" value="Search" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onfocus="searchBox.OnSearchFieldFocus(true)"
+               onblur="searchBox.OnSearchFieldFocus(false)"
                onkeyup="searchBox.OnSearchFieldChange(event)"/>
           </span><span class="right">
             <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
@@ -73,7 +73,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
+<iframe src="javascript:void(0)" frameborder="0"
         name="MSearchResults" id="MSearchResults">
 </iframe>
 </div>
@@ -108,9 +108,9 @@ Functions</h2></td></tr>
 <tr class="separator:acec65039b721a60d622aa6ccdc57fe58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adee030c15f2b401361c278a6c6ea6f7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s2let__mw_8c.html#adee030c15f2b401361c278a6c6ea6f7c">s2let_mw_map2alm_real</a> (complex double *flm, const double *f, int L)</td></tr>
 <tr class="separator:adee030c15f2b401361c278a6c6ea6f7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae518b8a8931f67a113608a753bfa683b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_mw_allocate</a> (complex double **f, int L)</td></tr>
+<tr class="memitem:ae518b8a8931f67a113608a753bfa683b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s2let__mw_8c.html#ae518b8a8931f67a113608a753bfa683b">s2let_allocate_mw</a> (complex double **f, int L)</td></tr>
 <tr class="separator:ae518b8a8931f67a113608a753bfa683b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedef34050559d64d3d6456afc4e24bcd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_mw_allocate_real</a> (double **f, int L)</td></tr>
+<tr class="memitem:aedef34050559d64d3d6456afc4e24bcd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_allocate_mw_real</a> (double **f, int L)</td></tr>
 <tr class="separator:aedef34050559d64d3d6456afc4e24bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91dbb4ab1556928322986d21d413abdf"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s2let__mw_8c.html#a91dbb4ab1556928322986d21d413abdf">s2let_mw_power</a> (complex double *f, int L)</td></tr>
 <tr class="separator:a91dbb4ab1556928322986d21d413abdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,7 +123,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void s2let_mw_allocate </td>
+          <td class="memname">void s2let_allocate_mw </td>
           <td>(</td>
           <td class="paramtype">complex double **&#160;</td>
           <td class="paramname"><em>f</em>, </td>
@@ -165,7 +165,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void s2let_mw_allocate_real </td>
+          <td class="memname">void s2let_allocate_mw_real </td>
           <td>(</td>
           <td class="paramtype">double **&#160;</td>
           <td class="paramname"><em>f</em>, </td>

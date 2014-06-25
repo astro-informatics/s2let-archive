@@ -75,7 +75,7 @@ void s2let_mw_map2alm_real(complex double* flm, const double* f, int L) {
  */
 double s2let_mw_power(complex double *f, int L){
   complex double *flm;
-  s2let_lm_allocate(&flm, L);
+  s2let_allocate_lm(&flm, L);
   s2let_mw_map2alm(flm, f, L);
   double res = s2let_lm_power(flm, L);
   free(flm);
@@ -87,7 +87,7 @@ double s2let_mw_power(complex double *f, int L){
  */
 double s2let_mw_power_real(double *f, int L){
   complex double *flm;
-  s2let_lm_allocate(&flm, L);
+  s2let_allocate_lm(&flm, L);
   s2let_mw_map2alm_real(flm, f, L);
   double res = s2let_lm_power(flm, L);
   free(flm);

@@ -115,10 +115,10 @@ int main(int argc, char **argv)
 
             parameters.L = L;
 
-            s2let_lm_allocate(&flm, L);
-            s2let_lm_allocate(&flm_rec, L);
-            s2let_mw_allocate(&f, L);
-            s2let_mw_allocate(&f_rec, L);
+            s2let_allocate_lm(&flm, L);
+            s2let_allocate_lm(&flm_rec, L);
+            s2let_allocate_mw(&f, L);
+            s2let_allocate_mw(&f_rec, L);
             s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
             min_duration_inverse = 0.0;

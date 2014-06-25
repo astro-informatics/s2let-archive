@@ -226,7 +226,7 @@ void s2let_synthesis_wav2lm(
     s2let_tiling_wavelet(wav_lm, scal_l, parameters);
 
     complex double *f_wav_lmn, *f_scal_lm;
-    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
+    s2let_allocate_lmn_f_wav(&f_wav_lmn, &f_scal_lm, parameters);
 
     if (!parameters->upsample)
         bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
@@ -316,7 +316,7 @@ void s2let_synthesis_wav2lm_real(
     s2let_tiling_wavelet(wav_lm, scal_l, &real_parameters);
 
     complex double *f_wav_lmn, *f_scal_lm;
-    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &real_parameters);
+    s2let_allocate_lmn_f_wav(&f_wav_lmn, &f_scal_lm, &real_parameters);
 
     if (!parameters->upsample)
         bandlimit = MIN(s2let_bandlimit(J_min-1, &real_parameters), L);
@@ -391,7 +391,7 @@ void s2let_synthesis_wav2px(
     int verbosity = 0;
 
     complex double *flm;
-    s2let_lm_allocate(&flm, L);
+    s2let_allocate_lm(&flm, L);
 
     s2let_synthesis_wav2lm(flm, f_wav, f_scal, parameters);
 
@@ -433,7 +433,7 @@ void s2let_synthesis_wav2px_real(
     int verbosity = 0;
 
     complex double *flm;
-    s2let_lm_allocate(&flm, L);
+    s2let_allocate_lm(&flm, L);
 
     s2let_synthesis_wav2lm_real(flm, f_wav, f_scal, parameters);
 

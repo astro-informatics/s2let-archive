@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012-2104
+// Copyright (C) 2012-2014
 // Boris Leistedt & Jason McEwen
 
 #ifndef S2LET_TYPES

@@ -216,7 +216,7 @@ void s2let_analysis_lm2wav(
 
     complex double *f_wav_lmn, *f_scal_lm;
 
-    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, parameters);
+    s2let_allocate_lmn_f_wav(&f_wav_lmn, &f_scal_lm, parameters);
     s2let_analysis_lm2lmn(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, parameters);
 
     if (!parameters->upsample)
@@ -306,7 +306,7 @@ void s2let_analysis_lm2wav_real(
 
     complex double *f_wav_lmn, *f_scal_lm;
 
-    s2let_allocate_f_wav_lmn(&f_wav_lmn, &f_scal_lm, &real_parameters);
+    s2let_allocate_lmn_f_wav(&f_wav_lmn, &f_scal_lm, &real_parameters);
     s2let_analysis_lm2lmn_real(f_wav_lmn, f_scal_lm, flm, wav_lm, scal_l, &real_parameters);
 
     if (!parameters->upsample)
@@ -378,7 +378,7 @@ void s2let_analysis_px2wav(
     int verbosity = parameters->verbosity;
 
     complex double *flm;
-    s2let_lm_allocate(&flm, L);
+    s2let_allocate_lm(&flm, L);
 
     switch (parameters->sampling_scheme)
     {
@@ -420,7 +420,7 @@ void s2let_analysis_px2wav_real(
     int verbosity = 0;
 
     complex double *flm;
-    s2let_lm_allocate(&flm, L);
+    s2let_allocate_lm(&flm, L);
 
     switch (parameters->sampling_scheme)
     {

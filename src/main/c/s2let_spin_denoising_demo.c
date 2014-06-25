@@ -67,8 +67,8 @@ int main(int argc, char *argv[])
   const int spin = 2;     // Spin number
 
   char outfile[100];
-  complex double *flm_r, *flm_i, *f, *noise, *g, *g_wav, *g_scal, *f_denoised, *remaining_noise;
-  double *f_hpx_r, *f_hpx_i, *f_r, *f_i, *g_r, *g_i, *scal_l;
+  complex double *flm, *f, *noise, *g, *g_wav, *g_scal, *f_denoised, *remaining_noise;
+  double *f_hpx_i, *f_hpx_r, *f_r, *f_i, *f_denoised_r, *f_denoised_i, *g_r, *g_i, *scal_l;
   complex double *noise_lm, *wav_lm;
 
   parameters.B = B;
@@ -76,19 +76,24 @@ int main(int argc, char *argv[])
   parameters.N = N;
   parameters.spin = spin;
   parameters.upsample = !multires;
-  parameters.reality = 1;
 
   printf("--------------------------------------------------\n");
   printf(" S2LET library : denoising example\n");
   printf(" Earth tomography signal, MW sampling\n");
   printf("--------------------------------------------------\n");
 
-  char file_Q[100] = "data/wmap_Q.fits";
-  char file_U[100] = "data/wmap_U.fits";
-  printf(" Reading file %s\n", file_Q);
-  printf(" Reading file %s\n", file_U);
-  const int nside = s2let_fits_hpx_read_nside(file_Q);
-  const int L = 4*nside;
+  // Commented out code uses a real map and converts it to
+  // a spin map
+
+  //char file[100] = "data/earth_tomo_mw_128.fits";
+  char fileQ[100] = "data/wmap_mcmc_base_k_synch_stk_q_9yr_v5.fits";
+  char fileU[100] = "data/wmap_mcmc_base_k_synch_stk_u_9yr_v5.fits";
+  //printf(" Reading file %s\n", file);
+  printf(" Reading file %s\n", fileQ);
+  printf(" Reading file %s\n", fileU);
+  //const int L = s2let_fits_mw_read_bandlimit(file);
+  const int nside = s2let_fits_hpx_read_nside(fileQ);
+  int L = MIN(192,3*nside);
   parameters.L = L;
   printf(" - Detected bandlimit L = %i\n",L);
   int J = s2let_j_max(&parameters);
@@ -101,42 +106,53 @@ int main(int argc, char *argv[])
   printf(" - Total number of wavelets : %i\n", J);
   printf(" - First wavelet scale to be used : %i\n", J_min);
 
+  //s2let_allocate_mw_real(&f_r, L);
+  //s2let_fits_mw_read_map(f_r, file, L); // Read MW map from file
   s2let_hpx_allocate_real(&f_hpx_r, nside);
-  s2let_hpx_read_map(f_hpx_r, file_Q, nside); // Read MW map from file
   s2let_hpx_allocate_real(&f_hpx_i, nside);
-  s2let_hpx_read_map(f_hpx_i, file_U, nside); // Read MW map from file
-  printf(" File successfully read from file\n");
+  s2let_hpx_read_map(f_hpx_r, fileQ, nside);
+  s2let_hpx_read_map(f_hpx_i, fileU, nside);
+  printf(" Map successfully read from file\n");
+
+  // Force into spin signal
+  // s2let_allocate_lm(&flm, L);
+  // s2let_mw_map2alm_real(flm, f_r, L);
+  // for (i = 0; i < spin*spin; ++i)
+  //   flm[i] = 0;
+  // s2let_allocate_mw(&f, L);
+  // int verbosity = 0;
+  // ssht_dl_method_t dl_method = SSHT_DL_RISBO;
+  // ssht_core_mw_inverse_sov_sym(f, flm, L, spin, dl_method, verbosity);
 
   // Convert to MW sampling
-  s2let_lm_allocate(&flm_r, L);
-  s2let_hpx_map2alm_real(flm_r, f_hpx_r, nside, L);
-  s2let_mw_allocate_real(&f_r, L);
-  s2let_mw_alm2map_real(f_r, flm_r, L);
-  free(flm_r);
-  s2let_lm_allocate(&flm_i, L);
-  s2let_hpx_map2alm_real(flm_i, f_hpx_i, nside, L);
-  s2let_mw_allocate_real(&f_i, L);
-  s2let_mw_alm2map_real(f_i, flm_i, L);
-  free(flm_i);
+  s2let_allocate_mw_real(&f_r, L);
+  s2let_allocate_mw_real(&f_i, L);
+  s2let_allocate_lm(&flm, L);
+  s2let_hpx_map2alm_real(flm, f_hpx_r, nside, L);
+  s2let_mw_alm2map_real(f_r, flm, L);
+  s2let_hpx_map2alm_real(flm, f_hpx_i, nside, L);
+  s2let_mw_alm2map_real(f_i, flm, L);
 
-  // Construct spin signal
-  s2let_mw_allocate(&f, L);
-  for (i = 0; i < 12*nside*nside; i++)
+  s2let_allocate_mw(&f, L);
+  for (i = 0; i < L*(2*L-1); ++i)
     f[i] = f_r[i] + I*f_i[i];
+  free(flm);
+  free(f_hpx_r);
+  free(f_hpx_i);
 
   // Compute noise standard deviation and generate noise
   double sigmanoise = sqrt(pow(10.0, -SNR_in/10.0) * s2let_mw_power(f, L));
   printf(" - Std dev of the noise (to match SNR) = %f\n", sigmanoise);
-  s2let_lm_allocate(&noise_lm, L);
+  s2let_allocate_lm(&noise_lm, L);
   s2let_lm_random_flm_sigma(noise_lm, L, seed, sigmanoise);
   double SNR_actual = 10.0 * log10( s2let_mw_power(f, L) / s2let_lm_power(noise_lm, L));
   printf(" - Actual (realised) SNR = %f\n", SNR_actual);
 
   // Add noise to the signal in real space
   printf(" Contaminating the signal with this noise...");fflush(NULL);
-  s2let_mw_allocate(&noise, L);
+  s2let_allocate_mw(&noise, L);
   s2let_mw_alm2map(noise, noise_lm, L);
-  s2let_mw_allocate(&g, L);
+  s2let_allocate_mw(&g, L);
   for (i = 0; i < L*(2*L-1); i++)
     g[i] = f[i] + noise[i];
   printf(" done\n");
@@ -156,13 +172,13 @@ int main(int argc, char *argv[])
     threshold[j-J_min] = sigmanoise * nsigma * sqrt(waveletpower(wav_lm + j * L*L, L));
 
   printf(" Hard thresholding the wavelets...");fflush(NULL);
-  s2let_mw_allocate(&f_denoised, L);
+  s2let_allocate_mw(&f_denoised, L);
   hard_threshold(g_wav, threshold, &parameters);
   s2let_synthesis_wav2px(f_denoised, g_wav, g_scal, &parameters);
   printf(" done\n");
 
   // Remaining noise
-  s2let_mw_allocate(&remaining_noise, L);
+  s2let_allocate_mw(&remaining_noise, L);
   for(i = 0; i < L*(2*L-1); i++)
     remaining_noise[i] = f_denoised[i] - f[i];
 
@@ -172,40 +188,50 @@ int main(int argc, char *argv[])
   printf(" -> SNR after denoising  = %f\n", SNR_denoised);
 
   // Finally write the denoised signal
-  s2let_mw_allocate_real(&g_r, L);
-  s2let_mw_allocate_real(&g_i, L);
+  s2let_allocate_mw_real(&g_r, L);
+  s2let_allocate_mw_real(&g_i, L);
+  s2let_allocate_mw_real(&f_denoised_r, L);
+  s2let_allocate_mw_real(&f_denoised_i, L);
   for (i = 0; i < L*(2*L-1); ++i)
   {
     g_r[i] = creal(g[i]);
     g_i[i] = cimag(g[i]);
-    f_r[i] = creal(f_denoised[i]);
-    f_i[i] = cimag(f_denoised[i]);
+    f_denoised_r[i] = creal(f_denoised[i]);
+    f_denoised_i[i] = cimag(f_denoised[i]);
   }
   printf(" Write output files\n");
-  sprintf(outfile, "%s%s%s", "data/wmap_Q", "_noisy" , ".fits");
-  printf(" Outfile = %s\n",outfile);
+  sprintf(outfile, "%s%s%s", "data/spin_signal_real", "_input" , ".fits");
+  printf(" Outfile = %s\n", outfile);
+  remove(outfile); // In case the file exists
+  s2let_fits_mw_write_map(outfile, f_r, L); // Now write the map to fits file
+  sprintf(outfile, "%s%s%s", "data/spin_signal_imag", "_input" , ".fits");
+  printf(" Outfile = %s\n", outfile);
+  remove(outfile); // In case the file exists
+  s2let_fits_mw_write_map(outfile, f_i, L); // Now write the map to fits file
+
+  sprintf(outfile, "%s%s%s", "data/spin_signal_real", "_noisy" , ".fits");
+  printf(" Outfile = %s\n", outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, g_r, L); // Now write the map to fits file
-  printf(" Write output files\n");
-  sprintf(outfile, "%s%s%s", "data/wmap_U", "_noisy" , ".fits");
-  printf(" Outfile = %s\n",outfile);
+  sprintf(outfile, "%s%s%s", "data/spin_signal_imag", "_noisy" , ".fits");
+  printf(" Outfile = %s\n", outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, g_i, L); // Now write the map to fits file
 
-  char params[100];
-  sprintf(params, "%d%s%d%s%d", L, "_", B, "_", J_min);
-  sprintf(outfile, "%s%s%s", "data/wmap_Q", "_denoised", ".fits");
-  printf(" Outfile = %s\n",outfile);
+  sprintf(outfile, "%s%s%s", "data/spin_signal_real", "_denoised", ".fits");
+  printf(" Outfile = %s\n", outfile);
   remove(outfile); // In case the file exists
-  s2let_fits_mw_write_map(outfile, f_r, L); // Now write the map to fits file
-  sprintf(outfile, "%s%s%s", "data/wmap_U", "_denoised", ".fits");
-  printf(" Outfile = %s\n",outfile);
+  s2let_fits_mw_write_map(outfile, f_denoised_r, L); // Now write the map to fits file
+  sprintf(outfile, "%s%s%s", "data/spin_signal_imag", "_denoised", ".fits");
+  printf(" Outfile = %s\n", outfile);
   remove(outfile); // In case the file exists
-  s2let_fits_mw_write_map(outfile, f_i, L); // Now write the map to fits file
+  s2let_fits_mw_write_map(outfile, f_denoised_i, L); // Now write the map to fits file
 
   free(f);
   free(f_r);
   free(f_i);
+  free(f_denoised_r);
+  free(f_denoised_i);
   free(noise);
   free(g);
   free(g_r);

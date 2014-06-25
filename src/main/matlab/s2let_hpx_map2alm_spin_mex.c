@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
@@ -11,7 +11,7 @@
  * MATLAB interface: s2let_hpx_map2alm_spin_mex.
  * This function for internal use only.
  *
- * Usage: 
+ * Usage:
  *   alm!, almU = s2let_hpx_map2alm_spin_mex(fQ, fU, nside, L, spin);
  *
  */
@@ -43,8 +43,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse HEALPIX parameter nside
   iin = 2;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_hpx_map2alm_spin_mex:InvalidInput:healpixParameter",
           "HEALPIX parameter nside must be integer.");
@@ -54,14 +54,14 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_hpx_map2alm_spin_mex:InvalidInput:healpixParameter",
           "Healpix parameter nside must be positive integer greater than 2");
 
-  if( f_m*f_n != 12*nside*nside ) 
+  if( f_m*f_n != 12*nside*nside )
     mexErrMsgIdAndTxt("s2let_hpx_map2alm_spin_mex:InvalidInput:LbandLimit",
           "nside must correspond to the sampling scheme, i.e. f = 12*nside*nside samples.");
 
   // Parse harmonic band-limit L
   iin = 3;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_hpx_map2alm_spin_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
@@ -73,17 +73,17 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse spin
   iin = 4;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_hpx_alm2map_spin_mex:InvalidInput:LbandLimit",
           "spin must be integer.");
   }
   spin = (int)mxGetScalar(prhs[iin]);
 
-  // Perform harmonic transform 
-  s2let_lm_allocate(&flmQ, L);
-  s2let_lm_allocate(&flmU, L);
+  // Perform harmonic transform
+  s2let_allocate_lm(&flmQ, L);
+  s2let_allocate_lm(&flmU, L);
   s2let_hpx_map2alm_spin_real(flmQ, flmU, fQ_r, fU_r, nside, L, spin);
 
   // Output flm's
@@ -109,6 +109,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
   free(fQ_r);
   free(flmU);
   free(fU_r);
-  
+
 
 }

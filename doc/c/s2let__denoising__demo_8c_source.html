@@ -48,8 +48,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
                onmouseout="return searchBox.OnSearchSelectHide()"
                alt=""/>
           <input type="text" id="MSearchField" value="Search" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onfocus="searchBox.OnSearchFieldFocus(true)"
+               onblur="searchBox.OnSearchFieldFocus(false)"
                onkeyup="searchBox.OnSearchFieldChange(event)"/>
           </span><span class="right">
             <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
@@ -73,7 +73,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
+<iframe src="javascript:void(0)" frameborder="0"
         name="MSearchResults" id="MSearchResults">
 </iframe>
 </div>
@@ -161,23 +161,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  printf(<span class="stringliteral">&quot; - Total number of wavelets : %i\n&quot;</span>, J);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  printf(<span class="stringliteral">&quot; - First wavelet scale to be used : %i\n&quot;</span>, J_min);</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_mw_allocate_real</a>(&amp;f, L); </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_allocate_mw_real</a>(&amp;f, L); </div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <a class="code" href="s2let__fits_8c.html#af6db1f82ef3c0d037656ec6ac54e2d19">s2let_fits_mw_read_map</a>(f, file, L); <span class="comment">// Read MW map from file</span></div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  printf(<span class="stringliteral">&quot; File successfully read from file\n&quot;</span>);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  <span class="comment">// Compute noise standard deviation and generate noise</span></div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keywordtype">double</span> sigmanoise = sqrt(pow(10.0, -SNR_in/10.0) * <a class="code" href="s2let__mw_8c.html#a3520764bba2023b957373df5769f25e8">s2let_mw_power_real</a>(f, L));</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  printf(<span class="stringliteral">&quot; - Std dev of the noise (to match SNR) = %f\n&quot;</span>, sigmanoise);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_lm_allocate</a>(&amp;noise_lm, L);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  <a class="code" href="s2let__lm_8c.html#af381f2282d9c3442e6a3368eb87f96ad">s2let_allocate_lm</a>(&amp;noise_lm, L);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  <a class="code" href="s2let__denoising__demo_8c.html#aecd22408c13042607d49019671ff9168">s2let_lm_random_flm_real_sigma</a>(noise_lm, L, seed, sigmanoise);</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <span class="keywordtype">double</span> SNR_actual = 10.0 * log10( <a class="code" href="s2let__mw_8c.html#a3520764bba2023b957373df5769f25e8">s2let_mw_power_real</a>(f, L) / <a class="code" href="s2let__lm_8c.html#a520c6e822fd2d004f87b0babf793b93b">s2let_lm_power</a>(noise_lm, L));</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  printf(<span class="stringliteral">&quot; - Actual (realised) SNR = %f\n&quot;</span>, SNR_actual);</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <span class="comment">// Add noise to the signal in real space</span></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  printf(<span class="stringliteral">&quot; Contaminating the signal with this noise...&quot;</span>);fflush(NULL);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_mw_allocate_real</a>(&amp;noise, L);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_allocate_mw_real</a>(&amp;noise, L);</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <a class="code" href="s2let__mw_8c.html#acec65039b721a60d622aa6ccdc57fe58">s2let_mw_alm2map_real</a>(noise, noise_lm, L);</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_mw_allocate_real</a>(&amp;g, L);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_allocate_mw_real</a>(&amp;g, L);</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  <span class="keywordtype">int</span> i, j;</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  <span class="keywordflow">for</span>(i = 0; i &lt; L*(2*L-1); i++)</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    g[i] = f[i] + noise[i];</div>
@@ -203,7 +203,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    treshold[j-J_min] = sigmanoise * nsigma * sqrt(<a class="code" href="s2let__denoising__demo_8c.html#a16c08eb6db78637aae2b6ffdfd13cfe2">needletpower</a>(wav_lm + j * L, L));</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;  printf(<span class="stringliteral">&quot; Hard thresholding the wavelets...&quot;</span>);fflush(NULL);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_mw_allocate_real</a>(&amp;f_denois, L);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_allocate_mw_real</a>(&amp;f_denois, L);</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  <span class="keywordflow">if</span>(multires){</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <a class="code" href="s2let__axisym__mw_8c.html#a724d8eab3c6b5139cb3049dc04701083">s2let_axisym_mw_wav_hardthreshold_multires_real</a>(g_wav, treshold, B, L, J_min);</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <a class="code" href="s2let__axisym__mw_8c.html#a67ba18a5dee1135e44a17d1f1645fc0f">s2let_axisym_mw_wav_synthesis_multires_real</a>(f_denois, g_wav, g_scal, B, L, J_min);</div>
@@ -214,7 +214,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  printf(<span class="stringliteral">&quot; done\n&quot;</span>);</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    </div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;  <span class="comment">// Remaining noise</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_mw_allocate_real</a>(&amp;remaining_noise, L);</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  <a class="code" href="s2let__mw_8c.html#aedef34050559d64d3d6456afc4e24bcd">s2let_allocate_mw_real</a>(&amp;remaining_noise, L);</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;  <span class="keywordflow">for</span>(i = 0; i &lt; L*(2*L-1); i++)</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    remaining_noise[i] = f_denois[i] - f[i];</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;</div>
