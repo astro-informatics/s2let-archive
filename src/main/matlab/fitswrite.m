@@ -60,3 +60,13 @@ fclose(fid);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function hrec=make_header_record(card_matrix)
+
+[nrow,ncol] = size(card_matrix);
+n_blanks = 36 - rem(nrow,36);
+blank_line = setstr(ones(1,80)*32);
+hrec = [card_matrix; repmat(blank_line,n_blanks,1)];
+
