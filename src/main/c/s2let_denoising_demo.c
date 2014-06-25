@@ -159,13 +159,15 @@ int main(int argc, char *argv[])
 
   // Finally write the denoised signal
   printf(" Write output files\n");
-  sprintf(outfile, "%s%s%s", "data/earth_tomo_mw_128", "_noisy" , ".fits");
+  sprintf(outfile, "%s%s%s", "data/real_signal", "_input" , ".fits");
+  printf(" Outfile = %s\n",outfile);
+  remove(outfile); // In case the file exists
+  s2let_fits_mw_write_map(outfile, f, L); // Now write the map to fits file
+  sprintf(outfile, "%s%s%s", "data/real_signal", "_noisy" , ".fits");
   printf(" Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, g, L); // Now write the map to fits file
-  char params[100];
-  sprintf(params, "%d%s%d%s%d", L, "_", B, "_", J_min);
-  sprintf(outfile, "%s%s%s", "data/earth_tomo_mw_128", "_denoised", ".fits");
+  sprintf(outfile, "%s%s%s", "data/real_signal", "_denoised", ".fits");
   printf(" Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, f_denoised, L); // Now write the map to fits file
