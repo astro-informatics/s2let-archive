@@ -163,7 +163,11 @@ int main(int argc, char *argv[])
   printf(" Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, f, L); // Now write the map to fits file
-  sprintf(outfile, "%s%s%s", "data/real_signal", "_noisy" , ".fits");
+  sprintf(outfile, "%s%s%s", "data/real_signal", "_noise" , ".fits");
+  printf(" Outfile = %s\n",outfile);
+  remove(outfile); // In case the file exists
+  s2let_fits_mw_write_map(outfile, noise, L); // Now write the map to fits file
+  sprintf(outfile, "%s%s%s", "data/real_signal", "_input_noise" , ".fits");
   printf(" Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, g, L); // Now write the map to fits file

@@ -68,7 +68,12 @@ int main(int argc, char *argv[])
 
   char outfile[100];
   complex double *flm, *f, *noise, *g, *g_wav, *g_scal, *f_denoised, *remaining_noise;
-  double *f_hpx_i, *f_hpx_r, *f_r, *f_i, *f_denoised_r, *f_denoised_i, *g_r, *g_i, *scal_l;
+  double *f_hpx_r, *f_hpx_i,
+         *f_r, *f_i,
+         *noise_r, *noise_i,
+         *f_denoised_r, *f_denoised_i,
+         *g_r, *g_i,
+         *scal_l;
   complex double *noise_lm, *wav_lm;
 
   parameters.B = B;
@@ -188,12 +193,16 @@ int main(int argc, char *argv[])
   printf(" -> SNR after denoising  = %f\n", SNR_denoised);
 
   // Finally write the denoised signal
+  s2let_allocate_mw_real(&noise_r, L);
+  s2let_allocate_mw_real(&noise_i, L);
   s2let_allocate_mw_real(&g_r, L);
   s2let_allocate_mw_real(&g_i, L);
   s2let_allocate_mw_real(&f_denoised_r, L);
   s2let_allocate_mw_real(&f_denoised_i, L);
   for (i = 0; i < L*(2*L-1); ++i)
   {
+    noise_r[i] = creal(noise[i]);
+    noise_i[i] = cimag(noise[i]);
     g_r[i] = creal(g[i]);
     g_i[i] = cimag(g[i]);
     f_denoised_r[i] = creal(f_denoised[i]);
@@ -209,11 +218,20 @@ int main(int argc, char *argv[])
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, f_i, L); // Now write the map to fits file
 
-  sprintf(outfile, "%s%s%s", "data/spin_signal_real", "_noisy" , ".fits");
+  sprintf(outfile, "%s%s%s", "data/spin_signal_real", "_noise" , ".fits");
+  printf(" Outfile = %s\n", outfile);
+  remove(outfile); // In case the file exists
+  s2let_fits_mw_write_map(outfile, noise_r, L); // Now write the map to fits file
+  sprintf(outfile, "%s%s%s", "data/spin_signal_imag", "_noise" , ".fits");
+  printf(" Outfile = %s\n", outfile);
+  remove(outfile); // In case the file exists
+  s2let_fits_mw_write_map(outfile, noise_i, L); // Now write the map to fits file
+
+  sprintf(outfile, "%s%s%s", "data/spin_signal_real", "_input_noise" , ".fits");
   printf(" Outfile = %s\n", outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, g_r, L); // Now write the map to fits file
-  sprintf(outfile, "%s%s%s", "data/spin_signal_imag", "_noisy" , ".fits");
+  sprintf(outfile, "%s%s%s", "data/spin_signal_imag", "_input_noise" , ".fits");
   printf(" Outfile = %s\n", outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, g_i, L); // Now write the map to fits file
@@ -230,16 +248,18 @@ int main(int argc, char *argv[])
   free(f);
   free(f_r);
   free(f_i);
+  free(f_denoised);
   free(f_denoised_r);
   free(f_denoised_i);
   free(noise);
+  free(noise_r);
+  free(noise_i);
   free(g);
   free(g_r);
   free(g_i);
   free(g_wav);
   free(g_scal);
   free(scal_l);
-  free(f_denoised);
   free(remaining_noise);
   free(noise_lm);
 
