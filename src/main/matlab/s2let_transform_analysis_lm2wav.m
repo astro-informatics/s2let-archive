@@ -72,7 +72,7 @@ if strcmp(args.Sampling, 'MWSS')
     f_scal = s2let_mwss_vec2arr(f_scal_vec);
 
     J = s2let_jmax(args.L, args.B);
-    f_wav = cell(J+1-args.J_min, 2*args.N-1);
+    f_wav = cell(J+1-args.J_min, args.N);
     offset = 0;
     for j = args.J_min:J
       for en = 1:args.N
@@ -96,7 +96,7 @@ else
     f_scal = s2let_mw_vec2arr(f_scal_vec);
 
     J = s2let_jmax(args.L, args.B);
-    f_wav = cell(J+1-args.J_min, 2*args.N-1);
+    f_wav = cell(J+1-args.J_min, args.N);
     offset = 0;
     for j = args.J_min:J
       for en = 1:args.N

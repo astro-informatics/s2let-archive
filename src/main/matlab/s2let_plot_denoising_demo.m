@@ -211,6 +211,8 @@ print('-r200', '-dpng', fname)
 
 %% Plot Q + iU map
 
+subL = 64;
+
 f_QU = f_Q + 1i*f_U;
 f_QU_noise = f_Q_noise + 1i*f_U_noise;
 f_QU_input_noise = f_Q_input_noise + 1i*f_U_input_noise;
@@ -223,7 +225,7 @@ stddev_f = abs(std(f_QU_input_noise(:)));
 range = [0 mean_f+sigmas*stddev_f];
 
 figure
-ssht_plot_mollweide(f_QU, L, 'Mode', 3)
+ssht_plot_mollweide(f_QU, L, 'Mode', 3, 'SubL', subL)
 colorbar;
 caxis(range);
 title('Spin signal (Q + iU) - Input map');
@@ -233,7 +235,7 @@ fname = [plot_root, 'denoising_spin_signal_QU_input.png'];
 print('-r200', '-dpng', fname)
 
 figure
-ssht_plot_mollweide(f_QU_noise, L, 'Mode', 3)
+ssht_plot_mollweide(f_QU_noise, L, 'Mode', 3, 'SubL', subL)
 colorbar;
 caxis(range);
 title('Spin signal (Q + iU) - Noise map');
@@ -243,7 +245,7 @@ fname = [plot_root, 'denoising_spin_signal_QU_noise.png'];
 print('-r200', '-dpng', fname)
 
 figure
-ssht_plot_mollweide(f_QU_input_noise, L, 'Mode', 3)
+ssht_plot_mollweide(f_QU_input_noise, L, 'Mode', 3, 'SubL', subL)
 colorbar;
 caxis(range);
 title('Spin signal (Q + iU) - Input map with added noise');
@@ -253,7 +255,7 @@ fname = [plot_root, 'denoising_spin_signal_QU_input_noise.png'];
 print('-r200', '-dpng', fname)
 
 figure
-ssht_plot_mollweide(f_QU_denoised, L, 'Mode', 3)
+ssht_plot_mollweide(f_QU_denoised, L, 'Mode', 3, 'SubL', subL)
 colorbar;
 caxis(range);
 title('Spin signal (Q + iU) - Denoised map');

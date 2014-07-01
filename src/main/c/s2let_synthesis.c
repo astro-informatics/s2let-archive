@@ -51,6 +51,10 @@ void s2let_synthesis_lmn2lm(
 
     int offset = 0;
 
+    // Clear output
+    for (el = 0; el < L*L; ++el)
+        flm[el] = 0;
+
     for (j = J_min; j <= J; ++j)
     {
         if (!parameters->upsample)
@@ -132,6 +136,10 @@ void s2let_synthesis_lmn2lm_real(
     double phi;
 
     int offset = 0;
+
+    // Clear output
+    for (el = 0; el < L*L; ++el)
+        flm[el] = 0;
 
     for (j = J_min; j <= J; ++j)
     {
