@@ -42,7 +42,11 @@ int s2let_fits_mw_read_bandlimit(char* filename)
     printerror( status );
 
   if ( fits_read_key_lng(fptr, "L", &Lread, comment, &status) )
-    printerror(status);
+  {
+    Lread = -1;
+    status = 0;
+  }
+
 
   if ( fits_close_file(fptr, &status) )
     printerror( status );
@@ -79,7 +83,10 @@ int s2let_fits_hpx_read_nside(char* filename)
     printerror( status );
 
   if ( fits_read_key_lng(fptr, "NSIDE", &nsideread, comment, &status) )
-    printerror(status);
+  {
+    nsideread = -1;
+    status = 0;
+  }
 
   if ( fits_close_file(fptr, &status) )
     printerror( status );
