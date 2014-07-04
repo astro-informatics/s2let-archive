@@ -119,7 +119,7 @@ int main(int argc, char **argv)
             s2let_allocate_lm(&flm_rec, L);
             s2let_allocate_mw(&f, L);
             s2let_allocate_mw(&f_rec, L);
-            s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
+            s2let_allocate_f_wav(&f_wav, &f_scal, &parameters);
 
             min_duration_inverse = 0.0;
             min_duration_forward = 0.0;

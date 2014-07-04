@@ -600,7 +600,7 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int seed)
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav(&f_wav, &f_scal, B, L, J_min, N);
+    s2let_allocate_f_wav(&f_wav, &f_scal, B, L, J_min, N);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();

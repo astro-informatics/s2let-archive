@@ -102,7 +102,7 @@ void s2let_allocate_lmn_f_wav(
  *                        \link s2let_parameters_t::N N\endlink
  * \retval none
  */
-void s2let_allocate_mw_f_wav(
+void s2let_allocate_f_wav(
     complex double **f_wav,
     complex double **f_scal,
     const s2let_parameters_t *parameters
@@ -125,7 +125,7 @@ void s2let_allocate_mw_f_wav(
  *                        \link s2let_parameters_t::N N\endlink
  * \retval none
  */
-void s2let_allocate_mw_f_wav_real(
+void s2let_allocate_f_wav_real(
     double **f_wav,
     double **f_scal,
     const s2let_parameters_t *parameters

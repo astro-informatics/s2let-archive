@@ -742,7 +742,7 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -815,7 +815,7 @@ void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -889,7 +889,7 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -961,7 +961,7 @@ void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, i
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -1037,7 +1037,7 @@ void s2let_wav_transform_mwss_test(int B, int L, int J_min, int N, int spin, int
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -1111,7 +1111,7 @@ void s2let_wav_transform_mwss_real_test(int B, int L, int J_min, int N, int seed
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -1186,7 +1186,7 @@ void s2let_wav_transform_mwss_multires_test(int B, int L, int J_min, int N, int 
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -1260,7 +1260,7 @@ void s2let_wav_transform_mwss_multires_real_test(int B, int L, int J_min, int N,
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -1329,7 +1329,7 @@ void s2let_wav_transform_lm2wav_test(int B, int L, int J_min, int N, int spin, i
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -1391,7 +1391,7 @@ void s2let_wav_transform_lm2wav_real_test(int B, int L, int J_min, int N, int se
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -1454,7 +1454,7 @@ void s2let_wav_transform_lm2wav_multires_test(int B, int L, int J_min, int N, in
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     complex double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -1515,7 +1515,7 @@ void s2let_wav_transform_lm2wav_multires_real_test(int B, int L, int J_min, int 
 
     // Allocate space for wavelet maps on the sphere (corresponding to the triplet B/L/J_min)
     double *f_wav, *f_scal;
-    s2let_allocate_mw_f_wav_real(&f_wav, &f_scal, &parameters);
+    s2let_allocate_f_wav_real(&f_wav, &f_scal, &parameters);
 
     // Perform wavelet analysis from scratch with all signals given on the sphere (MW sampling)
     time_start = clock();
@@ -1584,7 +1584,7 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
     // from both transforms.
     complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
     s2let_transform_axisym_allocate_mw_f_wav(&f_wav_axisym, &f_scal_axisym, &parameters);
-    s2let_allocate_mw_f_wav(&f_wav_dir, &f_scal_dir, &parameters);
+    s2let_allocate_f_wav(&f_wav_dir, &f_scal_dir, &parameters);
 
     // Do both transforms
     s2let_transform_axisym_wav_analysis_mw(f_wav_axisym, f_scal_axisym, f, &parameters);
@@ -1644,7 +1644,7 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     // from both transforms.
     complex double *f_wav_axisym, *f_scal_axisym, *f_wav_dir, *f_scal_dir;
     s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav_axisym, &f_scal_axisym, &parameters);
-    s2let_allocate_mw_f_wav(&f_wav_dir, &f_scal_dir, &parameters);
+    s2let_allocate_f_wav(&f_wav_dir, &f_scal_dir, &parameters);
 
     // Do both transforms
     s2let_transform_axisym_wav_analysis_mw_multires(f_wav_axisym, f_scal_axisym, f, &parameters);

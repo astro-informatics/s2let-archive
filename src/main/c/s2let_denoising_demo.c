@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 
   printf(" Performing wavelet decomposition...");fflush(NULL);
   // Perform wavelet analysis from scratch with all signals given as MW maps
-  s2let_allocate_mw_f_wav_real(&g_wav, &g_scal, &parameters);
+  s2let_allocate_f_wav_real(&g_wav, &g_scal, &parameters);
   s2let_analysis_px2wav_real(g_wav, g_scal, g, &parameters);
   printf(" done\n");
 
