@@ -21,7 +21,7 @@ void s2let_allocate_mw(complex double **f, int L)
 }
 
 /*!
- * Allocate map fora real signal in pixel space using MW sampling.
+ * Allocate map for a real signal in pixel space using MW sampling.
  * \param[out]  f Allocated map
  * \param[in]   L Harmonic band-limit
  */
@@ -31,7 +31,7 @@ void s2let_allocate_mw_real(double **f, int L)
 }
 
 /*!
- * Allocate map fora complex signal in pixel space using MWSS sampling.
+ * Allocate map for a complex signal in pixel space using MWSS sampling.
  * \param[out]  f Allocated map
  * \param[in]   L Harmonic band-limit
  */
@@ -41,7 +41,7 @@ void s2let_allocate_mwss(complex double **f, int L)
 }
 
 /*!
- * Allocate map fora real signal in pixel space using MWSS sampling.
+ * Allocate map for a real signal in pixel space using MWSS sampling.
  * \param[out]  f Allocated map
  * \param[in]   L Harmonic band-limit
  */
@@ -84,31 +84,8 @@ void s2let_allocate_lmn_f_wav(
     complex double **f_scal_lm,
     const s2let_parameters_t *parameters
 ) {
-    int L = parameters->L;
-    int J_min = parameters->J_min;
-    int N = parameters->N;
-
-    so3_parameters_t so3_parameters = {};
-    fill_so3_parameters(&so3_parameters, parameters);
-
-    int bandlimit = L;
-    int J = s2let_j_max(parameters);
-    int j, total = 0;
-    for (j = J_min; j <= J; ++j)
-    {
-        if (!parameters->upsample)
-        {
-            bandlimit = MIN(s2let_bandlimit(j, parameters), L);
-            so3_parameters.L = bandlimit;
-            so3_parameters.N = MIN(N, bandlimit);
-        }
-        total += so3_sampling_flmn_size(&so3_parameters);
-    }
-
-    *f_wav_lmn = calloc(total, sizeof **f_wav_lmn);
-    if (!parameters->upsample)
-        bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
-    *f_scal_lm = calloc(bandlimit * bandlimit, sizeof **f_scal_lm);
+    *f_wav_lmn = calloc(s2let_n_lmn_wav(parameters), sizeof **f_wav_lmn);
+    *f_scal_lm = calloc(s2let_n_lm_scal(parameters), sizeof **f_scal_lm);
 }
 
 /*!
@@ -130,38 +107,8 @@ void s2let_allocate_mw_f_wav(
     complex double **f_scal,
     const s2let_parameters_t *parameters
 ) {
-    int L = parameters->L;
-    int J_min = parameters->J_min;
-
-    so3_parameters_t so3_parameters = {};
-    fill_so3_parameters(&so3_parameters, parameters);
-
-    int bandlimit = L;
-    int J = s2let_j_max(parameters);
-    int j, total = 0;
-
-    for (j = J_min; j <= J; ++j)
-    {
-        if (!parameters->upsample)
-        {
-            bandlimit = MIN(s2let_bandlimit(j, parameters), L);
-            so3_parameters.L = bandlimit;
-        }
-
-        // We actually only need N samples of the orientational angle.
-        total += so3_sampling_f_size(&so3_parameters);
-    }
-
-    *f_wav = calloc(total, sizeof **f_wav);
-
-    if (!parameters->upsample)
-    {
-        bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
-        so3_parameters.L = bandlimit;
-    }
-
-    total = so3_sampling_f_size(&so3_parameters);
-    *f_scal = calloc(total, sizeof **f_scal);
+    *f_wav = calloc(s2let_n_wav(parameters), sizeof **f_wav);
+    *f_scal = calloc(s2let_n_scal(parameters), sizeof **f_scal);
 }
 
 /*!
@@ -183,33 +130,6 @@ void s2let_allocate_mw_f_wav_real(
     double **f_scal,
     const s2let_parameters_t *parameters
 ) {
-    int L = parameters->L;
-    int J_min = parameters->J_min;
-
-    so3_parameters_t so3_parameters = {};
-    fill_so3_parameters(&so3_parameters, parameters);
-
-    int bandlimit = L;
-    int J = s2let_j_max(parameters);
-    int j, total = 0;
-
-    for (j = J_min; j <= J; ++j)
-    {
-        if (!parameters->upsample)
-        {
-            bandlimit = MIN(s2let_bandlimit(j, parameters), L);
-            so3_parameters.L = bandlimit;
-        }
-        // We actually only need N samples of the orientational angle.
-        total += so3_sampling_f_size(&so3_parameters);
-    }
-
-    *f_wav = calloc(total, sizeof **f_wav);
-    if (!parameters->upsample)
-    {
-        bandlimit = MIN(s2let_bandlimit(J_min-1, parameters), L);
-        so3_parameters.L = bandlimit;
-    }
-    total = so3_sampling_f_size(&so3_parameters);
-    *f_scal = calloc(total, sizeof **f_scal);
+    *f_wav = calloc(s2let_n_wav(parameters), sizeof **f_wav);
+    *f_scal = calloc(s2let_n_scal(parameters), sizeof **f_scal);
 }

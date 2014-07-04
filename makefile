@@ -127,6 +127,7 @@ FFLAGS  = -I$(FFTWINC) -I$(SSHTINC) -I$(SO3INC) -I$(S2LETINC)
 S2LETOBJS= $(S2LETOBJ)/s2let_transform_axisym_lm.o 	\
 	  $(S2LETOBJ)/s2let_transform_axisym_mw.o 	\
 	  $(S2LETOBJ)/s2let_alloc.o 	\
+	  $(S2LETOBJ)/s2let_helper.o 	\
 	  $(S2LETOBJ)/s2let_analysis.o 	\
 	  $(S2LETOBJ)/s2let_synthesis.o 	\
 	  $(S2LETOBJ)/s2let_idl_mw.o 	\

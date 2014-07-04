@@ -3,6 +3,7 @@
 
 #include "s2let_error.h"
 #include "s2let_types.h"
+#include "s2let_helper.h"
 #include "s2let_so3.h"
 #include "s2let_alloc.h"
 #include "s2let_analysis.h"
