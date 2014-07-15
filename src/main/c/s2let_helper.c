@@ -105,3 +105,17 @@ int s2let_n_wav(const s2let_parameters_t *parameters)
     }
     return total;
 }
+
+int s2let_n_wav_j(int j, const s2let_parameters_t *parameters)
+{
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, parameters);
+
+    if (!parameters->upsample)
+    {
+        int L = parameters->L;
+        so3_parameters.L = MIN(s2let_bandlimit(j, parameters), L);
+    }
+
+    return so3_sampling_f_size(&so3_parameters);
+}
