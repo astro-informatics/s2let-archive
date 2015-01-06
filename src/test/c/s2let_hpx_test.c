@@ -168,7 +168,7 @@ void s2let_transform_axisym_hpx_wav_test(double *accuracy, double *timing, int n
 
   // Perform wavelet analysis from scratch with all signals given on the sphere (Healpix sampling)
   fflush(NULL);time_start = clock();
-  s2let_transform_axisym_wav_analysis_hpx_real(f_wav, f_scal, f, nside, B, L, J_min);
+  s2let_transform_axisym_wav_analysis_hpx_real(f_wav, f_scal, f, nside, &parameters);
   time_end = clock();fflush(NULL);
   //printf("  - Wavelet analysis   : %4.4f seconds\n",
 	// (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -176,7 +176,7 @@ void s2let_transform_axisym_hpx_wav_test(double *accuracy, double *timing, int n
 
   // Reconstruct the initial healpix map from the wavelet healpix maps
   time_start = clock();
-  s2let_transform_axisym_wav_synthesis_hpx_real(f_rec, f_wav, f_scal, nside, B, L, J_min);
+  s2let_transform_axisym_wav_synthesis_hpx_real(f_rec, f_wav, f_scal, nside, &parameters);
   time_end = clock();
   //printf("  - Wavelet synthesis  : %4.4f seconds\n",
 	// (time_end - time_start) / (double)CLOCKS_PER_SEC);
@@ -371,7 +371,11 @@ int main(int argc, char *argv[])
   int L = 64, spin = 2;
   const int B = 2;
   const int J_min = 0;
-  int J = s2let_j_max(L, B);
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+  int J = s2let_j_max(&parameters);
   int nside = 32;
   int repeat, NREPEAT = 10;
   double timing, accuracy, timing_tot, accuracy_tot;
@@ -388,7 +392,7 @@ int main(int argc, char *argv[])
   printf("----------------------------------------------------------\n");
   printf("> Testing spin IO functions for MW sampling...\n");
   s2let_mw_io_spin_test(L, seed);
- /* printf("----------------------------------------------------------\n");
+  printf("----------------------------------------------------------\n");
   printf("> Testing spin SHT functions for HEALPIX sampling...\n");
   s2let_hpx_spinalm_test(nside, spin, L, seed);
   printf("----------------------------------------------------------\n");
@@ -399,11 +403,11 @@ int main(int argc, char *argv[])
 
   printf("> Extensive test of accuracy for various Nside and lmax..\n");
   const int i_nmin = 4;
-  const int i_nmax = 5;
+  const int i_nmax = 7;
   int n, l, i_lmin, i_lmax;
 
-  /*FILE *file1, *file2;
-  file1 = fopen("s2let_hpx_full.txt", "w");
+  FILE *file1, *file2;
+  file1 = fopen("s2let_hpx_full_new.txt", "w");
   if (file1 == NULL) {
          printf("I couldn't open s2let_hpx.txt for writing.\n");
          exit(0);
@@ -431,8 +435,9 @@ int main(int argc, char *argv[])
   }
   //close(file1);
 
-  printf("==========================================================\n");
+/*
 
+  printf("==========================================================\n");
 
   const int i_nmin = 5;
   const int i_nmax = 10;

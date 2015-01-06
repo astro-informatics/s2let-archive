@@ -1,10 +1,10 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include "s2let.h"
 #include <assert.h>
-#include <complex.h> 
+#include <complex.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,9 +21,9 @@
  * - L : bandlimit for the decomposition
  * OUTPUT : fits files containing the wavelet healpix maps
  */
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-  printf("--------------------------------------------------\n");	
+  printf("--------------------------------------------------\n");
   printf("S2LET library : axisymmetric wavelet transform\n");
   printf("Real signal, HEALPIX sampling\n");
   printf("--------------------------------------------------\n");
@@ -42,9 +42,14 @@ int main(int argc, char *argv[])
   if (sscanf(argv[4], "%i", &L) != 1)
     exit(-2);
 
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+
   printf("Parameters for wavelet transform :\n");
   printf("- Wavelet parameter : %i\n", L);
-  int J = s2let_j_max(L, B);
+  int J = s2let_j_max(&parameters);
   printf("- Wavelet parameter : %i\n", B);
   printf("- Total number of wavelets : %i\n", J);
   printf("- First wavelet scale to be used : %i\n", J_min);
@@ -56,8 +61,8 @@ int main(int argc, char *argv[])
 
   printf("Performing wavelet decomposition...");fflush(NULL);
   double *f_wav, *f_scal;
-  s2let_axisym_hpx_allocate_f_wav_real(&f_wav, &f_scal, nside, B, L, J_min);
-  s2let_axisym_hpx_wav_analysis_real(f_wav, f_scal, f, nside, B, L, J_min);
+  s2let_transform_axisym_allocate_hpx_f_wav_real(&f_wav, &f_scal, nside, &parameters);
+  s2let_transform_axisym_wav_analysis_hpx_real(f_wav, f_scal, f, nside, &parameters);
   printf("done\n");
 
   // Output the wavelets to FITS files
@@ -83,9 +88,9 @@ int main(int argc, char *argv[])
   remove(outfile); // In case the file exists
   s2let_hpx_write_map(outfile, f_scal, nside); // Now write the map to fits file
 
-  printf("--------------------------------------------------\n");	
+  printf("--------------------------------------------------\n");
 
-  return 0;		
+  return 0;
 }
 
 
