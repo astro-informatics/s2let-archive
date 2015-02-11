@@ -24,8 +24,8 @@ SUBROUTINE healpix_forward_real_noiter_noweights( alm, map, nside, L )
 
   do el = 0, nlmax
      do em = 0, el
-        alm( el * el + el + em ) = alm_temp(1, el, em)
         alm( el * el + el - em ) =  (-1.0)**real(-em) * CONJG( alm_temp(1, el, em) )
+        alm( el * el + el + em ) = alm_temp(1, el, em)
      enddo
   enddo
 
@@ -101,8 +101,8 @@ SUBROUTINE healpix_forward_real( alm, map, nside, L )
 
     do el = 0, nlmax
        do em = 0, el
-          alm( el * el + el + em ) = alm_f(1, el, em)
           alm( el * el + el - em ) = (-1.0)**real(-em) * CONJG( alm_f(1, el, em) )
+          alm( el * el + el + em ) = alm_f(1, el, em)
        enddo
     enddo
 
