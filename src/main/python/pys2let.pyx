@@ -54,7 +54,7 @@ def pys2let_j_max(B, L, J_min):
 def healpy_lm(el, em, L):
 	return em*(2*L-1-em)/2+el
 
-def pys2let_transform_axisym_lm_wav_analysis(
+def analysis_axisym_lm_wav(
 	np.ndarray[double complex, ndim=1, mode="c"] flm_hp not None, B, L, J_min):
 
 	cdef s2let_parameters_t parameters = {};
@@ -98,7 +98,7 @@ def pys2let_transform_axisym_lm_wav_analysis(
 	return f_wav_lm_hp, f_scal_lm_hp
 
 
-def pys2let_transform_axisym_lm_wav_synthesis(
+def synthesis_axisym_lm_wav(
 	np.ndarray[double complex, ndim=2, mode="c"] f_wav_lm_hp not None, 
 	np.ndarray[double complex, ndim=1, mode="c"] f_scal_lm_hp not None, B, L, J_min):
 

@@ -25,7 +25,7 @@ hp.mollview(f)
 # Call pys2let and compute wavelet transform. Returns the harmonic coefficients of the wavelets.
 # f_scal_lm has size L*(L+1)/2
 # f_wav_lm has size L*(L+1)/2 by J-J_min+1
-f_wav_lm, f_scal_lm = pys2let_transform_axisym_lm_wav_analysis(f_lm, B, L, J_min)
+f_wav_lm, f_scal_lm = analysis_axisym_lm_wav(f_lm, B, L, J_min)
 
 # Reconstruct healpix maps on the sphere and plot them
 f_scal = hp.alm2map(f_scal_lm, nside=nside, lmax=L-1)
@@ -37,7 +37,7 @@ for j in range(J-J_min+1):
 	hp.mollview(f_wav[:,j])
 
 # Uses synthesis to reconstruct the input map.
-f_lm_rec = pys2let_transform_axisym_lm_wav_synthesis(f_wav_lm, f_scal_lm, B, L, J_min)
+f_lm_rec = synthesis_axisym_lm_wav(f_wav_lm, f_scal_lm, B, L, J_min)
 f_rec = hp.alm2map(f_lm_rec, nside=nside, lmax=L-1)
 hp.mollview(f_rec)
 
