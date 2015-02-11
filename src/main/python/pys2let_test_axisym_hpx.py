@@ -16,8 +16,11 @@ fname = '/Users/bl/Dropbox/Astrodata/SDSS/Fields/Planck_EBV_256rQ.fits'
 
 # Read healpix map and compute alms. 
 # f_lm has size L*(L+1)/2
-f = hp.read_map(fname)
-f_lm = hp.map2alm(f, lmax=L-1)
+f_ini = hp.read_map(fname) # Initial map
+f_lm = hp.map2alm(f_ini, lmax=L-1) # Its alms
+f = hp.alm2map(f_lm, nside=nside, lmax=L-1) # Band limited version
+
+hp.mollview(f)
 
 # Call pys2let and compute wavelet transform. Returns the harmonic coefficients of the wavelets.
 # f_scal_lm has size L*(L+1)/2
@@ -32,5 +35,10 @@ for j in range(J-J_min+1):
 	flm = f_wav_lm[:,j].ravel()
 	f_wav[:,j] = hp.alm2map(flm, nside=nside, lmax=L-1)
 	hp.mollview(f_wav[:,j])
+
+# Uses synthesis to reconstruct the input map.
+f_lm_rec = pys2let_transform_axisym_lm_wav_synthesis(f_wav_lm, f_scal_lm, B, L, J_min)
+f_rec = hp.alm2map(f_lm_rec, nside=nside, lmax=L-1)
+hp.mollview(f_rec)
 
 plt.show()
