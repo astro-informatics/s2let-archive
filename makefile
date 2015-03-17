@@ -6,7 +6,7 @@
 # Directory for SO3 (required)
 SO3DIR = ../so3
 # Directory for SSHT (required)
-SSHTDIR	= ../ssht
+SSHTDIR	= ${SSHT}
 # Directory for FFTW (required)
 FFTWDIR	= ${FFTW}
 
@@ -14,9 +14,11 @@ FFTWDIR	= ${FFTW}
 CFITSIODIR	= ${CFITSIO}
 # Directory for HEALPIX (optional)
 HEALPIXDIR	= ${HEALPIX}
+# Directory for idl_export.h include (required for healpix)
+IDLINC = /Applications/exelis/idl82/external/include
 
 # Directory for MATLAB (optional)
-MLAB	=  /Applications/MATLAB_R2013b.app
+MLAB	=  ${MATLAB}
 # Directory for DOXYGEN (optional)
 #DOXYGEN_PATH = /Applications/Doxygen.app/Contents/Resources/doxygen
 DOXYGEN_PATH = doxygen
@@ -91,7 +93,7 @@ SSHTLIBNM = ssht
 FFTWINC	     = $(FFTWDIR)/include
 FFTWLIB      = $(FFTWDIR)/lib
 FFTWLIBNM    = fftw3
-FFTWOMPLIBNM = fftw3_threads
+FFTWOMPLIBNM = fftw3_omp
 
 # === CFITSIO ===
 ifneq ($(strip $(CFITSIODIR)),)
@@ -164,9 +166,10 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 
 	S2LETOBJS+= $(S2LETOBJ)/s2let_hpx.o
 	S2LETOBJS+= $(S2LETOBJ)/s2let_transform_axisym_hpx.o
-	S2LETOBJS+= $(S2LETOBJ)/s2let_idl_hpx.o
+#	S2LETOBJS+= $(S2LETOBJ)/s2let_idl_hpx.o
 	S2LETOBJS+= $(S2LETOBJF90)/s2let_hpx.o
 
+	FFLAGS+= -I$(IDLINC)/idl_export.h
 	FFLAGS+= -I$(HEALPIXINC)
 	LDFLAGS+= -L$(HEALPIXLIB)
 	LDFLAGS+= -l$(HEALPIXLIBNM)
@@ -175,7 +178,7 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 	  LDFLAGS+= -L$(GFORTRANLIB)
 	endif
 
-	LDFLAGSMEX+= -lgfortran -lgomp 
+	LDFLAGSMEX+= -lgfortran -lgomp
 	ifneq ($(strip $(GFORTRANLIB)),)
 	LDFLAGSMEX+= -L$(GFORTRANLIB)
 	endif
@@ -263,7 +266,7 @@ $(S2LETLIB)/lib$(S2LETLIBNM).a: $(S2LETOBJS)
 .PHONY: dylib
 dylib: $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT)
 $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT): $(S2LETOBJS)
-	$(DYLIBCMD) $(FFLAGS) $(LDFLAGS) -I$(S2LETINC)/idl_export.h -o $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETOBJS)
+	$(DYLIBCMD) $(FFLAGS) $(LDFLAGS) -o $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETOBJS)
 	cp $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETDIR)/src/main/resources/lib/darwin_universal/
 	cp $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETDIR)/target/classes/lib/darwin_universal/
 
