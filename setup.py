@@ -18,13 +18,16 @@ for root, dirs, files in os.walk("./src/main/python/", topdown=False):
 
 include_dirs = [
     numpy.get_include(),
-    "./include/",
+    "./include",
     os.environ['SSHT']+"/include/c",
     os.environ['SO3']+"/include/c"
     ]
 
 extra_link_args=[
-    "-L./lib"
+    "-L./lib",
+    "-L"+os.environ['FFTW']+"/lib",
+    "-L"+os.environ['SSHT']+"/lib/c",
+    "-L"+os.environ['SO3']+"/lib/c"
     ]
 
 setup(
@@ -37,8 +40,8 @@ setup(
         package_dir=['src'],
         sources=["src/main/python/pys2let.pyx"],
         include_dirs=include_dirs,
-        libraries=["s2let"],
-        extra_link_args=extra_link_args, 
+        libraries=["s2let", "so3", "ssht", "fftw3"],
+        extra_link_args=extra_link_args,
         extra_compile_args=[]
     )])
 )

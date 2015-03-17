@@ -6,10 +6,10 @@
 #define S2LET_MW
 
 /** Interfaces to SSHT (required by the Java interface to S2LET) **/
-void s2let_mw_map2alm(complex double* flm, const complex double* f, int L);
+void s2let_mw_map2alm(complex double* flm, const complex double* f, int L, int spin);
 void s2let_mw_map2alm_real(complex double* flm, const double* f, int L);
 
-void s2let_mw_alm2map(complex double* f, const complex double* flm, int L);
+void s2let_mw_alm2map(complex double* f, const complex double* flm, int L, int spin);
 void s2let_mw_alm2map_real(double* f, const complex double* flm, int L);
 
 /** Helper functions for pixel-space computations in MW sampling **/

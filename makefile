@@ -169,7 +169,7 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 #	S2LETOBJS+= $(S2LETOBJ)/s2let_idl_hpx.o
 	S2LETOBJS+= $(S2LETOBJF90)/s2let_hpx.o
 
-	FFLAGS+= -I$(IDLINC)/idl_export.h
+	FFLAGS+= -I$(IDLINC)
 	FFLAGS+= -I$(HEALPIXINC)
 	LDFLAGS+= -L$(HEALPIXLIB)
 	LDFLAGS+= -l$(HEALPIXLIBNM)

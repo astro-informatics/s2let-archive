@@ -1696,7 +1696,7 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
 
       s2let_lm_random_flm(flm, L, 0, seed);
       s2let_allocate_mw(&f, L);
-      s2let_mw_alm2map(f, flm, L);
+      s2let_mw_alm2map(f, flm, L, 0);
       s2let_transform_axisym_allocate_mw_f_wav(&f_wav, &f_scal, &parameters);
 
       time_start = clock();
@@ -1713,7 +1713,7 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
       tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
 
       s2let_allocate_lm(&flm_rec, L);
-      s2let_mw_map2alm(flm_rec, f_rec, L);
+      s2let_mw_map2alm(flm_rec, f_rec, L, 0);
 
       //printf("  - Duration for S2LET analysis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
       accuracy += maxerr_cplx(flm, flm_rec, L*L);fflush(NULL);
@@ -1771,7 +1771,7 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
 
       s2let_lm_random_flm(flm, L, 0, seed);
       s2let_allocate_mw(&f, L);
-      s2let_mw_alm2map(f, flm, L);
+      s2let_mw_alm2map(f, flm, L, 0);
       s2let_transform_axisym_allocate_mw_f_wav_multires(&f_wav, &f_scal, &parameters);
 
       time_start = clock();
@@ -1788,7 +1788,7 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
       tottime_analysis += (time_end - time_start) / (double)CLOCKS_PER_SEC;
 
       s2let_allocate_lm(&flm_rec, L);
-      s2let_mw_map2alm(flm_rec, f_rec, L);
+      s2let_mw_map2alm(flm_rec, f_rec, L, 0);
 
       //printf("  - Duration for S2LET analysis   : %4.4f seconds\n", (time_end - time_start) / (double)CLOCKS_PER_SEC);
       accuracy += maxerr_cplx(flm, flm_rec, L*L);
