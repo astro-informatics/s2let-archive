@@ -57,17 +57,19 @@ def myplot(f, L, ax, title=''):
 
     # This is to undersample the grid of x/yticklabels.
     if L > 10:
-        step_phi = int(L/8)
-        step_theta = int(L/10)
+        step_phi = int(L/4)
+        step_theta = int(L/4)
     else:
         step_phi = 3
         step_theta = 3
 
     selec = np.arange(0, nphi, step_phi) # subset of phi tick labels
-    ax.set_xticks(selec, ['%.1f' % x for x in phis[selec]])
+    ax.set_xticks(selec)
+    ax.set_xticklabels(['%.1f' % x for x in phis[selec]])
     ax.set_xlabel(r'$\phi$')
     selec = np.arange(0, ntheta, step_theta) # subset of theta tick labels
-    ax.set_yticks(selec, ['%.1f' % x for x in thetas[selec]])
+    ax.set_yticks(selec)
+    ax.set_yticklabels(['%.1f' % x for x in thetas[selec]])
     ax.set_ylabel(r'$\theta$')
     ax.set_title(title)
 
