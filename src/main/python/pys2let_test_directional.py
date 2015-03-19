@@ -32,6 +32,9 @@ print 'Running analysis_lm2wav'
 f_wav, f_scal = analysis_lm2wav(f_lm, B, L, J_min, N, spin, upsample)
 print 'Done'
 
+
+print 'size f_scal f_wav', f_scal.size, f_wav.size, f_wav.size / f_scal.size
+
 # Uses synthesis to reconstruct the input alms.
 print 'Running synthesis_wav2lm'
 f_lm_rec = synthesis_wav2lm(f_wav, f_scal, B, L, J_min, N, spin, upsample)
@@ -79,14 +82,14 @@ fig, ax = plt.subplots(1,1)
 myplot(f_mw, L, ax, 'Input map converted to MW')
 fig, ax = plt.subplots(1,1)
 myplot(f_mw_rec, L, ax, 'Input map converted to MW (reconstructed)')
-#fig.savefig('test_directional_python_wrappers_1.png')
+fig.savefig('test_directional_python_wrappers_1.png')
 
 
 # Create giant array figure
-fig, axs = plt.subplots(J-J_min, N, figsize=(4*N, 3*(J-J_min)))
+fig, axs = plt.subplots(J-J_min+1, N, figsize=(4*N, 3*(J-J_min)))
 axs = axs.ravel()
 # Loop through scales j and directions n
-for j in range(J_min, J):
+for j in range(J_min, J+1):
     for n in range(0, N):
         # Retreive the boundaries and positions of the right wavelet scale in the giant f_wav array!
         offset, bandlimit, nelem, nelem_wav = wav_ind(j, n, B, L, N, J_min, upsample)
@@ -96,9 +99,9 @@ for j in range(J_min, J):
         print 'plot id', (j-J_min)*N+n, 'j=', j, 'n=', n, 'bounds=',offset, 'to', offset+nelem, 'Total elems:', nelem_wav
         # Make the plot!
         myplot(f_wav[offset:offset+nelem], bandlimit, axs[(j-J_min)*N+n],
-            title='Scale '+str(j+1)+'/'+str(J)+', direction '+str(n+1)+'/'+str(N))
+            title='Scale '+str(j+1-J_min)+'/'+str(J-J_min+1)+', direction '+str(n+1)+'/'+str(N))
 
 # Pretty adjustment
 fig.subplots_adjust(hspace=0.4, wspace=0.5)
-#fig.savefig('test_directional_python_wrappers_2.png')
+fig.savefig('test_directional_python_wrappers_2.png')
 plt.show()

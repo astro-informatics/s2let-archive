@@ -214,7 +214,7 @@ def analysis_lm2wav(
 	parameters.verbosity = 0
 
 	f_scal = np.empty([s2let_n_scal(&parameters),], dtype=complex)
-	f_wav = np.empty([2*s2let_n_wav(&parameters),], dtype=complex)
+	f_wav = np.empty([s2let_n_wav(&parameters),], dtype=complex)
 	f_lm = lm_hp2lm(flm_hp, L)
 
 	s2let_analysis_lm2wav(
