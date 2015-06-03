@@ -73,7 +73,7 @@ caxis([-temp temp])
 title('Scaling fct')
 ind = 3
 for j = J_min:J
-	for en = 1:2*N-1
+	for en = 1:N
 		ind = ind + 1
         if ind <= maxfigs
             subplot(nx, ny, ind);
