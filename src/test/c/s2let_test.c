@@ -409,6 +409,17 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
   // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
   s2let_allocate_lmn_f_wav(&f_wav_lmn, &f_scal_lm, &parameters);
 
+  FILE *fp1, *fp2;
+  int el, m, lm_ind;
+  fp1 = fopen("f_lm_before.dat", "w");
+   for (el = ABS(spin); el < L; ++el) {
+    for (m = -el; m <= el; ++m){
+      ssht_sampling_elm2ind(&lm_ind, el, m);
+      fprintf(fp1, "%d, %d, %d, %f, %f\n",el,m,lm_ind, creal(flm[lm_ind]), cimag(flm[lm_ind]));
+    }
+  }
+  fclose(fp1);
+
   // Perform the wavelet transform through exact harmonic tiling
   time_start = clock();
   s2let_analysis_lm2lmn(f_wav_lmn, f_scal_lm, flm, psi, phi, &parameters);
@@ -422,6 +433,15 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
   time_end = clock();
   printf("  - Wavelet synthesis  : %4.4f seconds\n",
      (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+  fp2 = fopen("f_lm_rec_after.dat", "w");
+   for (el = ABS(spin); el < L; ++el) {
+    for (m = -el; m <= el; ++m){
+      ssht_sampling_elm2ind(&lm_ind, el, m);
+      fprintf(fp2, "%d, %d, %d, %f, %f\n",el,m,lm_ind, creal(flm_rec[lm_ind]), cimag(flm_rec[lm_ind]));
+    }
+  }
+  fclose(fp2);
 
   // Compute the maximum absolute error on the harmonic coefficients
   printf("  - Maximum abs error  : %6.5e\n",
@@ -1970,7 +1990,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 int main(int argc, char *argv[])
 {
   const int L = 64;
-  const int N = 4;
+  const int N = 3;
   const int B = 3;
   const int J_min = 0;
   const int spin = 2;
@@ -2020,6 +2040,7 @@ int main(int argc, char *argv[])
   printf("---------------------------------------------------------------------------\n");
   printf("> Testing directional multiresolution algorithm in harmonic space...\n");
   s2let_wav_transform_harmonic_multires_test(B, L, J_min, N, spin, seed);
+
   printf("===========================================================================\n");
   printf("> Testing axisymmetric wavelets in pixel space...\n");
   s2let_transform_axisym_wav_test(B, L, J_min, seed);
@@ -2063,6 +2084,8 @@ int main(int argc, char *argv[])
   printf("---------------------------------------------------------------------------\n");
   printf("> Testing real directional multiresolution harmonic-to-wavelet transform...\n");
   s2let_wav_transform_lm2wav_multires_real_test(B, L, J_min, N, seed);
+
+
   printf("===========================================================================\n");
   printf("> Testing directional wavelet transform with MWSS...\n");
   s2let_wav_transform_mwss_test(B, L, J_min, N, spin, seed);
@@ -2076,7 +2099,7 @@ int main(int argc, char *argv[])
   printf("> Testing real directional multiresolution wavelet transform with MWSS...\n");
   s2let_wav_transform_mwss_multires_real_test(B, L, J_min, N, seed);
 
-    /*
+  /*
   const int NREPEAT = 50;
   const int NSCALE = 9;
     printf("==========================================================\n");

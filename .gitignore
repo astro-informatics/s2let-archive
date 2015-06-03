@@ -1,5 +1,13 @@
 *.sublime-workspace
-
+*.zip
+*.egg-info
+*.tif
+*.fort.6
+*.fits
+*.csv
+*.so
+*.pdf
+*.png
 *.DS_Store
 *.o
 *.mexa64
