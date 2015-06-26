@@ -17,7 +17,7 @@ function [f_radon_lm] = s2let_radon_transform(f_lm, varargin)
 %  'L'               = { Harmonic band-limit; L > 1 (default=guessed from input) }
 
 % S2LET package to perform Wavelets transform on the Sphere.
-% Copyright (C) 2015 Jason McEwen
+% Copyright (C) 2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 L_guess = sqrt(length(f_lm));

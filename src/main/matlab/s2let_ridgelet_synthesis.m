@@ -15,7 +15,6 @@ function f = s2let_ridgelet_synthesis(f_ridge_wav, f_ridge_scal, varargin)
 % Option :
 %  'B'               = { Dilation factor; B > 1 (default=2) }
 %  'L'               = { Harmonic band-limit; L > 1 (default=guessed from input) }
-%  'N'               = { Azimuthal/directional band-limit; N > 1 (default=L) }
 %  'Spin'               = { Spin; (default=0) }
 %  'J_min'           = { Minimum wavelet scale to consider;
 %                        0 <= J_min < log_B(L) (default=0) }
@@ -53,7 +52,6 @@ p.addRequired('f_ridge_scal', @isnumeric);
 p.addParamValue('B', 2, @isnumeric);
 p.addParamValue('L', Lguessed, @isnumeric);
 p.addParamValue('J_min', 0, @isnumeric);
-p.addParamValue('N', 1, @isnumeric);
 p.addParamValue('Spin', 0, @isnumeric);
 p.addParamValue('Upsample', false, @islogical);
 p.addParamValue('Sampling', 'MW', @ischar);
@@ -63,10 +61,12 @@ p.addParamValue('SpinLoweredFrom', 0, @isnumeric);
 p.parse(f_ridge_wav, f_ridge_scal, varargin{:});
 args = p.Results;
 
+N = 1;
+
 f_radon = s2let_transform_synthesis_mw(f_ridge_wav, f_ridge_scal, ...
    'L', args.L, 'B', args.B, ...
    'J_min', args.J_min, ...
-   'N', args.N, 'Upsample', args.Upsample, 'Spin', args.Spin, ...
+   'N', N, 'Upsample', args.Upsample, 'Spin', args.Spin, ...
    'Reality', args.Reality, 'Sampling', args.Sampling, ...
    'SpinLowered', args.SpinLowered, ...
    'SpinLoweredFrom', args.SpinLoweredFrom);
