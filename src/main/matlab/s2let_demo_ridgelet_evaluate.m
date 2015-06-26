@@ -25,10 +25,12 @@ time_synthesis = zeros(N_test, length(Ls));
 
 el_ind = 0;
 for L = Ls
-   el_ind = el_ind + 1;
+   el_ind = el_ind + 1
    
    for n = 1:N_test
    
+      n
+      
       %disp('Generate band-limited function in harmonic space')
       flm = zeros(L^2,1);
       flm = rand(size(flm)) + sqrt(-1)*rand(size(flm));
@@ -117,13 +119,14 @@ plot(log2(Ls(istart:iend)), ...
 hold on;
 
 plot(log2(Ls(istart:iend)), ...
-   log10(Ls(istart:iend))-11.8, ...
+   log10(Ls(istart:iend).^2)-15, ...
    'r', ...
    'LineWidth', line_width_thick);
 a = axis;
 set(gca,'XTick',a(1):1:a(2));
 set(gca,'XTickLabel', 2.^[a(1):1:a(2)]);
-set(gca,'YTickLabel',{10.^[a(3):a(4)]});
+set(gca,'YTick',floor(a(3)):1:ceil(a(4)));
+set(gca,'YTickLabel',{10.^[floor(a(3)):ceil(a(4))]});
 xlabel('L');
 ylabel('E');
 
@@ -149,13 +152,14 @@ errorbar(log2(Ls(istart:iend)), ...
 hold on;
 
 plot(log2(Ls(istart:iend)), ...
-   log10(Ls(istart:iend))-11.8, ...
+   log10(Ls(istart:iend).^2)-15, ...
    'r', ...
    'LineWidth', line_width_thick);
 a = axis;
 set(gca,'XTick',a(1):1:a(2));
 set(gca,'XTickLabel', 2.^[a(1):1:a(2)]);
-set(gca,'YTickLabel',{10.^[a(3):a(4)]});
+set(gca,'YTick',floor(a(3)):1:ceil(a(4)));
+set(gca,'YTickLabel',{10.^[floor(a(3)):ceil(a(4))]});
 xlabel('L');
 ylabel('E');
 
@@ -187,7 +191,8 @@ plot(log2(Ls(istart:iend)), ...
 a = axis;
 set(gca,'XTick',a(1):1:a(2));
 set(gca,'XTickLabel', 2.^[a(1):1:a(2)]);
-set(gca,'YTickLabel',{10.^[a(3):a(4)]});
+set(gca,'YTick',floor(a(3)):1:ceil(a(4)));
+set(gca,'YTickLabel',{10.^[floor(a(3)):ceil(a(4))]});
 xlabel('L');
 ylabel('T');
 
@@ -220,7 +225,8 @@ plot(log2(Ls(istart:iend)), ...
 a = axis;
 set(gca,'XTick',a(1):1:a(2));
 set(gca,'XTickLabel', 2.^[a(1):1:a(2)]);
-set(gca,'YTickLabel',{10.^[a(3):a(4)]});
+set(gca,'YTick',floor(a(3)):1:ceil(a(4)));
+set(gca,'YTickLabel',{10.^[floor(a(3)):ceil(a(4))]});
 xlabel('L');
 ylabel('T');
 
