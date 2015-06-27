@@ -8,7 +8,7 @@
 
 clear;
 
-N_test = 5
+N_test = 10
 
 B = 2;
 J_min = 0;
