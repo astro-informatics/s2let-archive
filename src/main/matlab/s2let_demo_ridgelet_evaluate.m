@@ -8,16 +8,16 @@
 
 clear;
 
-N_test = 10
+N_test = 3
 
 B = 2;
 J_min = 0;
 spin = 0;
 reality = false;
 sampling_method = 'MWSS';
-save_plots = true;
+save_plots = false;
 
-Ls = [32 64 128 256 512]
+Ls = [32 64] % 128 256 512]
 
 err = zeros(N_test, length(Ls));
 time_analysis = zeros(N_test, length(Ls));
@@ -37,15 +37,17 @@ for L = Ls
       flm = 2.*(flm - (1+sqrt(-1))./2);
       
       %disp('Constraint on flms to ensure antipodal signal')
-      for el = 1:2:L-1
-         for m = -el:el
-            ind = ssht_elm2ind(el, m);
-            flm(ind) = 0;
+      for el = max([0 abs(spin)]):L-1         
+         if mod(el + spin, 2) == 1
+            for m = -el:el
+               ind = ssht_elm2ind(el, m);
+               flm(ind) = 0;
+            end
          end
       end
       
       %disp('Construct the corresponding signal on the sphere')
-      f = ssht_inverse(flm, L, 'Method', sampling_method);
+      f = ssht_inverse(flm, L, 'Method', sampling_method, 'Spin', spin);
       
       tstart = tic;
       [f_ridgelet_wav, f_ridgelet_scal] = s2let_ridgelet_analysis(f, ...
