@@ -12,7 +12,7 @@ N_test = 3
 
 B = 2;
 J_min = 0;
-spin = 0;
+spin = 2;
 reality = false;
 sampling_method = 'MWSS';
 save_plots = false;
@@ -31,12 +31,23 @@ for L = Ls
    
       n
       
-      %disp('Generate band-limited function in harmonic space')
+      % Generate band-limited function in harmonic space
       flm = zeros(L^2,1);
       flm = rand(size(flm)) + sqrt(-1)*rand(size(flm));
       flm = 2.*(flm - (1+sqrt(-1))./2);
       
-      %disp('Constraint on flms to ensure antipodal signal')
+      % For spin signals, set coefficients for el < spin to zero.
+      if spin > 0
+         for el = 0:abs(spin)-1
+            for m = -el:el
+               ind = ssht_elm2ind(el, m);
+               flm(ind) = 0;
+            end
+         end
+      end
+      
+      % Impose condition to ensure invertible
+      % (imposes antipodal symmetry for scalar signals).
       for el = max([0 abs(spin)]):L-1         
          if mod(el + spin, 2) == 1
             for m = -el:el
@@ -45,9 +56,22 @@ for L = Ls
             end
          end
       end
+            
+      % Impose antipodal symmetry for spin signals.
+%       for el = 0:L-1
+%          ind = el*el + el + 1;         
+%          if mod(el + spin, 2) == 1
+%             flm(ind,1) = 0;
+%          end
+%          for m = 1:el
+%             ind_pm = el*el + el + m + 1;
+%             ind_nm = el*el + el - m + 1;
+%             flm(ind_nm,1) = (-1).^el .* (-1)^m .* (-1)^spin * conj(flm(ind_pm,1));
+%          end
+%       end                  
       
-      %disp('Construct the corresponding signal on the sphere')
-      f = ssht_inverse(flm, L, 'Method', sampling_method, 'Spin', spin);
+      % Construct the corresponding signal on the sphere
+      f = ssht_inverse(flm, L, 'Method', sampling_method, 'Spin', spin);                  
       
       tstart = tic;
       [f_ridgelet_wav, f_ridgelet_scal] = s2let_ridgelet_analysis(f, ...
