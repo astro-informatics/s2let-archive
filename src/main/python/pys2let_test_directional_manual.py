@@ -4,18 +4,26 @@ import math
 import matplotlib.pyplot as plt
 from copy import copy
 
-L = 3024
-Bs = 1.2*np.array([4, 2, 1])
-L_transitions = np.array([100, 512])
-hybrid_scal_l, hybrid_wav_l, hybrid_scal_bandlimit, hybrid_wav_bandlimits, J, L_bounds = construct_hybrid_tiling(L, Bs, L_transitions)
 
-fig, axs = plt.subplots(Bs.size+1, 1)
+
+L = 3024
+J_min = 3
+
+Bs = np.array([2, 1.4, 1.2, 1.1])
+L_transitions = np.array([200, 1100, 1900])
+hybrid_scal_l, hybrid_wav_l, hybrid_scal_bandlimit, hybrid_wav_bandlimits, J, L_bounds = construct_hybrid_tiling(L, J_min, Bs, L_transitions)
+
+print 'Bs', Bs
+print 'L_bounds', L_bounds
+fig, axs = plt.subplots(Bs.size+2, 1, figsize=(8, 14))
 axs = axs.ravel()
+J_mins = np.zeros((Bs.size,), dtype=np.int32)
+J_mins[0] = J_min
 for k in range(Bs.size):
-    scal_l, wav_l = axisym_wav_l(Bs[k], L, 0)
+    scal_l, wav_l = axisym_wav_l(Bs[k], L, J_mins[k])
     Jt = pys2let_j_max(Bs[k], L, 0)
     axs[k].plot(scal_l, lw=2, ls='dashed')
-    for j in range(0,Jt+1):
+    for j in range(0,Jt+1-J_mins[k]):
         axs[k].plot(wav_l[:,j], lw=2, ls='solid')
     for kk in range(Bs.size):
         axs[k].axvline(L_bounds[kk], c='k', ls='dashed')
@@ -23,15 +31,19 @@ for k in range(Bs.size):
     axs[k].set_ylim([0, 1.2])
     axs[k].set_xlim([1, L])
     axs[k].set_title('Tiling %i'%(k+1)+' on %i'%Bs.size+', with B=%.2f'%Bs[k]+', Jmin=0, and defined at %i'%L_bounds[k]+'<el<%i'%L_bounds[k+1])
-axs[Bs.size].plot(hybrid_scal_l, lw=2, ls='dashed')
-for j in range(0,J+1):
-    axs[Bs.size].plot(hybrid_wav_l[:,j], lw=2, ls='solid')
-for k in range(Bs.size):
-    axs[Bs.size].axvline(L_bounds[k], c='k', ls='dashed')
-axs[Bs.size].set_title('Hybrid tiling')
-axs[Bs.size].set_xscale('log')
-axs[Bs.size].set_ylim([0, 1.2])
-axs[Bs.size].set_xlim([1, L])
+for k in [Bs.size, Bs.size+1]:
+    axs[k].plot(hybrid_scal_l, lw=2, ls='dashed')
+    for j in range(0,J+1):
+        axs[k].plot(hybrid_wav_l[:,j], lw=2, ls='solid')
+    for kk in range(Bs.size):
+        axs[k].axvline(L_bounds[kk], c='k', ls='dashed')
+    axs[k].set_ylim([0, 1.2])
+    axs[k].set_xlim([1, L])
+    if k == Bs.size:
+        axs[k].set_title('Hybrid tiling (log scale)')
+        axs[k].set_xscale('log')
+    else:
+        axs[k].set_title('Hybrid tiling (linear scale)')
 plt.tight_layout()
 #plt.show()
 
@@ -40,17 +52,22 @@ res = verify_tiling(L, hybrid_scal_l, hybrid_wav_l, hybrid_scal_bandlimit, hybri
 print 'Is the tiling OK and giving an invertible wavelet transform?', res
 fig.savefig('Hybrid_tiling.png')
 plt.show()
+#stop
 
 
+J_min = 2
 nside = 64
 N = 3
 spin = 0
-Bs = 2*np.array([2, 1])
+Bs = np.array([4, 2])
 J_min = 0
 L_transitions = np.array([64])
 L = 256
-hybrid_scal_l, hybrid_wav_l, hybrid_scal_bandlimit, hybrid_wav_bandlimits, J, L_bounds = construct_hybrid_tiling(L, Bs, L_transitions)
+hybrid_scal_l, hybrid_wav_l, hybrid_scal_bandlimit, hybrid_wav_bandlimits, J, L_bounds = construct_hybrid_tiling(L, J_min, Bs, L_transitions)
 hybrid_wav_l = hybrid_wav_l.T.ravel()
+res = verify_tiling(L, hybrid_scal_l, hybrid_wav_l, hybrid_scal_bandlimit, hybrid_wav_bandlimits)
+print 'Is the tiling OK and giving an invertible wavelet transform?', res
+
 
 # The filename of some arbitrary healpix map
 fname = '/Users/bl/Dropbox/Astrodata/SDSS/Fields/Planck_EBV_256rQ.fits'

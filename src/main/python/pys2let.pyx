@@ -677,9 +677,10 @@ def ssht_dl_beta_risbo(beta, L):
 #----------------------------------------------------------------------------------------------------#
 
 # Function to construct a hybrid wavelet tiling that should be valid for an invertible wavelet transform
-def construct_hybrid_tiling(L, Bs, L_transitions):
+def construct_hybrid_tiling(L, J_min0, Bs, L_transitions):
 	nb = Bs.size
 	J_mins = np.repeat(0, nb)
+	J_mins[0] = J_min0
 	Js = [pys2let_j_max(B, L, J_min) for B, J_min in zip(Bs, J_mins)]
 	J = 0
 	L_bounds = np.zeros((nb+1,) , dtype=np.int32)
@@ -687,7 +688,7 @@ def construct_hybrid_tiling(L, Bs, L_transitions):
 	j_transitions_right = np.zeros((nb,) , dtype=np.int32)
 	for k in range(nb):
 		if k == 0:
-			j_transitions_left[k] = 0
+			j_transitions_left[k] = J_mins[k]
 		else:
 			j_transitions_left[k] = int(np.log(L_bounds[k]) / np.log(Bs[k])) + 1
 		if k == nb - 1:
@@ -702,6 +703,7 @@ def construct_hybrid_tiling(L, Bs, L_transitions):
 	hybrid_wav_bandlimits = np.zeros((J+1,), dtype=np.int32)
 	off = 0
 	for k in range(nb):
+		#print 'k =',k+1,'on',nb,'with j_left =', j_transitions_left[k],' and j_right =', j_transitions_right[k]
 		scal_l, wav_l = axisym_wav_l(Bs[k], L, J_mins[k])
 		jrange = np.arange(J_mins[k],Js[k]+1)
 		wav_bandlimits = np.array([np.rint(np.min([x,L])) for x in Bs[k]**(jrange+1)]).astype(np.int32)
@@ -710,14 +712,14 @@ def construct_hybrid_tiling(L, Bs, L_transitions):
 			hybrid_scal_l = np.zeros((L, ))
 			hybrid_scal_l[:] = scal_l[:]
 
-		for j in range(j_transitions_left[k],j_transitions_right[k]):
+		for j in range(j_transitions_left[k]-J_mins[k],j_transitions_right[k]-J_mins[k]):
 			hybrid_wav_bandlimits[off] = wav_bandlimits[j]
 			hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off] = wav_l[L_bounds[k]:L_bounds[k+1],j]
-			if j == j_transitions_left[k] and wav_l[L_bounds[k],j] < 1.0:
+			if j == j_transitions_left[k]- J_mins[k] and wav_l[L_bounds[k],j] < 1.0:
 				hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off] = np.sqrt(hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off]**2 + wav_l[L_bounds[k]:L_bounds[k+1],j-1]**2)
-			if k < nb -1 and j == j_transitions_right[k] - 1 and wav_l[L_bounds[k],j] < 1.0:
+			if k < nb -1 and j == j_transitions_right[k] - 1 - J_mins[k] and wav_l[L_bounds[k],j] < 1.0:
 				hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off] = np.sqrt(hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off]**2 + wav_l[L_bounds[k]:L_bounds[k+1],j+1]**2)
-			if j < j_transitions_right[k]-1:
+			if j < j_transitions_right[k]-1- J_mins[k]:
 				off += 1
 
 	return hybrid_scal_l, hybrid_wav_l, hybrid_scal_bandlimit, hybrid_wav_bandlimits, J, L_bounds
