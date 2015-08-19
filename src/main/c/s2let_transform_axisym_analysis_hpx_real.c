@@ -34,7 +34,8 @@ int main(int argc, char *argv[])
   printf("Input HEALPIX map : %s\n",file);
   const int nside = s2let_fits_hpx_read_nside(file);
   printf("- Detected bandlimit nside = %i\n",nside);
-  int L, B, J_min;
+  int L, J_min;
+  double B;
   if (sscanf(argv[2], "%i", &B) != 1)
     exit(-2);
   if (sscanf(argv[3], "%i", &J_min) != 1)

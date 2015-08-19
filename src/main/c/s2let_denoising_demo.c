@@ -70,19 +70,20 @@ int main(int argc, char *argv[])
   // PARAMETERS
   const double SNR_in = 10.0;  // Input SNR
   const int nsigma = 3;   // Number of sigmas for hard thresholding
-  const int multires = 1; // Multiresolution flag
-  const int B = 2;        // Wavelet parameters
+  const int upsample = 0; // Multiresolution flag
+  const double B = 2;        // Wavelet parameters
   const int N = 4;        // Azimuthal band-limit
   const int J_min = 0;    // First wavelet scale to use
 
   char outfile[100];
+  int i, j;
   double *f, *noise, *g, *g_wav, *g_scal, *scal_l, *f_denoised, *remaining_noise;
   complex double *noise_lm, *wav_lm;
 
   parameters.B = B;
   parameters.J_min = J_min;
   parameters.N = N;
-  parameters.upsample = !multires;
+  parameters.upsample = upsample;
   parameters.reality = 1;
 
   printf("--------------------------------------------------\n");
@@ -90,7 +91,8 @@ int main(int argc, char *argv[])
   printf(" Earth tomography signal, MW sampling\n");
   printf("--------------------------------------------------\n");
 
-  char file[100] = "data/earth_tomo_mw_128.fits";
+  //char file[100] = "data/earth_tomo_mw_128.fits"
+  char file[100] = "/Users/bl/Downloads/TQU_150GHz_lsa_galactic_U_rot_mw.fits";
   printf(" Reading file %s\n",file);
   const int L = s2let_fits_mw_read_bandlimit(file);
   parameters.L = L;
@@ -100,13 +102,15 @@ int main(int argc, char *argv[])
   s2let_switch_wavtype(1);
   printf(" - Input SNR : %f\n",SNR_in);
   printf(" - Sigma threshold : %i\n", nsigma);
-  printf(" - Multiresolution flag : %i\n", multires);
+  printf(" - upsample flag : %i\n", upsample);
   printf(" - Wavelet parameter : %i\n", B);
   printf(" - Total number of wavelets : %i\n", J);
   printf(" - First wavelet scale to be used : %i\n", J_min);
 
   s2let_allocate_mw_real(&f, L);
   s2let_fits_mw_read_map(f, file, L); // Read MW map from file
+  for(i = 0; i < L*(2*L-1); i++)
+    f[i] = f[i] * 1000;
   printf(" File successfully read from file\n");
 
   // Compute noise standard deviation and generate noise
@@ -122,7 +126,6 @@ int main(int argc, char *argv[])
   s2let_allocate_mw_real(&noise, L);
   s2let_mw_alm2map_real(noise, noise_lm, L);
   s2let_allocate_mw_real(&g, L);
-  int i, j;
   for(i = 0; i < L*(2*L-1); i++)
     g[i] = f[i] + noise[i];
   printf(" done\n");
@@ -159,19 +162,19 @@ int main(int argc, char *argv[])
 
   // Finally write the denoised signal
   printf(" Write output files\n");
-  sprintf(outfile, "%s%s%s", "data/real_signal", "_input" , ".fits");
+  sprintf(outfile, "%s%s%s", "data/real_signal", "_U_input" , ".fits");
   printf(" Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, f, L); // Now write the map to fits file
-  sprintf(outfile, "%s%s%s", "data/real_signal", "_noise" , ".fits");
+  sprintf(outfile, "%s%s%s", "data/real_signal", "_U_noise" , ".fits");
   printf(" Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, noise, L); // Now write the map to fits file
-  sprintf(outfile, "%s%s%s", "data/real_signal", "_input_noise" , ".fits");
+  sprintf(outfile, "%s%s%s", "data/real_signal", "_U_input_noise" , ".fits");
   printf(" Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, g, L); // Now write the map to fits file
-  sprintf(outfile, "%s%s%s", "data/real_signal", "_denoised", ".fits");
+  sprintf(outfile, "%s%s%s", "data/real_signal", "_U_denoised", ".fits");
   printf(" Outfile = %s\n",outfile);
   remove(outfile); // In case the file exists
   s2let_fits_mw_write_map(outfile, f_denoised, L); // Now write the map to fits file

@@ -29,7 +29,21 @@ void s2let_synthesis_lmn2lm_real(
     const s2let_parameters_t *parameters
 );
 
-/** Harmonic-space wavelet transform **/
+/** Harmonic-space wavelet transform, manual tiling **/
+
+void s2let_synthesis_wav2lm_manual(
+    complex double *flm,
+    const complex double *f_wav,
+    const complex double *f_scal,
+    const double *scal_l,
+    const complex double *wav_lm,
+    const int scal_bandlimit,
+    const int *wav_bandlimits,
+    int J,
+    int L,
+    int spin,
+    int N
+);
 
 void s2let_synthesis_wav2lm(
     complex double *flm,

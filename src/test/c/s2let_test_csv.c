@@ -44,7 +44,7 @@
 #include <ssht.h>
 #include <s2let.h>
 
-#define NREPEAT 20
+#define NREPEAT 10
 
 double get_max_error(complex double *expected, complex double *actual, int n);
 double ran2_dp(int idum);
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
     for (multires = 0; multires < 2; ++multires)
     {
         parameters.upsample = 1-multires;
-        L = 1;
+        L = 1024;
         while(L <= Lmax)
         {
             if (L <= L0 || (!useLasN && L < N))

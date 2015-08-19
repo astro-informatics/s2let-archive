@@ -288,6 +288,114 @@ void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int se
   free(scal_lm);
 }
 
+
+/*!
+ * Test the exactness of the multiresolution, manual tiling directional wavelet transform
+ * in harmonic space.
+ *
+ * \param[in]  B Wavelet parameter.
+ * \param[in]  L Angular harmonic band-limit.
+ * \param[in]  J_min First wavelet scale to be used.
+ * \param[in]  N Azimuthal band-limit.
+ * \param[in]  spin Spin number.
+ * \param[in]  seed Random seed.
+ * \retval none
+ */
+void s2let_wav_transform_wavlm_manual_test(int B, int L, int J_min, int N, int spin, int seed)
+{
+  s2let_parameters_t parameters = {};
+  parameters.B = B;
+  parameters.L = L;
+  parameters.J_min = J_min;
+  parameters.N = N;
+  parameters.spin = spin;
+  parameters.upsample = 1;
+  parameters.normalization = S2LET_WAV_NORM_DEFAULT;
+  parameters.original_spin = 0;
+
+  int el, m, i, j;
+  int J = s2let_j_max(&parameters) - J_min;
+
+  clock_t time_start, time_end;
+  complex double *psi;
+  double *phi;
+
+  // Allocate the wavelet kernels
+  s2let_tiling_wavelet_allocate(&psi, &phi, &parameters);
+  // Compute the wavelet kernels
+  time_start = clock();
+  s2let_tiling_wavelet(psi, phi, &parameters);
+  time_end = clock();
+  printf("  - Generate wavelets  : %4.4f seconds\n",
+     (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+  int scal_bandlimit;
+  if (!parameters.upsample)
+    scal_bandlimit = MIN(s2let_bandlimit(J_min-1, &parameters), L);
+  else
+    scal_bandlimit = L;
+
+  complex double *wav_l = (complex double*)calloc((J+1)*L*L, sizeof(complex double));
+  int *wav_bandlimits = (int*)calloc(J+1, sizeof(int));
+  for (j = 0; j <= J; ++j)
+  {
+    if (!parameters.upsample)
+      wav_bandlimits[j] = MIN(s2let_bandlimit(J_min+j, &parameters), L);
+    else
+      wav_bandlimits[j] = L;
+    printf("j = %i, wav_bandlimit = %i\n",j,wav_bandlimits[j]);
+    for(i = 0; i < L*L; ++i){
+      wav_l[j*L*L + i] = psi[(J_min+j)*L*L + i];
+    }
+  }
+
+
+  complex double *f_wav, *f_scal, *flm, *flm_rec;
+  s2let_allocate_lm(&flm, L);
+  s2let_allocate_lm(&flm_rec, L);
+
+  // Generate a random spherical harmonic decomposition
+  s2let_lm_random_flm(flm, L, spin, seed);
+
+  // Allocate space for the wavelet scales (their harmonic/Wigner coefficients)
+  s2let_allocate_f_wav_manual(&f_wav, &f_scal, wav_bandlimits, scal_bandlimit, N, J, &parameters);
+
+  // Perform the wavelet transform through exact harmonic tiling
+  time_start = clock();
+  s2let_analysis_lm2wav_manual(f_wav, f_scal, flm, phi, wav_l, scal_bandlimit, wav_bandlimits, J, L, spin, N);
+  time_end = clock();
+  printf("  - Wavelet analysis   : %4.4f seconds\n",
+     (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+  // Reconstruct the initial harmonic coefficients from those of the wavelets
+  time_start = clock();
+  s2let_synthesis_wav2lm_manual(flm_rec, f_wav, f_scal, phi, wav_l, scal_bandlimit, wav_bandlimits, J, L, spin, N);
+  time_end = clock();
+  printf("  - Wavelet synthesis  : %4.4f seconds\n",
+     (time_end - time_start) / (double)CLOCKS_PER_SEC);
+
+  // Compute the maximum absolute error on the harmonic coefficients
+  printf("  - Maximum abs error  : %6.5e\n",
+     maxerr_cplx(flm, flm_rec, L*L));fflush(NULL);
+
+  for (el = 0; el < L; ++el)
+  {
+    for (m = -el; m <= el; ++m)
+    {
+      i = el*el + el + m;
+    if( cabs( flm[i]-flm_rec[i] ) > 0.001 )
+       printf("%(l,m) = (%i,%i) : %f+i%f %f+i%f\n",el, m, creal(flm[i]), cimag(flm[i]), creal(flm_rec[i]), cimag(flm_rec[i]));
+    }
+  }
+
+  free(flm);
+  free(flm_rec);
+  free(f_wav);
+  free(f_scal);
+  free(psi);
+  free(phi);
+}
+
 /*!
  * Test the exactness of the full resolution directional wavelet transform
  * in harmonic space.
@@ -1989,11 +2097,11 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 
 int main(int argc, char *argv[])
 {
-  const int L = 64;
+  const int L = 81;
   const int N = 3;
   const int B = 3;
-  const int J_min = 0;
-  const int spin = 2;
+  const int J_min = 2;
+  const int spin = 0;
 
   s2let_parameters_t parameters = {};
 
@@ -2098,6 +2206,10 @@ int main(int argc, char *argv[])
   printf("---------------------------------------------------------------------------\n");
   printf("> Testing real directional multiresolution wavelet transform with MWSS...\n");
   s2let_wav_transform_mwss_multires_real_test(B, L, J_min, N, seed);
+
+  printf("---------------------------------------------------------------------------\n");
+  printf("> Testing directional wavelet transform with manual setting...\n");
+  s2let_wav_transform_wavlm_manual_test(B, L, J_min, N, spin, seed);
 
   /*
   const int NREPEAT = 50;

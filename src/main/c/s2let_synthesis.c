@@ -198,6 +198,134 @@ void s2let_synthesis_lmn2lm_real(
 }
 
 /*!
+ * Wavelet analysis from wavelet space to harmonic space for complex signals.
+ * with fully manual wavelet tiling, using multiresolution as default with 
+ * the band-limits provided in input.
+ *
+ * \param[out]  flm Spherical harmonic coefficients of the signal
+ * \param[in]  f_wav Array of wavelets maps
+ * \param[in]  f_scal Scaling function map
+ * \param[in]  scal_l Array of size L containing the \ell space tiling for the scaling fct.
+                      It is only \ell because it is assumed to be axisymmetric.
+ * \param[in]  wav_lm Array of size (J+1)*L*L containing the (\ell, space) harmonic coefs
+                     of the wavelets. They can be directional. These must make sense and 
+                     define a valid invertible transform as no extra checks are performed.
+ * \param[in]  scal_bandlimit Same as wav_bandlimits but only one integer:
+                      the band-limit of the scaling function.
+ * \param[in]  wav_bandlimits Array of integers of size J+1 containing the band-limits 
+                     of the wavelets. Will be used to do the multiresolution.
+                     These must make sense and define a valid invertible transform
+                     as no extra checks are performed.
+ * \param[in]  J Number of scales in total (in wav_bandlimits) is J+1. 
+ * \param[in]  L Band-limit for the transform: defines the size of all awways.
+ * \param[in]  spin Spin (integer) to perform the transform 
+ * \param[in]  N Azimuthal band-limit for the directional transform
+ * \retval none
+ */
+void s2let_synthesis_wav2lm_manual(
+    complex double *flm,
+    const complex double *f_wav,
+    const complex double *f_scal,
+    const double *scal_l,
+    const complex double *wav_lm,
+    const int scal_bandlimit,
+    const int *wav_bandlimits,
+    int J,
+    int L,
+    int spin,
+    int N
+) {
+    s2let_parameters_t parameters = {};
+    parameters.L = L;
+    parameters.J_min = 0;
+    parameters.B = pow(L, 1.0/(float)J);
+    parameters.N = N;
+    parameters.dl_method = SSHT_DL_RISBO;
+
+    int bandlimit = L;
+    int verbosity = 0;
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, &parameters);
+
+    int j, offset, offset_lmn;
+    complex double *f_wav_lmn, *f_scal_lm;
+    complex double psi, npsi;
+    double phi;
+    int el, m, n, lm_ind, lmn_ind;
+
+    int Nj = N;
+
+    bandlimit = MIN(scal_bandlimit, L);
+
+    f_scal_lm = (complex double*)calloc(bandlimit*bandlimit, sizeof(complex double));
+
+    // Note, this is a spin-0 transform!
+    switch (parameters.sampling_scheme)
+    {
+    case S2LET_SAMPLING_MW:
+        ssht_core_mw_forward_sov_conv_sym(f_scal_lm, f_scal, bandlimit, 0, parameters.dl_method, verbosity);
+        break;
+    case S2LET_SAMPLING_MW_SS:
+        ssht_core_mw_forward_sov_conv_sym_ss(f_scal_lm, f_scal, bandlimit, 0, parameters.dl_method, verbosity);
+        break;
+    default:
+        S2LET_ERROR_GENERIC("Sampling scheme not supported.");
+    }
+
+    for (el = ABS(spin); el < bandlimit; ++el)
+    {
+        phi = sqrt(4.0*PI/(2*el+1)) * scal_l[el];
+        for (m = -el; m <= el; ++m)
+        {
+            ssht_sampling_elm2ind(&lm_ind, el, m);
+            flm[lm_ind] += f_scal_lm[lm_ind] * phi;
+        }
+    }
+
+    free(f_scal_lm);
+
+    offset = 0;
+    for (j = 0; j <= J; ++j)
+    {
+        bandlimit = MIN(wav_bandlimits[j], L);
+        so3_parameters.L = bandlimit;
+        int Nj = MIN(N,bandlimit);
+        Nj += (Nj+N)%2; // ensure N and Nj are both even or both odd
+        so3_parameters.N = Nj;
+        so3_parameters.L0 = 0;
+
+        f_wav_lmn = (complex double*)calloc(so3_sampling_flmn_size(&so3_parameters), sizeof(complex double));
+
+        so3_core_forward_via_ssht(
+            f_wav_lmn,
+            f_wav + offset,
+            &so3_parameters
+        );
+
+        for (n = -Nj+1; n < Nj; n+=2)
+        {
+            for (el = MAX(ABS(spin), ABS(n)); el < bandlimit; ++el)
+            {
+                ssht_sampling_elm2ind(&lm_ind, el, n);
+                psi = wav_lm[j*L*L + lm_ind];
+                for (m = -el; m <= el; ++m)
+                {
+                    ssht_sampling_elm2ind(&lm_ind, el, m);
+                    so3_sampling_elmn2ind(&lmn_ind, el, m, n, &so3_parameters);
+                    flm[lm_ind] += f_wav_lmn[lmn_ind] * psi;
+                }
+            }
+        }
+
+        free(f_wav_lmn);
+        offset += so3_sampling_f_size(&so3_parameters);
+
+    }
+
+}
+
+
+/*!
  * Wavelet synthesis from wavelet space to harmonic space for complex signals.
  *
  * \param[out]  flm Spherical harmonic coefficients of the signal

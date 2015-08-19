@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
   printf("--------------------------------------------------\n");
 
   const int L = 256;    // Harmonic band-limit
-  const int B = 4;      // Wavelet parameters
+  const double B = 4;      // Wavelet parameters
   const int J_min = 2;  // First wavelet scale to use
   s2let_parameters_t parameters = {};
   parameters.B = B;

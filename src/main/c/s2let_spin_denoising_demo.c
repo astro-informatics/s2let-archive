@@ -11,10 +11,11 @@
 #include <math.h>
 #include <time.h>
 
-void s2let_lm_random_flm_sigma(complex double *flm, int L, int seed, double sigmanoise) {
+void s2let_lm_random_flm_sigma(complex double *flm, int L, int spin, int seed, double sigmanoise) {
   int i;
-  for (i = 0; i < L*L; ++i)
-    flm[i] = sigmanoise * (2.0*ran2_dp(seed) - 1.0) + I * sigmanoise * (2.0*ran2_dp(seed) - 1.0);
+  int i_min = spin*spin;
+  for (i=i_min; i<L*L; ++i)
+     flm[i] = sigmanoise * (2.0*ran2_dp(seed) - 1.0) + I * sigmanoise * (2.0*ran2_dp(seed) - 1.0);
 }
 
 double waveletpower(complex double *wav_lm, int L){
@@ -60,8 +61,8 @@ int main(int argc, char *argv[])
   // PARAMETERS
   const double SNR_in = 10.0;  // Input SNR
   const int nsigma = 3;   // Number of sigmas for hard thresholding
-  const int multires = 1; // Multiresolution flag
-  const int B = 2;        // Wavelet parameters
+  const int upsample = 0; // Multiresolution flag
+  const double B = 2;        // Wavelet parameters
   const int N = 4;        // Azimuthal band-limit
   const int J_min = 0;    // First wavelet scale to use
   const int spin = 2;     // Spin number
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
   parameters.J_min = J_min;
   parameters.N = N;
   parameters.spin = spin;
-  parameters.upsample = !multires;
+  parameters.upsample = upsample;
 
   printf("--------------------------------------------------\n");
   printf(" S2LET library : denoising example\n");
@@ -91,8 +92,8 @@ int main(int argc, char *argv[])
   // a spin map
 
   //char file[100] = "data/earth_tomo_mw_128_rot.fits";
-  char fileQ[100] = "data/wmap_mcmc_base_k_synch_stk_q_9yr_v5_rot_denoised.fits";
-  char fileU[100] = "data/wmap_mcmc_base_k_synch_stk_u_9yr_v5_rot_denoised.fits";
+  char fileQ[100] = "/Users/bl/Dropbox/Wavelets/s2let/data/wmap_mcmc_fs_k_synch_stk_q_9yr_v5_rot_mw.fits";
+  char fileU[100] = "/Users/bl/Dropbox/Wavelets/s2let/data/wmap_mcmc_fs_k_synch_stk_u_9yr_v5_rot_mw.fits";
   //printf(" Reading file %s\n", file);
   printf(" Reading file %s\n", fileQ);
   printf(" Reading file %s\n", fileU);
@@ -106,7 +107,7 @@ int main(int argc, char *argv[])
   s2let_switch_wavtype(1);
   printf(" - Input SNR : %f\n",SNR_in);
   printf(" - Sigma threshold : %i\n", nsigma);
-  printf(" - Multiresolution flag : %i\n", multires);
+  printf(" - upsample flag : %i\n", upsample);
   printf(" - Wavelet parameter : %i\n", B);
   printf(" - Total number of wavelets : %i\n", J);
   printf(" - First wavelet scale to be used : %i\n", J_min);
@@ -151,7 +152,7 @@ int main(int argc, char *argv[])
   double sigmanoise = sqrt(pow(10.0, -SNR_in/10.0) * s2let_mw_power(f, L));
   printf(" - Std dev of the noise (to match SNR) = %f\n", sigmanoise);
   s2let_allocate_lm(&noise_lm, L);
-  s2let_lm_random_flm_sigma(noise_lm, L, seed, sigmanoise);
+  s2let_lm_random_flm_sigma(noise_lm, L, spin, seed, sigmanoise);
   double SNR_actual = 10.0 * log10( s2let_mw_power(f, L) / s2let_lm_power(noise_lm, L));
   printf(" - Actual (realised) SNR = %f\n", SNR_actual);
 

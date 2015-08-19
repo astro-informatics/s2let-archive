@@ -133,3 +133,52 @@ void s2let_allocate_f_wav_real(
     *f_wav = calloc(s2let_n_wav(parameters), sizeof **f_wav);
     *f_scal = calloc(s2let_n_scal(parameters), sizeof **f_scal);
 }
+
+/*!
+ * Allocates arrays for wavelet transform with manual wavelet tiling.
+ * Multiresolution is active and depends on the band-limits provided.
+ *
+ * \param[out]  f_wav Pointer to allocated space for array of wavelet
+ *                    maps, using MW sampling.
+ * \param[out]  f_scal Pointer to allocated space for scaling function
+ *                     map, using MW sampling.
+ * \param[in]  wav_bandlimits Array of integers containing the band-limits 
+                     of the wavelets. Will be used to do the multiresolution.
+                     These must make sense and define a valid invertible transform
+                     as no extra checks are performed.
+ * \param[in]  scal_bandlimit Same as wav_bandlimits but only one integer:
+                      the band-limit of the scaling function.
+ * \param[in]  N Azimuthal band-limit for the directional transform
+ * \param[in]  J Number of scales in total (in wav_bandlimits) is J+1. 
+ * \param[in]  parameters A parameters object containing all s2let and so3 sampling options.
+ * \retval none
+ */
+void s2let_allocate_f_wav_manual(
+    complex double **f_wav,
+    complex double **f_scal,
+    int *wav_bandlimits,
+    int scal_bandlimit,
+    int N,
+    int J,
+    s2let_parameters_t *parameters
+) {
+
+    so3_parameters_t so3_parameters = {};
+    fill_so3_parameters(&so3_parameters, parameters);
+
+    int j, total=0;
+    for (j = 0; j <= J; ++j)
+    {
+        if (!parameters->upsample)
+        {
+            so3_parameters.L = wav_bandlimits[j];
+        }
+        total += so3_sampling_f_size(&so3_parameters);
+    }
+
+    s2let_parameters_t bl_parameters = *parameters;
+    bl_parameters.L = scal_bandlimit;
+
+    *f_wav = calloc(total, sizeof **f_wav);
+    *f_scal = calloc(s2let_n_phi(&bl_parameters) * s2let_n_theta(&bl_parameters), sizeof **f_scal);
+}

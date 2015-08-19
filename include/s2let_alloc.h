@@ -41,4 +41,14 @@ void s2let_allocate_f_wav_real(
     const s2let_parameters_t *parameters
 );
 
+void s2let_allocate_f_wav_manual(
+    complex double **f_wav,
+    complex double **f_scal,
+    int *wav_bandlimits,
+    int scal_bandlimit,
+    int N,
+    int J,
+    s2let_parameters_t *parameters
+);
+
 #endif
