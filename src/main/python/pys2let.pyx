@@ -185,9 +185,13 @@ def healpy_lm(el, em, L):
 #----------------------------------------------------------------------------------------------------#
 
 def analysis_axisym_lm_wav(
-	np.ndarray[double complex, ndim=1, mode="c"] flm_hp not None, B, L, J_min):
+	np.ndarray[double complex, ndim=1, mode="c"] flm_hp not None, B, L, J_min, spin_lowered = False):
 
 	cdef s2let_parameters_t parameters = {};
+	if spin_lowered:
+		parameters.normalisation = S2LET_WAV_NORM_SPIN_LOWERED
+	else:
+		parameters.normalisation = S2LET_WAV_NORM_DEFAULT
 	parameters.B = B;
 	parameters.L = L;
 	parameters.J_min = J_min;
@@ -226,9 +230,13 @@ def analysis_axisym_lm_wav(
 
 def synthesis_axisym_lm_wav(
 	np.ndarray[double complex, ndim=2, mode="c"] f_wav_lm_hp not None,
-	np.ndarray[double complex, ndim=1, mode="c"] f_scal_lm_hp not None, B, L, J_min):
+	np.ndarray[double complex, ndim=1, mode="c"] f_scal_lm_hp not None, B, L, J_min, spin_lowered = False):
 
 	cdef s2let_parameters_t parameters = {};
+	if spin_lowered:
+		parameters.normalisation = S2LET_WAV_NORM_SPIN_LOWERED
+	else:
+		parameters.normalisation = S2LET_WAV_NORM_DEFAULT
 	parameters.B = B;
 	parameters.L = L;
 	parameters.J_min = J_min;
