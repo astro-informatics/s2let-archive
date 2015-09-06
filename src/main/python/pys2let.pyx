@@ -429,7 +429,7 @@ def synthesis_wav2lm_manualtiling(
 
 def analysis_lm2wav(
 		np.ndarray[double complex, ndim=1, mode="c"] flm_hp not None,
-		B, L, J_min, N, spin, upsample):
+		B, L, J_min, N, spin, upsample, spin_lowered=False):
 
 	cdef s2let_parameters_t parameters = {};
 	parameters.B = B;
@@ -439,7 +439,10 @@ def analysis_lm2wav(
 	parameters.spin = spin;
 	parameters.upsample = upsample;
 	parameters.sampling_scheme = S2LET_SAMPLING_MW
-	parameters.normalization = S2LET_WAV_NORM_DEFAULT
+	if spin_lowered:
+		parameters.normalisation = S2LET_WAV_NORM_SPIN_LOWERED
+	else:
+		parameters.normalisation = S2LET_WAV_NORM_DEFAULT
 	parameters.dl_method = SSHT_DL_RISBO
 	parameters.original_spin = 0
 	parameters.reality = 0
@@ -462,7 +465,7 @@ def analysis_lm2wav(
 def synthesis_wav2lm(
 		np.ndarray[double complex, ndim=1, mode="c"] f_wav not None,
 		np.ndarray[double complex, ndim=1, mode="c"] f_scal not None,
-		B, L, J_min, N, spin, upsample):
+		B, L, J_min, N, spin, upsample, spin_lowered=False):
 
 	cdef s2let_parameters_t parameters = {};
 	parameters.B = B;
@@ -472,7 +475,10 @@ def synthesis_wav2lm(
 	parameters.spin = spin;
 	parameters.upsample = upsample;
 	parameters.sampling_scheme = S2LET_SAMPLING_MW
-	parameters.normalization = S2LET_WAV_NORM_DEFAULT
+	if spin_lowered:
+		parameters.normalisation = S2LET_WAV_NORM_SPIN_LOWERED
+	else:
+		parameters.normalisation = S2LET_WAV_NORM_DEFAULT
 	parameters.dl_method = SSHT_DL_RISBO
 	parameters.original_spin = 0
 	parameters.reality = 0
