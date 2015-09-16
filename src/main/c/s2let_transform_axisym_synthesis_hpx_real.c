@@ -12,8 +12,8 @@
 #include <time.h>
 
 /*!
- * PROGRAM : s2let_axisym_hpx_synthesis_real
- * COMMAND : bin/s2let_axisym_hpx_synthesis_real file B J_min L
+ * PROGRAM : s2let_transform_axisym_hpx_synthesis_real
+ * COMMAND : bin/s2let_transform_axisym_hpx_synthesis_real file B J_min L
  * ARGUMENTS :
  * - file : input root for the healpix wavelet map
  * - B : wavelet parameter

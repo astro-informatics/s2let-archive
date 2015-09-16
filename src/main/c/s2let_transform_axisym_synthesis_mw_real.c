@@ -12,8 +12,8 @@
 #include <time.h>
 
 /*!
- * PROGRAM : s2let_axisym_mw_synthesis_real
- * COMMAND : bin/s2let_axisym_mw_synthesis_real file B J_min L
+ * PROGRAM : s2let_transform_axisym_mw_synthesis_real
+ * COMMAND : bin/s2let_transform_axisym_mw_synthesis_real file B J_min L
  * ARGUMENTS :
  * - file : root for input MW wavelet maps
  * - B : wavelet parameter

@@ -48,8 +48,8 @@ void hard_threshold(
 }
 
 /*!
- * PROGRAM : s2let_denoising_demo
- * COMMAND : bin/s2let_denoising_demo
+ * PROGRAM : s2let_spin_denoising_demo
+ * COMMAND : bin/s2let_spin_denoising_demo
  * ARGUMENTS : none
  */
 int main(int argc, char *argv[])
@@ -92,8 +92,8 @@ int main(int argc, char *argv[])
   // a spin map
 
   //char file[100] = "data/earth_tomo_mw_128_rot.fits";
-  char fileQ[100] = "/Users/bl/Dropbox/Wavelets/s2let/data/wmap_mcmc_fs_k_synch_stk_q_9yr_v5_rot_mw.fits";
-  char fileU[100] = "/Users/bl/Dropbox/Wavelets/s2let/data/wmap_mcmc_fs_k_synch_stk_u_9yr_v5_rot_mw.fits";
+  char fileQ[100] = "data/wmap_mcmc_fs_k_synch_stk_q_9yr_v5_rot_mw.fits";
+  char fileU[100] = "data/wmap_mcmc_fs_k_synch_stk_u_9yr_v5_rot_mw.fits";
   //printf(" Reading file %s\n", file);
   printf(" Reading file %s\n", fileQ);
   printf(" Reading file %s\n", fileU);

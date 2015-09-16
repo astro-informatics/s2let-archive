@@ -1,8 +1,10 @@
 *.sublime-workspace
 *.zip
+*checkpoint.ipynb
 *.egg-info
 *.tif
-*.fort.6
+*fort.6
+*.orig
 *.fits
 *.csv
 *.so

@@ -37,8 +37,8 @@ double needletpower(double *wav_lm, int L){
 }
 
 /*!
- * PROGRAM : s2let_denoising_demo
- * COMMAND : bin/s2let_denoising_demo
+ * PROGRAM : s2let_axisym_denoising_demo
+ * COMMAND : bin/s2let_axisym_denoising_demo
  * ARGUMENTS : none
  */
 int main(int argc, char *argv[])

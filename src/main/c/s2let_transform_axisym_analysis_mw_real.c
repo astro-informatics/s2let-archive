@@ -12,8 +12,8 @@
 #include <time.h>
 
 /*!
- * PROGRAM : s2let_axisym_mw_analysis_real
- * COMMAND : bin/s2let_axisym_mw_analysis_real file B J_min multires
+ * PROGRAM : s2let_transform_axisym_mw_analysis_real
+ * COMMAND : bin/s2let_transform_axisym_mw_analysis_real file B J_min multires
  * ARGUMENTS :
  * - file : input MW map
  * - B : wavelet parameter
