@@ -271,8 +271,8 @@ $(S2LETLIB)/lib$(S2LETLIBNM).a: $(S2LETOBJS)
 dylib: $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT)
 $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT): $(S2LETOBJS)
 	$(DYLIBCMD) $(FFLAGS) $(LDFLAGS) -o $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETOBJS)
-	cp $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETDIR)/src/main/resources/lib/darwin_universal/
-	cp $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETDIR)/target/classes/lib/darwin_universal/
+#	cp $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETDIR)/src/main/resources/lib/darwin_universal/
+#	cp $(S2LETLIB)/lib$(S2LETLIBNM).$(DYLIBEXT) $(S2LETDIR)/target/classes/lib/darwin_universal/
 
 .PHONY: test
 test: $(S2LETBIN)/s2let_test $(S2LETBIN)/s2let_test_csv
