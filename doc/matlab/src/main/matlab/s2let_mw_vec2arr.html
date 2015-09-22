@@ -36,7 +36,7 @@ This function calls:
 </ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>	s2let_axisym_mw_analysis</li><li><a href="s2let_axisym_mw_synthesis.html" class="code" title="function f = s2let_axisym_mw_synthesis(f_wav, f_scal, varargin)">s2let_axisym_mw_synthesis</a>	s2let_axisym_mw_synthesis</li><li><a href="s2let_mw_read_real_map.html" class="code" title="function [mwmaparr, L]= s2let_mw_read_real_map(file)">s2let_mw_read_real_map</a>	s2let_mw_read_real_map</li></ul>
+<li><a href="s2let_mw_read_real_map.html" class="code" title="function [mwmaparr, L]= s2let_mw_read_real_map(file)">s2let_mw_read_real_map</a>	s2let_mw_read_real_map</li><li><a href="s2let_transform_analysis_lm2wav.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_lm2wav(flm, varargin)">s2let_transform_analysis_lm2wav</a>	s2let_transform_analysis_lm2wav</li><li><a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>	s2let_transform_analysis_mw</li><li><a href="s2let_transform_axisym_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)">s2let_transform_axisym_analysis_mw</a>	s2let_transform_axisym_analysis_mw</li><li><a href="s2let_transform_axisym_synthesis_mw.html" class="code" title="function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_axisym_synthesis_mw</a>	s2let_transform_axisym_synthesis_mw</li><li><a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>	s2let_transform_synthesis_mw</li></ul>
 <!-- crossreference -->
 
 
@@ -44,26 +44,21 @@ This function is called by:
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function arr = s2let_mw_vec2arr(vec)</a>
 0002 
-0003 sz = size(vec);
+0003 len = length(vec(:));
 0004 
-0005 <span class="keyword">if</span> sz(1) == 1   <span class="comment">% array 1 x L*(2L-1)</span>
-0006     delta = sqrt(1 + 8*(sz(2)));
-0007     L = ( 1 + delta ) / 4;
-0008 <span class="keyword">else</span>            <span class="comment">% array L*(2L-1) x 1</span>
-0009     delta = sqrt(1 + 8*(sz(1)));
-0010     L = ( 1 + delta ) / 4;
-0011 <span class="keyword">end</span>
-0012 
-0013 arr = zeros(L, 2*L-1);
-0014 
-0015 <span class="keyword">for</span> t = 1:L
-0016     <span class="keyword">for</span> p = 1:2*L-1
-0017         arr(t,p) = vec((t-1)*(2*L-1)+p);
-0018     <span class="keyword">end</span>
-0019 <span class="keyword">end</span>
-0020 
-0021 
-0022 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Thu 29-Aug-2013 17:48:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0005 delta = sqrt(1 + 8*len);
+0006 L = ( 1 + delta ) / 4;
+0007 
+0008 arr = zeros(L, 2*L-1);
+0009 
+0010 <span class="keyword">for</span> t = 1:L
+0011     <span class="keyword">for</span> p = 1:2*L-1
+0012         arr(t,p) = vec((t-1)*(2*L-1)+p);
+0013     <span class="keyword">end</span>
+0014 <span class="keyword">end</span>
+0015 
+0016 
+0017 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 22-Sep-2015 14:38:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

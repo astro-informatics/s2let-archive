@@ -14,7 +14,7 @@ function f_hpx = s2let_mw2hpx(f, nside, varargin)
 %  'L'               = { Harmonic band-limit; L > 1 (default=guessed) }
 
 % S2LET package to perform Wavelets transform on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 sz = size(f);

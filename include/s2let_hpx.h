@@ -1,11 +1,35 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #ifndef S2LET_HPX
 #define S2LET_HPX
 
 #include <complex.h>
+
+/*!
+ * Restore real healpix map from spherical harmonic coefficients.
+ * Interface for HEALPIX Fortran code alm2map.
+ *
+ * \param[out]  f Output healpix map.
+ * \param[in]  flm Spherical harmonic coefficients.
+ * \param[in]  nside Healpix resolution of the output map.
+ * \param[in]  L Angular harmonic band-limit.
+ * \retval none
+ */
+void s2let_hpx_alm2map_spin_real(double* fQ, double* fU, const complex double* flmE, const complex double* flmB, int nside, int L, int spin);
+
+/*!
+ * Compute spherical harmonic coefficients of a real healpix map.
+ * Interface for HEALPIX Fortran code map2alm.
+ *
+ * \param[out]  flm Spherical harmonic coefficients.
+ * \param[in]  f Input healpix map.
+ * \param[in]  nside Healpix resolution of the output map.
+ * \param[in]  L Angular harmonic band-limit.
+ * \retval none
+ */
+void s2let_hpx_map2alm_spin_real(complex double* flmE, complex double* flmB, const double* fQ, const double* fU, int nside, int L, int spin);
 
 /*!
  * Restore real healpix map from spherical harmonic coefficients.

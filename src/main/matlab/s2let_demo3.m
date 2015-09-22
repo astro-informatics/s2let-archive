@@ -3,7 +3,7 @@
 % Compute the output wavelets as Healpix maps and plot them.
 %
 % S2LET package to perform Wavelets on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 L = 192;
@@ -21,7 +21,7 @@ flm = s2let_hpx_map2alm(f_ini, 'L', L);
 f = s2let_hpx_alm2map(flm, nside_recon, 'L', L);
 
 % Perform decomposition
-[f_wav, f_scal] = s2let_axisym_hpx_analysis(f,'B',B,'L',L,'J_min',J_min);
+[f_wav, f_scal] = s2let_transform_axisym_analysis_hpx(f,'B',B,'L',L,'J_min',J_min);
 
 % Plot
 J = s2let_jmax(L, B);

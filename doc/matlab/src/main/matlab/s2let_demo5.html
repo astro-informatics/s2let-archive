@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of s2let_demo5</title>
+  <meta name="keywords" content="s2let_demo5">
+  <meta name="description" content="s2let_demo5">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">src</a> &gt; <a href="#">main</a> &gt; <a href="index.html">matlab</a> &gt; s2let_demo5.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for src/main/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>s2let_demo5
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>s2let_demo5</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> s2let_demo5
+ Compute and plot the harmonic tiling and the wavelet kernels, and output png figures.
+
+ S2LET package to perform Wavelets on the Sphere.
+ Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen
+ See LICENSE.txt for license details</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li><li><a href="s2let_wavelet_tiling.html" class="code" title="function [psi_lm phi_l] = s2let_wavelet_tiling(B, L, N, Spin, J_min, varargin)">s2let_wavelet_tiling</a>	s2let_wavelet_tiling - Compute tiling in harmonic space.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% s2let_demo5</span>
+0002 <span class="comment">% Compute and plot the harmonic tiling and the wavelet kernels, and output png figures.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% S2LET package to perform Wavelets on the Sphere.</span>
+0005 <span class="comment">% Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen</span>
+0006 <span class="comment">% See LICENSE.txt for license details</span>
+0007 
+0008 B = 2;
+0009 zoomfactor = 1.4;
+0010 J_min = 2;
+0011 L = 64;
+0012 Spin = 0;
+0013 N = 0;
+0014 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
+0015 plot_caxis_scale = 20
+0016 type = <span class="string">'colour'</span>;
+0017 lighting = false;
+0018 
+0019 ns = ceil(sqrt(2+J-J_min+1)) ;
+0020 ny = 4;
+0021 nx = 3;
+0022 
+0023 maxfigs = nx*ny;
+0024 pltroot = <span class="string">'../../../figs'</span>
+0025 configstr = [<span class="string">'Spin'</span>,int2str(Spin),<span class="string">'_N'</span>,int2str(N),<span class="string">'_L'</span>,int2str(L),<span class="string">'_B'</span>,int2str(B),<span class="string">'_Jmin'</span>,int2str(J_min)]
+0026 [psi_lm phi_l] = <a href="s2let_wavelet_tiling.html" class="code" title="function [psi_lm phi_l] = s2let_wavelet_tiling(B, L, N, Spin, J_min, varargin)">s2let_wavelet_tiling</a>(B, L, N, Spin, J_min);
+0027 
+0028 figure(<span class="string">'Position'</span>,[100 100 300 300])
+0029 h=subplot(1, 1, 1);
+0030 flm = zeros(L^2,1);
+0031 <span class="keyword">for</span> l = 0:L-1
+0032     flm(l^2+l+1,1) = phi_l(l+1);
+0033 <span class="keyword">end</span>
+0034 f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
+0035 ssht_plot_sphere(f, L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
+0036 title(h,<span class="string">'Scaling fct'</span>)
+0037 locate = get(h,<span class="string">'title'</span>);
+0038 pos = get(locate,<span class="string">'position'</span>);
+0039 pos(1,2) = pos(1,2)+0.7;
+0040 pos(1,1) = pos(1,1)-0.7;
+0041 set(locate,<span class="string">'pos'</span>,pos);
+0042 zoom(1.2)<span class="comment">%</span>
+0043 <span class="comment">%v = caxis;</span>
+0044 <span class="comment">%temp = max(abs(v));</span>
+0045 <span class="comment">%caxis([-temp temp]*plot_caxis_scale)</span>
+0046 
+0047 
+0048 <span class="comment">%colormap(jet)</span>
+0049 <span class="comment">%fname = [pltroot,'/s2let_demo5_', configstr, '_scal_jet.png']</span>
+0050 <span class="comment">%print('-r200', '-dpng', fname)</span>
+0051 <span class="comment">%colormap(hot)</span>
+0052 <span class="comment">%fname = [pltroot,'/s2let_demo5_', configstr, '_scal_hot.png']</span>
+0053 <span class="comment">%print('-r200', '-dpng', fname)</span>
+0054 
+0055 figure(<span class="string">'Position'</span>,[100 100 1200 600])
+0056 ind = 0;
+0057 <span class="keyword">for</span> j = J_min:J
+0058    flm = psi_lm(:,j+1);
+0059 
+0060    <span class="keyword">if</span> Spin == 0
+0061        f = ssht_inverse(flm, L, <span class="string">'Reality'</span>, true);
+0062        ind = ind + 1;
+0063        <span class="keyword">if</span> ind &lt;= maxfigs
+0064            h = subplot(ny, nx, ind);
+0065            ssht_plot_sphere(f, L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
+0066            title(h, [<span class="string">'Wavelet j = '</span>,int2str(j-J_min+1)])
+0067            locate = get(h,<span class="string">'title'</span>);
+0068            pos = get(locate,<span class="string">'position'</span>);
+0069            pos(1,2) = pos(1,2)+0.7;
+0070            pos(1,1) = pos(1,1)-0.7;
+0071            set(locate,<span class="string">'pos'</span>,pos);
+0072            <span class="comment">%v = caxis;</span>
+0073            <span class="comment">%temp = max(abs(v));</span>
+0074            <span class="comment">%caxis([-temp temp]*plot_caxis_scale)</span>
+0075            <span class="comment">%zoom(zoomfactor)</span>
+0076        <span class="keyword">end</span>
+0077    <span class="keyword">end</span>
+0078    <span class="keyword">if</span> Spin &gt; 0
+0079        f = ssht_inverse(flm, L, <span class="string">'spin'</span>, Spin);
+0080        ind = ind + 1;
+0081        <span class="keyword">if</span> ind &lt;= maxfigs
+0082            h = subplot(ny, nx, ind);
+0083            ssht_plot_sphere(real(f), L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
+0084            title(h, [<span class="string">'Wavelet j = '</span>,int2str(j-J_min+1), <span class="string">', real part'</span>])
+0085            locate = get(h,<span class="string">'title'</span>);
+0086            pos = get(locate,<span class="string">'position'</span>);
+0087            pos(1,2) = pos(1,2)+0.7;
+0088            pos(1,1) = pos(1,1)-0.7;
+0089            set(locate,<span class="string">'pos'</span>,pos);
+0090            <span class="comment">%v = caxis;</span>
+0091            <span class="comment">%temp = max(abs(v));</span>
+0092            <span class="comment">%caxis([-temp temp]*plot_caxis_scale)</span>
+0093            <span class="comment">%zoom(zoomfactor)</span>
+0094        <span class="keyword">end</span>
+0095        ind = ind + 1;
+0096        <span class="keyword">if</span> ind &lt;= maxfigs
+0097            h = subplot(ny, nx, ind);
+0098            ssht_plot_sphere(imag(f), L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
+0099            title(h, [<span class="string">'Wavelet j = '</span>,int2str(j-J_min+1), <span class="string">', imag part'</span>])
+0100            locate = get(h,<span class="string">'title'</span>);
+0101            pos = get(locate,<span class="string">'position'</span>);
+0102            pos(1,2) = pos(1,2)+0.7;
+0103            pos(1,1) = pos(1,1)-0.7;
+0104            set(locate,<span class="string">'pos'</span>,pos);
+0105            <span class="comment">%v = caxis;</span>
+0106            <span class="comment">%temp = max(abs(v));</span>
+0107            <span class="comment">%caxis([-temp temp]*plot_caxis_scale)</span>
+0108            <span class="comment">%zoom(zoomfactor)</span>
+0109        <span class="keyword">end</span>
+0110        
+0111        ind = ind + 1;
+0112        <span class="keyword">if</span> ind &lt;= maxfigs
+0113            h = subplot(ny, nx, ind);
+0114            ssht_plot_sphere(abs(f), L, <span class="string">'Type'</span>, type, <span class="string">'Lighting'</span>, lighting);
+0115            title(h, [<span class="string">'Wavelet j = '</span>,int2str(j-J_min+1), <span class="string">', abs part'</span>])
+0116            locate = get(h,<span class="string">'title'</span>);
+0117            pos = get(locate,<span class="string">'position'</span>); 
+0118            pos(1,2) = pos(1,2)+0.7;
+0119            pos(1,1) = pos(1,1)-0.7;
+0120            set(locate,<span class="string">'pos'</span>,pos);
+0121            <span class="comment">%v = caxis;</span>
+0122            <span class="comment">%temp = max(abs(v));</span>
+0123            <span class="comment">%caxis([-temp temp]*plot_caxis_scale)</span>
+0124            <span class="comment">%zoom(zoomfactor)</span>
+0125        <span class="keyword">end</span>
+0126        
+0127    <span class="keyword">end</span>
+0128 <span class="keyword">end</span>
+0129 
+0130 
+0131 colormap(jet)
+0132 fname = [pltroot,<span class="string">'/s2let_demo5_'</span>, configstr, <span class="string">'_wav_jet.png'</span>]
+0133 print(<span class="string">'-r200'</span>, <span class="string">'-dpng'</span>, fname)
+0134 colormap(hot)
+0135 fname = [pltroot,<span class="string">'/s2let_demo5_'</span>, configstr, <span class="string">'_wav_hot.png'</span>]
+0136 print(<span class="string">'-r200'</span>, <span class="string">'-dpng'</span>, fname)
+0137</pre></div>
+<hr><address>Generated on Tue 22-Sep-2015 14:38:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

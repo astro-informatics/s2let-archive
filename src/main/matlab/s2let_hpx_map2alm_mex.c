@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
@@ -11,7 +11,7 @@
  * MATLAB interface: s2let_hpx_map2alm_mex.
  * This function for internal use only.
  *
- * Usage: 
+ * Usage:
  *   alm = s2let_hpx_map2alm_mex(f, nside, L);
  *
  */
@@ -43,8 +43,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse HEALPIX parameter nside
   iin = 1;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:healpixParameter",
           "HEALPIX parameter nside must be integer.");
@@ -54,14 +54,14 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:healpixParameter",
           "Healpix parameter nside must be positive integer greater than 2");
 
-  if( f_m*f_n != 12*nside*nside ) 
+  if( f_m*f_n != 12*nside*nside )
     mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:LbandLimit",
           "nside must correspond to the sampling scheme, i.e. f = 12*nside*nside samples.");
 
   // Parse harmonic band-limit L
   iin = 2;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
@@ -71,8 +71,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_hpx_map2alm_mex:InvalidInput:bandLimitNonInt",
           "Harmonic band-limit L must be positive integer.");
 
-  // Perform harmonic transform 
-  s2let_lm_allocate(&flm, L);
+  // Perform harmonic transform
+  s2let_allocate_lm(&flm, L);
   s2let_hpx_map2alm_real(flm, f_r, nside, L);
 
   // Output flm's
@@ -87,6 +87,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   free(flm);
   free(f_r);
-  
+
 
 }

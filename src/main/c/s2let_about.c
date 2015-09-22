@@ -1,11 +1,11 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
-/*! 
+/*!
  * \file s2let_about.c
  * Print information about the S2LET package, including version
- * and build numbers. 
+ * and build numbers.
  *
  * Usage: s2let_about
  *

@@ -5,7 +5,7 @@
 % Plot 2 : full resolution wavelet scales
 %
 % S2LET package to perform Wavelets on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 load('EGM2008_Topography_flms_L0128');
@@ -24,7 +24,7 @@ ny = ns - 1 + rem(2+J-J_min+1 , ns) ;
 nx = ns;
 
 % Perform decomposition
-[f_wav, f_scal] = s2let_axisym_mw_analysis(f, 'B', B, 'J_min', J_min, 'Reality', true, 'downsample', false);
+[f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, 'B', B, 'J_min', J_min, 'Reality', true, 'Upsample', true);
 % FULL RESOLUTION PLOT
 figure('Position',[100 100 1300 1000])
 subplot(nx, ny, 1);
@@ -53,7 +53,7 @@ end
 
 
 % Perform decomposition
-[f_wav, f_scal] = s2let_axisym_mw_analysis(f, 'B', B, 'J_min', J_min, 'Reality', true);
+[f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, 'B', B, 'J_min', J_min, 'Reality', true);
 
 % MULTIRESOLUTION PLOT
 figure('Position',[100 100 1300 1000])
@@ -81,4 +81,4 @@ v = caxis;
 temp = max(abs(v));
 caxis([-temp temp])
    %title(['Wavelet scale : ',int2str(j)-J_min+1])
-end 
+end
