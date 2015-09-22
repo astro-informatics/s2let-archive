@@ -22,7 +22,7 @@ function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)
 %                        true         [assume f real (improves performance)] }
 %
 % S2LET package to perform Wavelets transform on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 sz = size(f);

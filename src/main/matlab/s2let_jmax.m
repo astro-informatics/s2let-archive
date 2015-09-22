@@ -10,7 +10,7 @@ function J = s2let_jmax(L, B)
 %	B is the wavelet parameter.
 %
 % S2LET package to perform Wavelets transform on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 J = s2let_jmax_mex(L, B);

@@ -11,7 +11,7 @@ function [fQ, fU, nside]= s2let_hpx_read_real_spin_maps(file)
 % nside its resolution.
 %
 % S2LET package to perform Wavelets transform on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 

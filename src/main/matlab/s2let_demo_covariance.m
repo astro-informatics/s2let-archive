@@ -14,7 +14,7 @@
 %          Jason McEwen (www.jasonmcewen.org)
 
 % S2LET package to perform Wavelet transforms on the sphere.
-% Copyright (C) 2012-2014 Boris Leistedt and Jason McEwen
+% Copyright (C) 2012-2015-2014 Boris Leistedt and Jason McEwen
 % See LICENSE.txt for license details
 
 clear all;

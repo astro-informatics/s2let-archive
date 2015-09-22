@@ -12,7 +12,7 @@ function s2let_plot_axisym_tiling(B, L, J_min)
 % J_min the first wavelet to be used.
 %
 % S2LET package to perform Wavelet transform on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 [kappa kappa0] = s2let_transform_axisym_tiling(B, L, J_min);

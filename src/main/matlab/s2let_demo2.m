@@ -2,7 +2,7 @@
 % Compute and plot the harmonic tiling and the wavelet kernels.
 %
 % S2LET package to perform Wavelets on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 B = 3;

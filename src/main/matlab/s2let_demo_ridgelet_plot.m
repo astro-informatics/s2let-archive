@@ -3,7 +3,7 @@
 % Compute and plot the ridgelet wavelet and scaling functions.
 %
 % S2LET package to perform Wavelets on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 % close all;

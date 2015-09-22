@@ -5,7 +5,7 @@
 % Plot 2 : full resolution wavelet scales
 %
 % S2LET package to perform Wavelets on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 load('EGM2008_Topography_flms_L0128');

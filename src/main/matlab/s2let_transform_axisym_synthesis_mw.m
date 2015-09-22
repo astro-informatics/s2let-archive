@@ -22,7 +22,7 @@ function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)
 %                        0 <= J_min < log_B(L) (default=0) }
 %
 % S2LET package to perform Wavelets transform on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 len = size(f_wav);

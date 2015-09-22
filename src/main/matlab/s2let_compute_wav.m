@@ -22,7 +22,7 @@ function psi_j = s2let_compute_wav(j, alpha, beta, gamma, L, varargin)
 %  'Spin'            = { Spin number; Spin >= 0 (default = 0) }
 %
 % S2LET package to perform Wavelet transform on the Sphere.
-% Copyright (C) 2012-2014  Boris Leistedt, Martin Büttner & Jason McEwen
+% Copyright (C) 2012-2015-2014  Boris Leistedt, Martin Büttner & Jason McEwen
 % See LICENSE.txt for license details
 
 % Parse arguments.

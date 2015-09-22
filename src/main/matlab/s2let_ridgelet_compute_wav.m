@@ -25,7 +25,7 @@ function [ridgelet_wav, ridgelet_scal] = ...
 %                        true         [assume f real (improves performance)] }
 %
 % S2LET package to perform Wavelet transform on the Sphere.
-% Copyright (C) 2012-2014  Boris Leistedt, Martin Büttner & Jason McEwen
+% Copyright (C) 2012-2015-2014  Boris Leistedt, Martin Büttner & Jason McEwen
 % See LICENSE.txt for license details
 
 % Parse arguments.

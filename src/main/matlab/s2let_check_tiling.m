@@ -4,7 +4,7 @@ function error_on_tiling = s2let_check_tiling(psi, phi, L, spin, J)
 % -- Spin directional wavelets on the sphere.
 %
 % S2LET package to perform Wavelets transform on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 identity = zeros(1,L);

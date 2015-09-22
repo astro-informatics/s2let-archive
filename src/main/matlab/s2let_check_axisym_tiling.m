@@ -4,7 +4,7 @@ function error_on_axisym_tiling = s2let_check_axisym_tiling(kappa, kappa0, L, J)
 % -- Axisymmetric wavelets on the sphere.
 %
 % S2LET package to perform Wavelets transform on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 identity = kappa0.^2;

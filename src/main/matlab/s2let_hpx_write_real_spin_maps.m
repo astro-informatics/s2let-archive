@@ -10,7 +10,7 @@ function s2let_hpx_write_real_spin_maps(fQ, fU, filename)
 % file the name of the output FITS file.
 %
 % S2LET package to perform Wavelets transform on the Sphere.
-% Copyright (C) 2012  Boris Leistedt & Jason McEwen
+% Copyright (C) 2012-2015  Boris Leistedt & Jason McEwen
 % See LICENSE.txt for license details
 
 sz = size(fQ);
