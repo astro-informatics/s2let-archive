@@ -24,14 +24,14 @@
 <div class="box"><strong>s2let_hpx_rite_real_map</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function s2let_hpx_rite_real_map(f, file) </strong></div>
+<div class="box"><strong>function s2let_hpx_write_real_map(f, file) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> s2let_hpx_rite_real_map 
  Write a real Healpix map to a FITS file
  Default usage :
 
-   s2let_hpx_rite_real_map(f, file)
+   s2let_hpx_write_real_map(f, file)
 
  f the Healpix map to be written,
  file the name of the output FITS file.
@@ -53,13 +53,13 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s2let_hpx_rite_real_map(f, file)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s2let_hpx_write_real_map(f, file)</a>
 0002 
 0003 <span class="comment">% s2let_hpx_rite_real_map</span>
 0004 <span class="comment">% Write a real Healpix map to a FITS file</span>
 0005 <span class="comment">% Default usage :</span>
 0006 <span class="comment">%</span>
-0007 <span class="comment">%   s2let_hpx_rite_real_map(f, file)</span>
+0007 <span class="comment">%   s2let_hpx_write_real_map(f, file)</span>
 0008 <span class="comment">%</span>
 0009 <span class="comment">% f the Healpix map to be written,</span>
 0010 <span class="comment">% file the name of the output FITS file.</span>
@@ -75,6 +75,6 @@ This function is called by:
 0020 <a href="fitswrite.html" class="code" title="function fitswrite(data, filename, parname, parval)">fitswrite</a>(f, file, <span class="string">'NSIDE'</span>, nside);
 0021 
 0022 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Thu 29-Aug-2013 17:48:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Tue 22-Sep-2015 14:38:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

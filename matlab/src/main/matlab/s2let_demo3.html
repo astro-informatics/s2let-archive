@@ -39,7 +39,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_axisym_hpx_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_hpx_analysis(f, varargin)">s2let_axisym_hpx_analysis</a>	s2let_axisym_hpx_analysis</li><li><a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>	s2let_axisym_synthesis</li><li><a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_hpx_plot_mollweide.html" class="code" title="function s2let_hpx_plot_mollweide(f)">s2let_hpx_plot_mollweide</a>	s2let_hpx_plot_mollweide</li><li><a href="s2let_hpx_read_real_map.html" class="code" title="function [healpixmap, nside]= s2let_hpx_read_real_map(file)">s2let_hpx_read_real_map</a>	s2let_hpx_read_real_map</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li></ul>
+<li><a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>	s2let_axisym_synthesis</li><li><a href="s2let_hpx_map2alm.html" class="code" title="function flm = s2let_hpx_map2alm(f, varargin)">s2let_hpx_map2alm</a>	s2let_hpx_axisym_analysis</li><li><a href="s2let_hpx_plot_mollweide.html" class="code" title="function s2let_hpx_plot_mollweide(f)">s2let_hpx_plot_mollweide</a>	s2let_hpx_plot_mollweide</li><li><a href="s2let_hpx_read_real_map.html" class="code" title="function [healpixmap, nside]= s2let_hpx_read_real_map(file)">s2let_hpx_read_real_map</a>	s2let_hpx_read_real_map</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li><li><a href="s2let_transform_axisym_analysis_hpx.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_hpx(f, varargin)">s2let_transform_axisym_analysis_hpx</a>	s2let_transform_axisym_analysis_hpx</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -71,7 +71,7 @@ This function is called by:
 0021 f = <a href="s2let_hpx_alm2map.html" class="code" title="function f = s2let_hpx_alm2map(flm, nside, varargin)">s2let_hpx_alm2map</a>(flm, nside_recon, <span class="string">'L'</span>, L);
 0022 
 0023 <span class="comment">% Perform decomposition</span>
-0024 [f_wav, f_scal] = <a href="s2let_axisym_hpx_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_hpx_analysis(f, varargin)">s2let_axisym_hpx_analysis</a>(f,<span class="string">'B'</span>,B,<span class="string">'L'</span>,L,<span class="string">'J_min'</span>,J_min);
+0024 [f_wav, f_scal] = <a href="s2let_transform_axisym_analysis_hpx.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_hpx(f, varargin)">s2let_transform_axisym_analysis_hpx</a>(f,<span class="string">'B'</span>,B,<span class="string">'L'</span>,L,<span class="string">'J_min'</span>,J_min);
 0025 
 0026 <span class="comment">% Plot</span>
 0027 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
@@ -97,6 +97,6 @@ This function is called by:
 0047    campos([0 0 -1]); camup([0 1 0]); zoom(zoomfactor)
 0048    title([<span class="string">'Wavelet scale : '</span>,int2str(j)-J_min+1])
 0049 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Thu 29-Aug-2013 17:48:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Tue 22-Sep-2015 14:38:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

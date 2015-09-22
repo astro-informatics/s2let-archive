@@ -29,7 +29,7 @@
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> s2let_fulltest
  Run all exactness tests for the MW sampling,
- all wavelet transforms must reconstruct the input maps 
+ all wavelet transforms must reconstruct the input maps
  at floating-point precision. Various parameters are tested.
 
  S2LET package to perform Wavelets on the Sphere.
@@ -40,7 +40,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>	s2let_axisym_mw_analysis</li><li><a href="s2let_axisym_mw_synthesis.html" class="code" title="function f = s2let_axisym_mw_synthesis(f_wav, f_scal, varargin)">s2let_axisym_mw_synthesis</a>	s2let_axisym_mw_synthesis</li><li><a href="s2let_axisym_tiling.html" class="code" title="function [kappa kappa0] = s2let_axisym_tiling(B, L, J_min)">s2let_axisym_tiling</a>	s2let_axisym_tiling - Compute tiling in harmonic space.</li><li><a href="s2let_check_axisym_tiling.html" class="code" title="function error_on_axisym_tiling = s2let_check_axisym_tiling(kappa, kappa0, L, J)">s2let_check_axisym_tiling</a>	s2let_check_axisym_tilling - Checks exactness of the tilling.</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li></ul>
+<li><a href="s2let_check_axisym_tiling.html" class="code" title="function error_on_axisym_tiling = s2let_check_axisym_tiling(kappa, kappa0, L, J)">s2let_check_axisym_tiling</a>	s2let_check_axisym_tiling - Checks exactness of the tiling.</li><li><a href="s2let_check_tiling.html" class="code" title="function error_on_tiling = s2let_check_tiling(psi, phi, L, spin, J)">s2let_check_tiling</a>	s2let_check_axisym_tiling - Checks exactness of the tiling.</li><li><a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>	s2let_jmax</li><li><a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>	s2let_transform_analysis_mw</li><li><a href="s2let_transform_axisym_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)">s2let_transform_axisym_analysis_mw</a>	s2let_transform_axisym_analysis_mw</li><li><a href="s2let_transform_axisym_synthesis_mw.html" class="code" title="function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_axisym_synthesis_mw</a>	s2let_transform_axisym_synthesis_mw</li><li><a href="s2let_transform_axisym_tiling.html" class="code" title="function [kappa kappa0] = s2let_axisym_tiling(B, L, J_min)">s2let_transform_axisym_tiling</a>	s2let_axisym_tiling - Compute tiling in harmonic space.</li><li><a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>	s2let_transform_synthesis_mw</li><li><a href="s2let_wavelet_tiling.html" class="code" title="function [psi_lm phi_l] = s2let_wavelet_tiling(B, L, N, Spin, J_min, varargin)">s2let_wavelet_tiling</a>	s2let_wavelet_tiling - Compute tiling in harmonic space.</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -62,76 +62,173 @@ This function is called by:
 0011 close all;
 0012 
 0013 <span class="comment">% Main parameters</span>
-0014 L = 64;
-0015 B = 3;
-0016 J_min = 1;
-0017 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
-0018 
-0019 disp(<span class="string">'Checks tilling of harmonic space for axysimmetric wavelets'</span>)
-0020 [kappa kappa0] = <a href="s2let_axisym_tiling.html" class="code" title="function [kappa kappa0] = s2let_axisym_tiling(B, L, J_min)">s2let_axisym_tiling</a>(B, L, J_min);
-0021 error_on_axisym_tilling = <a href="s2let_check_axisym_tiling.html" class="code" title="function error_on_axisym_tiling = s2let_check_axisym_tiling(kappa, kappa0, L, J)">s2let_check_axisym_tiling</a>(kappa, kappa0, L, J)
-0022 
-0023 disp(<span class="string">'Generates band-limited function'</span>)
-0024 flm = zeros(L^2,1); 
-0025 flm = rand(size(flm)) + sqrt(-1)*rand(size(flm));
-0026 flm = 2.*(flm - (1+sqrt(-1))./2);
-0027 disp(<span class="string">'Construct the corresponding signal on the sphere'</span>)
-0028 f = ssht_inverse(flm, L, <span class="string">'Method'</span>, <span class="string">'MW'</span>);
-0029 
-0030 disp(<span class="string">'Perform axisym wavelet transform with default parameters'</span>)
-0031 [f_wav, f_scal] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f);
-0032 f_rec = <a href="s2let_axisym_mw_synthesis.html" class="code" title="function f = s2let_axisym_mw_synthesis(f_wav, f_scal, varargin)">s2let_axisym_mw_synthesis</a>(f_wav, f_scal);
-0033 default = max(max(abs(f-f_rec)))
-0034 
-0035 disp(<span class="string">'Perform axisym wavelet transform with multiresolution algorithm'</span>)
-0036 [f_wav, f_scal] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f, <span class="string">'downsample'</span>, true);
-0037 f_rec = <a href="s2let_axisym_mw_synthesis.html" class="code" title="function f = s2let_axisym_mw_synthesis(f_wav, f_scal, varargin)">s2let_axisym_mw_synthesis</a>(f_wav, f_scal, <span class="string">'downsample'</span>, true);
-0038 default_multires = max(max(abs(f-f_rec)))
-0039 
-0040 disp(<span class="string">'Perform axisym wavelet transform at full resolution'</span>)
-0041 [f_wav, f_scal] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f, <span class="string">'downsample'</span>, false);
-0042 f_rec = <a href="s2let_axisym_mw_synthesis.html" class="code" title="function f = s2let_axisym_mw_synthesis(f_wav, f_scal, varargin)">s2let_axisym_mw_synthesis</a>(f_wav, f_scal, <span class="string">'downsample'</span>, false);
-0043 default_fullres = max(max(abs(f-f_rec)))
-0044 
-0045 disp(<span class="string">'Perform axisym wavelet transform with custom parameters'</span>)
-0046 [f_wav, f_scal] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
-0047 f_rec = <a href="s2let_axisym_mw_synthesis.html" class="code" title="function f = s2let_axisym_mw_synthesis(f_wav, f_scal, varargin)">s2let_axisym_mw_synthesis</a>(f_wav, f_scal, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
-0048 custom = max(max(abs(f-f_rec)))
-0049 
-0050 disp(<span class="string">'Constraint on flms to generate real signal'</span>)
-0051 <span class="keyword">for</span> el = 0:L-1
-0052    ind = el*el + el + 1;
-0053    flm(ind,1) = real(flm(ind,1));
-0054    <span class="keyword">for</span> m = 1:el
-0055       ind_pm = el*el + el + m + 1;
-0056       ind_nm = el*el + el - m + 1;
-0057       flm(ind_nm,1) = (-1)^m * conj(flm(ind_pm,1));
-0058    <span class="keyword">end</span>  
-0059 <span class="keyword">end</span>
-0060 disp(<span class="string">'Construct the corresponding real signal on the sphere'</span>)
-0061 f_real = ssht_inverse(flm, L, <span class="string">'Method'</span>, <span class="string">'MW'</span>, <span class="string">'Reality'</span>, true);
+0014 L = 32;
+0015 B = 4;
+0016 N = 4;
+0017 Spin = 0;
+0018 J_min = 1;
+0019 J = <a href="s2let_jmax.html" class="code" title="function J = s2let_jmax(L, B)">s2let_jmax</a>(L, B);
+0020 
+0021 disp(<span class="string">'Checks tiling of harmonic space for axysimmetric wavelets'</span>)
+0022 [kappa kappa0] = <a href="s2let_transform_axisym_tiling.html" class="code" title="function [kappa kappa0] = s2let_axisym_tiling(B, L, J_min)">s2let_transform_axisym_tiling</a>(B, L, J_min);
+0023 error_on_axisym_tiling = <a href="s2let_check_axisym_tiling.html" class="code" title="function error_on_axisym_tiling = s2let_check_axisym_tiling(kappa, kappa0, L, J)">s2let_check_axisym_tiling</a>(kappa, kappa0, L, J)
+0024 
+0025 disp(<span class="string">'Checks tiling of harmonic space for directional wavelets'</span>)
+0026 [psi phi] = <a href="s2let_wavelet_tiling.html" class="code" title="function [psi_lm phi_l] = s2let_wavelet_tiling(B, L, N, Spin, J_min, varargin)">s2let_wavelet_tiling</a>(B, L, N, Spin, J_min);
+0027 error_on_axisym_tiling = <a href="s2let_check_tiling.html" class="code" title="function error_on_tiling = s2let_check_tiling(psi, phi, L, spin, J)">s2let_check_tiling</a>(psi, phi, L, Spin, J)
+0028 
+0029 disp(<span class="string">'Generates band-limited function'</span>)
+0030 flm = zeros(L^2,1);
+0031 flm = rand(size(flm)) + sqrt(-1)*rand(size(flm));
+0032 flm = 2.*(flm - (1+sqrt(-1))./2);
+0033 disp(<span class="string">'Construct the corresponding signal on the sphere'</span>)
+0034 f = ssht_inverse(flm, L, <span class="string">'Method'</span>, <span class="string">'MW'</span>);
+0035 disp(<span class="string">'Construct the corresponding spin signal on the sphere'</span>)
+0036 f_s = ssht_inverse(flm, L, <span class="string">'Method'</span>, <span class="string">'MW'</span>, <span class="string">'Spin'</span>, Spin);
+0037 
+0038 <span class="comment">% disp('Perform scalar directional harmonic-to-wavelet transform with default parameters')</span>
+0039 <span class="comment">% [f_wav, f_scal] = s2let_transform_analysis_lm2wav(flm, 'N', N, 'Upsample', true);</span>
+0040 <span class="comment">% flm_rec = s2let_transform_synthesis_lm2wav(f_wav, f_scal, 'N', N, 'Upsample', true);</span>
+0041 <span class="comment">% default = max(abs(flm-flm_rec))</span>
+0042 
+0043 <span class="comment">% disp('Perform spin directional harmonic-to-wavelet transform with default parameters')</span>
+0044 <span class="comment">% [f_wav, f_scal] = s2let_transform_analysis_lm2wav(flm, 'N', N, 'Spin', Spin, 'Upsample', true);</span>
+0045 <span class="comment">% flm_rec = s2let_transform_synthesis_lm2wav(f_wav, f_scal, 'N', N, 'Spin', Spin, 'Upsample', true);</span>
+0046 <span class="comment">% default = max(abs(flm-flm_rec))</span>
+0047 
+0048 <span class="comment">% disp('Perform spin directional harmonic-to-wavelet transform with custom parameters')</span>
+0049 <span class="comment">% [f_wav, f_scal] = s2let_transform_analysis_lm2wav(flm,  'B', B, 'L', L, 'J_min', J_min, 'N', N, 'Spin', Spin, 'Upsample', false);</span>
+0050 <span class="comment">% flm_rec = s2let_transform_synthesis_lm2wav(f_wav, f_scal,  'B', B, 'L', L, 'J_min', J_min, 'N', N, 'Spin', Spin, 'Upsample', false);</span>
+0051 <span class="comment">% default = max(abs(flm-flm_rec))</span>
+0052 
+0053 disp(<span class="string">'Perform scalar directional wavelet transform with default parameters'</span>)
+0054 [f_wav, f_scal] = <a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>(f, <span class="string">'N'</span>, N, <span class="string">'Upsample'</span>, true);
+0055 f_rec = <a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>(f_wav, f_scal, <span class="string">'N'</span>, N, <span class="string">'Upsample'</span>, true);
+0056 default = max(max(abs(f-f_rec)))
+0057 
+0058 disp(<span class="string">'Perform spin directional wavelet transform with default parameters'</span>)
+0059 [f_wav, f_scal] = <a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>(f_s, <span class="string">'N'</span>, N, <span class="string">'Spin'</span>, Spin, <span class="string">'Upsample'</span>, true);
+0060 f_rec = <a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>(f_wav, f_scal, <span class="string">'N'</span>, N, <span class="string">'Spin'</span>, Spin, <span class="string">'Upsample'</span>, true);
+0061 default = max(max(abs(f_s-f_rec)))
 0062 
-0063 
-0064 disp(<span class="string">'Perform real axisym wavelet transform with default parameters'</span>)
-0065 [f_wav_real, f_scal_real] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f_real, <span class="string">'Reality'</span>, true);
-0066 f_real_rec = <a href="s2let_axisym_mw_synthesis.html" class="code" title="function f = s2let_axisym_mw_synthesis(f_wav, f_scal, varargin)">s2let_axisym_mw_synthesis</a>(f_wav_real, f_scal_real, <span class="string">'Reality'</span>, true);
-0067 default = max(max(abs(f_real-f_real_rec)))
-0068 
-0069 disp(<span class="string">'Perform real axisym wavelet transform with multiresolution algorithm'</span>)
-0070 [f_wav_real, f_scal_real] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f_real, <span class="string">'downsample'</span>, true, <span class="string">'Reality'</span>, true);
-0071 f_real_rec = <a href="s2let_axisym_mw_synthesis.html" class="code" title="function f = s2let_axisym_mw_synthesis(f_wav, f_scal, varargin)">s2let_axisym_mw_synthesis</a>(f_wav_real, f_scal_real, <span class="string">'downsample'</span>, true, <span class="string">'Reality'</span>, true);
-0072 default_multires = max(max(abs(f_real-f_real_rec)))
-0073 
-0074 disp(<span class="string">'Perform real axisym wavelet transform at full resolution'</span>)
-0075 [f_wav_real, f_scal_real] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f_real, <span class="string">'downsample'</span>, false, <span class="string">'Reality'</span>, true);
-0076 f_real_rec = <a href="s2let_axisym_mw_synthesis.html" class="code" title="function f = s2let_axisym_mw_synthesis(f_wav, f_scal, varargin)">s2let_axisym_mw_synthesis</a>(f_wav_real, f_scal_real, <span class="string">'downsample'</span>, false, <span class="string">'Reality'</span>, true);
-0077 default_fullres = max(max(abs(f_real-f_real_rec)))
-0078 
-0079 disp(<span class="string">'Perform real axisym wavelet transform with custom parameters'</span>)
-0080 [f_wav_real, f_scal_real] = <a href="s2let_axisym_mw_analysis.html" class="code" title="function [f_wav, f_scal] = s2let_axisym_mw_analysis(f, varargin)">s2let_axisym_mw_analysis</a>(f_real, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true);
-0081 f_real_rec = <a href="s2let_axisym_mw_synthesis.html" class="code" title="function f = s2let_axisym_mw_synthesis(f_wav, f_scal, varargin)">s2let_axisym_mw_synthesis</a>(f_wav_real, f_scal_real, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true);
-0082 custom = max(max(abs(f_real-f_real_rec)))
-0083</pre></div>
-<hr><address>Generated on Thu 29-Aug-2013 17:48:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0063 disp(<span class="string">'Perform spin directional wavelet transform with custom parameters'</span>)
+0064 [f_wav, f_scal] = <a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>(f_s,  <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min, <span class="string">'N'</span>, N, <span class="string">'Spin'</span>, Spin, <span class="string">'Upsample'</span>, false);
+0065 f_rec = <a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>(f_wav, f_scal,  <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min, <span class="string">'N'</span>, N, <span class="string">'Spin'</span>, Spin, <span class="string">'Upsample'</span>, false);
+0066 default = max(max(abs(f_s-f_rec)))
+0067 
+0068 disp(<span class="string">'Perform multiresolution scalar directional wavelet transform with default parameters'</span>)
+0069 [f_wav, f_scal] = <a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>(f, <span class="string">'N'</span>, N);
+0070 f_rec = <a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>(f_wav, f_scal, <span class="string">'N'</span>, N);
+0071 default = max(max(abs(f-f_rec)))
+0072 
+0073 disp(<span class="string">'Perform multiresolution spin directional wavelet transform with default parameters'</span>)
+0074 [f_wav, f_scal] = <a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>(f_s, <span class="string">'N'</span>, N, <span class="string">'Spin'</span>, Spin);
+0075 f_rec = <a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>(f_wav, f_scal, <span class="string">'N'</span>, N, <span class="string">'Spin'</span>, Spin);
+0076 default = max(max(abs(f_s-f_rec)))
+0077 
+0078 disp(<span class="string">'Perform multiresolution spin directional wavelet transform with custom parameters'</span>)
+0079 [f_wav, f_scal] = <a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>(f_s,  <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min, <span class="string">'N'</span>, N, <span class="string">'Spin'</span>, Spin, <span class="string">'Upsample'</span>, true);
+0080 f_rec = <a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>(f_wav, f_scal,  <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min, <span class="string">'N'</span>, N, <span class="string">'Spin'</span>, Spin, <span class="string">'Upsample'</span>, true);
+0081 default = max(max(abs(f_s-f_rec)))
+0082 
+0083 
+0084 disp(<span class="string">'Constraint on flms to generate real signal'</span>)
+0085 <span class="keyword">for</span> el = 0:L-1
+0086    ind = el*el + el + 1;
+0087    flm(ind,1) = real(flm(ind,1));
+0088    <span class="keyword">for</span> m = 1:el
+0089       ind_pm = el*el + el + m + 1;
+0090       ind_nm = el*el + el - m + 1;
+0091       flm(ind_nm,1) = (-1)^m * conj(flm(ind_pm,1));
+0092    <span class="keyword">end</span>
+0093 <span class="keyword">end</span>
+0094 disp(<span class="string">'Construct the corresponding real signal on the sphere'</span>)
+0095 f_real = ssht_inverse(flm, L, <span class="string">'Method'</span>, <span class="string">'MW'</span>, <span class="string">'Reality'</span>, true);
+0096 
+0097 
+0098 disp(<span class="string">'Perform multiresolution real directional wavelet transform with default parameters'</span>)
+0099 [f_wav, f_scal] = <a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>(f_real, <span class="string">'N'</span>, N, <span class="string">'Reality'</span>, true);
+0100 f_rec = <a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>(f_wav, f_scal, <span class="string">'N'</span>, N, <span class="string">'Reality'</span>, true);
+0101 default = max(max(abs(f_real-f_rec)))
+0102 
+0103 
+0104 disp(<span class="string">'Perform full resolution real directional wavelet transform with default parameters'</span>)
+0105 [f_wav, f_scal] = <a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>(f_real, <span class="string">'N'</span>, N, <span class="string">'Reality'</span>, true, <span class="string">'Upsample'</span>, true);
+0106 f_rec = <a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>(f_wav, f_scal, <span class="string">'N'</span>, N, <span class="string">'Reality'</span>, true, <span class="string">'Upsample'</span>, true);
+0107 default = max(max(abs(f_real-f_rec)))
+0108 
+0109 stop
+0110 
+0111 
+0112 disp(<span class="string">'Generates band-limited function'</span>)
+0113 flm = zeros(L^2,1);
+0114 flm = rand(size(flm)) + sqrt(-1)*rand(size(flm));
+0115 flm = 2.*(flm - (1+sqrt(-1))./2);
+0116 disp(<span class="string">'Construct the corresponding signal on the sphere'</span>)
+0117 f = ssht_inverse(flm, L, <span class="string">'Method'</span>, <span class="string">'MW'</span>);
+0118 disp(<span class="string">'Construct the corresponding spin signal on the sphere'</span>)
+0119 f_s = ssht_inverse(flm, L, <span class="string">'Method'</span>, <span class="string">'MW'</span>, <span class="string">'Spin'</span>, Spin);
+0120 
+0121 disp(<span class="string">'Perform axisym wavelet transform with default parameters'</span>)
+0122 [f_wav, f_scal] = <a href="s2let_transform_axisym_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)">s2let_transform_axisym_analysis_mw</a>(f);
+0123 f_rec = <a href="s2let_transform_axisym_synthesis_mw.html" class="code" title="function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_axisym_synthesis_mw</a>(f_wav, f_scal);
+0124 default = max(max(abs(f-f_rec)))
+0125 
+0126 disp(<span class="string">'Perform axisym wavelet transform with multiresolution algorithm'</span>)
+0127 [f_wav, f_scal] = <a href="s2let_transform_axisym_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)">s2let_transform_axisym_analysis_mw</a>(f, <span class="string">'Upsample'</span>, false);
+0128 f_rec = <a href="s2let_transform_axisym_synthesis_mw.html" class="code" title="function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_axisym_synthesis_mw</a>(f_wav, f_scal, <span class="string">'Upsample'</span>, false);
+0129 default_multires = max(max(abs(f-f_rec)))
+0130 
+0131 disp(<span class="string">'Perform axisym wavelet transform at full resolution'</span>)
+0132 [f_wav, f_scal] = <a href="s2let_transform_axisym_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)">s2let_transform_axisym_analysis_mw</a>(f, <span class="string">'Upsample'</span>, true);
+0133 f_rec = <a href="s2let_transform_axisym_synthesis_mw.html" class="code" title="function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_axisym_synthesis_mw</a>(f_wav, f_scal, <span class="string">'Upsample'</span>, true);
+0134 default_fullres = max(max(abs(f-f_rec)))
+0135 
+0136 disp(<span class="string">'Perform axisym wavelet transform with custom parameters'</span>)
+0137 [f_wav, f_scal] = <a href="s2let_transform_axisym_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)">s2let_transform_axisym_analysis_mw</a>(f, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
+0138 f_rec = <a href="s2let_transform_axisym_synthesis_mw.html" class="code" title="function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_axisym_synthesis_mw</a>(f_wav, f_scal, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min);
+0139 custom = max(max(abs(f-f_rec)))
+0140 
+0141 disp(<span class="string">'Constraint on flms to generate real signal'</span>)
+0142 <span class="keyword">for</span> el = 0:L-1
+0143    ind = el*el + el + 1;
+0144    flm(ind,1) = real(flm(ind,1));
+0145    <span class="keyword">for</span> m = 1:el
+0146       ind_pm = el*el + el + m + 1;
+0147       ind_nm = el*el + el - m + 1;
+0148       flm(ind_nm,1) = (-1)^m * conj(flm(ind_pm,1));
+0149    <span class="keyword">end</span>
+0150 <span class="keyword">end</span>
+0151 disp(<span class="string">'Construct the corresponding real signal on the sphere'</span>)
+0152 f_real = ssht_inverse(flm, L, <span class="string">'Method'</span>, <span class="string">'MW'</span>, <span class="string">'Reality'</span>, true);
+0153 
+0154 
+0155 disp(<span class="string">'Perform multiresolution real directional wavelet transform with default parameters'</span>)
+0156 [f_wav, f_scal] = <a href="s2let_transform_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_analysis_mw(f, varargin)">s2let_transform_analysis_mw</a>(f_real, <span class="string">'N'</span>, N, <span class="string">'Reality'</span>, true);
+0157 f_rec = <a href="s2let_transform_synthesis_mw.html" class="code" title="function f = s2let_transform_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_synthesis_mw</a>(f_wav, f_scal, <span class="string">'N'</span>, N, <span class="string">'Reality'</span>, true);
+0158 default = max(max(abs(f_real-f_rec)))
+0159 
+0160 
+0161 disp(<span class="string">'Perform real axisym wavelet transform with default parameters'</span>)
+0162 [f_wav_real, f_scal_real] = <a href="s2let_transform_axisym_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)">s2let_transform_axisym_analysis_mw</a>(f_real, <span class="string">'Reality'</span>, true);
+0163 f_real_rec = <a href="s2let_transform_axisym_synthesis_mw.html" class="code" title="function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_axisym_synthesis_mw</a>(f_wav_real, f_scal_real, <span class="string">'Reality'</span>, true);
+0164 default = max(max(abs(f_real-f_real_rec)))
+0165 
+0166 disp(<span class="string">'Perform real axisym wavelet transform with multiresolution algorithm'</span>)
+0167 [f_wav_real, f_scal_real] = <a href="s2let_transform_axisym_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)">s2let_transform_axisym_analysis_mw</a>(f_real, <span class="string">'Upsample'</span>, false, <span class="string">'Reality'</span>, true);
+0168 f_real_rec = <a href="s2let_transform_axisym_synthesis_mw.html" class="code" title="function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_axisym_synthesis_mw</a>(f_wav_real, f_scal_real, <span class="string">'Upsample'</span>, false, <span class="string">'Reality'</span>, true);
+0169 default_multires = max(max(abs(f_real-f_real_rec)))
+0170 
+0171 disp(<span class="string">'Perform real axisym wavelet transform at full resolution'</span>)
+0172 [f_wav_real, f_scal_real] = <a href="s2let_transform_axisym_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)">s2let_transform_axisym_analysis_mw</a>(f_real, <span class="string">'Upsample'</span>, true, <span class="string">'Reality'</span>, true);
+0173 f_real_rec = <a href="s2let_transform_axisym_synthesis_mw.html" class="code" title="function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_axisym_synthesis_mw</a>(f_wav_real, f_scal_real, <span class="string">'Upsample'</span>, true, <span class="string">'Reality'</span>, true);
+0174 default_fullres = max(max(abs(f_real-f_real_rec)))
+0175 
+0176 disp(<span class="string">'Perform real axisym wavelet transform with custom parameters'</span>)
+0177 [f_wav_real, f_scal_real] = <a href="s2let_transform_axisym_analysis_mw.html" class="code" title="function [f_wav, f_scal] = s2let_transform_axisym_analysis_mw(f, varargin)">s2let_transform_axisym_analysis_mw</a>(f_real, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true);
+0178 f_real_rec = <a href="s2let_transform_axisym_synthesis_mw.html" class="code" title="function f = s2let_transform_axisym_synthesis_mw(f_wav, f_scal, varargin)">s2let_transform_axisym_synthesis_mw</a>(f_wav_real, f_scal_real, <span class="string">'B'</span>, B, <span class="string">'L'</span>, L, <span class="string">'J_min'</span>, J_min, <span class="string">'Reality'</span>, true);
+0179 custom = max(max(abs(f_real-f_real_rec)))
+0180</pre></div>
+<hr><address>Generated on Tue 22-Sep-2015 14:38:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

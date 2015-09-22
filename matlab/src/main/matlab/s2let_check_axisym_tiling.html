@@ -4,7 +4,7 @@
 <head>
   <title>Description of s2let_check_axisym_tiling</title>
   <meta name="keywords" content="s2let_check_axisym_tiling">
-  <meta name="description" content="s2let_check_axisym_tilling - Checks exactness of the tilling.">
+  <meta name="description" content="s2let_check_axisym_tiling - Checks exactness of the tiling.">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,13 +21,13 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>s2let_check_axisym_tilling - Checks exactness of the tilling.</strong></div>
+<div class="box"><strong>s2let_check_axisym_tiling - Checks exactness of the tiling.</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>function error_on_axisym_tiling = s2let_check_axisym_tiling(kappa, kappa0, L, J) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> s2let_check_axisym_tilling - Checks exactness of the tilling.
+<div class="fragment"><pre class="comment"> s2let_check_axisym_tiling - Checks exactness of the tiling.
  -- Axisymmetric wavelets on the sphere.
 
  S2LET package to perform Wavelets transform on the Sphere.
@@ -49,7 +49,7 @@ This function is called by:
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function error_on_axisym_tiling = s2let_check_axisym_tiling(kappa, kappa0, L, J)</a>
 0002 
-0003 <span class="comment">% s2let_check_axisym_tilling - Checks exactness of the tilling.</span>
+0003 <span class="comment">% s2let_check_axisym_tiling - Checks exactness of the tiling.</span>
 0004 <span class="comment">% -- Axisymmetric wavelets on the sphere.</span>
 0005 <span class="comment">%</span>
 0006 <span class="comment">% S2LET package to perform Wavelets transform on the Sphere.</span>
@@ -63,10 +63,10 @@ This function is called by:
 0014 
 0015 error_on_axisym_tiling = 0;
 0016 <span class="keyword">for</span> l=1:L
-0017     error_on_axisym_tiling = error_on_axisym_tiling + identity(1,l) - 1.0; 
+0017     error_on_axisym_tiling = error_on_axisym_tiling + identity(1,l) - 1.0;
 0018 <span class="keyword">end</span>
 0019 
 0020 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Thu 29-Aug-2013 17:48:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Tue 22-Sep-2015 14:38:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

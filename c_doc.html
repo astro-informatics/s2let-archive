@@ -31,10 +31,10 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <table border="0" cellspacing="0">
     <tr>
       <td width=200 align="right" valign="top">
-	<img src="images/wav.png" width="140" height="140" border=0> 
+	<img src="images/newlogo.png" width="140" height="140" border=0> 
       </td>
       <td width=500 align="left" valign="center">
-	<h1 class="title">S2LET<span class="fade">1.1b1</span></h1>
+	<h1 class="title">S2LET<span class="fade"></span></h1>
 	<p id="slogantitle">Fast wavelets on the sphere</p>
       </td>			
     </tr>
@@ -53,7 +53,6 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <li><a href="scratch_install.html">Dependencies</a></li>
 <li><a href="c_doc.html">C library</a></li>
 <li><a href="idl_doc.html">IDL interfaces</a></li>
-<li><a href="java_doc.html">Java interfaces</a></li>
 <li><a href="matlab_doc.html">Matlab interfaces</a></li>
 </ul>
 
@@ -62,7 +61,6 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <ul>
 <li><a href="c/files.html">C documentation</a></li>
 <li><a href="idl/index.html">IDL documentation</a></li>
-<li><a href="java/index-all.html">Java documentation</a></li>
 <li><a href="matlab/index.html">Matlab documentation</a></li>
 </ul>
 
@@ -70,6 +68,11 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <h2>Brief release notes</h2>
 
 <ul>
+<li><strong>Version 2.0b1</strong><br />
+  <ul>
+  <li>Added support for spin directional wavelets.</li>
+  </ul>
+</li>
 <li><strong>Version 1.1b1</strong><br />
   <ul>
   <li>Added support for B-spline wavelets.</li>
@@ -94,12 +97,12 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <!--------------------------------------------------------------->  
 <a name="installation"><h2>Installing and using the C library</h2></a>
 
-  <p> The core functionalities of <strong>S2LET</strong> are written in C and self-documented. The C library only requires <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a
+  <p> The core functionalities of <strong>S2LET</strong> are written in C and self-documented. The C library  requires <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a href="http://www.sothree.org">SO3</a>, and <a
  href="http://www.fftw.org/">FFTW</a>. The extra IO and Healpix features require the <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> libraries. To support <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a>, <strong>S2LET</strong> uses a hybrid C/Fortran interface to the Fortran <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> library. Several examples, tests and demos are provided to demonstrate the usability of the C library.</p>
 
   <h4>Dependencies</h4>
 
-  <p> <strong>S2LET</strong> requires the <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a> and <a
+  <p> <strong>S2LET</strong> requires the <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a href="http://www.sothree.org">SO3</a>, and <a
  href="http://www.fftw.org/">FFTW</a> packages.  Obviously suitable C and Fortran 90 compilers will be required to build the respective
  implementations. Linking with <a
  href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> adds the FITS input-output functionalities for the MW sampling. Linking with <a
@@ -107,7 +110,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 
   <h4>Compiling</h4>
 
-  <p> Makefiles are provided to build the code. However the locations of <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a href="http://www.fftw.org/">FFTW</a> and optionally <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> must be defined in Bash/Shell to be found by the Makefile. Alternatively you may declare them explicitely in the first section of the Makefile. The compilers and their options may also be changed there. 
+  <p> Makefiles are provided to build the code. However the locations of <a href="http://www.mrao.cam.ac.uk/~jdm57/ssht/index.html">SSHT</a>, <a href="http://www.sothree.org">SO3</a>, <a href="http://www.fftw.org/">FFTW</a> and optionally <a href="http://heasarc.gsfc.nasa.gov/fitsio/">CFITSIO</a> and <a href="http://healpix.jpl.nasa.gov/">HEALPIX</a> must be defined in Bash/Shell to be found by the Makefile. Alternatively you may declare them explicitely in the first section of the Makefile. The compilers and their options may also be changed there. 
 
   <p> Once you have set the Makefile up for your system,
   <strong>S2LET</strong> may be compiled by running:
@@ -193,29 +196,30 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 
   <p> A denoising example is also provided and extensively documented. It reads an MW map containing Earth tomography data, adds a random noise, perform the wavelet transform, denoise the wavelet scales through hard thresholding, reconstruct the denoised map and write it to an output FITS file in the <it>/data</it> directory.
   <pre> >> ./bin/s2let_denoising_demo</pre>
+   <p>This demo uses directional wavelets on a scalar signal, but similar demos are provided for axisymmetric wavelets and also spin signals.</p>
 
   <p> We also provide a program to read a valid MW map, perform its wavelet decomposition and output the wavelet maps (which can be plotted in Matlab, for instance). The command, whose parameters are fully documented in the code, reads
-  <pre> >> ./bin/s2let_axisym_mw_analysis_real 
+  <pre> >> ./bin/s2let_transform_axisym_mw_analysis_real 
 		&lt;inputFile&gt;  &lt;lambda&gt;  &lt;J_0&gt;  &lt;multiResolution&gt;</pre>
   <p>To reproduce the example on the main page, use:<p>
-  <pre> >> ./bin/s2let_axisym_mw_analysis_real data/earth_tomo_mw_128.fits 3 2 1</pre></p>
+  <pre> >> ./bin/s2let_transform_axisym_mw_analysis_real data/earth_tomo_mw_128.fits 3 2 1</pre></p>
   <p> A similar program is provided to synthesise a map from the wavelet coefficents:
-  <pre> >> ./bin/s2let_axisym_mw_synthesis_real 
+  <pre> >> ./bin/s2let_transform_axisym_mw_synthesis_real 
 		&lt;outputRoot&gt;  &lt;lambda&gt;  &lt;J_0&gt;  &lt;bandLimit&gt;</pre>
   <p>will look in the same directory for the wavelet scales, requires the maximum bandlimit of the wavelets (i.e. of the output map) and will determine if multiresolution was activated. To re-synthesise the signal decomposed in the previous example, you may run
-  <pre> >> ./bin/s2let_axisym_mw_synthesis_real data/earth_tomo_mw_128 3 2 128</pre></p>
+  <pre> >> ./bin/s2let_transform_axisym_mw_synthesis_real data/earth_tomo_mw_128 3 2 128</pre></p>
 
 
   <p> We provide the same routine for a Healpix map, for which the multiresolution flag has to be replaced by the band-limit of the analysis. The output maps may be plotted in Matlab or IDL, for instance.
-  <pre> >> ./bin/s2let_axisym_hpx_analysis_real 
+  <pre> >> ./bin/s2let_transform_axisym_hpx_analysis_real 
 		&lt; inputFile&gt;  &lt;lambda&gt;  &lt;J_0&gt;  &lt;bandLimit&gt;</pre>
   <p>As an example, to decompose a Healpix CMB simulation into wavelets, run  :<p>
-  <pre> >> ./bin/s2let_axisym_hpx_analysis_real data/somecmbsimu_hpx_128.fits 3 2 128</pre></p>
+  <pre> >> ./bin/s2let_transform_axisym_hpx_analysis_real data/somecmbsimu_hpx_128.fits 3 2 128</pre></p>
   <p> A similar program is provided to synthesise a healpix map from the wavelet coefficents:
-  <pre> >> ./bin/s2let_axisym_hpx_synthesis_real 
+  <pre> >> ./bin/s2let_transform_axisym_hpx_synthesis_real 
 		&lt;outputRoot&gt;  &lt;lambda&gt;  &lt;J_0&gt;  &lt;bandLimit&gt;</pre>
   <p>will look in the same directory for the wavelet scales.To re-synthesise the signal decomposed in the previous example, you may run
-  <pre> >> ./bin/s2let_axisym_hpx_synthesis_real data/somecmbsimu_hpx_128 3 2 128</pre></p>
+  <pre> >> ./bin/s2let_transform_axisym_hpx_synthesis_real data/somecmbsimu_hpx_128 3 2 128</pre></p>
 
 
   <p>Finally, to check the version and build numbers of your version run:
@@ -235,7 +239,7 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <p>
   <a href="#header">Back to top</a><br >
   
-  <p>&copy; 2012 <a href="http://www.ixkael.com/blog">Boris Leistedt</a> & <a href="http://www.jasonmcewen.org">Jason McEwen</a> | Design by
+  <p>&copy; 2012-2015 <a href="http://www.ixkael.com/blog">Boris Leistedt</a> & <a href="http://www.jasonmcewen.org">Jason McEwen</a> | Design by
   <a href="http://andreasviklund.com/">Andreas Viklund</a> </p>
 
 
