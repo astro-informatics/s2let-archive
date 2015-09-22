@@ -1,0 +1,316 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of s2let_demo_ridgelet_evaluate</title>
+  <meta name="keywords" content="s2let_demo_ridgelet_evaluate">
+  <meta name="description" content="s2let_demo_ridgelet_evaluate">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">src</a> &gt; <a href="#">main</a> &gt; <a href="index.html">matlab</a> &gt; s2let_demo_ridgelet_evaluate.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for src/main/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>s2let_demo_ridgelet_evaluate
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>s2let_demo_ridgelet_evaluate</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> s2let_demo_ridgelet_evaluate
+ Evaluate timing and error of ridgelet transform.
+
+ S2LET package to perform Wavelets on the Sphere.
+ Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen
+ See LICENSE.txt for license details</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="s2let_ridgelet_analysis.html" class="code" title="function [f_ridge_wav, f_ridge_scal] = s2let_ridgelet_analysis(f, varargin)">s2let_ridgelet_analysis</a>	s2let_ridgelet_analysis</li><li><a href="s2let_ridgelet_synthesis.html" class="code" title="function f = s2let_ridgelet_synthesis(f_ridge_wav, f_ridge_scal, varargin)">s2let_ridgelet_synthesis</a>	s2let_ridgelet_analysis</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 <span class="comment">% s2let_demo_ridgelet_evaluate</span>
+0003 <span class="comment">% Evaluate timing and error of ridgelet transform.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% S2LET package to perform Wavelets on the Sphere.</span>
+0006 <span class="comment">% Copyright (C) 2012  Boris Leistedt &amp; Jason McEwen</span>
+0007 <span class="comment">% See LICENSE.txt for license details</span>
+0008 
+0009 clear;
+0010 
+0011 N_test = 3
+0012 
+0013 B = 2;
+0014 J_min = 0;
+0015 spin = 2;
+0016 reality = false;
+0017 sampling_method = <span class="string">'MWSS'</span>;
+0018 save_plots = false;
+0019 
+0020 Ls = [32 64] <span class="comment">% 128 256 512]</span>
+0021 
+0022 err = zeros(N_test, length(Ls));
+0023 time_analysis = zeros(N_test, length(Ls));
+0024 time_synthesis = zeros(N_test, length(Ls));
+0025 
+0026 el_ind = 0;
+0027 <span class="keyword">for</span> L = Ls
+0028    el_ind = el_ind + 1
+0029    
+0030    <span class="keyword">for</span> n = 1:N_test
+0031    
+0032       n
+0033       
+0034       <span class="comment">% Generate band-limited function in harmonic space</span>
+0035       flm = zeros(L^2,1);
+0036       flm = rand(size(flm)) + sqrt(-1)*rand(size(flm));
+0037       flm = 2.*(flm - (1+sqrt(-1))./2);
+0038       
+0039       <span class="comment">% For spin signals, set coefficients for el &lt; spin to zero.</span>
+0040       <span class="keyword">if</span> spin &gt; 0
+0041          <span class="keyword">for</span> el = 0:abs(spin)-1
+0042             <span class="keyword">for</span> m = -el:el
+0043                ind = ssht_elm2ind(el, m);
+0044                flm(ind) = 0;
+0045             <span class="keyword">end</span>
+0046          <span class="keyword">end</span>
+0047       <span class="keyword">end</span>
+0048       
+0049       <span class="comment">% Impose condition to ensure invertible</span>
+0050       <span class="comment">% (imposes antipodal symmetry for scalar signals).</span>
+0051       <span class="keyword">for</span> el = max([0 abs(spin)]):L-1         
+0052          <span class="keyword">if</span> mod(el + spin, 2) == 1
+0053             <span class="keyword">for</span> m = -el:el
+0054                ind = ssht_elm2ind(el, m);
+0055                flm(ind) = 0;
+0056             <span class="keyword">end</span>
+0057          <span class="keyword">end</span>
+0058       <span class="keyword">end</span>
+0059             
+0060       <span class="comment">% Impose antipodal symmetry for spin signals.</span>
+0061 <span class="comment">%       for el = 0:L-1</span>
+0062 <span class="comment">%          ind = el*el + el + 1;</span>
+0063 <span class="comment">%          if mod(el + spin, 2) == 1</span>
+0064 <span class="comment">%             flm(ind,1) = 0;</span>
+0065 <span class="comment">%          end</span>
+0066 <span class="comment">%          for m = 1:el</span>
+0067 <span class="comment">%             ind_pm = el*el + el + m + 1;</span>
+0068 <span class="comment">%             ind_nm = el*el + el - m + 1;</span>
+0069 <span class="comment">%             flm(ind_nm,1) = (-1).^el .* (-1)^m .* (-1)^spin * conj(flm(ind_pm,1));</span>
+0070 <span class="comment">%          end</span>
+0071 <span class="comment">%       end</span>
+0072       
+0073       <span class="comment">% Construct the corresponding signal on the sphere</span>
+0074       f = ssht_inverse(flm, L, <span class="string">'Method'</span>, sampling_method, <span class="string">'Spin'</span>, spin);                  
+0075       
+0076       tstart = tic;
+0077       [f_ridgelet_wav, f_ridgelet_scal] = <a href="s2let_ridgelet_analysis.html" class="code" title="function [f_ridge_wav, f_ridge_scal] = s2let_ridgelet_analysis(f, varargin)">s2let_ridgelet_analysis</a>(f, <span class="keyword">...</span>
+0078          <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="keyword">...</span>
+0079          <span class="string">'Upsample'</span>, true, <span class="string">'Spin'</span>, spin, <span class="string">'Reality'</span>, reality, <span class="keyword">...</span>
+0080          <span class="string">'Sampling'</span>, sampling_method);
+0081       time_analysis(n, el_ind) = toc(tstart);
+0082       
+0083       tstart = tic;
+0084       f_recov = <a href="s2let_ridgelet_synthesis.html" class="code" title="function f = s2let_ridgelet_synthesis(f_ridge_wav, f_ridge_scal, varargin)">s2let_ridgelet_synthesis</a>(f_ridgelet_wav, f_ridgelet_scal, <span class="keyword">...</span>
+0085          <span class="string">'L'</span>, L, <span class="string">'B'</span>, B, <span class="string">'J_min'</span>, J_min, <span class="keyword">...</span>
+0086          <span class="string">'Upsample'</span>, true, <span class="string">'Spin'</span>, spin, <span class="string">'Reality'</span>, reality, <span class="keyword">...</span>
+0087          <span class="string">'Sampling'</span>, sampling_method);
+0088       time_synthesis(n, el_ind) = toc(tstart);
+0089       
+0090       err(n, el_ind) = max(abs(f(:) - f_recov(:)));
+0091       
+0092    <span class="keyword">end</span>
+0093 
+0094 <span class="keyword">end</span>
+0095 
+0096 err_mean = mean(err);
+0097 err_std = std(err);
+0098 err_std_log = std(log10(err));
+0099 
+0100 time_analysis_mean = mean(time_analysis);
+0101 time_analysis_std = std(time_analysis);
+0102 
+0103 
+0104 time_synthesis_mean = mean(time_synthesis);
+0105 time_synthesis_std = std(time_synthesis);
+0106 
+0107 
+0108 time_total = time_analysis + time_synthesis;
+0109 time_total_mean = mean(time_total);
+0110 time_total_std = std(time_total);
+0111 time_total_std_log = std(log10(time_total));
+0112 
+0113 
+0114 
+0115 <span class="comment">%% Define plotting parameters.</span>
+0116 
+0117 istart = 1;
+0118 iend = length(Ls);
+0119 
+0120 line_width = 1.8;
+0121 line_width_thick = 2.5;
+0122 marker_size = 7;
+0123 marker_type = <span class="string">'o'</span>;
+0124 green_light = [0.2 0.6 0.4];<span class="comment">% x339966</span>
+0125 green_dark = [0 0.4 0.2];   <span class="comment">% x006633</span>
+0126 blue_light = [0.2 0.4 0.8]; <span class="comment">% x3366CC</span>
+0127 blue_dark = [0 0 1];        <span class="comment">% x0000FF</span>
+0128 red_light = [1 0.4 0.2];    <span class="comment">% xFF6633</span>
+0129 red_dark = [0.8 0.2 0];     <span class="comment">% xCC3300</span>
+0130 
+0131 
+0132 <span class="comment">% Plot error</span>
+0133 figure;
+0134    
+0135 plot(log2(Ls(istart:iend)), <span class="keyword">...</span>
+0136    log10(err_mean(istart:iend)), <span class="keyword">...</span>
+0137    <span class="string">'Color'</span>, green_dark, <span class="keyword">...</span>
+0138    <span class="string">'Marker'</span>, marker_type, <span class="keyword">...</span>
+0139    <span class="string">'MarkerSize'</span>, marker_size, <span class="keyword">...</span>
+0140    <span class="string">'MarkerFaceColor'</span>, green_light, <span class="keyword">...</span>
+0141    <span class="string">'MarkerEdgeColor'</span>, green_dark, <span class="keyword">...</span>
+0142    <span class="string">'LineStyle'</span>, <span class="string">'--'</span>, <span class="keyword">...</span>
+0143    <span class="string">'LineWidth'</span>, line_width);
+0144 
+0145 hold on;
+0146 
+0147 plot(log2(Ls(istart:iend)), <span class="keyword">...</span>
+0148    log10(Ls(istart:iend).^2)-15, <span class="keyword">...</span>
+0149    <span class="string">'r'</span>, <span class="keyword">...</span>
+0150    <span class="string">'LineWidth'</span>, line_width_thick);
+0151 a = axis;
+0152 set(gca,<span class="string">'XTick'</span>,a(1):1:a(2));
+0153 set(gca,<span class="string">'XTickLabel'</span>, 2.^[a(1):1:a(2)]);
+0154 set(gca,<span class="string">'YTick'</span>,floor(a(3)):1:ceil(a(4)));
+0155 set(gca,<span class="string">'YTickLabel'</span>,{10.^[floor(a(3)):ceil(a(4))]});
+0156 xlabel(<span class="string">'L'</span>);
+0157 ylabel(<span class="string">'E'</span>);
+0158 
+0159 set(gca, <span class="string">'LineWidth'</span>, 3)
+0160 set(gca, <span class="string">'FontSize'</span>, 20)
+0161 
+0162 <span class="keyword">if</span> save_plots, print(<span class="string">'-depsc2'</span>, <span class="string">'plots/ridgelet_error.eps'</span>); <span class="keyword">end</span>
+0163 
+0164 <span class="comment">% Plot error with error bars</span>
+0165 figure
+0166   
+0167 errorbar(log2(Ls(istart:iend)), <span class="keyword">...</span>
+0168    log10(err_mean(istart:iend)), <span class="keyword">...</span>
+0169    err_std_log(istart:iend), <span class="keyword">...</span>
+0170    <span class="string">'Color'</span>, green_dark, <span class="keyword">...</span>
+0171    <span class="string">'Marker'</span>, marker_type, <span class="keyword">...</span>
+0172    <span class="string">'MarkerSize'</span>, marker_size, <span class="keyword">...</span>
+0173    <span class="string">'MarkerFaceColor'</span>, green_light, <span class="keyword">...</span>
+0174    <span class="string">'MarkerEdgeColor'</span>, green_dark, <span class="keyword">...</span>
+0175    <span class="string">'LineStyle'</span>, <span class="string">'--'</span>, <span class="keyword">...</span>
+0176    <span class="string">'LineWidth'</span>, line_width);
+0177 
+0178 hold on;
+0179 
+0180 plot(log2(Ls(istart:iend)), <span class="keyword">...</span>
+0181    log10(Ls(istart:iend).^2)-15, <span class="keyword">...</span>
+0182    <span class="string">'r'</span>, <span class="keyword">...</span>
+0183    <span class="string">'LineWidth'</span>, line_width_thick);
+0184 a = axis;
+0185 set(gca,<span class="string">'XTick'</span>,a(1):1:a(2));
+0186 set(gca,<span class="string">'XTickLabel'</span>, 2.^[a(1):1:a(2)]);
+0187 set(gca,<span class="string">'YTick'</span>,floor(a(3)):1:ceil(a(4)));
+0188 set(gca,<span class="string">'YTickLabel'</span>,{10.^[floor(a(3)):ceil(a(4))]});
+0189 xlabel(<span class="string">'L'</span>);
+0190 ylabel(<span class="string">'E'</span>);
+0191 
+0192 set(gca, <span class="string">'LineWidth'</span>, 3)
+0193 set(gca, <span class="string">'FontSize'</span>, 20)
+0194 
+0195 <span class="keyword">if</span> save_plots, print(<span class="string">'-depsc2'</span>, <span class="string">'plots/ridgelet_error_errorbars.eps'</span>); <span class="keyword">end</span>
+0196 
+0197 
+0198 <span class="comment">% Plot timing</span>
+0199 figure;
+0200    
+0201 plot(log2(Ls(istart:iend)), <span class="keyword">...</span>
+0202    log10(time_total_mean(istart:iend)), <span class="keyword">...</span>
+0203    <span class="string">'Color'</span>, green_dark, <span class="keyword">...</span>
+0204    <span class="string">'Marker'</span>, marker_type, <span class="keyword">...</span>
+0205    <span class="string">'MarkerSize'</span>, marker_size, <span class="keyword">...</span>
+0206    <span class="string">'MarkerFaceColor'</span>, green_light, <span class="keyword">...</span>
+0207    <span class="string">'MarkerEdgeColor'</span>, green_dark, <span class="keyword">...</span>
+0208    <span class="string">'LineStyle'</span>, <span class="string">'--'</span>, <span class="keyword">...</span>
+0209    <span class="string">'LineWidth'</span>, line_width);
+0210 
+0211 hold on;
+0212 
+0213 plot(log2(Ls(istart:iend)), <span class="keyword">...</span>
+0214    log10(Ls(istart:iend).^3)-5, <span class="keyword">...</span>
+0215    <span class="string">'r'</span>, <span class="keyword">...</span>
+0216    <span class="string">'LineWidth'</span>, line_width_thick);
+0217 a = axis;
+0218 set(gca,<span class="string">'XTick'</span>,a(1):1:a(2));
+0219 set(gca,<span class="string">'XTickLabel'</span>, 2.^[a(1):1:a(2)]);
+0220 set(gca,<span class="string">'YTick'</span>,floor(a(3)):1:ceil(a(4)));
+0221 set(gca,<span class="string">'YTickLabel'</span>,{10.^[floor(a(3)):ceil(a(4))]});
+0222 xlabel(<span class="string">'L'</span>);
+0223 ylabel(<span class="string">'T'</span>);
+0224 
+0225 set(gca, <span class="string">'LineWidth'</span>, 3)
+0226 set(gca, <span class="string">'FontSize'</span>, 20)
+0227 
+0228 <span class="keyword">if</span> save_plots, print(<span class="string">'-depsc2'</span>, <span class="string">'plots/ridgelet_timing.eps'</span>); <span class="keyword">end</span>
+0229 
+0230 
+0231 <span class="comment">% Plot timing with error bars</span>
+0232 figure;
+0233    
+0234 errorbar(log2(Ls(istart:iend)), <span class="keyword">...</span>
+0235    log10(time_total_mean(istart:iend)), <span class="keyword">...</span>
+0236    time_total_std_log(istart:iend), <span class="keyword">...</span>
+0237    <span class="string">'Color'</span>, green_dark, <span class="keyword">...</span>
+0238    <span class="string">'Marker'</span>, marker_type, <span class="keyword">...</span>
+0239    <span class="string">'MarkerSize'</span>, marker_size, <span class="keyword">...</span>
+0240    <span class="string">'MarkerFaceColor'</span>, green_light, <span class="keyword">...</span>
+0241    <span class="string">'MarkerEdgeColor'</span>, green_dark, <span class="keyword">...</span>
+0242    <span class="string">'LineStyle'</span>, <span class="string">'--'</span>, <span class="keyword">...</span>
+0243    <span class="string">'LineWidth'</span>, line_width);
+0244 
+0245 hold on;
+0246 
+0247 plot(log2(Ls(istart:iend)), <span class="keyword">...</span>
+0248    log10(Ls(istart:iend).^3)-5, <span class="keyword">...</span>
+0249    <span class="string">'r'</span>, <span class="keyword">...</span>
+0250    <span class="string">'LineWidth'</span>, line_width_thick);
+0251 a = axis;
+0252 set(gca,<span class="string">'XTick'</span>,a(1):1:a(2));
+0253 set(gca,<span class="string">'XTickLabel'</span>, 2.^[a(1):1:a(2)]);
+0254 set(gca,<span class="string">'YTick'</span>,floor(a(3)):1:ceil(a(4)));
+0255 set(gca,<span class="string">'YTickLabel'</span>,{10.^[floor(a(3)):ceil(a(4))]});
+0256 xlabel(<span class="string">'L'</span>);
+0257 ylabel(<span class="string">'T'</span>);
+0258 
+0259 set(gca, <span class="string">'LineWidth'</span>, 3)
+0260 set(gca, <span class="string">'FontSize'</span>, 20)
+0261 
+0262 <span class="keyword">if</span> save_plots, print(<span class="string">'-depsc2'</span>, <span class="string">'plots/ridgelet_timing_errorbars.eps'</span>); <span class="keyword">end</span>
+0263 
+0264</pre></div>
+<hr><address>Generated on Tue 22-Sep-2015 14:38:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

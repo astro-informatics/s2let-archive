@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of s2let_radon_inverse</title>
+  <meta name="keywords" content="s2let_radon_inverse">
+  <meta name="description" content="s2let_radon_inverse">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">src</a> &gt; <a href="#">main</a> &gt; <a href="index.html">matlab</a> &gt; s2let_radon_inverse.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for src/main/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>s2let_radon_inverse
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>s2let_radon_inverse</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [f_lm] = s2let_radon_inverse(f_radon_lm, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> s2let_radon_inverse
+ Compute inverse radon transform in harmonic space.
+
+ Default usage:
+
+   f_lm = s2let_radon_analysis(f_radon_lm, &lt;options&gt;)
+
+ where f_lm is the vector of L^2 harmonic coefficients and f_random_lm
+ is the vector of harmonic coefficients of the spherical radon transform
+ of f.
+
+ Note that the inverse random transform recovers the antipodal part
+ of the original signal f only.
+
+ Option :
+  'Reality'         = { false        [do not assume f real (default)],
+                        true         [assume f real (improves performance)] }
+  'Spin'            = { Spin; (default=0) }
+  'L'               = { Harmonic band-limit; L &gt; 1 (default=guessed from input) }</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="s2let_ridgelet_synthesis.html" class="code" title="function f = s2let_ridgelet_synthesis(f_ridge_wav, f_ridge_scal, varargin)">s2let_ridgelet_synthesis</a>	s2let_ridgelet_analysis</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [f_lm] = s2let_radon_inverse(f_radon_lm, varargin)</a>
+0002 
+0003 <span class="comment">% s2let_radon_inverse</span>
+0004 <span class="comment">% Compute inverse radon transform in harmonic space.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Default usage:</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   f_lm = s2let_radon_analysis(f_radon_lm, &lt;options&gt;)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% where f_lm is the vector of L^2 harmonic coefficients and f_random_lm</span>
+0011 <span class="comment">% is the vector of harmonic coefficients of the spherical radon transform</span>
+0012 <span class="comment">% of f.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Note that the inverse random transform recovers the antipodal part</span>
+0015 <span class="comment">% of the original signal f only.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Option :</span>
+0018 <span class="comment">%  'Reality'         = { false        [do not assume f real (default)],</span>
+0019 <span class="comment">%                        true         [assume f real (improves performance)] }</span>
+0020 <span class="comment">%  'Spin'            = { Spin; (default=0) }</span>
+0021 <span class="comment">%  'L'               = { Harmonic band-limit; L &gt; 1 (default=guessed from input) }</span>
+0022 
+0023 <span class="comment">% S2LET package to perform Wavelets transform on the Sphere.</span>
+0024 <span class="comment">% Copyright (C) 2015  Boris Leistedt &amp; Jason McEwen</span>
+0025 <span class="comment">% See LICENSE.txt for license details</span>
+0026 
+0027 L_guess = sqrt(length(f_radon_lm));
+0028 
+0029 p = inputParser;
+0030 p.addRequired(<span class="string">'f_lm'</span>, @isnumeric);
+0031 p.addParamValue(<span class="string">'L'</span>, L_guess, @isnumeric);
+0032 p.addParamValue(<span class="string">'Reality'</span>, false, @islogical);
+0033 p.addParamValue(<span class="string">'Spin'</span>, 0, @isnumeric);
+0034 p.parse(f_radon_lm, varargin{:});
+0035 args = p.Results;
+0036 
+0037 s = args.Spin; 
+0038 
+0039 ring_lm = zeros(args.L^2,1);
+0040 f_lm = zeros(args.L^2,1);
+0041 <span class="keyword">for</span> el = max([0 abs(args.Spin)]):args.L-1
+0042           
+0043    logp2 = gammaln(el+s+1) - el * log(2) - gammaln((el+s)./2+1) - gammaln((el-s)./2+1);
+0044    p0 = real((-1).^((el+s)./2)) .* exp(logp2);    
+0045    ind = ssht_elm2ind(el, 0);
+0046    ring_lm(ind) = 2*pi * sqrt((2*el+1)/(4*pi)) * p0;
+0047    ring_lm(ind) = ring_lm(ind) .* <span class="keyword">...</span>
+0048       (-1).^s .* sqrt(exp(gammaln(el-s+1) - gammaln(el+s+1)));      
+0049          
+0050    <span class="keyword">if</span> args.Reality
+0051       m_min = 0;
+0052    <span class="keyword">else</span>
+0053       m_min = -el;
+0054    <span class="keyword">end</span>
+0055 
+0056    <span class="keyword">for</span> m = m_min:el
+0057       ind_lm = ssht_elm2ind(el, m);
+0058       
+0059       <span class="keyword">if</span> mod(el, 2) == 1
+0060          f_lm(ind_lm) = 0.0;
+0061       <span class="keyword">else</span>         
+0062          f_lm(ind_lm) = f_radon_lm(ind_lm) <span class="keyword">...</span>
+0063             ./ sqrt(4 * pi ./ (2*el+1)) ./ ring_lm(ind);
+0064       <span class="keyword">end</span>
+0065    
+0066    <span class="keyword">end</span>
+0067    
+0068 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 22-Sep-2015 14:38:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
