@@ -67,7 +67,7 @@ if s2let_dylib_exists() eq 1 then begin
    f_wav_vec = dblarr((J_max+1-J_min)*npix)
    f_scal = dblarr(npix)
 
-   r = call_external(soname, 's2let_idl_axisym_mw_wav_analysis_real', f_wav_vec, f_scal, double(f), B, L, J_min, wavtype, /CDECL)
+   r = call_external(soname, 's2let_idl_transform_axisym_wav_analysis_mw_real', f_wav_vec, f_scal, double(f), B, L, J_min, wavtype, /CDECL)
    
    ;f_wav = dblarr(npix, J_max+2-J_min)
    ;f_wav(0:npix-1, 0) = f_scal(0:npix-1)

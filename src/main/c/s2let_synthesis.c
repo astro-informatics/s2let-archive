@@ -247,13 +247,11 @@ void s2let_synthesis_wav2lm_manual(
     so3_parameters_t so3_parameters = {};
     fill_so3_parameters(&so3_parameters, &parameters);
 
-    int j, offset, offset_lmn;
+    int j, offset;
     complex double *f_wav_lmn, *f_scal_lm;
-    complex double psi, npsi;
+    complex double psi;
     double phi;
     int el, m, n, lm_ind, lmn_ind;
-
-    int Nj = N;
 
     bandlimit = MIN(scal_bandlimit, L);
 

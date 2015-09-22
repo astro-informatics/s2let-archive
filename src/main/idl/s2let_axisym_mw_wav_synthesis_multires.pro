@@ -79,7 +79,7 @@ if s2let_dylib_exists() eq 1 then begin
     endfor
 
    f = dcomplex(dblarr(L*(2*L-1)))
-   r = call_external(soname, 's2let_idl_axisym_mw_wav_synthesis_multires_real', f, dcomplex(f_wav_vec), dcomplex(f_scal), B, L, J_min, wavtype, /CDECL)
+   r = call_external(soname, 's2let_idl_transform_axisym_wav_synthesis_mw_multires_real', f, dcomplex(f_wav_vec), dcomplex(f_scal), B, L, J_min, wavtype, /CDECL)
 
    if keyword_set(verbose) then print, '=========================================='
 
