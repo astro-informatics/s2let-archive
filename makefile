@@ -15,7 +15,7 @@ CFITSIODIR	= ${CFITSIO}
 # Directory for HEALPIX (optional)
 HEALPIXDIR	= ${HEALPIX}
 # Directory for idl_export.h include (required for healpix)
-IDLINC = /Applications/exelis/idl82/external/include
+IDLINC = ${IDL_DIR}/external/include
 
 # Directory for MATLAB (optional)
 MLAB	=  ${MATLAB}
@@ -104,8 +104,10 @@ endif
 
 # === HEALPIX ===
 ifneq ($(strip $(HEALPIXDIR)),)
-HEALPIXINC    = $(HEALPIXDIR)/include_gfortran
-HEALPIXLIB     = $(HEALPIXDIR)/lib_gfortran
+#HEALPIXINC    = $(HEALPIXDIR)/include_gfortran
+HEALPIXINC    = $(HEALPIXDIR)/include
+#HEALPIXLIB     = $(HEALPIXDIR)/lib_gfortran
+HEALPIXLIB     = $(HEALPIXDIR)/lib
 HEALPIXLIBNM   = healpix
 endif
 
@@ -168,7 +170,7 @@ ifneq (,$(wildcard $(HEALPIXLIB)/libhealpix.a))
 
 	S2LETOBJS+= $(S2LETOBJ)/s2let_hpx.o
 	S2LETOBJS+= $(S2LETOBJ)/s2let_transform_axisym_hpx.o
-#	S2LETOBJS+= $(S2LETOBJ)/s2let_idl_hpx.o
+	S2LETOBJS+= $(S2LETOBJ)/s2let_idl_hpx.o
 	S2LETOBJS+= $(S2LETOBJF90)/s2let_hpx.o
 
 	FFLAGS+= -I$(IDLINC)
@@ -240,7 +242,7 @@ $(S2LETOBJMAT)/%_mex.o: %_mex.c $(S2LETLIB)/lib$(S2LETLIBNM).a
 	$(CC) $(OPT) $(FFLAGS) -c $< -o $@ -I${MLABINC}
 
 $(S2LETOBJMEX)/%_mex.$(MEXEXT): $(S2LETOBJMAT)/%_mex.o $(S2LETLIB)/lib$(S2LETLIBNM).a
-	$(MEX) $< -o $@ $(LDFLAGSMEX) $(MEXFLAGS) -L$(MLABLIB)
+	$(MEX) $< -output $@ $(LDFLAGSMEX) $(MEXFLAGS) -L$(MLABLIB)
 
 $(S2LETBIN)/%: $(S2LETOBJ)/%.o $(S2LETLIB)/lib$(S2LETLIBNM).a
 	$(CC) $(OPT) $< -o $@ $(LDFLAGS)
