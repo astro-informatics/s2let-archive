@@ -9,16 +9,23 @@ DESCRIPTION
      scale-discretised wavelet transforms on the sphere.
 
 CURRENT VERSION
-     Release 1.1b1, October 2013
+     Release 2.0b1, September 2014
 
 PREVIOUS VERSIONS
+     Release 1.1b1, October 2013
      Release 1.0b1, November 2012
 
 AUTHORS
      B. Leistedt (www.ixkael.com/blog)
      J. D. McEwen (www.jasonmcewen.org)
+     M. Buttner
 
 REFERENCES
+
+     J. D. McEwen, M. Büttner, B. Leistedt, H. V. Peiris, Y. Wiaux, P. Vandergheynst, Spin scale-discretised wavelets on the sphere, IEEE TSP, 2015 .
+
+     J. D. McEwen, M. Büttner, B. Leistedt, H. V. Peiris, Y. Wiaux, A novel sampling theorem on the rotation group, IEEE TSP, 2015.
+
      B. Leistedt, Y. Wiaux, P. Vandergheynst and J. D. McEwen,
      S2LET: A code to perform fast wavelet analysis on the sphere, 
      Astronomy & Astrophysics, 558, A128, 2013 (arXiv:1211.1680)
@@ -34,6 +41,7 @@ INSTALLATION
 
 REQUIREMENTS
      SSHT (http://www.spinsht.org/)
+     SO3 (http://www.sothree.org/)
      FFTW (http://www.fftw.org/)
 
 OPTIONAL
