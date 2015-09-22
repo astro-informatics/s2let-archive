@@ -19,7 +19,7 @@ N = 3;
 J_min = 1;
 J = s2let_jmax(L, B);
 
-zoomfactor = 1.6;
+zoomfactor = 1.8;
 ns = ceil(sqrt(2+J-J_min+1)) ;
 ny = 4; % ns - 1 + rem(2+J-J_min+1 , ns) ;
 nx = 3; % ns;

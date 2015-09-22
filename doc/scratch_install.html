@@ -32,10 +32,10 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
   <table border="0" cellspacing="0">
     <tr>
       <td width=200 align="right" valign="top">
-	<img src="images/wav.png" width="140" height="140" border=0>
+	<img src="images/newlogo.png" width="140" height="140" border=0>
       </td>
       <td width=500 align="left" valign="center">
-	<h1 class="title">S2LET<span class="fade">1.1b1</span></h1>
+	<h1 class="title">S2LET<span class="fade"></span></h1>
 	<p id="slogantitle">Fast wavelets on the sphere</p>
       </td>
     </tr>
@@ -53,7 +53,6 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <li><a href="scratch_install.html">Dependencies</a></li>
 <li><a href="c_doc.html">C library</a></li>
 <li><a href="idl_doc.html">IDL interfaces</a></li>
-<li><a href="java_doc.html">Java interfaces</a></li>
 <li><a href="matlab_doc.html">Matlab interfaces</a></li>
 </ul>
 
@@ -62,7 +61,6 @@ harmonics, sphere, transforms, fourier, fast, algorithms, mcewen, leistedt, wave
 <ul>
 <li><a href="c/files.html">C documentation</a></li>
 <li><a href="idl/index.html">IDL documentation</a></li>
-<li><a href="java/index-all.html">Java documentation</a></li>
 <li><a href="matlab/index.html">Matlab documentation</a></li>
 </ul>
 
@@ -88,7 +86,7 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
 <!--------------------------------------------------------------->
 <a name="installation"><h2>Installation for Linux / Mac from scratch</h2></a>
 
-<p>1) Download CFITSIO from <a href="http://heasarc.gsfc.nasa.gov/fitsio">here</a>  and install it with
+<p>1) Install <strong>CFITSIO</strong>. Use brew, macport of fink if you can. Otherwise, to build from source you can download the code from <a href="http://heasarc.gsfc.nasa.gov/fitsio">here</a>  and install it with
 <pre>
 >> ./configure
 >> make
@@ -96,7 +94,7 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
 </pre>
 </p>
 
-<p>2) Download FFTW-3.3.3 from <a href="http://www.fftw.org/download.html">here</a> and install it with
+<p>2) Install <strong>FFTW</strong>. Again, use brew, macport of fink if you can. Otherwise, download the code from <a href="http://www.fftw.org/download.html">here</a> and install it with
 <pre>
 >> ./configure --prefix=absolute-fftw-directory --enable-shared --with-pic
 >> ./make
@@ -104,7 +102,7 @@ Public release of <strong>S2LET</strong> 1.0b1, fully supporting the MW and HEAL
 </pre>
 </p>
 
-<p>3) Download HEALPIX_3.00 from <a href="http://sourceforge.net/projects/healpix/">here</a> and run
+<p>3) Download <strong>HEALPIX_3.xx</strong> from <a href="http://sourceforge.net/projects/healpix/">here</a> and run
 <pre>>> ./configure </pre>
 Configure the C code only (i.e. main option 2) with correct location for
 CFITSIO. No change to any other option, no even compiler flags.
@@ -127,9 +125,8 @@ least for the installation). The easiest approach was to run something like:
 Then MEX should find the right compilers and not complain.
 </p>
 
-<p>5) Install SSHT:
-Modify the ssht makefile with the right path for FFTW and MATLAB (**I am
-attaching my makefile**)
+<p>5) Install <strong>SSHT</strong>:
+Modify the ssht makefile with the right path for FFTW and MATLAB
 <pre>
 >> make
 >> ./bin/c/ssht_test 128 0
@@ -137,10 +134,17 @@ attaching my makefile**)
 </pre>
 </p>
 
-<p>6) Install S2LET (explained in further details in other pages):
-modify the s2let makefile with the right path for FFTW and MATLAB. I
-also had to change the order in the linking command and add fPIC (**see
-attached makefile**)
+<p>6) Install <strong>SO3</strong>:
+Modify the so3 makefile with the right path for FFTW and MATLAB
+<pre>
+>> make
+>> make matlab
+</pre>
+</p>
+
+<p>7) Install <strong>S2LET</strong> (explained in further details in other pages):
+modify the s2let makefile with the right path for FFTW, SO3, CFITSIO, and MATLAB. I
+also had to change the order in the linking command and add fPIC
 <pre>
 >> make
 >> ./bin/c/s2let_test
@@ -148,7 +152,7 @@ attached makefile**)
 </pre>
 </p>
 
-<p>7) Open Matlab, add the SSHT and S2LET matlab source directories to the
+<p>7) Open Matlab, add the SSHT, SO3, and S2LET matlab source directories to the
 PATH (respectively in src/matlab and src/main/matlab)
 In MATLAB, test the two packages and the plotting routines by running
 ssht_demo1 and s2let_demo1 for example.
@@ -162,7 +166,7 @@ ssht_demo1 and s2let_demo1 for example.
   <p>
   <a href="#header">Back to top</a><br >
 
-  <p>&copy; 2012 <a href="http://www.ixkael.com/blog">Boris Leistedt</a> & <a href="http://www.jasonmcewen.org">Jason McEwen</a> | Design by
+  <p>&copy; 2012-2015 <a href="http://www.ixkael.com/blog">Boris Leistedt</a> & <a href="http://www.jasonmcewen.org">Jason McEwen</a> | Design by
   <a href="http://andreasviklund.com/">Andreas Viklund</a> </p>
 
 

@@ -8,13 +8,13 @@
 B = 2;
 zoomfactor = 1.4;
 J_min = 2;
-L = 512;
+L = 64;
 Spin = 0;
-N = 15;
+N = 0;
 J = s2let_jmax(L, B);
-plot_caxis_scale = 2
+plot_caxis_scale = 20
 type = 'colour';
-lighting = true;
+lighting = false;
 
 ns = ceil(sqrt(2+J-J_min+1)) ;
 ny = 4;
@@ -39,10 +39,10 @@ pos = get(locate,'position');
 pos(1,2) = pos(1,2)+0.7;
 pos(1,1) = pos(1,1)-0.7;
 set(locate,'pos',pos);
-zoom(1.2)
-v = caxis;
-temp = max(abs(v));
-caxis([-temp temp]*plot_caxis_scale)
+zoom(1.2)%
+%v = caxis;
+%temp = max(abs(v));
+%caxis([-temp temp]*plot_caxis_scale)
 
 
 %colormap(jet)
@@ -69,10 +69,10 @@ for j = J_min:J
            pos(1,2) = pos(1,2)+0.7;
            pos(1,1) = pos(1,1)-0.7;
            set(locate,'pos',pos);
-           v = caxis;
-           temp = max(abs(v));
-           caxis([-temp temp]*plot_caxis_scale)
-           zoom(zoomfactor)
+           %v = caxis;
+           %temp = max(abs(v));
+           %caxis([-temp temp]*plot_caxis_scale)
+           %zoom(zoomfactor)
        end
    end
    if Spin > 0
@@ -87,10 +87,10 @@ for j = J_min:J
            pos(1,2) = pos(1,2)+0.7;
            pos(1,1) = pos(1,1)-0.7;
            set(locate,'pos',pos);
-           v = caxis;
-           temp = max(abs(v));
-           caxis([-temp temp]*plot_caxis_scale)
-           zoom(zoomfactor)
+           %v = caxis;
+           %temp = max(abs(v));
+           %caxis([-temp temp]*plot_caxis_scale)
+           %zoom(zoomfactor)
        end
        ind = ind + 1;
        if ind <= maxfigs
@@ -102,10 +102,10 @@ for j = J_min:J
            pos(1,2) = pos(1,2)+0.7;
            pos(1,1) = pos(1,1)-0.7;
            set(locate,'pos',pos);
-           v = caxis;
-           temp = max(abs(v));
-           caxis([-temp temp]*plot_caxis_scale)
-           zoom(zoomfactor)
+           %v = caxis;
+           %temp = max(abs(v));
+           %caxis([-temp temp]*plot_caxis_scale)
+           %zoom(zoomfactor)
        end
        
        ind = ind + 1;
@@ -118,10 +118,10 @@ for j = J_min:J
            pos(1,2) = pos(1,2)+0.7;
            pos(1,1) = pos(1,1)-0.7;
            set(locate,'pos',pos);
-           v = caxis;
-           temp = max(abs(v));
-           caxis([-temp temp]*plot_caxis_scale)
-           zoom(zoomfactor)
+           %v = caxis;
+           %temp = max(abs(v));
+           %caxis([-temp temp]*plot_caxis_scale)
+           %zoom(zoomfactor)
        end
        
    end

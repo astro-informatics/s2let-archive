@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
   printf(" Earth tomography signal, MW sampling\n");
   printf("--------------------------------------------------\n");
 
-  char file[100] = "data/earth_tomo_mw_128.fits"
+  char file[100] = "data/earth_tomo_mw_128.fits";
   printf(" Reading file %s\n",file);
   const int L = s2let_fits_mw_read_bandlimit(file);
   parameters.L = L;

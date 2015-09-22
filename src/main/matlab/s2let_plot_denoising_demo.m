@@ -4,10 +4,10 @@
 % color bar.
 sigmas = 2;
 
-position = [ 500 500 1000 800 ];
+position = [ 500 500 700 400 ];
 set(0, 'DefaultFigurePosition', position);
 plot_root = '../../../figs/';
-plot_size = [0 0 23 13];
+plot_size = [0 0 29 10];
 
 % Set working directory to script's location
 % (assumed to be src/main/matlab)
@@ -30,12 +30,12 @@ range = [mean_f-sigmas*stddev_f mean_f+sigmas*stddev_f];
 figure
 ssht_plot_mollweide(f_Q, L, 'Mode', 1)
 colorbar;
-caxis(range);
+caxis(range)
 title('Spin signal (Q) - Input map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_Q_input.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_Q_input_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_Q_noise, L, 'Mode', 1)
@@ -43,9 +43,9 @@ colorbar;
 caxis(range);
 title('Spin signal (Q) - Noise map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_Q_noise.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_Q_noise_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_Q_input_noise, L, 'Mode', 1)
@@ -53,9 +53,9 @@ colorbar;
 caxis(range);
 title('Spin signal (Q) - Input map with added noise');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_Q_input_noise.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_Q_input_noise_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_Q_denoised, L, 'Mode', 1)
@@ -63,18 +63,18 @@ colorbar;
 caxis(range);
 title('Spin signal (Q) - Denoised map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_Q_denoised.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_Q_denoised_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_error, L, 'Mode', 1)
 colorbar;
 title('Spin signal (Q) - Logarithmic relative error');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_Q_error.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_Q_error_jet.png'];
+print('-r300', '-dpng', fname)
 
 [f_U, ~] = s2let_mw_read_real_map('../../../data/spin_signal_imag_input.fits');
 [f_U_noise, ~] = s2let_mw_read_real_map('../../../data/spin_signal_imag_noise.fits');
@@ -93,9 +93,9 @@ colorbar;
 caxis(range);
 title('Spin signal (U) - Input map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_U_input.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_U_input_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_U_noise, L, 'Mode', 1)
@@ -103,9 +103,9 @@ colorbar;
 caxis(range);
 title('Spin signal (U) - Noise map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_U_noise.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_U_noise_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_U_input_noise, L, 'Mode', 1)
@@ -113,9 +113,9 @@ colorbar;
 caxis(range);
 title('Spin signal (U) - Input map with added noise');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_U_input_noise.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_U_input_noise_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_U_denoised, L, 'Mode', 1)
@@ -123,22 +123,22 @@ colorbar;
 caxis(range);
 title('Spin signal (U) - Denoised map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_U_denoised.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_U_denoised_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_error, L, 'Mode', 1)
 colorbar;
 title('Spin signal (U) - Logarithmic relative error');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_U_error.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_U_error_jet.png'];
+print('-r300', '-dpng', fname)
 
 %% Plot Q + iU map
 
-subL = 64;
+subL = 32;
 
 f_QU = f_Q + 1i*f_U;
 f_QU_noise = f_Q_noise + 1i*f_U_noise;
@@ -157,9 +157,9 @@ colorbar;
 caxis(range);
 title('Spin signal (Q + iU) - Input map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_QU_input.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_QU_input_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_QU_noise, L, 'Mode', 3, 'SubL', subL)
@@ -167,9 +167,9 @@ colorbar;
 caxis(range);
 title('Spin signal (Q + iU) - Noise map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_QU_noise.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_QU_noise_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_QU_input_noise, L, 'Mode', 3, 'SubL', subL)
@@ -177,9 +177,9 @@ colorbar;
 caxis(range);
 title('Spin signal (Q + iU) - Input map with added noise');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_QU_input_noise.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_QU_input_noise_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_QU_denoised, L, 'Mode', 3, 'SubL', subL)
@@ -187,19 +187,20 @@ colorbar;
 caxis(range);
 title('Spin signal (Q + iU) - Denoised map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_QU_denoised.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_QU_denoised_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_error, L, 'Mode', 1)
 colorbar;
 title('Spin signal (Q + iU) - Logarithmic relative error');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_spin_signal_QU_error.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_spin_signal_QU_error_jet.png'];
+print('-r300', '-dpng', fname)
 
+stop
 
 %% Plot real map results
 
@@ -234,45 +235,45 @@ ssht_plot_mollweide(f, L, 'Mode', 1)
 colorbar;
 title('Real signal - Input map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_real_signal_input.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_real_signal_input_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_noise, L, 'Mode', 1)
 colorbar;
 title('Real signal - Noise map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_real_signal_noise.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_real_signal_noise_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_input_noise, L, 'Mode', 1)
 colorbar;
 title('Real signal - Input map with added noise');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_real_signal_input_noise.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_real_signal_input_noise_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_denoised, L, 'Mode', 1)
 colorbar;
 title('Real signal - Denoised map');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_real_signal_denoised.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_real_signal_denoised_jet.png'];
+print('-r300', '-dpng', fname)
 
 figure
 ssht_plot_mollweide(f_error, L, 'Mode', 1)
 colorbar;
 title('Real signal - Logarithmic relative error');
 set(gcf, 'PaperUnits', 'centimeters', 'PaperPosition', plot_size);
-colormap(jet);
-fname = [plot_root, 'denoising_real_signal_error.png'];
-print('-r200', '-dpng', fname)
+colormap(jet);set(gca,'FontSize',18)
+fname = [plot_root, 'denoising_real_signal_error_jet.png'];
+print('-r300', '-dpng', fname)
 
 
 %% Clean up

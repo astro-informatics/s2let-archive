@@ -54,7 +54,7 @@ cdef extern from "s2let.h":
 	void s2let_tiling_direction(double complex *s_elm, const s2let_parameters_t *parameters);
 
 	void s2let_tiling_wavelet_allocate(double complex **psi, double **phi, const s2let_parameters_t *parameters);
-	void s2let_tiling_wavelet(double complex *psi, double *phi, const s2let_parameters_t *parameters);
+	void s2letc_tiling_wavelet(double complex *psi, double *phi, const s2let_parameters_t *parameters);
 	void s2let_tiling_axisym(double *kappa, double *kappa0, const s2let_parameters_t *parameters);
 	void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, const s2let_parameters_t *parameters);
 
@@ -152,7 +152,7 @@ cdef extern from "s2let.h":
 		int upsample
 		int spin
 		ssht_dl_method_t dl_method
-		s2let_wav_norm_t normalization;
+		s2let_wav_norm_t normalisation;
 		s2let_sampling_t sampling_scheme;
 		int original_spin
 		int reality
@@ -534,7 +534,7 @@ def wav_ind(j, n, B, L, N, J_min, upsample):
 	parameters.spin = 0;
 	parameters.upsample = upsample;
 	parameters.sampling_scheme = S2LET_SAMPLING_MW
-	parameters.normalization = S2LET_WAV_NORM_DEFAULT
+	parameters.normalisation = S2LET_WAV_NORM_DEFAULT
 	parameters.dl_method = SSHT_DL_RISBO
 	parameters.original_spin = 0
 	parameters.reality = 0
@@ -730,9 +730,11 @@ def construct_hybrid_tiling(L, J_min0, Bs, L_transitions):
 			hybrid_wav_bandlimits[off] = wav_bandlimits[j]
 			hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off] = wav_l[L_bounds[k]:L_bounds[k+1],j]
 			if j == j_transitions_left[k]- J_mins[k] and wav_l[L_bounds[k],j] < 1.0:
-				hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off] = np.sqrt(hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off]**2 + wav_l[L_bounds[k]:L_bounds[k+1],j-1]**2)
+				hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off] = 
+				np.sqrt(hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off]**2 + wav_l[L_bounds[k]:L_bounds[k+1],j-1]**2)
 			if k < nb -1 and j == j_transitions_right[k] - 1 - J_mins[k] and wav_l[L_bounds[k],j] < 1.0:
-				hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off] = np.sqrt(hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off]**2 + wav_l[L_bounds[k]:L_bounds[k+1],j+1]**2)
+				hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off] = 
+				np.sqrt(hybrid_wav_l[L_bounds[k]:L_bounds[k+1],off]**2 + wav_l[L_bounds[k]:L_bounds[k+1],j+1]**2)
 			if j < j_transitions_right[k]-1- J_mins[k]:
 				off += 1
 
