@@ -141,8 +141,6 @@ cdef extern from "s2let.h":
 		SSHT_DL_RISBO, SSHT_DL_TRAPANI
 	ctypedef enum s2let_sampling_t:
 		S2LET_SAMPLING_MW
-	ctypedef enum s2let_wav_norm_t:
-		S2LET_WAV_NORM_DEFAULT, S2LET_WAV_NORM_SPIN_LOWERED
 
 	ctypedef struct s2let_parameters_t:
 		int J_min
@@ -152,7 +150,6 @@ cdef extern from "s2let.h":
 		int upsample
 		int spin
 		ssht_dl_method_t dl_method
-		s2let_wav_norm_t normalization;
 		s2let_sampling_t sampling_scheme;
 		int original_spin
 		int reality
@@ -188,10 +185,6 @@ def analysis_axisym_lm_wav(
 	np.ndarray[double complex, ndim=1, mode="c"] flm_hp not None, B, L, J_min, spin_lowered = False):
 
 	cdef s2let_parameters_t parameters = {};
-	if spin_lowered:
-		parameters.normalization = S2LET_WAV_NORM_SPIN_LOWERED
-	else:
-		parameters.normalization = S2LET_WAV_NORM_DEFAULT
 	parameters.B = B;
 	parameters.L = L;
 	parameters.J_min = J_min;
@@ -233,10 +226,6 @@ def synthesis_axisym_lm_wav(
 	np.ndarray[double complex, ndim=1, mode="c"] f_scal_lm_hp not None, B, L, J_min, spin_lowered = False):
 
 	cdef s2let_parameters_t parameters = {};
-	if spin_lowered:
-		parameters.normalization = S2LET_WAV_NORM_SPIN_LOWERED
-	else:
-		parameters.normalization = S2LET_WAV_NORM_DEFAULT
 	parameters.B = B;
 	parameters.L = L;
 	parameters.J_min = J_min;
@@ -440,10 +429,6 @@ def analysis_lm2wav(
 	parameters.upsample = upsample;
 	parameters.sampling_scheme = S2LET_SAMPLING_MW
 	parameters.original_spin = original_spin
-	if spin_lowered:
-		parameters.normalization = S2LET_WAV_NORM_SPIN_LOWERED
-	else:
-		parameters.normalization = S2LET_WAV_NORM_DEFAULT
 	parameters.dl_method = SSHT_DL_RISBO
 	parameters.reality = 0
 	parameters.verbosity = 0
@@ -476,10 +461,6 @@ def synthesis_wav2lm(
 	parameters.upsample = upsample;
 	parameters.sampling_scheme = S2LET_SAMPLING_MW
 	parameters.original_spin = original_spin
-	if spin_lowered:
-		parameters.normalization = S2LET_WAV_NORM_SPIN_LOWERED
-	else:
-		parameters.normalization = S2LET_WAV_NORM_DEFAULT
 	parameters.dl_method = SSHT_DL_RISBO
 	parameters.reality = 0
 	parameters.verbosity = 0
@@ -534,7 +515,6 @@ def wav_ind(j, n, B, L, N, J_min, upsample):
 	parameters.spin = 0;
 	parameters.upsample = upsample;
 	parameters.sampling_scheme = S2LET_SAMPLING_MW
-	parameters.normalization = S2LET_WAV_NORM_DEFAULT
 	parameters.dl_method = SSHT_DL_RISBO
 	parameters.original_spin = 0
 	parameters.reality = 0

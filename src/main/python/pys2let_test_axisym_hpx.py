@@ -11,8 +11,7 @@ B = 3
 J = pys2let_j_max(B, L, J_min)
 
 # The filename of some random healpix map
-fname = '/Users/bl/Dropbox/Astrodata/SDSS/Fields/Planck_EBV_256rQ.fits'
-#fname = '/Users/bl/Dropbox/Wavelets/s2let/data/somecmbsimu_hpx_128.fits'
+fname = '/Users/bl/Dropbox/Wavelets/s2let/data/somecmbsimu_hpx_128.fits'
 
 # Read healpix map and compute alms. 
 # f_lm has size L*(L+1)/2
