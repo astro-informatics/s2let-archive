@@ -305,8 +305,8 @@ def verify_tiling(L,
 def analysis_lm2wav_manualtiling(
 		np.ndarray[double complex, ndim=1, mode="c"] flm_hp not None,
 		L, N, spin,
-		np.ndarray[double, ndim=1, mode="c"] scal_l,
-		np.ndarray[double, ndim=1, mode="c"] wav_l,
+		np.ndarray[double, ndim=1, mode="c"] kappa_scal_l,
+		np.ndarray[double, ndim=1, mode="c"] kappa_wav_l,
 		scal_bandlimit,
 		np.ndarray[int, ndim=1, mode="c"] wav_bandlimits):
 
@@ -317,10 +317,15 @@ def analysis_lm2wav_manualtiling(
 	parameters.N = N;
 	parameters.spin = spin;
 	parameters.upsample = 0;
+	parameters.J_min = 0;
 
 	cdef so3_parameters_t so3_parameters = {};
 	fill_so3_parameters(&so3_parameters, &parameters);
 	so3_parameters.sampling_scheme = SO3_SAMPLING_MW;
+
+	scal_l = np.zeros([L,], dtype=float)
+	for el from 0 <= el < L:
+		scal_l[el] = np.sqrt((2*el+1)/(4.0*np.pi)) * kappa_scal_l[el];
 
 	wav_lm = np.zeros([L*L*(J+1),], dtype=complex)
 	cdef double complex *s_elm;
@@ -330,11 +335,11 @@ def analysis_lm2wav_manualtiling(
 		for el from 0 <= el < L:
 			for em from -el <= em <= el:
 				ind = el*el + el + em
-				wav_lm[j*L*L + ind] = np.sqrt((2*el+1)/(8.0*np.pi*np.pi)) * wav_l[j*L + el] * s_elm[ind];
+				wav_lm[j*L*L + ind] = np.sqrt((2*el+1)/(8.0*np.pi*np.pi)) * kappa_wav_l[j*L + el] * s_elm[ind];
 	free(s_elm);
 
 	cdef s2let_parameters_t bl_parameters = {};
-	bl_parameters.L = scal_bandlimit;
+	bl_parameters.L = int(scal_bandlimit);
 	total = s2let_n_phi(&bl_parameters) * s2let_n_theta(&bl_parameters)
 	f_scal = np.zeros([total,], dtype=complex)
 	total = 0
@@ -350,7 +355,7 @@ def analysis_lm2wav_manualtiling(
 
 	f_lm = lm_hp2lm(flm_hp, L)
 
-	print 'scal_bandlimit = ', scal_bandlimit
+	print 'scal_bandlimit = ', int(scal_bandlimit)
 	print 'wav_bandlimits = ', wav_bandlimits
 	print 'J, L, spin, N = ', J, L, spin, N
 
@@ -373,8 +378,8 @@ def synthesis_wav2lm_manualtiling(
 		np.ndarray[double complex, ndim=1, mode="c"] f_wav not None,
 		np.ndarray[double complex, ndim=1, mode="c"] f_scal not None,
 		L, N, spin,
-		np.ndarray[double, ndim=1, mode="c"] scal_l,
-		np.ndarray[double, ndim=1, mode="c"] wav_l,
+		np.ndarray[double, ndim=1, mode="c"] kappa_scal_l,
+		np.ndarray[double, ndim=1, mode="c"] kappa_wav_l,
 		scal_bandlimit,
 		np.ndarray[int, ndim=1, mode="c"] wav_bandlimits):
 
@@ -385,6 +390,11 @@ def synthesis_wav2lm_manualtiling(
 	parameters.N = N;
 	parameters.spin = spin;
 	parameters.upsample = 0;
+	parameters.J_min = 0;
+
+	scal_l = np.zeros([L,], dtype=float)
+	for el from 0 <= el < L:
+		scal_l[el] = np.sqrt((2*el+1)/(4.0*np.pi)) * kappa_scal_l[el];
 
 	wav_lm = np.zeros([L*L*(J+1),], dtype=complex)
 	cdef double complex *s_elm;
@@ -394,7 +404,7 @@ def synthesis_wav2lm_manualtiling(
 		for el from 0 <= el < L:
 			for em from -el <= em <= el:
 				ind = el*el + el + em
-				wav_lm[j*L*L + ind] = np.sqrt((2*el+1)/(8.0*np.pi*np.pi)) * wav_l[j*L + el] * s_elm[ind];
+				wav_lm[j*L*L + ind] = np.sqrt((2*el+1)/(8.0*np.pi*np.pi)) * kappa_wav_l[j*L + el] * s_elm[ind];
 	free(s_elm);
 
 	f_lm = np.zeros([L * L,], dtype=complex)
