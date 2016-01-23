@@ -18,7 +18,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[])
 {
 
-  int B, L, J_min, spin, N, original_spin;
+  int L, J_min, spin, N, original_spin;
+  double B;
   s2let_parameters_t parameters = {};
   int iin = 0, iout = 0;
 
@@ -40,7 +41,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:waveletParameter",
           "Wavelet parameter B must be integer.");
   }
-  B = (int)mxGetScalar(prhs[iin]);
+  B = (double)mxGetScalar(prhs[iin]);
   if (mxGetScalar(prhs[iin]) > (double)B || B <= 1)
     mexErrMsgIdAndTxt("s2let_tiling_mex:InvalidInput:bandLimitNonInt",
           "Wavelet parameter B must be positive integer greater than 2");
