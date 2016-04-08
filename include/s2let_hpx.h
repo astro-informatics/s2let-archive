@@ -68,6 +68,8 @@ void s2let_hpx_map2alm_real(complex double* flm, const double* f, int nside, int
  */
 void s2let_hpx_read_map(double* f, char* file, int nside);
 
+void s2let_hpx_read_maps(double* f, char* file, int nside, int nmaps);
+
 
 /*!
  * Write Healpix map to a FITS file.
