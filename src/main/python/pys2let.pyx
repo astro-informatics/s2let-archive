@@ -587,13 +587,14 @@ def map2alm_mw(np.ndarray[double complex, ndim=1, mode="c"] f not None, L, spin)
 
 #----------------------------------------------------------------------------------------------------#
 
-def wavelet_tiling(B, L, N, J_min, spin):
+def wavelet_tiling(B, L, N, J_min, spin, original_spin=0):
 
 	cdef s2let_parameters_t parameters = {};
 	parameters.B = B;
 	parameters.L = L;
 	parameters.N = N;
 	parameters.spin = spin;
+	parameters.original_spin = 0
 	parameters.J_min = J_min;
 	J = s2let_j_max(&parameters);
 
