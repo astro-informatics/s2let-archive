@@ -33,7 +33,7 @@ OPT	= -Wall -g -fopenmp -DS2LET_VERSION=\"1.1b1\" -DS2LET_BUILD=\"`git rev-parse
 FCC	= gfortran
 OPTF90 	= -O3 -ffree-form
 # To be defined if LGFORTRAN cannot be found in the path
-GFORTRANLIB = /usr/local/lib
+# GFORTRANLIB = /usr/local/lib
 
 # Config for dynamic library
 ifeq ($(UNAME), Linux)
