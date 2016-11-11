@@ -1,5 +1,4 @@
 function s2let_plot_curvelet_parametric(alpha, beta, gamma, B, L, J_min, varargin)
-%
 % s2let_plot_curvelet_parametric
 % - Plot curvelet coefficients on multiple spheres.
 %
