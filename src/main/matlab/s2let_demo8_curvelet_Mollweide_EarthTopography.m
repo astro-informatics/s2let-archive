@@ -1,4 +1,4 @@
-% s2let_demo8_curvelet_Mollweide_EarthTopography
+% s2let_demo8 - curvelet analysis on the Earth topographic map
 %
 % Plot curvelet coefficients on multiple Mollweide projections.
 % The function generates one plot of the scaling function
@@ -79,8 +79,8 @@ J =s2let_jmax(L, B);  % Maximum scale probed by curvelets =ceil(log L/ log B);
 % Define Plotting parameters: 
 % ---------------
 zoomfactor= 1.0;  
-ny = 6;  
-nx = 4;  
+ny = 7;  
+nx = 3;  
 
 maxfigs = nx*ny;
 pltroot = '../../../figs' ; 
@@ -163,7 +163,7 @@ f_rec = s2let_transform_curvelet_synthesis_cur2px(f_cur, f_scal, ...
                                                   'J_min', J_min, ...
                                                   'Spin', Spin, ...
                                                   'Reality', reality, ...
-                                                  'Upsample', upsample, ...
+                                                  'Upsample', true, ...
                                                   'SpinLowered', false, ...
                                                   'SpinLoweredFrom', 0);
 

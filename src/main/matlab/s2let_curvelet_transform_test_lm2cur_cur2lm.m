@@ -1,4 +1,4 @@
-% s2let_curvelet_transform_test_lm2lmn_lmn2lm
+% s2let_curvelet_transform_test_lm2cur_cur2lm
 %
 % Run curvelet analysis (harmonic to curvelet space) and 
 % synthesis (curvelet to harmonic space)
@@ -135,7 +135,7 @@ disp(' Curvelet transform: Full-resolution (Upsample: true): ');
 % -----------------
 % Signal analysis: (harmonic to curvelet space) 
 % -----------------
-disp('Real signal, Full resolution: analysis_lm2lmn...')
+disp('Real signal, Full resolution: analysis_lm2cur...')
 upsample = true; 
 [f_cur, f_scal]= s2let_transform_curvelet_analysis_lm2cur(flm_gen, ...
                                                           'B', B, 'L', L,...

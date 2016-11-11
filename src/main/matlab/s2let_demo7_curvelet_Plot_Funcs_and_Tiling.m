@@ -1,4 +1,4 @@
-% s2let_demo7_curvelet_Plot_Funcs_and_Tiling
+% s2let_demo7 - plotting curvelets 
 %
 % 1) Plot the scaling function and curvelet functions in real space (s2let_plot_curvelet_tiling).
 % 2) Plot the curvelets on the Sphere (s2let_plot_curvelet_on_sphere).

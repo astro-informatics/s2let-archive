@@ -1,4 +1,3 @@
-
 % s2let_demo_curvelet_evaluate_performance
 %
 % Evaluate timing and error of (spin) curvelet transform.

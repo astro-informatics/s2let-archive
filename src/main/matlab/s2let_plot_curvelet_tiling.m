@@ -1,5 +1,4 @@
 function s2let_plot_curvelet_tiling(B, L, J_min, varargin)
-%
 % s2let_plot_curvelet_tiling
 %  - Plot the tiling of scaling functions and curvelets in harmonic space.
 %  - then plot the scaling functions and curvelets in real space. 

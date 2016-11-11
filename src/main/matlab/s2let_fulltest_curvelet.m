@@ -1,4 +1,4 @@
-% s2let_fulltest
+% s2let_fulltest_curvelet
 % Run all exactness tests for the MW sampling,
 % all wavelet transforms must reconstruct the input maps
 % at floating-point precision. Various parameters are tested.

@@ -1,5 +1,4 @@
 function  [cur_lm scal_l] = s2let_spin_curvelet_tiling(B, L, J_min, varargin)
-%
 % s2let_spin_curvelet_tiling - Tile scaling functions and curvelets in harmonic space.
 %
 % Default usage :

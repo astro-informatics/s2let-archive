@@ -1,5 +1,5 @@
 % s2let_demo_curvelet_covariance
-% Run curvelet_covariance_demo.
+% Run curvelet covariance demo.
 %
 % Demo to compare theoretical covariance of curvelet coefficients with
 % empirical data from using our transform functions. 

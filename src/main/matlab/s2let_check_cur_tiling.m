@@ -1,7 +1,5 @@
 function error_on_cur_tiling = s2let_check_cur_tiling(cur_lm, scal_l, L, Spin, J, J_min)
-%
-% s2let_check_cur_tiling 
-% - Checks whether the admissibity condition is satisfied. 
+% s2let_check_cur_tiling - Checks the admissibity condition is satisfied. 
 % -----------------------------------------------------------
 % S2LET package to perform wavelets transform on the Sphere.
 % Copyright (C) 2012-2016  Boris Leistedt, Jennifer Chan & Jason McEwen
