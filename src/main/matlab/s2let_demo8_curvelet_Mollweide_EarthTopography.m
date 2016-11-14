@@ -71,8 +71,8 @@ reality = true;
 % Define curvelet parameters: 
 % ---------------
 Spin = 0;             % Spin value of wavelet
-B = 2;                % B=2 for dyadic sampling
-J_min = 3;            % Minimum scale probed by curvelets 
+B = 5;                % B=2 for dyadic sampling
+J_min = 1;            % Minimum scale probed by curvelets 
 J =s2let_jmax(L, B);  % Maximum scale probed by curvelets =ceil(log L/ log B); 
  
 % ---------------

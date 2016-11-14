@@ -1,8 +1,8 @@
 
 function f = s2let_ridgelet_synthesis(f_ridge_wav, f_ridge_scal, varargin)
 
-% s2let_ridgelet_analysis
-% Compute ridgelet transform on the sphere.
+% s2let_ridgelet_synthesis
+% Compute inverse ridgelet transform on the sphere.
 %
 % Default usage :
 %

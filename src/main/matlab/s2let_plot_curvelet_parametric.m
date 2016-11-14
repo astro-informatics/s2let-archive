@@ -1,13 +1,11 @@
 function s2let_plot_curvelet_parametric(alpha, beta, gamma, B, L, J_min, varargin)
 % s2let_plot_curvelet_parametric
-% - Plot curvelet coefficients on multiple spheres.
+% - Plot curvelet coefficients parametrically on multiple spheres.
 %
 % This Matlab function
 % i)  compute the j-th curvelet, rotated by rho=(alpha, beta, gamma) in
 %     harmonic space and reconstruct it on the sphere.
-% ii) generates one plot of the scaling function contribution and
-%     a grid of plots for each orientation of each scale of the
-%     curvelet contributions.
+% ii) plot the scaling function contribution and curvelet coefficients parametrically
 %
 % Default usage :
 %
