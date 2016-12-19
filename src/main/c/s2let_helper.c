@@ -40,7 +40,7 @@ int s2let_n_lm_scal(const s2let_parameters_t *parameters)
 
 int s2let_n_lmn_wav(const s2let_parameters_t *parameters)
 {
-    so3_parameters_t so3_parameters = {};
+    so3_parameters_t so3_parameters = {0};
     fill_so3_parameters(&so3_parameters, parameters);
 
     int L = parameters->L;
@@ -64,7 +64,7 @@ int s2let_n_lmn_wav(const s2let_parameters_t *parameters)
 
 int s2let_n_gamma(const s2let_parameters_t *parameters)
 {
-    so3_parameters_t so3_parameters = {};
+    so3_parameters_t so3_parameters = {0};
     fill_so3_parameters(&so3_parameters, parameters);
 
     return so3_sampling_ngamma(&so3_parameters);
@@ -86,7 +86,7 @@ int s2let_n_scal(const s2let_parameters_t *parameters)
 
 int s2let_n_wav(const s2let_parameters_t *parameters)
 {
-    so3_parameters_t so3_parameters = {};
+    so3_parameters_t so3_parameters = {0};
     fill_so3_parameters(&so3_parameters, parameters);
 
     int L = parameters->L;
@@ -108,7 +108,7 @@ int s2let_n_wav(const s2let_parameters_t *parameters)
 
 int s2let_n_wav_j(int j, const s2let_parameters_t *parameters)
 {
-    so3_parameters_t so3_parameters = {};
+    so3_parameters_t so3_parameters = {0};
     fill_so3_parameters(&so3_parameters, parameters);
 
     if (!parameters->upsample)

@@ -132,7 +132,7 @@ void s2let_tiling_axisym_allocate(double **kappa, double **kappa0, const s2let_p
     *kappa0 = calloc(L, sizeof **kappa0);
 }
 
-void s2let_tiling_phi2_s2dw(double *phi2, const s2let_parameters_t *parameters)
+static void s2let_tiling_phi2_s2dw(double *phi2, const s2let_parameters_t *parameters)
 {
     int L = parameters->L;
     double B = parameters->B;
@@ -155,7 +155,7 @@ void s2let_tiling_phi2_s2dw(double *phi2, const s2let_parameters_t *parameters)
     }
 }
 
-void s2let_tiling_phi2_needlet(double *phi2, const s2let_parameters_t *parameters)
+static void s2let_tiling_phi2_needlet(double *phi2, const s2let_parameters_t *parameters)
 {
     int L = parameters->L;
     double B = parameters->B;
@@ -180,7 +180,7 @@ void s2let_tiling_phi2_needlet(double *phi2, const s2let_parameters_t *parameter
     }
 }
 
-void s2let_tiling_phi2_spline(double *phi2, const s2let_parameters_t *parameters)
+static void s2let_tiling_phi2_spline(double *phi2, const s2let_parameters_t *parameters)
 {
     int L = parameters->L;
     double B = parameters->B;

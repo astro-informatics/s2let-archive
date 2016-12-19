@@ -142,14 +142,14 @@ void s2let_allocate_f_wav_real(
  *                    maps, using MW sampling.
  * \param[out]  f_scal Pointer to allocated space for scaling function
  *                     map, using MW sampling.
- * \param[in]  wav_bandlimits Array of integers containing the band-limits 
+ * \param[in]  wav_bandlimits Array of integers containing the band-limits
                      of the wavelets. Will be used to do the multiresolution.
                      These must make sense and define a valid invertible transform
                      as no extra checks are performed.
  * \param[in]  scal_bandlimit Same as wav_bandlimits but only one integer:
                       the band-limit of the scaling function.
  * \param[in]  N Azimuthal band-limit for the directional transform
- * \param[in]  J Number of scales in total (in wav_bandlimits) is J+1. 
+ * \param[in]  J Number of scales in total (in wav_bandlimits) is J+1.
  * \param[in]  parameters A parameters object containing all s2let and so3 sampling options.
  * \retval none
  */
@@ -163,7 +163,7 @@ void s2let_allocate_f_wav_manual(
     s2let_parameters_t *parameters
 ) {
 
-    so3_parameters_t so3_parameters = {};
+    so3_parameters_t so3_parameters = {0};
     fill_so3_parameters(&so3_parameters, parameters);
 
     int j, total=0;

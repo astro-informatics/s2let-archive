@@ -11,7 +11,7 @@
 /*!
  * Tiling function for S2DW wavelets
  */
-double f_s2dw(double k, double B)
+static double f_s2dw(double k, double B)
 {
   double t = (k - (1 / B)) * (2.0 * B / (B-1)) - 1;
   return exp(-2.0 / (1.0 - pow(t, 2.0))) / k;
@@ -20,7 +20,7 @@ double f_s2dw(double k, double B)
 /*!
  * Tiling function for needlets
  */
-double f_needlet(double t)
+static double f_needlet(double t)
 {
   return exp(-1.0 / (1.0 - pow(t, 2.0))) ;
 }
@@ -29,7 +29,7 @@ double f_needlet(double t)
 /*!
  * Computes cubis B-spline function
  */
-double b3_spline (double x)
+static double b3_spline (double x)
 {
     if ( ABS(x) < 1e-16 ) return 0;
     double A1,A2,A3,A4,A5,Val;

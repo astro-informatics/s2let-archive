@@ -27,7 +27,7 @@ UNAME 	:= $(shell uname)
 
 # Compilers and options for C
 CC	= gcc
-OPT	= -Wall -g -fopenmp -DS2LET_VERSION=\"2.1b1\" -DS2LET_BUILD=\"`git rev-parse HEAD`\"
+OPT	= -std=c99 -pedantic -Wall -W -Wmissing-prototypes -Wstrict-prototypes -O3 -g -fopenmp -DS2LET_VERSION=\"2.1b1\" -DS2LET_BUILD=\"`git rev-parse HEAD`\"
 
 # Compilers and options for Fortran
 FCC	= gfortran

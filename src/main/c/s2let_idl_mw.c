@@ -44,7 +44,7 @@ int s2let_idl_transform_axisym_wav_analysis_mw_real(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = *B;
   parameters.L = *L;
   parameters.J_min = *J_min;
@@ -67,7 +67,7 @@ int s2let_idl_transform_axisym_wav_synthesis_mw_real(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = *B;
   parameters.L = *L;
   parameters.J_min = *J_min;
@@ -91,7 +91,7 @@ int s2let_idl_transform_axisym_wav_analysis_mw(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = *B;
   parameters.L = *L;
   parameters.J_min = *J_min;
@@ -114,7 +114,7 @@ int s2let_idl_transform_axisym_wav_synthesis_mw(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = *B;
   parameters.L = *L;
   parameters.J_min = *J_min;
@@ -138,7 +138,7 @@ int s2let_idl_transform_axisym_wav_analysis_mw_multires(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = *B;
   parameters.L = *L;
   parameters.J_min = *J_min;
@@ -161,7 +161,7 @@ int s2let_idl_transform_axisym_wav_synthesis_mw_multires(int argc, void* argv[])
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = *B;
   parameters.L = *L;
   parameters.J_min = *J_min;
@@ -184,7 +184,7 @@ int s2let_idl_transform_axisym_wav_analysis_mw_multires_real(int argc, void* arg
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = *B;
   parameters.L = *L;
   parameters.J_min = *J_min;
@@ -207,7 +207,7 @@ int s2let_idl_transform_axisym_wav_synthesis_mw_multires_real(int argc, void* ar
   IDL_INT *wavtype = (IDL_INT *) argv[6];
   s2let_switch_wavtype(*wavtype);
 
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = *B;
   parameters.L = *L;
   parameters.J_min = *J_min;
@@ -218,6 +218,7 @@ int s2let_idl_transform_axisym_wav_synthesis_mw_multires_real(int argc, void* ar
 }
 
 
+int s2let_idl_mw_map2alm(int argc, void* argv[]);
 int s2let_idl_mw_map2alm(int argc, void* argv[])
 {
   if(argc != 3) return 0;
@@ -230,6 +231,7 @@ int s2let_idl_mw_map2alm(int argc, void* argv[])
   return 1;
 }
 
+int s2let_idl_mw_alm2map(int argc, void* argv[]);
 int s2let_idl_mw_alm2map(int argc, void* argv[])
 {
   if(argc != 3) return 0;
@@ -243,6 +245,7 @@ int s2let_idl_mw_alm2map(int argc, void* argv[])
 }
 
 
+int s2let_idl_mw_map2alm_real(int argc, void* argv[]);
 int s2let_idl_mw_map2alm_real(int argc, void* argv[])
 {
   if(argc != 3) return 0;
@@ -255,6 +258,7 @@ int s2let_idl_mw_map2alm_real(int argc, void* argv[])
   return 1;
 }
 
+int s2let_idl_mw_alm2map_real(int argc, void* argv[]);
 int s2let_idl_mw_alm2map_real(int argc, void* argv[])
 {
   if(argc != 3) return 0;

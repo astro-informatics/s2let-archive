@@ -18,9 +18,9 @@
  * \param[in]  J_min First wavelet scale to be used.
  * \retval none
  */
-void s2let_tiling_axisym_test(int B, int L, int J_min)
+static void s2let_tiling_axisym_test(int B, int L, int J_min)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -50,9 +50,9 @@ void s2let_tiling_axisym_test(int B, int L, int J_min)
  * \param[in]  N Azimuthal band-limit.
  * \retval none
  */
-void s2let_tiling_direction_test(int L, int N)
+static void s2let_tiling_direction_test(int L, int N)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.L = L;
   parameters.N = N;
 
@@ -84,9 +84,9 @@ void s2let_tiling_direction_test(int L, int N)
  * \param[in]  spin Spin number.
  * \retval none
  */
-void s2let_tiling_wavelet_test(int B, int L, int J_min, int N, int spin)
+static void s2let_tiling_wavelet_test(int B, int L, int J_min, int N, int spin)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -113,7 +113,7 @@ void s2let_tiling_wavelet_test(int B, int L, int J_min, int N, int spin)
   free(psi);
 }
 
-void s2let_binomial_coefficient_test(int n_max)
+static void s2let_binomial_coefficient_test(int n_max)
 {
     const int nRepeat = 100000;
     int n, k, i;
@@ -166,9 +166,9 @@ void s2let_binomial_coefficient_test(int n_max)
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
+static void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -231,9 +231,9 @@ void s2let_transform_axisym_lm_wav_test(int B, int L, int J_min, int seed)
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int seed)
+static void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -300,9 +300,9 @@ void s2let_transform_axisym_lm_wav_multires_test(int B, int L, int J_min, int se
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_wavlm_manual_test(int B, int L, int J_min, int N, int spin, int seed)
+static void s2let_wav_transform_wavlm_manual_test(int B, int L, int J_min, int N, int spin, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -382,7 +382,7 @@ void s2let_wav_transform_wavlm_manual_test(int B, int L, int J_min, int N, int s
     {
       i = el*el + el + m;
     if( cabs( flm[i]-flm_rec[i] ) > 0.001 )
-       printf("%(l,m) = (%i,%i) : %f+i%f %f+i%f\n",el, m, creal(flm[i]), cimag(flm[i]), creal(flm_rec[i]), cimag(flm_rec[i]));
+       printf("(l,m) = (%i,%i) : %f+i%f %f+i%f\n",el, m, creal(flm[i]), cimag(flm[i]), creal(flm_rec[i]), cimag(flm_rec[i]));
     }
   }
 
@@ -406,9 +406,9 @@ void s2let_wav_transform_wavlm_manual_test(int B, int L, int J_min, int N, int s
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin, int seed)
+static void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -479,9 +479,9 @@ void s2let_wav_transform_harmonic_test(int B, int L, int J_min, int N, int spin,
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, int spin, int seed)
+static void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, int spin, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -569,9 +569,9 @@ void s2let_wav_transform_harmonic_multires_test(int B, int L, int J_min, int N, 
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
+static void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -634,9 +634,9 @@ void s2let_transform_axisym_wav_test(int B, int L, int J_min, int seed)
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
+static void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -700,9 +700,9 @@ void s2let_transform_axisym_wav_real_test(int B, int L, int J_min, int seed)
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
+static void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -766,9 +766,9 @@ void s2let_transform_axisym_wav_multires_test(int B, int L, int J_min, int seed)
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int seed)
+static void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -834,11 +834,11 @@ void s2let_transform_axisym_wav_multires_real_test(int B, int L, int J_min, int 
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int seed)
+static void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -907,11 +907,11 @@ void s2let_wav_transform_mw_test(int B, int L, int J_min, int N, int spin, int s
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
+static void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -981,11 +981,11 @@ void s2let_wav_transform_mw_real_test(int B, int L, int J_min, int N, int seed)
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int spin, int seed)
+static void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1054,11 +1054,11 @@ void s2let_wav_transform_mw_multires_test(int B, int L, int J_min, int N, int sp
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, int seed)
+static void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1126,11 +1126,11 @@ void s2let_wav_transform_mw_multires_real_test(int B, int L, int J_min, int N, i
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_mwss_test(int B, int L, int J_min, int N, int spin, int seed)
+static void s2let_wav_transform_mwss_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1200,11 +1200,11 @@ void s2let_wav_transform_mwss_test(int B, int L, int J_min, int N, int spin, int
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_mwss_real_test(int B, int L, int J_min, int N, int seed)
+static void s2let_wav_transform_mwss_real_test(int B, int L, int J_min, int N, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1275,11 +1275,11 @@ void s2let_wav_transform_mwss_real_test(int B, int L, int J_min, int N, int seed
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_mwss_multires_test(int B, int L, int J_min, int N, int spin, int seed)
+static void s2let_wav_transform_mwss_multires_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1349,11 +1349,11 @@ void s2let_wav_transform_mwss_multires_test(int B, int L, int J_min, int N, int 
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_mwss_multires_real_test(int B, int L, int J_min, int N, int seed)
+static void s2let_wav_transform_mwss_multires_real_test(int B, int L, int J_min, int N, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1423,11 +1423,11 @@ void s2let_wav_transform_mwss_multires_real_test(int B, int L, int J_min, int N,
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_lm2wav_test(int B, int L, int J_min, int N, int spin, int seed)
+static void s2let_wav_transform_lm2wav_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1485,11 +1485,11 @@ void s2let_wav_transform_lm2wav_test(int B, int L, int J_min, int N, int spin, i
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_lm2wav_real_test(int B, int L, int J_min, int N, int seed)
+static void s2let_wav_transform_lm2wav_real_test(int B, int L, int J_min, int N, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1548,11 +1548,11 @@ void s2let_wav_transform_lm2wav_real_test(int B, int L, int J_min, int N, int se
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_lm2wav_multires_test(int B, int L, int J_min, int N, int spin, int seed)
+static void s2let_wav_transform_lm2wav_multires_test(int B, int L, int J_min, int N, int spin, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1610,11 +1610,11 @@ void s2let_wav_transform_lm2wav_multires_test(int B, int L, int J_min, int N, in
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_wav_transform_lm2wav_multires_real_test(int B, int L, int J_min, int N, int seed)
+static void s2let_wav_transform_lm2wav_multires_real_test(int B, int L, int J_min, int N, int seed)
 {
     clock_t time_start, time_end;
 
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1669,9 +1669,9 @@ void s2let_wav_transform_lm2wav_multires_real_test(int B, int L, int J_min, int 
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
+static void s2let_transform_axisym_vs_directional_mw_test(int B, int L, int J_min, int seed)
 {
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1726,9 +1726,9 @@ void s2let_transform_axisym_vs_directional_mw_test(B, L, J_min, seed)
  * \param[in]  seed Random seed.
  * \retval none
  */
-void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
+static void s2let_transform_axisym_vs_directional_mw_multires_test(int B, int L, int J_min, int seed)
 {
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.B = B;
     parameters.L = L;
     parameters.J_min = J_min;
@@ -1783,9 +1783,9 @@ void s2let_transform_axisym_vs_directional_mw_multires_test(B, L, J_min, seed)
     fflush(NULL);
 }
 
-void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
+static void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.J_min = J_min;
 
@@ -1858,9 +1858,9 @@ void s2let_transform_performance_test(int B, int J_min, int NREPEAT, int NSCALE,
 
 
 
-void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
+static void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.J_min = J_min;
 
@@ -1934,9 +1934,9 @@ void s2let_transform_performance_multires_test(int B, int J_min, int NREPEAT, in
 
 
 
-void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
+static void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.J_min = J_min;
 
@@ -2009,9 +2009,9 @@ void s2let_transform_lm_performance_test(int B, int J_min, int NREPEAT, int NSCA
 
 
 
-void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
+static void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT, int NSCALE, int seed)
 {
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.J_min = J_min;
 
@@ -2083,7 +2083,7 @@ void s2let_transform_lm_performance_multires_test(int B, int J_min, int NREPEAT,
 }
 
 
-int main(int argc, char *argv[])
+int main(void)
 {
   const int L = 81;
   const int N = 3;
@@ -2091,7 +2091,7 @@ int main(int argc, char *argv[])
   const int J_min = 2;
   const int spin = 0;
 
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
 
   parameters.B = B;
   parameters.L = L;

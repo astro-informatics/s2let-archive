@@ -43,7 +43,7 @@ void s2let_analysis_lm2lmn(
     int Nj = N;
 
     int lm_ind, lmn_ind;
-    so3_parameters_t so3_parameters = {};
+    so3_parameters_t so3_parameters = {0};
     fill_so3_parameters(&so3_parameters, parameters);
 
     complex double psi;
@@ -127,7 +127,7 @@ void s2let_analysis_lm2lmn_real(
     int Nj = N;
 
     int lm_ind, lmn_ind;
-    so3_parameters_t so3_parameters = {};
+    so3_parameters_t so3_parameters = {0};
     fill_so3_parameters(&so3_parameters, parameters);
 
     complex double psi;
@@ -181,7 +181,7 @@ void s2let_analysis_lm2lmn_real(
 
 /*!
  * Wavelet analysis from harmonic space to wavelet space for complex signals.
- * with fully manual wavelet tiling, using multiresolution as default with 
+ * with fully manual wavelet tiling, using multiresolution as default with
  * the band-limits provided in input.
  *
  * \param[out]  f_wav Array of wavelet maps
@@ -190,17 +190,17 @@ void s2let_analysis_lm2lmn_real(
  * \param[in]  scal_l Array of size L containing the \ell space tiling for the scaling fct.
                       It is only \ell because it is assumed to be axisymmetric.
  * \param[in]  wav_lm Array of size (J+1)*L*L containing the (\ell, space) harmonic coefs
-                     of the wavelets. They can be directional. These must make sense and 
+                     of the wavelets. They can be directional. These must make sense and
                      define a valid invertible transform as no extra checks are performed.
  * \param[in]  scal_bandlimit Same as wav_bandlimits but only one integer:
                       the band-limit of the scaling function.
- * \param[in]  wav_bandlimits Array of integers of size J+1 containing the band-limits 
+ * \param[in]  wav_bandlimits Array of integers of size J+1 containing the band-limits
                      of the wavelets. Will be used to do the multiresolution.
                      These must make sense and define a valid invertible transform
                      as no extra checks are performed.
- * \param[in]  J Number of scales in total (in wav_bandlimits) is J+1. 
+ * \param[in]  J Number of scales in total (in wav_bandlimits) is J+1.
  * \param[in]  L Band-limit for the transform: defines the size of all awways.
- * \param[in]  spin Spin (integer) to perform the transform 
+ * \param[in]  spin Spin (integer) to perform the transform
  * \param[in]  N Azimuthal band-limit for the directional transform
  * \retval none
  */
@@ -217,7 +217,7 @@ void s2let_analysis_lm2wav_manual(
     int spin,
     int N
 ) {
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     parameters.L = L;
     parameters.J_min = 0;
     parameters.B = pow(L, 1.0/(float)(J+2));
@@ -226,16 +226,14 @@ void s2let_analysis_lm2wav_manual(
 
     int bandlimit = L;
     int verbosity = 0;
-    so3_parameters_t so3_parameters = {};
+    so3_parameters_t so3_parameters = {0};
     fill_so3_parameters(&so3_parameters, &parameters);
 
-    int j, offset, offset_lmn;
+    int j, offset;
     complex double *f_wav_lmn, *f_scal_lm;
-    complex double psi, npsi;
+    complex double psi;
     double phi;
     int el, m, n, lm_ind, lmn_ind;
-
-    int Nj = N;
 
     bandlimit = MIN(scal_bandlimit, L);
     f_scal_lm = (complex double*)calloc(bandlimit*bandlimit, sizeof(complex double));
@@ -330,7 +328,7 @@ void s2let_analysis_lm2wav(
 
     int bandlimit = L;
     int verbosity = 0;
-    so3_parameters_t so3_parameters = {};
+    so3_parameters_t so3_parameters = {0};
     fill_so3_parameters(&so3_parameters, parameters);
 
     int j, offset, offset_lmn;
@@ -420,7 +418,7 @@ void s2let_analysis_lm2wav_real(
 
     int bandlimit = L;
     int verbosity = 0;
-    so3_parameters_t so3_parameters = {};
+    so3_parameters_t so3_parameters = {0};
     fill_so3_parameters(&so3_parameters, &real_parameters);
 
     int j, offset, offset_lmn;

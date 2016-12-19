@@ -51,7 +51,7 @@ double ran2_dp(int idum);
 
 int main(int argc, char **argv)
 {
-    s2let_parameters_t parameters = {};
+    s2let_parameters_t parameters = {0};
     int verbosity = parameters.verbosity = 0;
     int Lmax, L, useLasN, N, L0, B, J_min, spin;
     complex *flm, *flm_rec, *f, *f_rec;;
