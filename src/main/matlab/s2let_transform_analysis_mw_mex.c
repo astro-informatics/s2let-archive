@@ -29,7 +29,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   double B;
   char sampling_str[S2LET_STRING_LEN];
   s2let_sampling_t sampling_scheme;
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   double *f_wav_real, *f_scal_real, *f_real, *f_wav_imag, *f_scal_imag, *f_imag;
   complex double *f_wav = NULL, *f_scal = NULL, *f = NULL;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
@@ -204,7 +204,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Compute size of wavelet array
   int bandlimit, wavsize = 0, scalsize = 0;
-  so3_parameters_t so3_parameters = {};
+  so3_parameters_t so3_parameters = {0};
   so3_parameters.N = N;
   so3_parameters.sampling_scheme = sampling_scheme;
   so3_parameters.steerable = 1;

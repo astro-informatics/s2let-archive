@@ -1,5 +1,5 @@
 // S2LET package
-// Copyright (C) 2012 
+// Copyright (C) 2012
 // Boris Leistedt & Jason McEwen
 
 #include <s2let.h>
@@ -9,7 +9,7 @@
  * MATLAB interface: s2let_hpx_axisym_synthesis.
  * This function for internal use only.
  *
- * Usage: 
+ * Usage:
  *   f = s2let_hpx_alm2map_mex(alm, nside, L);
  *
  */
@@ -43,8 +43,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse HEALPIX parameter nside
   iin = 1;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_axisym_analysis_mex:InvalidInput:healpixParameter",
           "HEALPIX parameter nside must be integer.");
@@ -56,8 +56,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   // Parse harmonic band-limit L
   iin = 2;
-  if( !mxIsDouble(prhs[iin]) || 
-      mxIsComplex(prhs[iin]) || 
+  if( !mxIsDouble(prhs[iin]) ||
+      mxIsComplex(prhs[iin]) ||
       mxGetNumberOfElements(prhs[iin])!=1 ) {
     mexErrMsgIdAndTxt("s2let_hpx_alm2map_mex:InvalidInput:LbandLimit",
           "Harmonic band-limit L must be integer.");
@@ -67,10 +67,10 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mexErrMsgIdAndTxt("s2let_hpx_alm2map_mex:InvalidInput:bandLimitNonInt",
           "Harmonic band-limit L must be positive integer.");
 
-  // Perform harmonic transform 
+  // Perform harmonic transform
   s2let_hpx_allocate_real(&f_r, nside);
   s2let_hpx_alm2map_real(f_r, flm, nside, L);
-   
+
   // Output function f
   iout = 0;
   plhs[iout] = mxCreateDoubleMatrix(1, 12 * nside * nside, mxREAL);

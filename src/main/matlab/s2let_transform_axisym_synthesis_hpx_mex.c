@@ -21,7 +21,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 {
   int i, j, nside, L, J_min, f_m, f_n;
   double B;
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   double *f_wav_real, *f_scal_real, *f_real;
   double *f_wav_r = NULL, *f_scal_r = NULL, *f_r = NULL;
   int iin = 0, iout = 0;

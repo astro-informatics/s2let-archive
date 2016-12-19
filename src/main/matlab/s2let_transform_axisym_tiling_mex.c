@@ -20,7 +20,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   int L, J_min;
   double B;
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   int iin = 0, iout = 0;
 
   // Check number of arguments
