@@ -7,14 +7,13 @@
 #include <complex.h>
 
 // Fortran interfaces to Healpix F90 library ; see s2let_hpx.f90
-extern void healpix_inverse_real_();
-extern void healpix_forward_real_();
-extern void healpix_inverse_spin_real_();
-extern void healpix_forward_spin_real_();
-extern void write_healpix_map_();
-extern void read_healpix_map_();
-extern void read_healpix_maps_();
-extern void healpix_forward_real_();
+extern void healpix_inverse_real_(double *, const complex double *, int *, int *);
+extern void healpix_forward_real_(complex double *, const double *, int *, int *);
+extern void healpix_inverse_spin_real_(double *, double *, const complex double *, const complex double *, int *, int *, int *);
+extern void healpix_forward_spin_real_(complex double *, complex double *, const double *,const double *,int *, int *, int *);
+extern void write_healpix_map_(char *, const double *, int *);
+extern void read_healpix_map_(double *, char *, int *);
+extern void read_healpix_maps_(double *, char *, int *, int*);
 
 void s2let_hpx_alm2map_real(double* f, const complex double* flm, int nside, int L)
 {

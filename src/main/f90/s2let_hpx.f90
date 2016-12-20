@@ -152,11 +152,13 @@ END SUBROUTINE healpix_inverse_real
 
 ! ----------------------------------------------------------- !
 
-SUBROUTINE read_healpix_maps(maps, file, nside, nmaps)
+SUBROUTINE read_healpix_maps(maps, f2, nside, nmaps)
 
+  use iso_c_binding
   use healpix_types
   use healpix_modules
 
+  character(kind=c_char) :: f2(*)
   character(len=filenamelen) :: file, ordering, comment
   character(LEN=80), dimension(1:60) :: header
   integer :: n, nside, npix, nmaps
@@ -164,6 +166,14 @@ SUBROUTINE read_healpix_maps(maps, file, nside, nmaps)
   real(dp) :: nullval
   logical :: anynull
 
+  file=""
+  do i=1,filenamelen
+  if (f2(i)/=C_NULL_CHAR) then
+    file(i:i) = f2(i)
+  else
+    exit
+  endif
+  end do
   npix = nside2npix(nside)
   call read_bintab(file, maps, npix, nmaps, nullval, anynull, header)
   call get_card(header,'ORDERING',ordering,comment)
@@ -178,18 +188,28 @@ END SUBROUTINE read_healpix_maps
 
 ! ----------------------------------------------------------- !
 
-SUBROUTINE read_healpix_map(map, file, nside)
+SUBROUTINE read_healpix_map(map, f2, nside)
 
+  use iso_c_binding
   use healpix_types
   use healpix_modules
 
+  character(kind=c_char) :: f2(*)
   character(len=filenamelen) :: file, ordering, comment
   character(LEN=80), dimension(1:60) :: header
-  integer :: nside, npix
+  integer :: nside, npix, i
   real(dp), dimension(0:12*nside*nside-1,1:1) :: map
   real(dp) :: nullval
   logical :: anynull
 
+  file=""
+  do i=1,filenamelen
+  if (f2(i)/=C_NULL_CHAR) then
+    file(i:i) = f2(i)
+  else
+    exit
+  endif
+  end do
   npix = nside2npix(nside)
   call read_bintab(file, map, npix, 1, nullval, anynull, header)
   call get_card(header,'ORDERING',ordering,comment)
@@ -204,16 +224,25 @@ END SUBROUTINE read_healpix_map
 
 ! ----------------------------------------------------------- !
 
-SUBROUTINE write_healpix_map(file, map, nside)
-
+SUBROUTINE write_healpix_map(f2, map, nside)
+  use iso_c_binding
   use healpix_types
   use healpix_modules
 
+  character(kind=c_char) :: f2(*)
   character(len=filenamelen) :: file
   CHARACTER(len=80), DIMENSION(1:120):: header
-  integer :: nside, npix
+  integer :: nside, npix, i
   real(dp), dimension(0:12*nside*nside-1,1:1) :: map
 
+  file=""
+  do i=1,filenamelen
+  if (f2(i)/=C_NULL_CHAR) then
+    file(i:i) = f2(i)
+  else
+    exit
+  endif
+  enddo
   npix = nside2npix(nside)
   header = ''
   call write_minimal_header(header, 'MAP', nside=nside, ordering='ring')

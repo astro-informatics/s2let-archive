@@ -16,7 +16,7 @@
  * COMMAND : bin/s2let_hpx_demo
  * ARGUMENTS : none
  */
-int main(int argc, char *argv[])
+int main(void)
 {
   printf("--------------------------------------------------\n");
   printf(" S2LET : Healpix wavelet transform \n");
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
   const int L = 256;    // Harmonic band-limit
   const double B = 4;      // Wavelet parameters
   const int J_min = 2;  // First wavelet scale to use
-  s2let_parameters_t parameters = {};
+  s2let_parameters_t parameters = {0};
   parameters.B = B;
   parameters.L = L;
   parameters.J_min = J_min;
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
   // Output the wavelets to FITS files
   char outfile[100];
   char params[100];
-  sprintf(params, "%d%s%d%s%d", L, "_", B, "_", J_min);
+  sprintf(params, "%d%s%d%s%d", L, "_", (int)B, "_", J_min);
   int j, J = s2let_j_max(&parameters); // Explicitly compute the maximum wavelet scale
   int offset = 0; // Start with the first wavelet
   for(j = J_min; j <= J; j++){

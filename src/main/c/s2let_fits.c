@@ -6,7 +6,7 @@
 #include "s2let.h"
 
 
-void printerror(int status)
+static void printerror(int status)
 {
   if (status){
     fits_report_error(stderr, status); /* print error report */
